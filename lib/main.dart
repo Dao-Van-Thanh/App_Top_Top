@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ManHinhDangKy(),
-      // home: ManHinhDangNhapSDT(),
+      // home: ManHinhDangKy(),
+      home: ManHinhDangNhapSDT(),
     );
   }
 }

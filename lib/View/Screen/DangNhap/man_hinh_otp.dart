@@ -12,6 +12,7 @@ class ManHinhOTP extends StatefulWidget {
 class _ManHinhOTPState extends State<ManHinhOTP> {
   int _secondsRemaining = 60; // Số giây còn lại
   late Timer _timer; // Đối tượng Timer để đếm ngược
+  bool _isCodeSubmitted = true;
 
   @override
   void initState() {
@@ -51,7 +52,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
           appBar: AppBar(
             backgroundColor: Colors.white,
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 color: Colors.black,
               ),
@@ -66,7 +67,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Nhập mã gồm 6 chữ số',
                   style: TextStyle(
                     color: Colors.black,
@@ -74,12 +75,12 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
                   'Mã của bạn đã được gửi đến +84${provider.phone}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
                   ),
@@ -88,6 +89,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
                   numberOfFields: 6,
                   borderColor: Color(0xFF512DA8),
                   cursorColor: Colors.pinkAccent,
+                  enabled: _isCodeSubmitted,
                   focusedBorderColor: Colors.pinkAccent,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   autoFocus: true,
@@ -95,18 +97,22 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
                     // Xử lý sự kiện khi người dùng thay đổi mã
                   },
                   onSubmit: (String verificationCode) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text("Verification Code"),
-                          content: Text('Code entered is $verificationCode'),
-                        );
-                      },
-                    );
+                    setState(() {
+                      _isCodeSubmitted = false;
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text("Verification Code"),
+                            content: Text('Code entered is $verificationCode'),
+                          );
+                        },
+                      );
+                    });
+
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
