@@ -32,7 +32,7 @@ class _ManHinhDangNhapEmailVoiSdtState extends State<ManHinhDangNhapEmailVoiSdt>
           backgroundColor: Colors.white,
           centerTitle: true,
           title: const Text(
-            'Đăng ký',
+            'Đăng nhập',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.black,
