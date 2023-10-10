@@ -1,4 +1,5 @@
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
+import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_email_voi_sdt.dart';
 import 'package:app/View/Widget/button.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,12 @@ class ManHinhDangNhap extends StatelessWidget {
               ButtonCusstom(
                   text: "Đăng nhập bằng số điện thoại & Email",
                   icon: Icons.person,
-                  onPress: () {}),
+                  onPress: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder:
+                            (context) =>  ManHinhDangNhapEmailVoiSdt(),)
+                    );
+                  }),
               SizedBox(height: 40),
               ButtonCusstom(
                   text: "Tiếp tục với Google",

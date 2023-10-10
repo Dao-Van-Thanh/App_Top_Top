@@ -21,61 +21,21 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(40),
-        child: Column(
-          children: [
-            TextField(
-              controller: emailController,
-              onChanged: (text) {
-                setState(() {
-                  // Kiểm tra xem ô input có rỗng hay không để cập nhật trạng thái của nút
-                  isButtonEnabled = text.isNotEmpty;
-                  isClearButtonVisible = text.isNotEmpty;
-                  if (isButtonEnabled) {
-                    emailErrorText = null;
-                  }
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Địa chỉ email',
-                errorText: emailErrorText,
-                suffixIcon: isClearButtonVisible
-                    ? GestureDetector(
-                        onTap: () {
-                          // Xoá toàn bộ nội dung trong TextField khi nút "X" được nhấn
-                          emailController.clear();
-
-                          // Ẩn nút "X" sau khi xoá
-                          isClearButtonVisible = false;
-                        },
-                        child: Icon(Icons.close), // Icon "X"
-                      )
-                    : null,
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: isButtonEnabled
-                  ? () {
-                      setState(() {
-                        emailErrorText = _isEmailValid(emailController.text)
-                            ? null
-                            : 'Nhập địa chỉ email hợp lệ';
-                      });
-                      if (emailErrorText != null ||
-                          emailErrorText != 'Nhập địa chỉ email hợp lệ') {
-                        print('looix');
-                        null;
-                      }
-                      
-                      if (_isEmailValid(emailController.text)) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreatePassSingup()),
-                        );
-                      }
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(40),
+          child: Column(
+            children: [
+              TextField(
+                controller: emailController,
+                onChanged: (text) {
+                  setState(() {
+                    // Kiểm tra xem ô input có rỗng hay không để cập nhật trạng thái của nút
+                    isButtonEnabled = text.isNotEmpty;
+                    isClearButtonVisible = text.isNotEmpty;
+                    if (isButtonEnabled) {
+                      emailErrorText = null;
                     }
                   });
                 },
@@ -105,7 +65,8 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail> {
                               : 'Nhập địa chỉ email hợp lệ';
                         });
                         if (emailErrorText != null ||
-                            emailErrorText != 'Nhập địa chỉ email hợp lệ') {
+                            emailErrorText !=
+                                'Nhập địa chỉ email hợp lệ') {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -119,9 +80,10 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail> {
                     borderRadius: BorderRadius.circular(5.0), // Đường viền cong
                   ),
                   backgroundColor: isButtonEnabled
-                      ? Colors.red // Màu nền của nút khi có dữ liệu trong ô input
-                      : const Color.fromARGB(
-                          255, 219, 219, 219), // Màu nền của nút khi ô input rỗng
+                      ? Colors
+                          .red // Màu nền của nút khi có dữ liệu trong ô input
+                      : const Color.fromARGB(255, 219, 219,
+                          219), // Màu nền của nút khi ô input rỗng
                   minimumSize: const Size(500, 50), // Kích thước nút
                 ),
                 child: const Text(
