@@ -1,14 +1,15 @@
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_email.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_sdt.dart';
+import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_email.dart';
 import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_sdt.dart';
 import 'package:flutter/material.dart';
 
-class ManHinhDangKyEmailWithSDT extends StatefulWidget {
+class ManHinhDangNhapEmailVoiSdt extends StatefulWidget {
   @override
-  State<ManHinhDangKyEmailWithSDT> createState() => _ManHinhDangKyState();
+  State<ManHinhDangNhapEmailVoiSdt> createState() => _ManHinhDangNhapEmailVoiSdtState();
 }
 
-class _ManHinhDangKyState extends State<ManHinhDangKyEmailWithSDT>
+class _ManHinhDangNhapEmailVoiSdtState extends State<ManHinhDangNhapEmailVoiSdt>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -69,9 +70,9 @@ class _ManHinhDangKyState extends State<ManHinhDangKyEmailWithSDT>
         ),
         body: TabBarView(
           controller: _tabController,
-          children: const [
-            ManHinhDangKySDT(),
-            ManHinhDangKyEmail()
+          children: [
+            ManHinhDangNhapSDT(),
+            ManHinhDangNhapEmail()
           ],
         ),
       ),
