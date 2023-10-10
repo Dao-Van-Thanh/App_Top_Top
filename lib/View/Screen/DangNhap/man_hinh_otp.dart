@@ -120,6 +120,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
                       onPressed: _secondsRemaining > 0 ? null
                           :(){
                         setState(() {
+                          _isCodeSubmitted = true;
                           _secondsRemaining = 60;
                           startTimer();
                         });

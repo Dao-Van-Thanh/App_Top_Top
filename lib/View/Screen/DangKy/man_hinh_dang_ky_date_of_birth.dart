@@ -48,22 +48,24 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Column(
-                    children: [
-                      Text(
-                        'Ngày sinh của bạn là ngày nào?',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  Expanded(
+                      child: const Column(
+                        children: [
+                          Text(
+                            'Ngày sinh của bạn là ngày nào?',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Ngày sinh của bạn sẽ không được \nhiển thị công khai?',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'Ngày sinh của bạn sẽ không được \nhiển thị công khai?',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
                   ),
                   const SizedBox(
                     width: 25,
@@ -85,6 +87,10 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                   fontWeight: FontWeight.bold, // Độ đậm của chữ
                 ),
                 decoration: InputDecoration(
+                  errorStyle: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold
+                  ),
                   errorText: dateErrorText = isCheckAge == true
                       ? null
                       : 'Bạn chưa đủ tuổi để tham gia ứng dụng!!!',
@@ -116,7 +122,7 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                   ),
                 ),
               ),
-              const SizedBox(height: 300.0),
+              const SizedBox(height: 180),
               Container(
                 height: 300, // Hoặc kích thước cố định khác tùy bạn chọn
                 child: CupertinoDatePicker(
