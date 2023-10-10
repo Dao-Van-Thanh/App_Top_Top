@@ -1,13 +1,12 @@
 
+import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_email.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => DangNhapSdtProvider()),
-    ],child: MyApp(),
-  ));
+  runApp(
+   MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ManHinhDangKy(),
+      home: ManHinhDangKyEmail(),
     );
   }
 }
