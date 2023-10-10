@@ -8,7 +8,7 @@ class ManHinhDangKyEmail extends StatefulWidget {
   State<ManHinhDangKyEmail> createState() => _MyManHinhDangKyEmailState();
 }
 
-class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail>{
+class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail> {
   TextEditingController emailController = TextEditingController();
   bool isButtonEnabled = false; // Trạng thái ban đầu của nút
   String? emailErrorText;
@@ -21,7 +21,6 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Padding(
         padding: const EdgeInsets.all(40),
         child: Column(
@@ -66,12 +65,18 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail>{
                       });
                       if (emailErrorText != null ||
                           emailErrorText != 'Nhập địa chỉ email hợp lệ') {
+                        print('looix');
+                        null;
+                      }
+                      
+                      if (_isEmailValid(emailController.text)) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => CreatePassSingup()),
                         );
                       }
+
                     }
                   : null, // Vô hiệu hóa nút nếu ô input rỗng
               style: ElevatedButton.styleFrom(
