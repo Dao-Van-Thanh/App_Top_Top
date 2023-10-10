@@ -1,8 +1,8 @@
-import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap.dart';
+import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/button.dart';
 import 'package:flutter/material.dart';
 
-class ManHinhDangKy extends StatelessWidget {
+class ManHinhDangNhap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,15 +12,15 @@ class ManHinhDangKy extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Texts("Đăng ký TikTok", 30, FontWeight.w800),
+              Texts("Đăng nhập TikTok", 30, FontWeight.w800),
               SizedBox(height: 10),
               Texts(
-                  "Tạo hồ sơ, follow các tài khoản khác, quay\n video của chính bạn,v.v ",
+                  "Quản lý tài khoản, kiếm tra thông báo, bình\n luận trên các video,v.v ",
                   18,
                   FontWeight.normal),
               SizedBox(height: 40),
               ButtonCusstom(
-                  text: "Đăng ký bằng số điện thoại & Email",
+                  text: "Đăng nhập bằng số điện thoại & Email",
                   icon: Icons.person,
                   onPress: () {}),
               SizedBox(height: 40),
@@ -35,15 +35,16 @@ class ManHinhDangKy extends StatelessWidget {
                   onPress: () {}),
               SizedBox(height: 100),
               textButton(
-                  "Bạn đã có tài khoản?", 'Đăng nhập', 18, FontWeight.bold, () {
+                  "Bạn không có tài khoản?", 'Đăng ký', 18, FontWeight.bold,
+                  () {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        ManHinhDangNhap(),
+                        ManHinhDangKy(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
-                      const begin = Offset(-1.0,
+                      const begin = Offset(1.0,
                           0.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
                       const end = Offset
                           .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
