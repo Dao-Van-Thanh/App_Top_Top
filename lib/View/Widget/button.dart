@@ -11,7 +11,7 @@ class ButtonCusstom extends StatelessWidget {
     return OutlinedButton(
         style: ButtonStyle(
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            EdgeInsets.all(20.0), // Đặt giá trị padding là 10
+            EdgeInsets.all(15.0), // Đặt giá trị padding là 10
           ),
           minimumSize: MaterialStateProperty.all<Size>(
             Size(300, 40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
