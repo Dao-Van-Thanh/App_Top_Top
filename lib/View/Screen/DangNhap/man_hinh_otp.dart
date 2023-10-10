@@ -13,6 +13,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
   int _secondsRemaining = 60; // Số giây còn lại
   late Timer _timer; // Đối tượng Timer để đếm ngược
   bool _isCodeSubmitted = true;
+  bool _isCheckOtp = false;
 
   @override
   void initState() {
@@ -112,9 +113,15 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
 
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20,),
+                _isCheckOtp ? Text(
+                    'Mã xác minh sai vui lòng thử lại !',
+                    style: TextStyle(
+                      color: Colors.red
+                    ),
+                ) : SizedBox(),
+                const SizedBox(height: 10),
                 Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
                       onPressed: _secondsRemaining > 0 ? null

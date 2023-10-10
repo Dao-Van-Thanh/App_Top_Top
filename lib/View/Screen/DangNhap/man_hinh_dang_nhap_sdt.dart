@@ -20,7 +20,6 @@ class ManHinhDangNhapSDT extends StatelessWidget{
                 children: [
                   const SizedBox(height: 20,),
                   PhoneFormField(
-                    // controller: null,     // controller & initialValue value
                     defaultCountry: IsoCode.VN, // default
                     cursorColor: Colors.grey,
                     decoration: const InputDecoration(
@@ -33,7 +32,7 @@ class ManHinhDangNhapSDT extends StatelessWidget{
                       PhoneValidator.valid(errorText: "Không đúng định dạng"),
                       PhoneValidator.required(errorText: "Không được để trống"),
                     ]),
-                    countrySelectorNavigator: CountrySelectorNavigator.bottomSheet(),
+                    countrySelectorNavigator: CountrySelectorNavigator.draggableBottomSheet(),
                     onChanged: (p) {
                       provider.changePhone(p!.nsn.toString());
                       print('Số điện thoại đã thay đổi thành: ${provider.phone}');
@@ -97,7 +96,8 @@ class ManHinhDangNhapSDT extends StatelessWidget{
                         },
                         child: const Text('Gửi mã',)
                     ),
-                  )
+                  ),
+
                 ],
               ),
             ),
