@@ -1,8 +1,12 @@
+import 'package:app/Provider/dang_ky_email_provider.dart';
+import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_date_of_birth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreatePassSingup extends StatefulWidget {
-  const CreatePassSingup({Key? key}) : super(key: key);
+  const CreatePassSingup({Key? key, required TextEditingController data})
+      : super(key: key);
 
   @override
   State<CreatePassSingup> createState() => _MyWidgetState();
@@ -38,6 +42,8 @@ class _MyWidgetState extends State<CreatePassSingup> {
   List<Color> iconColors = [Colors.grey, Colors.grey];
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DangKyEmailProvider>(context);
+    final myData = Provider.of<MyData>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -146,6 +152,7 @@ class _MyWidgetState extends State<CreatePassSingup> {
             ElevatedButton(
               onPressed: isButtonEnabled
                   ? () {
+                      myData.updatePass(passWordController.text);
                       setState(() {
                         Navigator.push(
                           context,
