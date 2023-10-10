@@ -12,15 +12,13 @@ class ManHinhDangNhapSDT extends StatelessWidget{
         builder: (context, provider, _) {
           return Container(
             color: Colors.white,
-            width: double.infinity,
-            height: double.infinity,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 36),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const SizedBox(height: 60,),
+                  const SizedBox(height: 20,),
                   PhoneFormField(
                     // controller: null,     // controller & initialValue value
                     defaultCountry: IsoCode.VN, // default
