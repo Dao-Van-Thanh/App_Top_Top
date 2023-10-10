@@ -1,7 +1,8 @@
 
-import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_email.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'Provider/dang_nhap_sdt_provider.dart';
+import 'View/Screen/DangKy/man_hinh_dang_ky.dart';
 
 void main() {
   runApp(
