@@ -41,14 +41,12 @@ class ManHinhDangNhapSDT extends StatelessWidget {
                             errorText: "Không được để trống"),
                       ]),
                       countrySelectorNavigator:
-                          CountrySelectorNavigator.draggableBottomSheet(),
+                          const CountrySelectorNavigator.draggableBottomSheet(),
                       onChanged: (p) {
                         provider.changePhone(p!.nsn.toString());
-                        print(
-                            'Số điện thoại đã thay đổi thành: ${provider.phone}');
                       }, // default null
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -74,7 +72,7 @@ class ManHinhDangNhapSDT extends StatelessWidget {
                                   : Colors.transparent, // Màu nền khi được chọn
                             ),
                             child: provider.isChecked
-                                ? Icon(
+                                ? const Icon(
                                     Icons.check,
                                     size: 12,
                                     color: Colors
@@ -83,7 +81,7 @@ class ManHinhDangNhapSDT extends StatelessWidget {
                                 : null,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
                         const Text(
@@ -94,7 +92,7 @@ class ManHinhDangNhapSDT extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Container(
@@ -110,10 +108,6 @@ class ManHinhDangNhapSDT extends StatelessWidget {
                               ? null
                               : () {
                                   provider.dangNhapPhone(context);
-                                  // Navigator.push(context,
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) => ManHinhOTP())
-                                  // );
                                 },
                           child: const Text(
                             'Gửi mã',

@@ -11,11 +11,13 @@ class UserModel {
   List<String>? follower;
   String avatarURL;
   String uid;
+  String idTopTop;
   UserModel(
       {required this.gender,
       required this.email,
       required this.phone,
       required this.age,
+      required this.idTopTop,
       required this.avatarURL,
       required this.fullName,
       required this.uid,
@@ -28,6 +30,7 @@ class UserModel {
         "email": email,
         "age": age,
         "uid": uid,
+        "idTopTop": idTopTop,
         "birth": birth,
         "avatarURL": avatarURL,
         "phone": phone,
@@ -39,6 +42,7 @@ class UserModel {
     var snapshotData = snap.data() as Map<String, dynamic>;
 
     return UserModel(
+      idTopTop: snapshotData['idTopTop'] ?? '',
       fullName: snapshotData['fullname'] ?? '',
       email: snapshotData['email'] ?? '',
       age: snapshotData['age'] ?? '',

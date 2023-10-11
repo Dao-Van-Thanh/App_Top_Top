@@ -11,12 +11,17 @@ class DangNhapSdtProvider extends ChangeNotifier{
   bool isLoading = false;
   String verificationId = '';
   bool isCheckOtp = false;
+  String smsCode = '';
 
   void changeChecked(bool check){
     isChecked = check;
     notifyListeners();
   }
 
+  void setSmsCode(String s){
+    smsCode = s;
+    notifyListeners();
+  }
 
   void changCheckOTP(bool check){
     isCheckOtp = check;
@@ -77,5 +82,9 @@ class DangNhapSdtProvider extends ChangeNotifier{
       changCheckOTP(true);
       print('Xác minh OTP thất bại: $e');
     }
+  }
+
+  void guiLaiMaOTP(BuildContext context){
+    verifyOTP(context, smsCode);
   }
 }

@@ -10,7 +10,7 @@ class DangKyEmailService {
     if (atIndex != -1 && atIndex < email.length - 1) {
       // Sử dụng phương thức substring để lấy phần sau ký tự '@'
       String domain = email.substring(0, atIndex);
-      return '@$domain';
+      return '$domain';
     }
     return "";
   }
@@ -28,6 +28,9 @@ class DangKyEmailService {
         age: age.toString(),
         uid: _auth.currentUser!.uid,
         avatarURL: '',
+        follower: [],
+        following: [],
+        idTopTop: '@${createName(email)}',
         fullName: createName(email),
         birth: dayOfBirth,
       );

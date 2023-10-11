@@ -46,6 +46,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<DangNhapSdtProvider>(
       builder: (context, provider, _) {
         return Stack(
@@ -105,6 +106,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
                           onSubmit: (String verificationCode) {
                             setState(() {
                               _isCodeSubmitted = false;
+                              provider.setSmsCode(verificationCode);
                               provider.verifyOTP(context,verificationCode);
                               _isCodeSubmitted = true;
                             });
@@ -130,6 +132,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
                                         _isCodeSubmitted = true;
                                         _secondsRemaining = 60;
                                         startTimer();
+                                        provider.guiLaiMaOTP(context);
                                       });
                                     },
                               child: Text(
