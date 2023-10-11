@@ -1,21 +1,21 @@
-import 'package:app/Provider/dang_nhap_sdt_provider.dart';
+import 'dart:async';
+
+import 'package:app/Provider/dang_ky_sdt_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
 
 import '../../Widget/loading.dart';
 
-class ManHinhOTP extends StatefulWidget {
+class ManHinhDangKyOTP extends StatefulWidget {
   @override
-  _ManHinhOTPState createState() => _ManHinhOTPState();
+  _ManHinhDangKyOTPState createState() => _ManHinhDangKyOTPState();
 }
 
-class _ManHinhOTPState extends State<ManHinhOTP> {
+class _ManHinhDangKyOTPState extends State<ManHinhDangKyOTP> {
   int _secondsRemaining = 60; // Số giây còn lại
   late Timer _timer; // Đối tượng Timer để đếm ngược
   bool _isCodeSubmitted = true;
-
   @override
   void initState() {
     super.initState();
@@ -46,8 +46,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Consumer<DangNhapSdtProvider>(
+    return Consumer<DangKySdtProvider>(
       builder: (context, provider, _) {
         return Stack(
           children: [
@@ -112,12 +111,12 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
                             });
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         provider.isCheckOtp
                             ? Text(
-                                'Mã xác minh sai vui lòng thử lại !',
+                                '${provider.message}',
                                 style: TextStyle(color: Colors.red),
                               )
                             : SizedBox(),
@@ -144,7 +143,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(
@@ -169,5 +168,7 @@ class _ManHinhOTPState extends State<ManHinhOTP> {
         );
       },
     );
+
   }
+
 }

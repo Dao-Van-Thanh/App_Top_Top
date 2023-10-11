@@ -1,5 +1,5 @@
 import 'package:app/Provider/dang_nhap_sdt_provider.dart';
-import 'package:app/View/Screen/DangNhap/man_hinh_otp.dart';
+import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_otp.dart';
 import 'package:app/View/Widget/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:phone_form_field/phone_form_field.dart';
@@ -119,9 +119,9 @@ class ManHinhDangNhapSDT extends StatelessWidget {
                     Visibility(
                       visible: provider.isPhoneNumberCheck,
                       // Ẩn hoặc hiển thị dựa trên giá trị của isTextVisible
-                      child: const Text(
-                        'Lỗi. Thử lại !',
-                        style: TextStyle(
+                      child: Text(
+                        '${provider.message}',
+                        style: const TextStyle(
                           color: Colors.red,
                         ),
                       ),
