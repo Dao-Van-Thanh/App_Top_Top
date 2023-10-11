@@ -1,8 +1,9 @@
-import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_otp.dart';
+import 'package:app/Services/dang_ky_sdt_service.dart';
+import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class DangNhapSdtProvider extends ChangeNotifier{
+class DangKySdtProvider extends ChangeNotifier{
   bool isPhoneNumberCheck= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool isChecked = false;
@@ -49,13 +50,13 @@ class DangNhapSdtProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> dangNhapPhone(BuildContext context) async {
+  Future<void> dangKyPhone(BuildContext context) async {
     changeLoading(true);
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: '+84$phone',
       verificationCompleted: (PhoneAuthCredential credential) { },
       verificationFailed: (FirebaseAuthException e) {
-        setMessage('Lỗi thử lại');
+        setMessage('Lỗi. Thử lại!');
         changePhoneNumberCheck(true);
         changeLoading(false);
       },
@@ -63,7 +64,7 @@ class DangNhapSdtProvider extends ChangeNotifier{
         this.verificationId = verificationId;
         changeLoading(false);
         Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ManHinhDangNhapOTP())
+          MaterialPageRoute(builder: (context) => ManHinhDangKyOTP())
         );
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -79,15 +80,26 @@ class DangNhapSdtProvider extends ChangeNotifier{
         smsCode: otp,
       );
       // Xác minh OTP và đăng nhập người dùng
+      UserCredential authResult =
       await FirebaseAuth.instance.signInWithCredential(credential);
-      setMessage('Thành công');
-      changCheckOTP(false);
-      changeLoading(false);
+      DangKySdtService service = DangKySdtService();
+      bool check = await service.KiemTraDangKySdt(authResult,phone);
+      if(check){
+        setMessage('Số điện thoại đã được đăng ký');
+        changCheckOTP(true);
+        changeLoading(false);
+      }else{
+        print('vào đây ===========2');
+        // đăng ký thành công và chuyển sang màn hình home()
+        changCheckOTP(false);
+        changeLoading(false);
+      }
+
       // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
     } catch (e) {
       changeLoading(false);
       changCheckOTP(true);
-      setMessage('Xác minh OTP thất bại');
+      setMessage('Xác minh OTP thất bại!');
     }
   }
 

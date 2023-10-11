@@ -1,6 +1,6 @@
 import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
-import 'package:app/Service/dang_ky_email_service.dart';
+import 'package:app/Services/dang_ky_email_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
