@@ -1,5 +1,8 @@
+import 'package:app/Provider/dang_ky_email_provider.dart';
+import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_createPass.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ManHinhDangKyEmail extends StatefulWidget {
   const ManHinhDangKyEmail({Key? key}) : super(key: key);
@@ -8,18 +11,11 @@ class ManHinhDangKyEmail extends StatefulWidget {
   State<ManHinhDangKyEmail> createState() => _MyManHinhDangKyEmailState();
 }
 
-class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail>{
-  TextEditingController emailController = TextEditingController();
-  bool isButtonEnabled = false; // Trạng thái ban đầu của nút
-  String? emailErrorText;
-  bool isClearButtonVisible = false; // trạng thái ban đầu của nút x
-  bool _isEmailValid(String text) {
-    final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
-    return emailRegExp.hasMatch(text);
-  }
-
+class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail> {
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DangKyEmailProvider>(context);
+    final myData = Provider.of<MyData>(context);
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -28,67 +24,65 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail>{
           child: Column(
             children: [
               TextField(
-                controller: emailController,
+                controller: provider.emailController,
                 onChanged: (text) {
                   setState(() {
-                    // Kiểm tra xem ô input có rỗng hay không để cập nhật trạng thái của nút
-                    isButtonEnabled = text.isNotEmpty;
-                    isClearButtonVisible = text.isNotEmpty;
-                    if (isButtonEnabled) {
-                      emailErrorText = null;
+                    provider.updateButtonStatus(text.isNotEmpty);
+                    provider.isClearButtonVisible = text.isNotEmpty;
+                    if (provider.isButtonEnabled) {
+                      provider.emailErrorText = null;
                     }
                   });
                 },
                 decoration: InputDecoration(
                   labelText: 'Địa chỉ email',
-                  errorText: emailErrorText,
-                  suffixIcon: isClearButtonVisible
+                  errorText: provider.emailErrorText,
+                  suffixIcon: provider.isClearButtonVisible
                       ? GestureDetector(
                           onTap: () {
-                            // Xoá toàn bộ nội dung trong TextField khi nút "X" được nhấn
-                            emailController.clear();
-                            // Ẩn nút "X" sau khi xoá
-                            isClearButtonVisible = false;
+                            provider.emailController.clear();
+                            provider.isClearButtonVisible = false;
                           },
-                          child: Icon(Icons.close), // Icon "X"
+                          child: Icon(Icons.close),
                         )
                       : null,
                 ),
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: isButtonEnabled
+                onPressed: provider.isButtonEnabled
                     ? () {
                         setState(() {
-                          emailErrorText = _isEmailValid(emailController.text)
+                          provider.emailErrorText = provider.validateEmail()
                               ? null
-                              : 'Nhập địa chỉ email hợp lệ';
+                              : 'Nhập địa chỉ email hợp lệ';
                         });
-                        if (emailErrorText != null ||
-                            emailErrorText != 'Nhập địa chỉ email hợp lệ') {
+                        if (provider.emailErrorText == null) {
+                          myData.updateEmail(provider.emailController.text);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CreatePassSingup()),
+                              builder: (context) => CreatePassSingup(
+                                  data: provider.emailController),
+                            ),
                           );
                         }
                       }
-                    : null, // Vô hiệu hóa nút nếu ô input rỗng
+                    : null,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0), // Đường viền cong
+                    borderRadius: BorderRadius.circular(5.0),
                   ),
-                  backgroundColor: isButtonEnabled
-                      ? Colors.red // Màu nền của nút khi có dữ liệu trong ô input
-                      : const Color.fromARGB(
-                          255, 219, 219, 219), // Màu nền của nút khi ô input rỗng
-                  minimumSize: const Size(500, 50), // Kích thước nút
+                  backgroundColor: provider.isButtonEnabled
+                      ? Colors.red
+                      : const Color.fromARGB(255, 219, 219, 219),
+                  minimumSize: const Size(500, 50),
                 ),
                 child: const Text(
                   'Tiếp',
                   style: TextStyle(
-                    color: Colors.white, // Màu chữ
-                    fontSize: 18.0, // Kích thước chữ
+                    color: Colors.white,
+                    fontSize: 18.0,
                   ),
                 ),
               )

@@ -1,5 +1,9 @@
+import 'package:app/Provider/dang_ky_email_provider.dart';
+import 'package:app/Provider/gui_data_provider.dart';
+import 'package:app/Service/dang_ky_email_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateDateOfBirth extends StatefulWidget {
   const CreateDateOfBirth({super.key});
@@ -10,7 +14,8 @@ class CreateDateOfBirth extends StatefulWidget {
 
 class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
   DateTime selectedDate = DateTime.now();
-  late int yearNow = selectedDate.year;
+  late int yearNow = DateTime.now().year;
+  int? ageUser;
   bool isButtonEnabled = false;
   bool isCheckAge = false;
   String? dateErrorText;
@@ -20,6 +25,9 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DangKyEmailProvider>(context);
+    final myData = Provider.of<MyData>(context);
+    DangKyEmailService dangKyEmailService = DangKyEmailService();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -49,23 +57,23 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                      child: const Column(
-                        children: [
-                          Text(
-                            'Ngày sinh của bạn là ngày nào?',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    child: const Column(
+                      children: [
+                        Text(
+                          'Ngày sinh của bạn là ngày nào?',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
-                          Text(
-                            'Ngày sinh của bạn sẽ không được \nhiển thị công khai?',
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
+                        ),
+                        Text(
+                          'Ngày sinh của bạn sẽ không được \nhiển thị công khai?',
+                          style: TextStyle(
+                            fontSize: 15,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     width: 25,
@@ -87,10 +95,8 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                   fontWeight: FontWeight.bold, // Độ đậm của chữ
                 ),
                 decoration: InputDecoration(
-                  errorStyle: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold
-                  ),
+                  errorStyle:
+                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                   errorText: dateErrorText = isCheckAge == true
                       ? null
                       : 'Bạn chưa đủ tuổi để tham gia ứng dụng!!!',
@@ -99,8 +105,29 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: isCheckAge
-                    ? () {
-                        setState(() {});
+                    ? () async {
+                        String dayOfBirth = selectedDate.day.toString() +
+                            '/' +
+                            selectedDate.month.toString() +
+                            '/' +
+                            selectedDate.year.toString();
+                        final result = await dangKyEmailService.dangKyBangEmail(
+                          myData.email,
+                          myData.password,
+                          ageUser!,
+                          dayOfBirth
+                        );
+                        if (result == null) {
+                          // Đăng ký thành công, bạn có thể thực hiện các hành động sau đăng ký ở đây
+                          // Ví dụ: Điều hướng người dùng đến màn hình chính của ứng dụng
+                        } else {
+                          // Đăng ký thất bại, hiển thị thông báo lỗi cho người dùng
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Lỗi: $result'),
+                            ),
+                          );
+                        }
                       }
                     : null, // Vô hiệu hóa nút nếu ô input rỗng
                 style: ElevatedButton.styleFrom(
@@ -136,8 +163,10 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                       dateController.text = dateChosse;
                       colorDate = Colors.black;
                       isButtonEnabled = true;
+
                       isCheckAge =
                           yearNow - selectedDate.year >= 16 ? true : false;
+                      ageUser = yearNow - selectedDate.year;
                     });
                   },
                 ),
