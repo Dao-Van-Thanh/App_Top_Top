@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:app/View/Screen/Profile/main_hinh_editProfile.dart';
+import 'package:app/View/Screen/Profile/showAvatar.dart';
 import 'package:app/View/Screen/Profile/tab_bookmark.dart';
 import 'package:app/View/Screen/Profile/tab_video.dart';
 import 'package:app/View/Screen/man_hinh_addFriend.dart';
+import 'package:app/View/Widget/avatar.dart';
 import 'package:app/View/Widget/text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ManHinhProfile extends StatelessWidget {
   const ManHinhProfile({super.key});
@@ -17,8 +22,7 @@ class ManHinhProfile extends StatelessWidget {
           children: [
             Avatar(
                 'https://cdn.pixabay.com/photo/2016/11/14/04/36/boy-1822614_640.jpg',
-                context
-            ),
+                context),
             SizedBox(height: 20),
             text(lable: 'Username', size: 18, fontWeight: FontWeight.normal),
             SizedBox(height: 20),
@@ -44,7 +48,9 @@ class ManHinhProfile extends StatelessWidget {
               ClipOval(
                 child: GestureDetector(
                   onTap: () {
-                    showAboutDialog(context: sContext);
+                    showModalBottomSheet(
+                        context: sContext,
+                        builder: (context) => showAvatarDialog(context, url));
                   },
                   child: CachedNetworkImage(
                     imageUrl: url,
@@ -73,21 +79,25 @@ class ManHinhProfile extends StatelessWidget {
           child: Container(
             child: Column(
               children: [
-                text(lable: dangFollow.toString(),
+                text(
+                    lable: dangFollow.toString(),
                     size: 20,
                     fontWeight: FontWeight.w900),
                 SizedBox(height: 5),
-                text(lable: "Đang follow",
+                text(
+                    lable: "Đang follow",
                     size: 15,
                     fontWeight: FontWeight.normal),
               ],
             ),
           ),
-        ), Expanded(
+        ),
+        Expanded(
           child: Container(
             child: Column(
               children: [
-                text(lable: follow.toString(),
+                text(
+                    lable: follow.toString(),
                     size: 20,
                     fontWeight: FontWeight.w900),
                 SizedBox(height: 5),
@@ -96,11 +106,13 @@ class ManHinhProfile extends StatelessWidget {
               ],
             ),
           ),
-        ), Expanded(
+        ),
+        Expanded(
           child: Container(
             child: Column(
               children: [
-                text(lable: like.toString(),
+                text(
+                    lable: like.toString(),
                     size: 20,
                     fontWeight: FontWeight.w900),
                 SizedBox(height: 5),
@@ -139,8 +151,8 @@ class ManHinhProfile extends StatelessWidget {
                       1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
                   const end = Offset
                       .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
-                  const curve = Curves
-                      .easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
+                  const curve =
+                      Curves.easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
                   var tween = Tween(begin: begin, end: end)
                       .chain(CurveTween(curve: curve));
                   var offsetAnimation = animation.drive(tween);
@@ -154,9 +166,7 @@ class ManHinhProfile extends StatelessWidget {
           },
           child: Text(
             'Sửa hồ sơ',
-            style: TextStyle(
-                color: Colors.black
-            ),
+            style: TextStyle(color: Colors.black),
           ),
         ),
         SizedBox(width: 20),
@@ -182,8 +192,8 @@ class ManHinhProfile extends StatelessWidget {
                       1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
                   const end = Offset
                       .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
-                  const curve = Curves
-                      .easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
+                  const curve =
+                      Curves.easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
                   var tween = Tween(begin: begin, end: end)
                       .chain(CurveTween(curve: curve));
                   var offsetAnimation = animation.drive(tween);
@@ -197,9 +207,7 @@ class ManHinhProfile extends StatelessWidget {
           },
           child: Text(
             'Thêm bạn',
-            style: TextStyle(
-                color: Colors.black
-            ),
+            style: TextStyle(color: Colors.black),
           ),
         ),
       ],
@@ -229,33 +237,59 @@ class ManHinhProfile extends StatelessWidget {
                 child: TabBar(
                   indicatorColor: Colors.black,
                   tabs: [
-                    Tab(child: Icon(
-                      Icons.video_collection, color: Colors.black,)),
-                    Tab(child: Icon(Icons.bookmark, color: Colors.black,)),
+                    Tab(
+                        child: Icon(
+                      Icons.video_collection,
+                      color: Colors.black,
+                    )),
+                    Tab(
+                        child: Icon(
+                      Icons.bookmark,
+                      color: Colors.black,
+                    )),
                   ],
                   labelPadding: EdgeInsets.symmetric(horizontal: 0),
                 ),
               ),
-
             ],
           ),
-        )
-    );
+        ));
   }
 
-  showAvatarDialog(BuildContext context) {
-    return showModalBottomSheet(
-        context: context,
-        builder: (context){
-          return Container(
-            child: Column(
-              children: [
-                Text("data"),
-              ],
-            ),
-          );
-        }
+  showAvatarDialog(BuildContext context, String url) {
+    return Column(
+      children: [
+        SizedBox(height: 10),
+        Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.bottomRight,
+          children: [
+            AvatarCircle(urlImage: url, widthImage: 100, heightImagel: 100),
+            Positioned(
+              right: -15,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(50)),
+                child: IconButton(
+                  onPressed: () {ImagePick(ImageSource.gallery,context);},
+                  icon: Icon(Icons.add, color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        )
+      ],
     );
+  }
+  ImagePick(ImageSource src,BuildContext context) async{
+    final image = await ImagePicker().pickImage(source: src);
+    if(image != null){
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ShowAvatar(urlImage: File(image.path))));
+    }
   }
 
 }

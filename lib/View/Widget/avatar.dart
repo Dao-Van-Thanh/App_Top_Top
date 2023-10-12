@@ -14,11 +14,13 @@ class AvatarCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: urlImage,
-      fit: BoxFit.cover,
-      height: heightImagel,
-      width: widthImage,
+    return ClipOval(
+      child: CachedNetworkImage(
+        imageUrl: urlImage,
+        fit: BoxFit.cover,
+        height: heightImagel,
+        width: widthImage,
+      ),
     );
   }
 }
