@@ -49,6 +49,8 @@ dependencies:
   flutter_ffmpeg: ^0.4.2
   file_picker: ^5.5.0
   video_editor: ^2.4.0
+  flutter_downloader: ^1.11.3
+  path_provider: ^2.1.1
 
 dev_dependencies:
   flutter_test:

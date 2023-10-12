@@ -1,4 +1,7 @@
 import 'package:app/Provider/quay_video_provider.dart';
+import 'package:app/View/Pages/QuayVideo/man_hinh_dang_video.dart';
+import 'package:app/View/Pages/QuayVideo/man_hinh_kiem_tra_video.dart';
+import 'package:app/View/Pages/QuayVideo/man_hinh_kiem_tra_video.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -84,7 +87,7 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                       Container(
                         height: 100,
                         width: 100,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             color: Colors.white, shape: BoxShape.circle),
                         child: IconButton(
                           onPressed: () async {
@@ -93,18 +96,17 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                                 // Đã đang quay video, dừng lại
                                 videoFile = await _controller.stopVideoRecording();
 
-
                                 provider.setVideoFile(videoFile);
                                 // Ở đây, bạn có thể làm gì đó với videoFile, ví dụ: lưu hoặc chia sẻ video
                                 setState(() {
                                   _isRecording = false;
                                 });
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (context) => AddVideoPage(),
-                                //     )
-                                // );
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ManHinhKiemTraVideo(videoFile),
+                                    )
+                                );
                               } else {
                                 // Bắt đầu quay video
                                 await _controller.startVideoRecording();
@@ -133,7 +135,12 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                               onPressed: () async {
                                 XFile? file = await pickVideo();
                                 provider.setVideoFile(file!);
-                                print(file.name);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ManHinhKiemTraVideo(file),
+                                    )
+                                );
                               },
                               icon: const Icon(
                                 Icons.folder,
