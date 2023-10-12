@@ -48,6 +48,7 @@ dependencies:
   video_player: ^2.7.2
   flutter_ffmpeg: ^0.4.2
   file_picker: ^5.5.0
+  video_editor: ^2.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
