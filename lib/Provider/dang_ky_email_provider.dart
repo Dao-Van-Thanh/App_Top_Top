@@ -5,8 +5,12 @@ class DangKyEmailProvider extends ChangeNotifier {
   bool isButtonEnabled = false;
   String? emailErrorText;
   bool isClearButtonVisible = false;
-  bool _isEmailValid(String text) {
-    final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+  bool isEmailValid(String text) {
+    final emailRegExp = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+      caseSensitive: false,
+      multiLine: false,
+    );
     return emailRegExp.hasMatch(text);
   }
 
@@ -16,9 +20,8 @@ class DangKyEmailProvider extends ChangeNotifier {
   }
 
   bool validateEmail() {
-    emailErrorText = _isEmailValid(emailController.text)
-        ? null
-        : 'Nhập địa chỉ email hợp lệ';
+    emailErrorText =
+        isEmailValid(emailController.text) ? null : 'Nhập địa chỉ email hợp lệ';
     notifyListeners();
     return emailErrorText == null;
   }
