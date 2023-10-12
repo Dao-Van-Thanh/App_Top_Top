@@ -1,3 +1,5 @@
+import 'package:app/Services/dang_ky_email_service.dart';
+import 'package:app/Services/dang_nhap_email_service.dart';
 import 'package:flutter/material.dart';
 
 class ManHinhDangNhapEmail extends StatefulWidget {
@@ -46,14 +48,28 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
           children: [
             TextField(
               controller: emailController,
+              cursorColor: Colors.pinkAccent,
               decoration: InputDecoration(
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.pinkAccent), // Màu viền khi focus
+                ),
+                labelStyle: TextStyle(
+                  color: Colors.grey
+                ),
                 labelText: 'Email',
               ),
             ),
             SizedBox(height: 16.0),
             TextField(
               controller: passwordController,
+              cursorColor: Colors.pinkAccent,
               decoration: InputDecoration(
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.pinkAccent), // Màu viền khi focus
+                ),
+                labelStyle: TextStyle(
+                    color: Colors.grey
+                ),
                 labelText: 'Password',
               ),
               obscureText: true,
@@ -73,6 +89,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
             ),
             Container(
               alignment: Alignment.centerLeft,
+              margin: EdgeInsets.only(left: 15),
               child: Text(
                 'Quên mật khẩu',
                 style: TextStyle(
@@ -84,12 +101,38 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: isButtonEnabled
-                  ? () {
+                  ? () async {
                 // Xử lý đăng nhập ở đây
                 String email = emailController.text;
                 String password = passwordController.text;
-                // Gọi hàm xử lý đăng nhập hoặc điều hướng đến màn hình chính
-                // ...
+                DangNhapEmailService service = DangNhapEmailService();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Row(
+                      children: <Widget>[
+                        CircularProgressIndicator(), // Biểu tượng nạp
+                        SizedBox(width: 16.0), // Khoảng cách giữa biểu tượng và văn bản
+                        Text('Đang tải...'), // Văn bản
+                      ],
+                    ),
+                    duration: Duration(seconds: 3), // Độ dài hiển thị
+                  ),
+                );
+                bool check = await service.DangNhapBangEmail(email, password) as bool;
+                if(check){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Thành công'),
+                    ),
+                  );
+                }else{
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Tài khoản không chính xác!'),
+                    ),
+                  );
+                }
+
               }
                   : null,
               style: ButtonStyle(
@@ -99,7 +142,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                       return Color.fromARGB(
                           255, 210, 209, 209); // Màu xám khi không hợp lệ
                     }
-                    return Colors.red; // Màu đỏ khi hợp lệ
+                    return Colors.pinkAccent; // Màu đỏ khi hợp lệ
                   },
                 ),
                 fixedSize: MaterialStateProperty.all<Size>(
