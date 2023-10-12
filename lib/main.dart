@@ -4,6 +4,7 @@ import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Provider/dang_ky_sdt_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/View/Screen/Profile/main_hinh_editProfile.dart';
+import 'package:app/View/Screen/Profile/man_hinh_profile.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: EditProfile(),
+      home: ManHinhProfile(),
     );
   }
 }
