@@ -1,6 +1,7 @@
 import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/dang_ky_sdt_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
+import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ManHinhDangKy(),
+      // home: ManHinhDangKy(),
+      home: ManHinhQuayVideo(),
     );
   }
 }
