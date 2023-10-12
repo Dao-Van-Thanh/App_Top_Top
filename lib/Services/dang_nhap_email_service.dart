@@ -7,12 +7,13 @@ class DangNhapEmailService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<bool> DangNhapBangEmail(String email, String password) async {
+  Future<void> DangNhapBangEmail(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      // Đăng nhập thành công
       User? user = _auth.currentUser;
       if (user != null) {
         DocumentSnapshot userSnapshot =
@@ -28,9 +29,15 @@ class DangNhapEmailService {
           print('Không tìm thấy thông tin người dùng trong Firestore.');
         }
       }
-      return true;
     } on FirebaseAuthException catch (e) {
-      return false;
+      print(e.code);
+      if (e.code == 'user-not-found') {
+        print('Email không tồn tại.');
+      } else if (e.code == 'wrong-password') {
+        print('Sai mật khẩu.');
+      } else {
+        print('Lỗi đăng nhập: ${e.code}');
+      }
     }
   }
 }
