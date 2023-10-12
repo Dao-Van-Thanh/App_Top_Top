@@ -1,6 +1,7 @@
 import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/edit_item_profile_provider.dart';
 import 'package:app/Provider/edit_profile_provider.dart';
+import 'package:app/Provider/dang_ky_sdt_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/View/Screen/Profile/main_hinh_editProfile.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,6 +20,7 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => MyData()),
       ChangeNotifierProvider(create: (context) => DangNhapSdtProvider()),
+      ChangeNotifierProvider(create: (context) => DangKySdtProvider()),
       ChangeNotifierProvider(create: (context) => DangKyEmailProvider()),
       ChangeNotifierProvider(create: (context) => EditItemProfileProvider()),
       ChangeNotifierProvider(create: (context) => EditProfileProvider()),

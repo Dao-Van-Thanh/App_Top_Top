@@ -106,11 +106,7 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
               ElevatedButton(
                 onPressed: isCheckAge
                     ? () async {
-                        String dayOfBirth = selectedDate.day.toString() +
-                            '/' +
-                            selectedDate.month.toString() +
-                            '/' +
-                            selectedDate.year.toString();
+                        String dayOfBirth = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
                         final result = await dangKyEmailService.dangKyBangEmail(
                           myData.email,
                           myData.password,
@@ -136,7 +132,7 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                   ),
                   backgroundColor: isButtonEnabled
                       ? Colors
-                          .red // Màu nền của nút khi có dữ liệu trong ô input
+                          .pinkAccent // Màu nền của nút khi có dữ liệu trong ô input
                       : const Color.fromARGB(255, 219, 219,
                           219), // Màu nền của nút khi ô input rỗng
                   minimumSize: const Size(500, 50), // Kích thước nút
