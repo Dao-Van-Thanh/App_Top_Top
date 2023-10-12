@@ -30,6 +30,7 @@ class _ManHinhDangNhapEmailVoiSdtState extends State<ManHinhDangNhapEmailVoiSdt>
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
+
           centerTitle: true,
           title: const Text(
             'Đăng nhập',

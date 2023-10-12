@@ -117,6 +117,7 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                           // Đăng ký thành công, bạn có thể thực hiện các hành động sau đăng ký ở đây
                           // Ví dụ: Điều hướng người dùng đến màn hình chính của ứng dụng
                         } else {
+
                           // Đăng ký thất bại, hiển thị thông báo lỗi cho người dùng
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

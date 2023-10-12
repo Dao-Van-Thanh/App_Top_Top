@@ -46,6 +46,7 @@ class _ManHinhDangKyOTPState extends State<ManHinhDangKyOTP> {
     _timer.cancel(); // Hủy Timer khi màn hình bị hủy
     provider.isCheckOtp = false;
     provider.isLoading = false;
+
     super.dispose();
   }
 

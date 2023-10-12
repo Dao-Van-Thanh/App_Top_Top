@@ -17,6 +17,7 @@ class UserModel {
       {required this.gender,
       required this.email,
       required this.phone,
+
       required this.age,
       required this.idTopTop,
       required this.avatarURL,

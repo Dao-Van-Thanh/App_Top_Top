@@ -4,6 +4,7 @@ class EditItemProfileProvider extends ChangeNotifier {
   TextEditingController textController = TextEditingController();
   Color colorText = Colors.black;
   int maxText = 0;
+
   int maxLine = 5;
   String? label;
   TextEditingController get getTextController => textController;

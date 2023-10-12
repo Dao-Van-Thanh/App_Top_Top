@@ -14,6 +14,7 @@ class LoadingWidget extends StatelessWidget {
             color: Colors.black.withOpacity(0.0), // Màu đen với độ trong suốt 50%
           )
         ),
+
         const Center(
           child: SizedBox(
               width: 50,

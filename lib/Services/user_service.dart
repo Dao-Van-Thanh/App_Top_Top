@@ -5,6 +5,7 @@ class UserService {
   String? currentUserId;
   // Lấy thông tin user
   Future<Map<String, dynamic>?> getDataUser(String userId) async {
+
     currentUserId = userId;
     try {
       DocumentSnapshot userDoc =
