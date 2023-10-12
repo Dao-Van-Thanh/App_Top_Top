@@ -26,6 +26,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => EditProfileProvider()),
     ],
     child: MyApp(),
+
   ));
 }
 

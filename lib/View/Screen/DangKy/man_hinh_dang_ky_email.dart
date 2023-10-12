@@ -42,6 +42,7 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail> {
                   ),
                   errorText: provider.emailErrorText,
                   focusedBorder: const UnderlineInputBorder(
+
                     borderSide: BorderSide(color: Colors.pinkAccent), // Màu viền khi focus
                   ),
                   suffixIcon: provider.isClearButtonVisible

@@ -1,15 +1,14 @@
-
-import 'package:app/View/Screen/Profile/main_hinh_editProfile.dart';
-import 'package:app/View/Screen/Profile/tab_bookmark.dart';
-import 'package:app/View/Screen/Profile/tab_video.dart';
-import 'package:app/View/Screen/man_hinh_addFriend.dart';
+import 'package:app/View/Pages/Profile/tab_bookmark.dart';
+import 'package:app/View/Pages/Profile/tab_video.dart';
 import 'package:app/View/Widget/text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../Screen/man_hinh_addFriend.dart';
+import 'main_hinh_editProfile.dart';
+
 class ManHinhProfile extends StatelessWidget {
   const ManHinhProfile({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +193,7 @@ class ManHinhProfile extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(top: 40),
                 child: TabBarView(
+
                   children: [
                     TabVideo(),
                     TabBookMark(),

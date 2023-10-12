@@ -70,6 +70,7 @@ class _ManHinhDangKyState extends State<ManHinhDangKyEmailWithSDT>
         body: TabBarView(
           controller: _tabController,
           children: [
+
             ManHinhDangKySDT(),
             ManHinhDangKyEmail()
           ],

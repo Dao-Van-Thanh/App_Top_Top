@@ -1,11 +1,11 @@
 import 'package:app/Provider/edit_item_profile_provider.dart';
 import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Services/user_service.dart';
-import 'package:app/View/Screen/Profile/man_hinh_edit_item_profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'man_hinh_edit_item_profile.dart';
 
 class EditProfile extends StatelessWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -152,6 +152,7 @@ class EditProfile extends StatelessWidget {
                       editItemProvider.updateProfileData(
                           'Tên', editProfileProvider.getfullname.toString());
                       Navigator.push(
+
                         context,
                         MaterialPageRoute(
                             builder: (context) => const EditItemProfile()),

@@ -19,6 +19,7 @@ class DangNhapEmailService {
         DocumentSnapshot userSnapshot =
         await _firestore.collection('Users').doc(user.uid).get();
         if (userSnapshot.exists) {
+
           // Chuyển dữ liệu từ DocumentSnapshot sang UserModel
           UserModel userModel = UserModel.fromSnap(userSnapshot);
           // In thông tin UserModel
