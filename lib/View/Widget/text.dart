@@ -5,6 +5,7 @@ class text extends StatelessWidget {
   final String lable;
   final double size;
   final FontWeight fontWeight;
+
   @override
   Widget build(BuildContext context) {
     return Text(

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-
 class EditItemProfile extends StatefulWidget {
   const EditItemProfile({super.key});
 
   @override
   State<EditItemProfile> createState() => _MyEditItemProfileState();
+
 }
 
 class _MyEditItemProfileState extends State<EditItemProfile> {
