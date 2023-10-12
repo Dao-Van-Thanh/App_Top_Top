@@ -1,12 +1,14 @@
 import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/dang_ky_sdt_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
+import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
 import 'View/Screen/DangKy/man_hinh_dang_ky.dart';
+import 'View/Screen/Pages/trang_chu.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ManHinhDangKy(),
+      home: Bottom_Navigation_Bar(),
     );
   }
 }
