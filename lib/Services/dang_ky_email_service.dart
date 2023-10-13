@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:app/Model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DangKyEmailService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -31,7 +32,6 @@ class DangKyEmailService {
 
   // Phương thức để đăng ký người dùng bằng email và mật khẩu
   Future<String?> dangKyBangEmail(
-
       String email, String password, int age, String dayOfBirth) async {
     try {
       await _auth.createUserWithEmailAndPassword(
@@ -57,6 +57,8 @@ class DangKyEmailService {
           .catchError((error, StackTrace) {
         print(error);
       }); // Đăng ký thành công, trả về null để chỉ ra không có lỗi
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('uid', userModel.uid);
     } catch (e) {
       return e.toString(); // Trả về thông báo lỗi nếu đăng ký thất bại
     }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/user_model.dart';
 
@@ -13,6 +14,8 @@ class DangKySdtService{
         // Đăng nhập thành công, kiểm tra xem người dùng đã đăng ký tài khoản hay chưa
         return await _checkIfUserIsRegistered(user.uid,phone);
       }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('uid', user!.uid);
       return false;
     }
 
