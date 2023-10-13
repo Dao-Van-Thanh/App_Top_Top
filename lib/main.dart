@@ -8,8 +8,6 @@ import 'package:app/View/Pages/TrangChu/timkiem_trangchu.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:app/View/Screen/man_hinh_addFriend.dart';
 import 'package:app/Provider/quay_video_provider.dart';
-import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
-import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +37,6 @@ void main() async {
       ChangeNotifierProvider(create: (context) => QuayVideoProvider()),
     ],
     child: MyApp(),
-
   ));
 }
 
