@@ -4,6 +4,7 @@ import 'package:app/Provider/edit_item_profile_provider.dart';
 import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
+import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:app/View/Screen/man_hinh_addFriend.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
@@ -14,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'Provider/dang_nhap_sdt_provider.dart';
+import 'View/Screen/DangKy/man_hinh_dang_ky.dart';
+import 'View/Screen/Pages/trang_chu.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -43,7 +46,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ManHinhQuayVideo(),
+      home: Bottom_Navigation_Bar(),
     );
   }
 }

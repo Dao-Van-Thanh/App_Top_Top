@@ -1,3 +1,4 @@
+import 'package:app/View/Screen/Pages/trang_chu.dart';
 import 'package:app/View/Screen/Profile/man_hinh_profile.dart';
 import 'package:app/View/Widget/custom_icon_add_video.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
   int pageIdx = 0;
 
   List<Widget> pages = [
-    Text('1'),
+    Manhinhtrangchu(),
     Text('2'),
     Text('3'),
     Text('4'),
