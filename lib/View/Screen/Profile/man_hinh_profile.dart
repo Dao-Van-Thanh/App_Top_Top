@@ -1,28 +1,31 @@
 import 'dart:io';
 
+import 'package:app/Services/user_service.dart';
 import 'package:app/View/Screen/Profile/main_hinh_editProfile.dart';
-import 'package:app/View/Screen/Profile/showAvatar.dart';
+import 'package:app/View/Pages/Profile/showAvatar.dart';
 import 'package:app/View/Screen/Profile/tab_bookmark.dart';
 import 'package:app/View/Screen/Profile/tab_video.dart';
-import 'package:app/View/Screen/man_hinh_addFriend.dart';
+import 'package:app/View/Pages/man_hinh_addFriend.dart';
 import 'package:app/View/Widget/avatar.dart';
 import 'package:app/View/Widget/text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ManHinhProfile extends StatelessWidget {
-  const ManHinhProfile({super.key});
+  const ManHinhProfile({Key? key}) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
+    String? urlUser = FirebaseAuth.instance.currentUser?.photoURL;
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
             Avatar(
-                'https://cdn.pixabay.com/photo/2016/11/14/04/36/boy-1822614_640.jpg',
+                'https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/4d325d0ccb6a83532a11aa435c120bc2~c5_100x100.jpeg?x-expires=1697263200&x-signature=nnXthynxUH4MnH9zStb9e7rg01I%3D',
                 context),
             SizedBox(height: 20),
             text(lable: 'Username', size: 18, fontWeight: FontWeight.normal),
@@ -62,7 +65,7 @@ class ManHinhProfile extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {print(url);},
                 icon: Icon(Icons.upload, color: Colors.redAccent),
               ),
             ],

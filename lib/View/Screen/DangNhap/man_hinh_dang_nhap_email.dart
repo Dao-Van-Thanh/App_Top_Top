@@ -1,3 +1,4 @@
+import 'package:app/View/Screen/Profile/man_hinh_profile.dart';
 import 'package:flutter/material.dart';
 
 class ManHinhDangNhapEmail extends StatefulWidget {
@@ -90,6 +91,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 String email = emailController.text;
                 String password = passwordController.text;
                 // Gọi hàm xử lý đăng nhập hoặc điều hướng đến màn hình chính
+                Navigator.of(context).push(MaterialPageRoute(builder:(context)=> ManHinhProfile()));
                 // ...
               }
                   : null,
