@@ -5,7 +5,6 @@ class UserService {
   String? currentUserId;
   // Lấy thông tin user
   Future<Map<String, dynamic>?> getDataUser(String userId) async {
-
     currentUserId = userId;
     try {
       DocumentSnapshot userDoc =
@@ -88,7 +87,9 @@ class UserService {
         final targetUserID = userData['uid'].toString();
 
         // Kiểm tra xem người dùng có trong danh sách bạn bè đã theo dõi chưa
-        if (!followingList.contains(targetUserID)) {
+
+        if (!followingList.contains(targetUserID) &&
+            targetUserID != 'lxCeVjiVu3YeZcgjZJ3fN8TAGBG2') {
           usersList.add(userData);
         }
       }
