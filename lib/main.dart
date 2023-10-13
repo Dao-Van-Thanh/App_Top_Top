@@ -5,10 +5,11 @@ import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
-import 'package:app/View/Screen/man_hinh_addFriend.dart';
+import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Provider/dang_nhap_sdt_provider.dart';
 import 'firebase_options.dart';
@@ -18,6 +19,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await SharedPreferences.getInstance();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => MyData()),
@@ -39,7 +41,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AddFriend(),
+      // home: ManHinhDangKy(),
+      home: Bottom_Navigation_Bar(),
     );
   }
 }

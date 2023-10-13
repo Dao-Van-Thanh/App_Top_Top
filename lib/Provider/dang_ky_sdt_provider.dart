@@ -1,5 +1,6 @@
 import 'package:app/Services/dang_ky_sdt_service.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_otp.dart';
+import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -90,7 +91,8 @@ class DangKySdtProvider extends ChangeNotifier{
         changCheckOTP(true);
         changeLoading(false);
       }else{
-        print('vào đây ===========2');
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),));
         // đăng ký thành công và chuyển sang màn hình home()
         changCheckOTP(false);
         changeLoading(false);
