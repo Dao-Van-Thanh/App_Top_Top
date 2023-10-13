@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app/Model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +17,18 @@ class DangKyEmailService {
     return "";
   }
 
+  List<String> avatar = [
+    'https://p16-sign-useast2a.tiktokcdn.com/tos-useast2a-avt-0068-giso/9cc5a254434a03a37c75210074d89283~c5_100x100.jpeg?x-expires=1697288400&x-signature=aOhSjWIcG16OWmbXstJp3BkEZA0%3D',
+    'https://p16-sign-useast2a.tiktokcdn.com/tos-useast2a-avt-0068-euttp/0ac5c928977816a378bfc327d9ad3ec2~c5_100x100.jpeg?x-expires=1697288400&x-signature=mDJURQ1IDTtoDbVjpfZCluq8CNc%3D',
+    'https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/596238a62dbb46d8bc958060e86324b7~c5_100x100.jpeg?x-expires=1697288400&x-signature=M21bzOy5N1daZsdhovvHMj2MOF4%3D'
+  ];
+
+  String getRandomAvatar() {
+    final random = Random();
+    final randomIndex = random.nextInt(avatar.length);
+    return avatar[randomIndex];
+  }
+
   // Phương thức để đăng ký người dùng bằng email và mật khẩu
   Future<String?> dangKyBangEmail(
 
@@ -28,7 +42,7 @@ class DangKyEmailService {
         phone: '',
         age: age.toString(),
         uid: _auth.currentUser!.uid,
-        avatarURL: 'https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=6&m=1223671392&s=170667a&w=0&h=zP3l7WJinOFaGb2i1F4g8IS2ylw0FlIaa6x3tP9sebU=',
+        avatarURL: getRandomAvatar(),
         follower: [],
         following: [],
         idTopTop: '@${createName(email)}',
