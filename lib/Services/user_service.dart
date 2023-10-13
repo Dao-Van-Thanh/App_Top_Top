@@ -154,22 +154,17 @@ class UserService {
     }
   }
 
-  Future<String?> getAvatar(String documenId) async {
+  Stream<DocumentSnapshot> getAvatar(String documenId) {
     try {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+      final stream = FirebaseFirestore.instance
           .collection('Users')
           .doc(documenId)
-          .get();
-      if (documentSnapshot.exists) {
-        String? avatarUrl = documentSnapshot['avatarURL'];
-        return avatarUrl;
-      } else {
-        return null;
-      }
+          .snapshots();
+      return stream;
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi khi lấy avatarUrl: $e');
-      return null;
+      throw e; // Rethrow lỗi nếu cần
     }
   }
 }

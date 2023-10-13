@@ -10,6 +10,7 @@ import 'package:app/View/Pages/man_hinh_addFriend.dart';
 import 'package:app/View/Widget/avatar.dart';
 import 'package:app/View/Widget/text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,18 +18,19 @@ import 'package:image_picker/image_picker.dart';
 class ManHinhProfile extends StatelessWidget {
   const ManHinhProfile({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: UserService().getAvatar('sj8BOWfWdBZdVtI4dgNEO4hBVXD2'),
+
+    bool isDialog = false;
+    return StreamBuilder<DocumentSnapshot>(
+        stream: UserService().getAvatar('sj8BOWfWdBZdVtI4dgNEO4hBVXD2'),
         builder: (context,snapshot){
           if(snapshot.connectionState == ConnectionState.waiting){
             return Center(child: CircularProgressIndicator());
           }else if(snapshot.hasError){
             return Text("Error: ${snapshot.error}");
           }else{
-            String? avatarURL = snapshot.data;
+            String? avatarURL = snapshot.data?['avatarURL'];
             print(avatarURL);
             return Scaffold(
               body: SafeArea(
@@ -36,7 +38,7 @@ class ManHinhProfile extends StatelessWidget {
                   children: [
                     Avatar(
                         avatarURL!,
-                        context),
+                        context,isDialog),
                     SizedBox(height: 20),
                     text(lable: 'Username', size: 18, fontWeight: FontWeight.normal),
                     SizedBox(height: 20),
@@ -53,8 +55,7 @@ class ManHinhProfile extends StatelessWidget {
         }
     );
   }
-
-  Avatar(String url, BuildContext sContext) {
+  Avatar(String url, BuildContext sContext,bool isDialog) {
     return Container(
       child: Column(
         children: [
@@ -67,7 +68,7 @@ class ManHinhProfile extends StatelessWidget {
                   onTap: () {
                     showModalBottomSheet(
                         context: sContext,
-                        builder: (context) => showAvatarDialog(context, url));
+                        builder: (context) => showAvatarDialog(context, url,isDialog));
                   },
                   child: SizedBox(
                     height: 100,
@@ -278,7 +279,7 @@ class ManHinhProfile extends StatelessWidget {
         ));
   }
 
-  showAvatarDialog(BuildContext context, String url) {
+  showAvatarDialog(BuildContext context, String url,bool isDialog) {
     return Column(
       children: [
         SizedBox(height: 10),
@@ -286,19 +287,40 @@ class ManHinhProfile extends StatelessWidget {
           clipBehavior: Clip.none,
           alignment: Alignment.bottomRight,
           children: [
-            AvatarCircle(urlImage: url, widthImage: 100, heightImagel: 100),
+            GestureDetector(
+              onTap: (){
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        insetPadding: EdgeInsets.only(top: 350,bottom: 350,left: 10,right: 10),
+                        child: Center(
+                          child: Image.network(
+                              url,
+                            fit: BoxFit.scaleDown,
+                            width: double.infinity,
+
+                          ),
+                        ),
+                      );
+                    },
+                );
+              },
+              child: AvatarCircle(urlImage: url, widthImage: 100, heightImagel: 100)
+            ),
             Positioned(
-              right: -15,
+              right: -10,
               child: Container(
-                width: 40,
-                height: 40,
+                width: 35,
+                height: 35,
                 decoration: BoxDecoration(
                     color: Colors.blueAccent,
                     border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(50)),
+                    borderRadius: BorderRadius.circular(25)),
                 child: IconButton(
+                  padding: EdgeInsets.all(5),
                   onPressed: () {
-                    ImagePick(ImageSource.gallery, context);
+                    ImagePick(ImageSource.gallery, context,isDialog);
                   },
                   icon: Icon(Icons.add, color: Colors.white),
                 ),
@@ -310,12 +332,17 @@ class ManHinhProfile extends StatelessWidget {
     );
   }
 
-  ImagePick(ImageSource src, BuildContext context) async {
+  ImagePick(ImageSource src, BuildContext context,bool isDialog) async {
     final image = await ImagePicker().pickImage(source: src);
     if (image != null) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShowAvatar(urlImage: File(image.path))));
+          builder: (context) => ShowAvatar(urlImage: File(image.path),onSave: (){
+            Navigator.of(context).pop();
+            isDialog = false;
+          },)));
     }
   }
+
+
 
 }

@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:flutter/material.dart';
 
 class ShowAvatar extends StatelessWidget {
-  const ShowAvatar({super.key, required this.urlImage});
+  const ShowAvatar({super.key, required this.urlImage, required this.onSave});
   final File urlImage;
+  final VoidCallback onSave;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,8 @@ class ShowAvatar extends StatelessWidget {
                         textButton("Lưu",widthScreen,(){
                           UserService().uploadFile(urlImage);
                           Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+
                         }),
                       ],
                     )
