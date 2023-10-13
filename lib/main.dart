@@ -6,6 +6,7 @@ import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/View/Pages/TrangChu/timkiem_trangchu.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
+import 'package:app/View/Screen/man_hinh_addFriend.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
