@@ -20,6 +20,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => MyData()),
+
       ChangeNotifierProvider(create: (context) => DangNhapSdtProvider()),
       ChangeNotifierProvider(create: (context) => DangKySdtProvider()),
       ChangeNotifierProvider(create: (context) => DangKyEmailProvider()),
