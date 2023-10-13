@@ -25,6 +25,7 @@ class DangKySdtService{
         // Người dùng chưa tồn tại, hãy thêm họ vào cơ sở dữ liệu
         String idTopTop = await taoVaKiemTraIdTopTop();
         final userModel = UserModel(
+
           gender: 'None',
           email: 'None', // Thêm email nếu bạn muốn
           phone: '+84$phone', // Thêm số điện thoại nếu bạn muốn

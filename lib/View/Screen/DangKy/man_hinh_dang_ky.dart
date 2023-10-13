@@ -18,6 +18,7 @@ class ManHinhDangKy extends StatelessWidget {
               Texts(
                   "Tạo hồ sơ, follow các tài khoản khác, quay\n video của chính bạn,v.v ",
                   18,
+
                   FontWeight.normal),
               SizedBox(height: 40),
               ButtonCusstom(

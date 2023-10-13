@@ -34,16 +34,27 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail> {
                     }
                   });
                 },
+                cursorColor: Colors.pinkAccent,
                 decoration: InputDecoration(
                   labelText: 'Địa chỉ email',
+                  labelStyle: const TextStyle(
+                    color: Colors.grey
+                  ),
                   errorText: provider.emailErrorText,
+                  focusedBorder: const UnderlineInputBorder(
+
+                    borderSide: BorderSide(color: Colors.pinkAccent), // Màu viền khi focus
+                  ),
                   suffixIcon: provider.isClearButtonVisible
                       ? GestureDetector(
                           onTap: () {
                             provider.emailController.clear();
                             provider.isClearButtonVisible = false;
                           },
-                          child: Icon(Icons.close),
+                          child: Icon(
+                              Icons.close,
+                              color: Colors.pinkAccent,
+                          ),
                         )
                       : null,
                 ),
@@ -74,7 +85,7 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail> {
                     borderRadius: BorderRadius.circular(5.0),
                   ),
                   backgroundColor: provider.isButtonEnabled
-                      ? Colors.red
+                      ? Colors.pinkAccent
                       : const Color.fromARGB(255, 219, 219, 219),
                   minimumSize: const Size(500, 50),
                 ),
