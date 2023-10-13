@@ -1,10 +1,10 @@
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
-import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class ManHinhKiemTraVideo extends StatefulWidget {
   final XFile file;
@@ -44,27 +44,23 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
     return result ?? false; // Trả về true nếu result là null
   }
 
-  Future<void> downloadVideo(File videoFile) async {
-    print('đã vào');
+  Future<void> downloadVideo(XFile videoFile) async {
+    File file = File(videoFile.path);
     final directory = await getExternalStorageDirectory();
-    final savedDir = directory?.path; // Lấy thư mục lưu trữ trên thiết bị
+    final savedDir = directory?.path;
 
     if (savedDir != null) {
       final taskId = await FlutterDownloader.enqueue(
-        url: '',
-        // Đặt URL của video bạn muốn tải về
-        savedDir: savedDir,
-        // Thư mục lưu video trên thiết bị
-        fileName: widget.file.name,
-        // Tên của file video
-        showNotification: true,
-        // Hiển thị thông báo khi tải xuống hoàn thành
-        openFileFromNotification: true, // Mở file sau khi tải xuống xong
+        url: file.path,  // Đặt URL cho việc tải xuống
+        savedDir: savedDir,   // Thư mục lưu trữ tải xuống
+        fileName: 'downloaded_video.mp4',  // Đặt tên cho file tải xuống
+        showNotification: true,  // Hiển thị thông báo khi tải xuống hoàn thành
+        openFileFromNotification: true,  // Mở file sau khi tải xuống xong
       );
-      // taskId chứa thông tin về tác vụ tải xuống
-      // Bạn có thể sử dụng taskId để theo dõi tình trạng tải xuống hoặc quản lý các tác vụ khác liên quan đến tải xuống.
+      // taskId chứa thông tin về tác vụ tải xuống, bạn có thể sử dụng nó để kiểm tra trạng thái tải xuống.
     }
   }
+
 
   @override
   void initState() {
@@ -114,7 +110,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                               height: double.maxFinite,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  print('abc');
+                                  downloadVideo(widget.file);
                                 },
                                 style: ButtonStyle(
                                     backgroundColor:
@@ -145,19 +141,22 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                 ],
               ),
             ),
-            AppBar(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              centerTitle: true,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () async {
-                  bool cancel = (await _showCancelDialog()) as bool;
-                  print(cancel);
-                  if (cancel) {
-                    Navigator.of(context).pop();
-                  }
-                },
+            Container(
+              height: 50,
+              child: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                centerTitle: true,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () async {
+                    bool cancel = (await _showCancelDialog()) as bool;
+                    print(cancel);
+                    if (cancel) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
               ),
             ),
           ],
