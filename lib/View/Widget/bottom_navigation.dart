@@ -1,7 +1,9 @@
 import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
-import 'package:app/View/Screen/Pages/trang_chu.dart';
+import 'package:app/View/Pages/TrangChu/trang_chu.dart';
 import 'package:app/View/Widget/custom_icon_add_video.dart';
 import 'package:flutter/material.dart';
+
+import '../Pages/QuayVideo/man_hinh_quay_video.dart';
 
 class Bottom_Navigation_Bar extends StatefulWidget {
   const Bottom_Navigation_Bar({Key? key}) : super(key: key);
@@ -14,11 +16,11 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
   int pageIdx = 0;
 
   List<Widget> pages = [
-    VideoScreen(),
+    Manhinhtrangchu(),
     Text('2'),
-    // ManHinhQuayVideo(),
+    ManHinhQuayVideo(),
     Text('4'),
-    Text('5'),
+    ManHinhProfile(),
   ];
 
   @override
