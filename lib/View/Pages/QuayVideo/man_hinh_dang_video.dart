@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:app/Provider/quay_video_provider.dart';
+import 'package:app/Services/dang_video_service.dart';
+import 'package:app/View/Widget/loading.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,19 +19,24 @@ class ManHinhDangVideo extends StatefulWidget {
 
 class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
   late VideoPlayerController _videoController;
+  TextEditingController controller = TextEditingController();
+  bool isUploading = false;
+
+
 
   @override
   void initState() {
     super.initState();
     _videoController = VideoPlayerController.file(File(widget.xflie.path))
       ..initialize().then((_) {
-        setState(() {}); // Kích hoạt lại build để hiển thị video
+        // Đảm bảo rằng video đã sẵn sàng để phát khi khởi tạo
+          setState(() {});
       });
   }
 
   @override
   void dispose() {
-    _videoController.dispose(); // Giải phóng tài nguyên
+    _videoController.dispose();
     super.dispose();
   }
 
@@ -44,6 +51,13 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
               elevation: 0,
               backgroundColor: Colors.white,
               centerTitle: true,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back,color: Colors.black),
+              ),
               title: const Text(
                 'Đăng',
                 style: TextStyle(
@@ -69,7 +83,8 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                           flex: 3,
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.25,
-                            child: const TextField(
+                            child: TextField(
+                              controller: controller,
                               textAlignVertical: TextAlignVertical.top,
                               decoration: InputDecoration(
                                 hintText: 'Viết nội dung video của bạn ở đây',
@@ -97,10 +112,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.black12,
-                              width: 1
-                          )
+                        border: Border.all(color: Colors.black12, width: 1),
                       ),
                     ),
                     Container(
@@ -118,23 +130,25 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                   ],
                 ),
                 Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.1,
                     child: Padding(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
                       child: Row(
                         children: [
                           Expanded(
                             child: SizedBox(
                               height: double.maxFinite,
                               child: ElevatedButton(
-                                onPressed: () {
-                                },
+                                onPressed: () {},
                                 style: ButtonStyle(
-                                    backgroundColor:
-                                    MaterialStateProperty.all(Colors.blue)),
-                                child: Text('Tải xuống'),
+                                  backgroundColor:
+                                  MaterialStateProperty.all(Colors.blue),
+                                ),
+                                child: Text('Quay lại'),
                               ),
                             ),
                           ),
@@ -143,12 +157,44 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                             child: SizedBox(
                               height: double.maxFinite,
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  // Đánh dấu đang tải lên và cập nhật giao diện
+                                  setState(() {
+                                    isUploading = true;
+                                  });
+
+                                  DangVideoService service = DangVideoService();
+                                  bool check =
+                                  await service.DangVideo(controller.text, widget.xflie);
+                                  if (check) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Đăng video thành công.'),
+
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Đăng video thất bại.'),
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
+
+                                  // Đánh dấu xong tải lên và cập nhật giao diện
+                                  setState(() {
+                                    isUploading = false;
+                                  });
                                 },
-                                child: Text('Tiếp'),
+                                child: Text('Đăng'),
                                 style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.pinkAccent)),
+                                  backgroundColor:
+                                  MaterialStateProperty.all(Colors.pinkAccent),
+                                ),
                               ),
                             ),
                           ),
@@ -157,9 +203,17 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                     ),
                   ),
                 ),
-              ]
+                // Hiển thị tiện ích hàng chờ nếu đang tải lên
+                if (isUploading)
+                  Container(
+                    color: Colors.black.withOpacity(0.7),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+              ],
             ),
-            ),
+          ),
         );
       },
     );

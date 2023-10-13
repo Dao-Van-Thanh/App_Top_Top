@@ -95,7 +95,6 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                               if (_isRecording) {
                                 // Đã đang quay video, dừng lại
                                 videoFile = await _controller.stopVideoRecording();
-
                                 provider.setVideoFile(videoFile);
                                 // Ở đây, bạn có thể làm gì đó với videoFile, ví dụ: lưu hoặc chia sẻ video
                                 setState(() {
