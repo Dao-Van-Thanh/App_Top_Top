@@ -1,6 +1,7 @@
 import 'dart:io';
 
 
+import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
 import 'package:app/View/Pages/Profile/showAvatar.dart';
 import 'package:app/View/Pages/Profile/tab_bookmark.dart';
@@ -19,25 +20,37 @@ class ManHinhProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? urlUser = FirebaseAuth.instance.currentUser?.photoURL;
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Avatar(
-                'https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/4d325d0ccb6a83532a11aa435c120bc2~c5_100x100.jpeg?x-expires=1697263200&x-signature=nnXthynxUH4MnH9zStb9e7rg01I%3D',
-                context),
-            SizedBox(height: 20),
-            text(lable: 'Username', size: 18, fontWeight: FontWeight.normal),
-            SizedBox(height: 20),
-            TrangThai(10, 5, 5),
-            SizedBox(height: 30),
-            textButton(context),
-            SizedBox(height: 10),
-            Expanded(child: TastBar()),
-          ],
-        ),
-      ),
+    return FutureBuilder(
+        future: UserService().getAvatar('sj8BOWfWdBZdVtI4dgNEO4hBVXD2'),
+        builder: (context,snapshot){
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return Center(child: CircularProgressIndicator());
+          }else if(snapshot.hasError){
+            return Text("Error: ${snapshot.error}");
+          }else{
+            String? avatarURL = snapshot.data;
+            print(avatarURL);
+            return Scaffold(
+              body: SafeArea(
+                child: Column(
+                  children: [
+                    Avatar(
+                        avatarURL!,
+                        context),
+                    SizedBox(height: 20),
+                    text(lable: 'Username', size: 18, fontWeight: FontWeight.normal),
+                    SizedBox(height: 20),
+                    TrangThai(10, 5, 5),
+                    SizedBox(height: 30),
+                    textButton(context),
+                    SizedBox(height: 10),
+                    Expanded(child: TastBar()),
+                  ],
+                ),
+              ),
+            );
+          }
+        }
     );
   }
 
@@ -56,16 +69,21 @@ class ManHinhProfile extends StatelessWidget {
                         context: sContext,
                         builder: (context) => showAvatarDialog(context, url));
                   },
-                  child: CachedNetworkImage(
-                    imageUrl: url,
-                    fit: BoxFit.cover,
+                  child: SizedBox(
                     height: 100,
                     width: 100,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.black,
+                      backgroundImage:
+                      NetworkImage(url),
+                    ),
                   ),
                 ),
               ),
               IconButton(
-                onPressed: () {print(url);},
+                onPressed: () {
+                  print(url);
+                },
                 icon: Icon(Icons.upload, color: Colors.redAccent),
               ),
             ],
@@ -279,7 +297,9 @@ class ManHinhProfile extends StatelessWidget {
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(50)),
                 child: IconButton(
-                  onPressed: () {ImagePick(ImageSource.gallery,context);},
+                  onPressed: () {
+                    ImagePick(ImageSource.gallery, context);
+                  },
                   icon: Icon(Icons.add, color: Colors.white),
                 ),
               ),
@@ -289,10 +309,12 @@ class ManHinhProfile extends StatelessWidget {
       ],
     );
   }
-  ImagePick(ImageSource src,BuildContext context) async{
+
+  ImagePick(ImageSource src, BuildContext context) async {
     final image = await ImagePicker().pickImage(source: src);
-    if(image != null){
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ShowAvatar(urlImage: File(image.path))));
+    if (image != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ShowAvatar(urlImage: File(image.path))));
     }
   }
 

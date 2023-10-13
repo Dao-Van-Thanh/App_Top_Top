@@ -27,6 +27,7 @@ class ShowAvatar extends StatelessWidget {
                         }),
                         textButton("Lưu",widthScreen,(){
                           UserService().uploadFile(urlImage);
+                          Navigator.of(context).pop();
                         }),
                       ],
                     )
