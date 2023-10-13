@@ -42,7 +42,6 @@ class _MyWidgetState extends State<CreatePassSingup> {
   List<Color> iconColors = [Colors.grey, Colors.grey];
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<DangKyEmailProvider>(context);
     final myData = Provider.of<MyData>(context);
     return Scaffold(
       appBar: AppBar(
@@ -79,6 +78,7 @@ class _MyWidgetState extends State<CreatePassSingup> {
             ),
             TextField(
               controller: passWordController,
+              cursorColor: Colors.pinkAccent,
               onChanged: (text) {
                 setState(() {
                   // Kiểm tra xem ô input có rỗng hay không để cập nhật trạng thái của nút
@@ -92,7 +92,13 @@ class _MyWidgetState extends State<CreatePassSingup> {
               obscureText:
                   obscureText, // Sử dụng biến để quản lý trạng thái ẩn/mở mật khẩu
               decoration: InputDecoration(
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.pinkAccent), // Màu viền khi focus
+                ),
                 labelText: 'Mật khẩu',
+                labelStyle: const TextStyle(
+                  color: Colors.grey
+                ),
                 // Các thuộc tính khác của InputDecoration
                 suffixIcon: IconButton(
                   icon: Icon(
@@ -163,11 +169,12 @@ class _MyWidgetState extends State<CreatePassSingup> {
                     }
                   : null, // Vô hiệu hóa nút nếu ô input rỗng
               style: ElevatedButton.styleFrom(
+
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0), // Đường viền cong
                 ),
                 backgroundColor: isButtonEnabled
-                    ? Colors.red // Màu nền của nút khi có dữ liệu trong ô input
+                    ? Colors.pinkAccent // Màu nền của nút khi có dữ liệu trong ô input
                     : const Color.fromARGB(
                         255, 219, 219, 219), // Màu nền của nút khi ô input rỗng
                 minimumSize: const Size(500, 50), // Kích thước nút

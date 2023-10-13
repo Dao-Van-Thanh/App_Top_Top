@@ -78,12 +78,14 @@ class DangNhapSdtProvider extends ChangeNotifier{
         verificationId: verificationId,
         smsCode: otp,
       );
+
       // Xác minh OTP và đăng nhập người dùng
       await FirebaseAuth.instance.signInWithCredential(credential);
       setMessage('Thành công');
       changCheckOTP(false);
       changeLoading(false);
       // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
+      
     } catch (e) {
       changeLoading(false);
       changCheckOTP(true);

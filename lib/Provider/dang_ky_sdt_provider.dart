@@ -45,6 +45,7 @@ class DangKySdtProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+
   void changePhoneNumberCheck(bool isPhoneNumberCheck){
     this.isPhoneNumberCheck = isPhoneNumberCheck;
     notifyListeners();
@@ -64,7 +65,7 @@ class DangKySdtProvider extends ChangeNotifier{
         this.verificationId = verificationId;
         changeLoading(false);
         Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ManHinhDangKyOTP())
+            MaterialPageRoute(builder: (context) => ManHinhDangKyOTP())
         );
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -104,6 +105,6 @@ class DangKySdtProvider extends ChangeNotifier{
   }
 
   void guiLaiMaOTP(BuildContext context){
-    verifyOTP(context, smsCode);
+    dangKyPhone(context);
   }
 }
