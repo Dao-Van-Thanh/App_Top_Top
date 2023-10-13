@@ -5,9 +5,10 @@ import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:flutter/material.dart';
 
 class ShowAvatar extends StatelessWidget {
-  const ShowAvatar({super.key, required this.urlImage, required this.onSave});
+  const ShowAvatar({super.key, required this.urlImage, required this.onSave, required this.uId});
   final File urlImage;
   final VoidCallback onSave;
+  final String uId;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class ShowAvatar extends StatelessWidget {
                           Navigator.of(context).pop();
                         }),
                         textButton("Lưu",widthScreen,(){
-                          UserService().uploadFile(urlImage);
+                          UserService().uploadFile(urlImage,uId);
                           Navigator.of(context).pop();
                           Navigator.of(context).pop();
 
