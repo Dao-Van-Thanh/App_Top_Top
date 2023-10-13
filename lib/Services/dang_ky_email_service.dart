@@ -31,6 +31,7 @@ class DangKyEmailService {
 
   // Phương thức để đăng ký người dùng bằng email và mật khẩu
   Future<String?> dangKyBangEmail(
+
       String email, String password, int age, String dayOfBirth) async {
     try {
       await _auth.createUserWithEmailAndPassword(

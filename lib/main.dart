@@ -5,6 +5,10 @@ import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/View/Screen/man_hinh_addFriend.dart';
+import 'package:app/Provider/quay_video_provider.dart';
+import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
+import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
+import 'package:app/View/Screen/Profile/main_hinh_editProfile.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +30,10 @@ void main() async {
       ChangeNotifierProvider(create: (context) => EditItemProfileProvider()),
       ChangeNotifierProvider(create: (context) => EditProfileProvider()),
       ChangeNotifierProvider(create: (context) => FollowProvider()),
+      ChangeNotifierProvider(create: (context) => QuayVideoProvider()),
     ],
     child: MyApp(),
+
   ));
 }
 
@@ -37,7 +43,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AddFriend(),
+      home: ManHinhQuayVideo(),
     );
   }
 }

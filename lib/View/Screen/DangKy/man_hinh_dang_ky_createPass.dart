@@ -169,6 +169,7 @@ class _MyWidgetState extends State<CreatePassSingup> {
                     }
                   : null, // Vô hiệu hóa nút nếu ô input rỗng
               style: ElevatedButton.styleFrom(
+
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0), // Đường viền cong
                 ),

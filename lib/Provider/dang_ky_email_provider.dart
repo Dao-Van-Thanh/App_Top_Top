@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class DangKyEmailProvider extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();
   bool isButtonEnabled = false;
+
   String? emailErrorText;
   bool isClearButtonVisible = false;
   bool isEmailValid(String text) {

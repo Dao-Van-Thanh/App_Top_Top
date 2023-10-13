@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ButtonCusstom extends StatelessWidget {
   final String text;
   final IconData icon;
+
   final VoidCallback onPress;
   const ButtonCusstom({Key?key, required this.text, required this.icon, required this.onPress}):super(key: key);
 
