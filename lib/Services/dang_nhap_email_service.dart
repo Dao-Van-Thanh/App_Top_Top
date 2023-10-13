@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/user_model.dart';
 
@@ -26,6 +27,9 @@ class DangNhapEmailService {
           print('Thông tin UserModel:');
           print('Full Name: ${userModel.fullName}');
           print('Age: ${userModel.age}');
+          print('${userModel.uid}');
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('uid', userModel.uid);
         } else {
           print('Không tìm thấy thông tin người dùng trong Firestore.');
         }

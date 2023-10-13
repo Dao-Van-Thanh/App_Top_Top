@@ -51,7 +51,8 @@ dependencies:
   flutter_downloader: ^1.11.3
   file_picker: ^5.5.0
   video_player: ^2.7.2
-
+  video_thumbnail: ^0.5.3
+  shared_preferences: ^2.2.1
 
 dev_dependencies:
   flutter_test:
