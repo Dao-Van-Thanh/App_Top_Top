@@ -122,7 +122,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 bool check = await service.DangNhapBangEmail(email, password) as bool;
                 if(check){
                   Navigator.push(context, MaterialPageRoute(builder:
-                        (context) => Bottom_Navigation_Bar(),));
+                      (context) => Bottom_Navigation_Bar(),));
                 }else{
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
