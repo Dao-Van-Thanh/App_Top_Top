@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app/View/Pages/QuayVideo/man_hinh_dang_video.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -125,7 +126,10 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                               height: double.maxFinite,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  print('acsacscscs');
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder:
+                                            (context) =>
+                                                ManHinhDangVideo(widget.file),));
                                 },
                                 child: Text('Tiếp'),
                                 style: ButtonStyle(
