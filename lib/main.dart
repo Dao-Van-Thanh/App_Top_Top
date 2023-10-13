@@ -5,7 +5,8 @@ import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
-import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap.dart';
+import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
+import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => QuayVideoProvider()),
     ],
     child: MyApp(),
+
   ));
 }
 
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: ManHinhDangKy(),
-      home: ManHinhDangNhap(),
+      home: Bottom_Navigation_Bar(),
     );
   }
 }

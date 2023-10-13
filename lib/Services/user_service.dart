@@ -144,12 +144,12 @@ class UserService {
     }
   }
 
-  Future uploadFile(File file) async {
+  Future uploadFile(File file,String documenId) async {
     final firestore = FirebaseFirestore.instance;
     CollectionReference users = firestore.collection('Users');
     try{
       String imageUrl = await uploadFileToStorege(file);
-      final userDoc = users.doc('sj8BOWfWdBZdVtI4dgNEO4hBVXD2');
+      final userDoc = users.doc(documenId);
       await userDoc.update({
         "avatarURL": imageUrl,
       });
