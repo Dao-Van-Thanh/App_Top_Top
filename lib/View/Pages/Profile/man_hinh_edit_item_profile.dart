@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class EditItemProfile extends StatefulWidget {
-  const EditItemProfile({super.key});
+  String uid;
+  EditItemProfile(this.uid);
 
   @override
   State<EditItemProfile> createState() => _MyEditItemProfileState();
@@ -45,7 +46,8 @@ class _MyEditItemProfileState extends State<EditItemProfile> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              UserService().editDataUser(provider.getLabel.toString(),
+
+              UserService().editDataUser(widget.uid,provider.getLabel.toString(),
                   provider.getTextController.text);
               editProfileProvider.updateProfileData(
                   provider.getLabel.toString(),

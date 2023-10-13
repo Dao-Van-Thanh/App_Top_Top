@@ -16,7 +16,7 @@ class EditProfile extends StatelessWidget {
     final editProfileProvider = Provider.of<EditProfileProvider>(context);
 
     return FutureBuilder<Map<String, dynamic>?>(
-      future: UserService().getDataUser('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2'),
+      future: UserService().getDataUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
@@ -76,6 +76,7 @@ class EditProfile extends StatelessWidget {
           );
         } else {
           final userData = snapshot.data!;
+          String uid = userData['uid'];
           editProfileProvider.setfullname = userData['fullname'];
           editProfileProvider.setidTopTop = userData['idTopTop'];
           return Scaffold(
@@ -155,7 +156,7 @@ class EditProfile extends StatelessWidget {
 
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditItemProfile()),
+                            builder: (context) => EditItemProfile(uid)),
                       );
                     }),
                     _inkWellRowEdit(
@@ -166,7 +167,7 @@ class EditProfile extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditItemProfile()),
+                            builder: (context) => EditItemProfile(uid)),
                       );
                     }),
                     _inkWellRowEdit('Tiểu sử', 'fuck thuy', () {
@@ -175,7 +176,7 @@ class EditProfile extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditItemProfile()),
+                            builder: (context) => EditItemProfile(uid)),
                       );
                     }),
                     _inkWellRowEdit('Số điện thoại', userData['phone'], () {
