@@ -42,6 +42,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+        missingDimensionStrategy 'sharedPreferences', 'local'
     }
 
     buildTypes {

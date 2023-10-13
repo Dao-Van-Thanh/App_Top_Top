@@ -1,6 +1,7 @@
 import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/Services/dang_ky_email_service.dart';
+import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -114,8 +115,8 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                           dayOfBirth
                         );
                         if (result == null) {
-                          // Đăng ký thành công, bạn có thể thực hiện các hành động sau đăng ký ở đây
-                          // Ví dụ: Điều hướng người dùng đến màn hình chính của ứng dụng
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),));
                         } else {
 
                           // Đăng ký thất bại, hiển thị thông báo lỗi cho người dùng

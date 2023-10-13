@@ -1,6 +1,8 @@
 import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_otp.dart';
+import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DangNhapSdtProvider extends ChangeNotifier{
   bool isPhoneNumberCheck= false;
@@ -80,12 +82,16 @@ class DangNhapSdtProvider extends ChangeNotifier{
       );
 
       // Xác minh OTP và đăng nhập người dùng
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       setMessage('Thành công');
       changCheckOTP(false);
       changeLoading(false);
       // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
-      
+      print(userCredential.user!.uid);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('uid', userCredential.user!.uid);
+      Navigator.push(context, MaterialPageRoute(builder:
+          (context) => Bottom_Navigation_Bar(),));
     } catch (e) {
       changeLoading(false);
       changCheckOTP(true);

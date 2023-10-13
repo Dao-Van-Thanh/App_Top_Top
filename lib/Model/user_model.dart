@@ -57,8 +57,8 @@ class UserModel {
       following: (snapshotData['following'] as List<dynamic>?)
           ?.map((e) => e.toString())
           .toList(),
-      gender: '',
-      uid: '',
+      gender: snapshotData['gender'] ?? 'None',
+      uid: snapshotData['uid'] ?? '',
     );
   }
 }

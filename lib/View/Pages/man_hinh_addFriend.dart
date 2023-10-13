@@ -62,31 +62,32 @@ class _AddFriendState extends State<AddFriend> {
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 0,
-                            horizontal: 0),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: TextField(
-                          cursorColor: Colors.pinkAccent,
-                          decoration: const InputDecoration(
-                            hintText: 'Tìm kiếm theo tên',
-                            hintStyle: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w300,
-                            ),
-                            prefixIcon: Icon(Icons.search),
-                            border: InputBorder.none,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
-                          onChanged: (text) {
-                            print(text);
-                          },
-                        ),
-                      ),
+                          child: TextField(
+                            cursorColor: Colors.pinkAccent,
+                            decoration: const InputDecoration(
+                              hintText: 'Tìm kiếm theo tên',
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w300,
+                              ),
+                              prefixIcon: Icon(Icons.search),
+                              border: InputBorder.none,
+                            ),
+                            onTap: () {
+                              print('TextField đã được nhấn');
+                            },
+                            onChanged: (text) {
+                              print(text);
+                            },
+                          )),
                     ),
                   ),
                   ListView.builder(
