@@ -1,15 +1,16 @@
 import 'dart:io';
 
-
+import 'package:app/Model/user_model.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
 import 'package:app/View/Pages/Profile/showAvatar.dart';
 import 'package:app/View/Pages/Profile/tab_bookmark.dart';
 import 'package:app/View/Pages/Profile/tab_video.dart';
 import 'package:app/View/Pages/man_hinh_addFriend.dart';
+import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/avatar.dart';
+import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:app/View/Widget/text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,67 +26,141 @@ class ManHinhProfile extends StatefulWidget {
 
 class _ManHinhProfileState extends State<ManHinhProfile> {
   String uId = '';
+  bool checkLogin = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getId();
   }
-  Future<void> _getId() async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? saveUid = prefs.getString('uid');
+
+  Future<void> _getId() async {
+    final saveUid = FirebaseAuth.instance.currentUser;
     if (saveUid != null) {
       setState(() {
-        uId = saveUid;
+        uId = saveUid.uid;
+        checkLogin = true;
+      });
+    } else {
+      setState(() {
+        checkLogin = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     bool isDialog = false;
-    return StreamBuilder<DocumentSnapshot>(
+    return checkLogin
+        ? StreamBuilder<DocumentSnapshot>(
+            stream: UserService().getUser(uId),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Text("Error: ${snapshot.error}");
+              } else {
+                UserModel userModel = UserModel.fromSnap(snapshot.data!);
+                return Scaffold(
+                  backgroundColor: Colors.white,
+                  body: SafeArea(
+                    child: Column(
+                      children: [
+                        AppBarCustom(context,userModel.fullName),
+                        Avatar(userModel.avatarURL, context, isDialog, uId),
+                        SizedBox(height: 20),
+                        text(
+                            lable: userModel.idTopTop,
+                            size: 18,
+                            fontWeight: FontWeight.normal
+                        ),
+                        SizedBox(height: 20),
+                        TrangThai(userModel.following!.length,
+                            userModel.follower!.length, 5),
+                        SizedBox(height: 30),
+                        textButton(context),
+                        SizedBox(height: 10),
+                        Expanded(child: TastBar()),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            })
+        : Center(
+            child: ElevatedButton(
+                style: const ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll(Colors.pinkAccent)),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ManHinhDangKy()));
+                },
+                child: const Text(
+                  'Đăng ký',
+                  style: TextStyle(color: Colors.white),
+                )),
+          );
+  }
 
-        stream: UserService().getAvatar(uId),
-        builder: (context,snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(child: CircularProgressIndicator());
-          }else if(snapshot.hasError){
-            return Text("Error: ${snapshot.error}");
-          }else{
-            String? avatarURL = snapshot.data?['avatarURL'];
-            print(avatarURL);
-            return Scaffold(
-              body: SafeArea(
-                child: Column(
-                  children: [
-                    Avatar(
-                        avatarURL!,
-                        context,isDialog,uId),
-                    SizedBox(height: 20),
-                    text(lable: 'Username', size: 18, fontWeight: FontWeight.normal),
-                    SizedBox(height: 20),
-                    TrangThai(10, 5, 5),
-                    SizedBox(height: 30),
-                    textButton(context),
-                    SizedBox(height: 10),
-                    Expanded(child: TastBar()),
-                  ],
+  Widget AppBarCustom(BuildContext context,String fullname){
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.05,
+      child: Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: Container(
+              )
+          ),
+          Expanded(
+              flex: 8,
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  fullname,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18
+                  ),
                 ),
+              )
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              alignment: Alignment.center,
+              child: PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'item1') {
+                    setState(() {
+                      UserService.signOutUser();
+                      Navigator.push(context, 
+                        MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),)
+                      );
+                    });
+                  }
+                },
+                itemBuilder: (BuildContext context) => [
+                  const PopupMenuItem<String>(
+                    value: 'item1',
+                    child: Text('Đăng xuất',style: TextStyle(color: Colors.red),),
+                  ),
+                ],
               ),
-            );
-          }
-        }
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Avatar(String url, BuildContext sContext,bool isDialog,String uid) {
+  Avatar(String url, BuildContext sContext, bool isDialog, String uid) {
     return Container(
       child: Column(
         children: [
-          SizedBox(height: 40),
+          SizedBox(height: 10),
           Stack(
             alignment: Alignment.bottomRight,
             children: [
@@ -94,23 +169,21 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                   onTap: () {
                     showModalBottomSheet(
                         context: sContext,
-                        builder: (context) => showAvatarDialog(context, url,isDialog,uid));
+                        builder: (context) =>
+                            showAvatarDialog(context, url, isDialog, uid));
                   },
                   child: SizedBox(
                     height: 100,
                     width: 100,
                     child: CircleAvatar(
                       backgroundColor: Colors.black,
-                      backgroundImage:
-                      NetworkImage(url),
+                      backgroundImage: NetworkImage(url),
                     ),
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  print(url);
-                },
+              const IconButton(
+                onPressed: null,
                 icon: Icon(Icons.upload, color: Colors.redAccent),
               ),
             ],
@@ -133,7 +206,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                     size: 20,
                     fontWeight: FontWeight.w900),
                 SizedBox(height: 5),
-                text(
+                const text(
                     lable: "Đang follow",
                     size: 15,
                     fontWeight: FontWeight.normal),
@@ -149,8 +222,8 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                     lable: follow.toString(),
                     size: 20,
                     fontWeight: FontWeight.w900),
-                SizedBox(height: 5),
-                text(
+                const SizedBox(height: 5),
+                const text(
                     lable: "Follower", size: 15, fontWeight: FontWeight.normal),
               ],
             ),
@@ -184,7 +257,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               EdgeInsets.all(20.0), // Đặt giá trị padding là 10
             ),
             minimumSize: MaterialStateProperty.all<Size>(
-              Size(100,
+              const Size(100,
                   40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
             ),
           ),
@@ -213,19 +286,19 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               ),
             );
           },
-          child: Text(
+          child: const Text(
             'Sửa hồ sơ',
             style: TextStyle(color: Colors.black),
           ),
         ),
-        SizedBox(width: 20),
+        const SizedBox(width: 20),
         OutlinedButton(
           style: ButtonStyle(
             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
               EdgeInsets.all(20.0), // Đặt giá trị padding là 10
             ),
             minimumSize: MaterialStateProperty.all<Size>(
-              Size(100,
+              const Size(100,
                   40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
             ),
           ),
@@ -254,7 +327,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               ),
             );
           },
-          child: Text(
+          child: const Text(
             'Thêm bạn',
             style: TextStyle(color: Colors.black),
           ),
@@ -267,19 +340,20 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: Stack(
             fit: StackFit.passthrough,
             children: [
               Container(
                 margin: EdgeInsets.only(top: 40),
-                child: TabBarView(
+                child: const TabBarView(
                   children: [
                     TabVideo(),
                     TabBookMark(),
                   ],
                 ),
               ),
-              Positioned(
+              const Positioned(
                 top: 0,
                 right: 0,
                 left: 0,
@@ -288,14 +362,14 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                   tabs: [
                     Tab(
                         child: Icon(
-                          Icons.video_collection,
-                          color: Colors.black,
-                        )),
+                      Icons.video_collection,
+                      color: Colors.black,
+                    )),
                     Tab(
                         child: Icon(
-                          Icons.bookmark,
-                          color: Colors.black,
-                        )),
+                      Icons.bookmark,
+                      color: Colors.black,
+                    )),
                   ],
                   labelPadding: EdgeInsets.symmetric(horizontal: 0),
                 ),
@@ -305,35 +379,36 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
         ));
   }
 
-  showAvatarDialog(BuildContext context, String url,bool isDialog,String uId) {
+  showAvatarDialog(
+      BuildContext context, String url, bool isDialog, String uId) {
     return Column(
       children: [
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.bottomRight,
           children: [
             GestureDetector(
-              onTap: (){
-                showDialog(
+                onTap: () {
+                  showDialog(
                     context: context,
                     builder: (context) {
                       return Dialog(
-                        insetPadding: EdgeInsets.only(top: 350,bottom: 350,left: 10,right: 10),
+                        insetPadding: const EdgeInsets.only(
+                            top: 350, bottom: 350, left: 10, right: 10),
                         child: Center(
                           child: Image.network(
-                              url,
+                            url,
                             fit: BoxFit.scaleDown,
                             width: double.infinity,
-
                           ),
                         ),
                       );
                     },
-                );
-              },
-              child: AvatarCircle(urlImage: url, widthImage: 100, heightImagel: 100)
-            ),
+                  );
+                },
+                child: AvatarCircle(
+                    urlImage: url, widthImage: 100, heightImagel: 100)),
             Positioned(
               right: -10,
               child: Container(
@@ -346,7 +421,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 child: IconButton(
                   padding: EdgeInsets.all(5),
                   onPressed: () {
-                    ImagePick(ImageSource.gallery, context,isDialog,uId);
+                    ImagePick(ImageSource.gallery, context, isDialog, uId);
                   },
                   icon: Icon(Icons.add, color: Colors.white),
                 ),
@@ -358,16 +433,19 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     );
   }
 
-  ImagePick(ImageSource src, BuildContext context,bool isDialog,String uId) async {
+  ImagePick(
+      ImageSource src, BuildContext context, bool isDialog, String uId) async {
     final image = await ImagePicker().pickImage(source: src);
     if (image != null) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShowAvatar(urlImage: File(image.path),onSave: (){
-            Navigator.of(context).pop();
-            isDialog = false;
-          },uId: uId,)
-      )
-      );
+          builder: (context) => ShowAvatar(
+                urlImage: File(image.path),
+                onSave: () {
+                  Navigator.of(context).pop();
+                  isDialog = false;
+                },
+                uId: uId,
+              )));
     }
   }
 }

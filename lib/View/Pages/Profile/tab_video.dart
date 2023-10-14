@@ -6,7 +6,6 @@ class TabVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return gridView();
+    return GridViewVideo();
   }
 }

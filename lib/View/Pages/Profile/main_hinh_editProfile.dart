@@ -20,6 +20,7 @@ class EditProfile extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
@@ -119,7 +120,7 @@ class EditProfile extends StatelessWidget {
                             ClipOval(
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    'https://cdn.pixabay.com/photo/2016/11/14/04/36/boy-1822614_640.jpg',
+                                    '${userData['avatarURL']}',
                                 fit: BoxFit.cover,
                                 height: 100,
                                 width: 100,

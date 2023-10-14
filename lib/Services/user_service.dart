@@ -158,7 +158,7 @@ class UserService {
     }
   }
 
-  Stream<DocumentSnapshot> getAvatar(String documenId) {
+  Stream<DocumentSnapshot> getUser(String documenId) {
     try {
       final stream = FirebaseFirestore.instance
           .collection('Users')
@@ -167,8 +167,21 @@ class UserService {
       return stream;
     } catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi khi lấy avatarUrl: $e');
+      print('Lỗi: $e');
       throw e; // Rethrow lỗi nếu cần
+    }
+  }
+
+  // Hàm đăng xuất
+  static Future<void> signOutUser() async {
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('uid');
+      // Đăng xuất người dùng khỏi Firebase Auth
+      await _auth.signOut();
+    } catch (e) {
+      print('Lỗi khi đăng xuất: $e');
     }
   }
 }
