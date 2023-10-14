@@ -4,6 +4,7 @@ import 'package:app/Provider/edit_item_profile_provider.dart';
 import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
+import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
@@ -32,6 +33,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => EditProfileProvider()),
       ChangeNotifierProvider(create: (context) => FollowProvider()),
       ChangeNotifierProvider(create: (context) => QuayVideoProvider()),
+      ChangeNotifierProvider(create: (context) => ProfileProvider()),
     ],
     child: MyApp(),
 
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: ManHinhDangKy(),
       home: Bottom_Navigation_Bar(),

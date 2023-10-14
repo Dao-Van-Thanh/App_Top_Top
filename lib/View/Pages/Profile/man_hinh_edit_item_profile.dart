@@ -20,6 +20,7 @@ class _MyEditItemProfileState extends State<EditItemProfile> {
     final editProfileProvider = Provider.of<EditItemProfileProvider>(context);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
