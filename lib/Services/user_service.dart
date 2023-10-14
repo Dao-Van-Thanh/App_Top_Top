@@ -3,17 +3,19 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String? currentUserId;
 
   // Lấy thông tin user
-  Future<Map<String, dynamic>?> getDataUser(String userId) async {
-    currentUserId = userId;
+  Future<Map<String, dynamic>?> getDataUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    currentUserId = prefs.getString('uid');
     try {
       DocumentSnapshot userDoc =
-          await firestore.collection('Users').doc(userId).get();
+          await firestore.collection('Users').doc(currentUserId).get();
       if (userDoc.exists) {
         Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>;
         return userData;

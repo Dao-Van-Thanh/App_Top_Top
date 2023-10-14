@@ -16,7 +16,8 @@ class EditProfile extends StatelessWidget {
     final editProfileProvider = Provider.of<EditProfileProvider>(context);
 
     return FutureBuilder<Map<String, dynamic>?>(
-      future: UserService().getDataUser('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2'),
+      
+      future: UserService().getDataUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(

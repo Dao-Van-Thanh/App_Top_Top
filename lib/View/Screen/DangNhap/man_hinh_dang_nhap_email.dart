@@ -1,4 +1,3 @@
-import 'package:app/Services/dang_ky_email_service.dart';
 import 'package:app/Services/dang_nhap_email_service.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +24,8 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
   void updateButtonState() {
     setState(() {
       bool isEmailValid =
-      RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-          .hasMatch(emailController.text);
+          RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+              .hasMatch(emailController.text);
       bool isPasswordValid = passwordController.text.isNotEmpty;
 
       isButtonEnabled = isEmailValid && isPasswordValid;
@@ -52,11 +51,10 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
               cursorColor: Colors.pinkAccent,
               decoration: InputDecoration(
                 focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pinkAccent), // Màu viền khi focus
+                  borderSide: BorderSide(
+                      color: Colors.pinkAccent), // Màu viền khi focus
                 ),
-                labelStyle: TextStyle(
-                    color: Colors.grey
-                ),
+                labelStyle: TextStyle(color: Colors.grey),
                 labelText: 'Email',
               ),
             ),
@@ -66,11 +64,10 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
               cursorColor: Colors.pinkAccent,
               decoration: InputDecoration(
                 focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pinkAccent), // Màu viền khi focus
+                  borderSide: BorderSide(
+                      color: Colors.pinkAccent), // Màu viền khi focus
                 ),
-                labelStyle: TextStyle(
-                    color: Colors.grey
-                ),
+                labelStyle: TextStyle(color: Colors.grey),
                 labelText: 'Password',
               ),
               obscureText: true,
@@ -103,39 +100,45 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
             ElevatedButton(
               onPressed: isButtonEnabled
                   ? () async {
-                // Xử lý đăng nhập ở đây
-                String email = emailController.text;
-                String password = passwordController.text;
-                DangNhapEmailService service = DangNhapEmailService();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Row(
-                      children: <Widget>[
-                        CircularProgressIndicator(), // Biểu tượng nạp
-                        SizedBox(width: 16.0), // Khoảng cách giữa biểu tượng và văn bản
-                        Text('Đang tải...'), // Văn bản
-                      ],
-                    ),
-                    duration: Duration(seconds: 3), // Độ dài hiển thị
-                  ),
-                );
-                bool check = await service.DangNhapBangEmail(email, password) as bool;
-                if(check){
-                  Navigator.push(context, MaterialPageRoute(builder:
-                        (context) => Bottom_Navigation_Bar(),));
-                }else{
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Tài khoản không chính xác!'),
-                    ),
-                  );
-                }
-
-              }
+                      // Xử lý đăng nhập ở đây
+                      String email = emailController.text;
+                      String password = passwordController.text;
+                      DangNhapEmailService service = DangNhapEmailService();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Row(
+                            children: <Widget>[
+                              CircularProgressIndicator(), // Biểu tượng nạp
+                              SizedBox(
+                                  width:
+                                      16.0), // Khoảng cách giữa biểu tượng và văn bản
+                              Text('Đang tải...'), // Văn bản
+                            ],
+                          ),
+                          duration: Duration(seconds: 3), // Độ dài hiển thị
+                        ),
+                      );
+                      bool check =
+                          await service.DangNhapBangEmail(email, password)
+                              as bool;
+                      if (check) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Bottom_Navigation_Bar(),
+                            ));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Tài khoản không chính xác!'),
+                          ),
+                        );
+                      }
+                    }
                   : null,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
+                  (Set<MaterialState> states) {
                     if (states.contains(MaterialState.disabled)) {
                       return Color.fromARGB(
                           255, 210, 209, 209); // Màu xám khi không hợp lệ

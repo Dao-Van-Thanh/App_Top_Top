@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/user_model.dart';
@@ -18,9 +18,8 @@ class DangNhapEmailService {
       User? user = _auth.currentUser;
       if (user != null) {
         DocumentSnapshot userSnapshot =
-        await _firestore.collection('Users').doc(user.uid).get();
+            await _firestore.collection('Users').doc(user.uid).get();
         if (userSnapshot.exists) {
-
           // Chuyển dữ liệu từ DocumentSnapshot sang UserModel
           UserModel userModel = UserModel.fromSnap(userSnapshot);
           // In thông tin UserModel
