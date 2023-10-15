@@ -31,7 +31,6 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
         child: BottomNavigationBar(
               onTap: (idx) {
                 setState(() {
-                  print('$idx');
                   pageIdx = idx;
                 });
               },

@@ -10,6 +10,9 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import '../../Services/tab_video_service.dart';
 
 class GridViewVideo extends StatefulWidget {
+  String uid;
+  GridViewVideo(this.uid);
+
   @override
   _GridViewVideoState createState() => _GridViewVideoState();
 }
@@ -23,7 +26,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
     super.initState();
     final provider = Provider.of<ProfileProvider>(context, listen: false);
     if (!provider.isLoading && provider.videos.isEmpty) {
-      provider.loadVideos();
+      provider.loadVideos(widget.uid);
     }
   }
 
@@ -42,7 +45,6 @@ class _GridViewVideoState extends State<GridViewVideo> {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
       ),
-      padding: EdgeInsets.all(20),
       primary: false,
       itemCount: videos.length,
       itemBuilder: (context, index) {
@@ -97,7 +99,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
 
   Widget _getDataFirebase(BuildContext context, provider) {
     return FutureBuilder<List<VideoModel>>(
-      future: TabVideoService.getVideosByUid(),
+      future: TabVideoService.getVideosByUid(widget.uid),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -106,7 +108,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
         } else if (snapshot.hasError) {
           return Text('Lỗi: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text('Không có video nào.');
+          return Text('');
         }
         provider.setVideos(snapshot.data!);
         return _content2(context, snapshot.data!);

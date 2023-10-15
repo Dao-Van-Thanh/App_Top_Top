@@ -133,7 +133,6 @@ class UserService {
     try {
       String filePath = file.path.split('/').last;
       final path = 'images/${filePath}';
-      print(file.path);
       final ref = FirebaseStorage.instance.ref().child(path);
       UploadTask uploadTask = ref.putFile(File(file.path));
       TaskSnapshot snap = await uploadTask;
@@ -172,7 +171,6 @@ class UserService {
     }
   }
 
-  // Hàm đăng xuất
   static Future<void> signOutUser() async {
     try {
       final FirebaseAuth _auth = FirebaseAuth.instance;
