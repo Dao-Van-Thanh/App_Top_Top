@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/Model/user_model.dart';
+import 'package:app/Services/others_service.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
 import 'package:app/View/Pages/Profile/showAvatar.dart';
@@ -17,103 +18,65 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ManHinhProfile extends StatefulWidget {
-  const ManHinhProfile({Key? key}) : super(key: key);
+class ManHinhNguoiKhac extends StatefulWidget {
+  String uid;
+
+  ManHinhNguoiKhac({Key? key, required this.uid}) : super(key: key);
 
   @override
-  State<ManHinhProfile> createState() => _ManHinhProfileState();
+  State<ManHinhNguoiKhac> createState() => _ManHinhNguoiKhacState();
 }
 
-class _ManHinhProfileState extends State<ManHinhProfile> {
-  String uId = '';
-  bool checkLogin = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _getId();
-  }
-
-  Future<void> _getId() async {
-    final saveUid = FirebaseAuth.instance.currentUser;
-    if (saveUid != null) {
-      setState(() {
-        uId = saveUid.uid;
-        checkLogin = true;
-      });
-    } else {
-      setState(() {
-        checkLogin = false;
-      });
-    }
-  }
+class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
+  get stream => null;
+  bool checkFollow = false;
 
   @override
   Widget build(BuildContext context) {
     bool isDialog = false;
-    return checkLogin
-        ? StreamBuilder<DocumentSnapshot>(
-            stream: UserService().getUser(uId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Text("Error: ${snapshot.error}");
-              } else {
-                UserModel userModel = UserModel.fromSnap(snapshot.data!);
-                return Scaffold(
-                  backgroundColor: Colors.white,
-                  body: SafeArea(
-                    child: Column(
-                      children: [
-                        AppBarCustom(context,userModel.fullName),
-                        Avatar(userModel.avatarURL, context, isDialog, uId),
-                        SizedBox(height: 20),
-                        text(
-                            lable: userModel.idTopTop,
-                            size: 18,
-                            fontWeight: FontWeight.normal
-                        ),
-                        SizedBox(height: 20),
-                        TrangThai(userModel.following!.length,
-                            userModel.follower!.length, 5),
-                        SizedBox(height: 30),
-                        textButton(context),
-                        SizedBox(height: 10),
-                        Expanded(child: TastBar(userModel.uid)),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            })
-        : Center(
-            child: ElevatedButton(
-                style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll(Colors.pinkAccent)),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ManHinhDangKy()));
-                },
-                child: const Text(
-                  'Đăng ký',
-                  style: TextStyle(color: Colors.white),
-                )),
-          );
+    return StreamBuilder<DocumentSnapshot>(
+        stream: UserService().getUser(widget.uid),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text("Error: ${snapshot.error}");
+          } else {
+            UserModel userModel = UserModel.fromSnap(snapshot.data!);
+            return Scaffold(
+              backgroundColor: Colors.white,
+              body: SafeArea(
+                child: Column(
+                  children: [
+                    AppBarCustom(context, userModel.fullName),
+                    Avatar(userModel.avatarURL, context, isDialog, widget.uid),
+                    SizedBox(height: 20),
+                    text(
+                        lable: userModel.idTopTop,
+                        size: 18,
+                        fontWeight: FontWeight.normal),
+                    SizedBox(height: 20),
+                    TrangThai(userModel.following!.length,
+                        userModel.follower!.length, 5),
+                    SizedBox(height: 30),
+                    textButton(context, userModel.uid),
+                    SizedBox(height: 10),
+                    Expanded(child: TastBar()),
+                  ],
+                ),
+              ),
+            );
+          }
+        });
   }
 
-  Widget AppBarCustom(BuildContext context,String fullname){
+  Widget AppBarCustom(BuildContext context, String fullname) {
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.05,
       child: Row(
         children: [
-          Expanded(
-              flex: 1,
-              child: Container(
-              )
-          ),
+          Expanded(flex: 1, child: Container()),
           Expanded(
               flex: 8,
               child: Container(
@@ -121,34 +84,13 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 child: Text(
                   fullname,
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-              )
-          ),
+              )),
           Expanded(
             flex: 1,
             child: Container(
               alignment: Alignment.center,
-              child: PopupMenuButton<String>(
-                onSelected: (value) {
-                  if (value == 'item1') {
-                    setState(() {
-                      UserService.signOutUser();
-                      Navigator.push(context, 
-                        MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),)
-                      );
-                    });
-                  }
-                },
-                itemBuilder: (BuildContext context) => [
-                  const PopupMenuItem<String>(
-                    value: 'item1',
-                    child: Text('Đăng xuất',style: TextStyle(color: Colors.red),),
-                  ),
-                ],
-              ),
             ),
           ),
         ],
@@ -246,97 +188,89 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
       ],
     );
   }
-
-  textButton(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        OutlinedButton(
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.all(20.0), // Đặt giá trị padding là 10
-            ),
-            minimumSize: MaterialStateProperty.all<Size>(
-              const Size(100,
-                  40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
-            ),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    EditProfile(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  const begin = Offset(0.0,
-                      1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
-                  const end = Offset
-                      .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
-                  const curve =
-                      Curves.easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
-                  var tween = Tween(begin: begin, end: end)
-                      .chain(CurveTween(curve: curve));
-                  var offsetAnimation = animation.drive(tween);
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: child,
-                  );
-                },
-              ),
-            );
-          },
-          child: const Text(
-            'Sửa hồ sơ',
-            style: TextStyle(color: Colors.black),
+  textButton(BuildContext context, String idOther) {
+    Widget buttonFollow(BuildContext context) {
+      return ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll(Colors.pinkAccent),
+          minimumSize: MaterialStateProperty.all<Size>(
+            const Size(100,
+                40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
           ),
         ),
-        const SizedBox(width: 20),
-        OutlinedButton(
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.all(20.0), // Đặt giá trị padding là 10
-            ),
-            minimumSize: MaterialStateProperty.all<Size>(
-              const Size(100,
-                  40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
-            ),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    AddFriend(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  const begin = Offset(0.0,
-                      1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
-                  const end = Offset
-                      .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
-                  const curve =
-                      Curves.easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
-                  var tween = Tween(begin: begin, end: end)
-                      .chain(CurveTween(curve: curve));
-                  var offsetAnimation = animation.drive(tween);
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: child,
-                  );
-                },
-              ),
-            );
-          },
-          child: const Text(
-            'Thêm bạn',
-            style: TextStyle(color: Colors.black),
-          ),
+        onPressed: () {
+          OthersService service = OthersService(); // Thay đổi cách khởi tạo đối tượng service
+          service.FollowOther(idOther);
+        },
+        child: const Text(
+          'Follow',
+          style: TextStyle(color: Colors.white),
         ),
-      ],
+      );
+    }
+    Widget bottonFollowing(BuildContext context) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          OutlinedButton(
+            style: ButtonStyle(
+              minimumSize: MaterialStateProperty.all<Size>(
+                const Size(100,
+                    40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
+              ),
+            ),
+            onPressed: () {},
+            child: const Text(
+              'Nhắn tin',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          SizedBox(width: 5,),
+          OutlinedButton(
+            style: ButtonStyle(
+              minimumSize: MaterialStateProperty.all<Size>(
+                const Size(30,
+                    40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
+              ),
+            ),
+            onPressed: () {
+              OthersService service = OthersService();
+              service.UnFollowOther(idOther);
+            },
+            child: Icon(
+              color: Colors.black,
+              size: 20,
+              Icons.undo
+            )
+          ),
+        ],
+      );
+    }
+    return StreamBuilder<DocumentSnapshot>(
+      stream: OthersService.getUserDataStream(),
+      // Sử dụng hàm checkFollow ở đây
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return buttonFollow(
+              context); // Hiển thị một tiến trình đang tải nếu đang kiểm tra
+        }
+        if (snapshot.hasError) {
+          print('Lỗi: ${snapshot.error}');
+          return buttonFollow(context); // Xử lý lỗi nếu cần
+        }
+        final userData = UserModel.fromSnap(snapshot.data!);
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            userData.following != null && userData.following!.contains(idOther)
+                ? bottonFollowing(context)
+                : buttonFollow(context)
+          ],
+        );
+      },
     );
   }
-
-  TastBar(String uid) {
+  TastBar() {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -348,7 +282,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 margin: EdgeInsets.only(top: 40),
                 child: TabBarView(
                   children: [
-                    TabVideo(uid),
+                    TabVideo(widget.uid),
                     TabBookMark(),
                   ],
                 ),

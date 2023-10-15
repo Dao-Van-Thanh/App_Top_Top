@@ -26,20 +26,18 @@ class TabVideoService{
   //     return [];
   //   }
   // }
-  static Future<List<VideoModel>> getVideosByUid() async {
-    final user = FirebaseAuth.instance.currentUser;
+  static Future<List<VideoModel>> getVideosByUid(String uid) async {
     try {
       final CollectionReference videosCollection =
       FirebaseFirestore.instance.collection('Videos');
 
       final QuerySnapshot querySnapshot = await videosCollection
-          .where('uid', isEqualTo: user!.uid) // Điều kiện trường 'uid' bằng UID cụ thể
+          .where('uid', isEqualTo: uid) // Điều kiện trường 'uid' bằng UID cụ thể
           .get();
 
       final List<VideoModel> videos = querySnapshot.docs
           .map((doc) => VideoModel.fromSnap(doc))
           .toList();
-      print('================ ${videos.length}');
       return videos;
     } catch (error) {
       print('Lỗi khi truy vấn dữ liệu từ Firestore: $error');

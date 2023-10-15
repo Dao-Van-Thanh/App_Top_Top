@@ -157,7 +157,6 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                   icon: Icon(Icons.arrow_back),
                   onPressed: () async {
                     bool cancel = (await _showCancelDialog()) as bool;
-                    print(cancel);
                     if (cancel) {
                       Navigator.of(context).pop();
                     }
