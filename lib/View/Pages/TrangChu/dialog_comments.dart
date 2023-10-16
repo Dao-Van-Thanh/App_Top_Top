@@ -1,3 +1,4 @@
+import 'package:app/Model/user_model.dart';
 import 'package:app/Provider/emoji_provider.dart';
 import 'package:app/Services/comment_service.dart';
 import 'package:app/Services/user_service.dart';
@@ -24,7 +25,11 @@ class _CommentsDialogState extends State<CommentsDialog> {
   bool checkLogin = false;
   final textController = TextEditingController();
   bool isEmoji = false;
-  String videoId = "";
+  String? avatarURL;
+  late UserModel userModel ;
+  String videoId = 'HL3uUmTFa7uICZUAsJeg';
+  CommentService commentService = CommentService();
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -39,6 +44,12 @@ class _CommentsDialogState extends State<CommentsDialog> {
         uId = saveUid.uid;
         checkLogin = true;
       });
+      CommentService().getAvatarUrl(uId).then((url) {
+        setState(() {
+          avatarURL = url;
+        });
+      });
+
     } else {
       setState(() {
         checkLogin = false;
@@ -47,10 +58,11 @@ class _CommentsDialogState extends State<CommentsDialog> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream: CommentService().getCmtVideo('DatKUmNPqyKbCyq7sZZB'),
+      stream: CommentService().getCmtVideo(videoId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -66,16 +78,28 @@ class _CommentsDialogState extends State<CommentsDialog> {
               uIds.add(uid);
             }
           });
-
           if (comments.length == 0) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            return Stack(
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Không có bình luận nào.",
-                      style: TextStyle(fontSize: 18)),
+                  Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(width: 50),
+                        Text("Không có bình luận nào.",
+                            style: TextStyle(fontSize: 18)),
+                        Positioned(
+                          bottom: 0,
+                          child:
+                          footerDialog(
+                              avatarURL!,
+                              videoId),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
-              ),
             );
           }
           return Scaffold(
@@ -94,8 +118,8 @@ class _CommentsDialogState extends State<CommentsDialog> {
                       child: Column(
                         children: [
                           footerDialog(
-                              'https://cdn.pixabay.com/photo/2023/08/11/06/12/boy-8182923_640.jpg',
-                              'DatKUmNPqyKbCyq7sZZB'),
+                              avatarURL!,
+                              videoId),
                           // SizedBox(
                           //   height: 200,
                           //   child: EmojiPicker(
@@ -126,8 +150,22 @@ class _CommentsDialogState extends State<CommentsDialog> {
         children: [
           Row(
             children: [
-              AvatarCircle(
-                  urlImage: urlImage, widthImage: 50, heightImagel: 50),
+              FutureBuilder(
+                  future: precacheImage(NetworkImage(urlImage), context),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return AvatarCircle(
+                      urlImage: urlImage,
+                      widthImage: 50,
+                      heightImagel: 50,
+                    );
+                  } else if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return Icon(Icons.error);
+                  }
+                },
+              ),
               SizedBox(width: 5),
               Expanded(
                 child: Card(
@@ -183,6 +221,7 @@ class showComment extends StatelessWidget {
   final Map<String, dynamic> cmtData;
 
 
+
   @override
   Widget build(BuildContext context) {
     Timestamp timestamp = cmtData['timestamp'];
@@ -191,6 +230,7 @@ class showComment extends StatelessWidget {
     Duration duration = now.difference(dateTime);
     int s = duration.inSeconds;
     String? times;
+    String uid = cmtData['uid'];
     if (s < 60) {
       String time = "${s}giây";
       times = time;
@@ -205,47 +245,63 @@ class showComment extends StatelessWidget {
     } else {
       print("Ngày");
     }
-    return Container(
-      margin: EdgeInsets.all(10),
-      child: Row(
-        children: [
-          AvatarCircle(urlImage: 'https://cdn.pixabay.com/photo/2023/07/30/17/00/spider-web-8159315_1280.jpg', widthImage: 50, heightImagel: 50),
-          SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Duong",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey
-                ),
-              ),
-              SizedBox(height: 5),
-              Text(
-                cmtData['text'],
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.black
-                ),
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-              ),
-              SizedBox(height: 5),
-              Row(
+    Future<UserModel?> getUserModel() async {
+      return CommentService().getUserDataForUid(cmtData['uid']);
+    }
+    return FutureBuilder<UserModel?>(
+        future: getUserModel(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(color: Colors.white);
+          } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+          } else {
+            UserModel userModel = snapshot.data!;
+            return Container(
+              margin: EdgeInsets.all(10),
+              child: Row(
                 children: [
-                  Text(
-                    times!,
+                  AvatarCircle(urlImage: userModel.avatarURL, widthImage: 50, heightImagel: 50),
+                  SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        userModel.fullName,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        cmtData['text']?? '',
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black
+                        ),
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Text(
+                            times?? '',
 
+                          )
+                        ],
+                      )
+                    ],
                   )
                 ],
-              )
-            ],
-          )
-        ],
-      ),
+              ),
+            );
+          }
+        },
     );
   }
 }
+
 

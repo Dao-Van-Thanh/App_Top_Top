@@ -1,3 +1,4 @@
+import 'package:app/Model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommentService{
@@ -36,39 +37,31 @@ class CommentService{
       throw e; // Rethrow lỗi nếu cần
     }
   }
-  Future<List<Map<String, dynamic>>?> getUserDataForMultipleUIDs(List<String> uIds) async {
-    try {
-      final userCollection = FirebaseFirestore.instance.collection('Users');
-
-      List<Map<String, dynamic>> userData = [];
-
-      for (String uid in uIds) {
-        DocumentSnapshot userDoc = await userCollection.doc(uid).get();
-        Map<String, dynamic>? userDataMap = userDoc.data() as Map<String, dynamic>?;
-
-        if (userDataMap != null) {
-          userData.add(userDataMap);
-        }
-      }
-
-      return userData;
-    } catch (e) {
-      print('Lỗi khi lấy dữ liệu người dùng: $e');
-      return null;
+  Future<UserModel?> getUserDataForUid(String uid) async {
+    DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+        .collection('Users')  // Thay đổi tên bảng Firestore theo thiết lập của bạn
+        .doc(uid)
+        .get();
+    if (userDataSnapshot.exists) {
+      final userModel = UserModel.fromSnap(userDataSnapshot);
+      return userModel;
+    } else {
+      return null; // Hoặc giá trị mặc định khác tùy theo bạn
     }
   }
-  Future<String?> getUserUrl(String uid) async{
-    try{
-      final userConnect = FirebaseFirestore.instance.doc(uid);
-      final userData = await userConnect.get();
-      if (userData.exists) {
-        final urlImage = userData.data()?['avatarURL'] as String;
-        return urlImage;
+  Future<String?> getAvatarUrl(String uid) async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      DocumentSnapshot userDoc = await firestore.collection('Users').doc(uid).get();
+
+      if (userDoc.exists) {
+        String? avatarUrl = userDoc.get('avatarURL');
+        return avatarUrl;
       } else {
-        // Handle the case where the document with the provided UID doesn't exist.
         return null;
       }
-    }catch (e) {
+    } catch (e) {
       print('Lỗi khi lấy dữ liệu người dùng: $e');
       return null;
     }
