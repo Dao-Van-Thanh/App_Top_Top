@@ -136,7 +136,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                   if (value == 'item1') {
                     setState(() {
                       UserService.signOutUser();
-                      Navigator.push(context, 
+                      Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),)
                       );
                     });

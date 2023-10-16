@@ -107,18 +107,20 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
               ElevatedButton(
                 onPressed: isCheckAge
                     ? () async {
-                        String dayOfBirth = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
+                        String dayOfBirth =
+                            '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
                         final result = await dangKyEmailService.dangKyBangEmail(
-                          myData.email,
-                          myData.password,
-                          ageUser!,
-                          dayOfBirth
-                        );
+                            myData.email,
+                            myData.password,
+                            ageUser!,
+                            dayOfBirth);
                         if (result == null) {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Bottom_Navigation_Bar(),
+                              ));
                         } else {
-
                           // Đăng ký thất bại, hiển thị thông báo lỗi cho người dùng
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

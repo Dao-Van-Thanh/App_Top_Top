@@ -11,8 +11,8 @@ class UserService {
 
   // Lấy thông tin user
   Future<Map<String, dynamic>?> getDataUser() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    currentUserId = preferences.getString('uid');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    currentUserId = prefs.getString('uid');
     try {
       DocumentSnapshot userDoc =
       await firestore.collection('Users').doc(currentUserId).get();
