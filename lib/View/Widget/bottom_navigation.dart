@@ -2,8 +2,13 @@ import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
 import 'package:app/View/Widget/custom_icon_add_video.dart';
 import 'package:flutter/material.dart';
-
 import '../Pages/TrangChu/trang_chu.dart';
+import 'package:app/View/Pages/TrangChu/trang_chu.dart';
+import 'package:app/View/Widget/custom_icon_add_video.dart';
+import 'package:flutter/material.dart';
+
+import '../Pages/QuayVideo/man_hinh_quay_video.dart';
+
 
 class Bottom_Navigation_Bar extends StatefulWidget {
   const Bottom_Navigation_Bar({Key? key}) : super(key: key);

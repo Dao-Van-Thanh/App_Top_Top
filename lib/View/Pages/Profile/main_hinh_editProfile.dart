@@ -16,11 +16,11 @@ class EditProfile extends StatelessWidget {
     final editProfileProvider = Provider.of<EditProfileProvider>(context);
 
     return FutureBuilder<Map<String, dynamic>?>(
-      
       future: UserService().getDataUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
@@ -77,6 +77,7 @@ class EditProfile extends StatelessWidget {
           );
         } else {
           final userData = snapshot.data!;
+          String uid = userData['uid'];
           editProfileProvider.setfullname = userData['fullname'];
           editProfileProvider.setidTopTop = userData['idTopTop'];
           return Scaffold(
@@ -119,7 +120,7 @@ class EditProfile extends StatelessWidget {
                             ClipOval(
                               child: CachedNetworkImage(
                                 imageUrl:
-                                    'https://cdn.pixabay.com/photo/2016/11/14/04/36/boy-1822614_640.jpg',
+                                    '${userData['avatarURL']}',
                                 fit: BoxFit.cover,
                                 height: 100,
                                 width: 100,
@@ -156,7 +157,7 @@ class EditProfile extends StatelessWidget {
 
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditItemProfile()),
+                            builder: (context) => EditItemProfile(uid)),
                       );
                     }),
                     _inkWellRowEdit(
@@ -167,7 +168,7 @@ class EditProfile extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditItemProfile()),
+                            builder: (context) => EditItemProfile(uid)),
                       );
                     }),
                     _inkWellRowEdit('Tiểu sử', 'fuck thuy', () {
@@ -176,7 +177,7 @@ class EditProfile extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditItemProfile()),
+                            builder: (context) => EditItemProfile(uid)),
                       );
                     }),
                     _inkWellRowEdit('Số điện thoại', userData['phone'], () {

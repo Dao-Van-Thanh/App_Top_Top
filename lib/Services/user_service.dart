@@ -28,12 +28,12 @@ class UserService {
   }
 
   // Chỉnh sửa thông tin user
-  Future<void> editDataUser(String label, String value) async {
+  Future<void> editDataUser(String uid,String label, String value) async {
     final firestore = FirebaseFirestore.instance;
     CollectionReference users = firestore.collection('Users');
 
     try {
-      final userDoc = users.doc('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2');
+      final userDoc = users.doc(uid);
       Map<String, dynamic> updateData = {};
       switch (label) {
         case 'Tên':
@@ -131,7 +131,9 @@ class UserService {
 
   Future uploadFileToStorege(File file) async {
     try {
-      final path = 'images/${file.path}';
+      String filePath = file.path.split('/').last;
+      final path = 'images/${filePath}';
+      print(file.path);
       final ref = FirebaseStorage.instance.ref().child(path);
       UploadTask uploadTask = ref.putFile(File(file.path));
       TaskSnapshot snap = await uploadTask;
@@ -142,38 +144,44 @@ class UserService {
     }
   }
 
-  Future uploadFile(File file) async {
+  Future uploadFile(File file,String documenId) async {
     final firestore = FirebaseFirestore.instance;
-    final currentUser = FirebaseAuth.instance.currentUser;
-
-    if (currentUser != null) {
+    CollectionReference users = firestore.collection('Users');
+    try{
       String imageUrl = await uploadFileToStorege(file);
-      final collectionRef = firestore.collection('Users').doc(currentUser.uid);
-      await collectionRef.update({
-        "avatarUrl": imageUrl,
+      final userDoc = users.doc(documenId);
+      await userDoc.update({
+        "avatarURL": imageUrl,
       });
-    } else {
-      // Xử lý trường hợp người dùng chưa đăng nhập
-      print("Người dùng chưa đăng nhập.");
+    } catch (e) {
+      print('Lỗi khi cập nhật dữ liệu người dùng: $e');
     }
   }
 
-  Future<String?> getAvatar(String documenId) async {
+  Stream<DocumentSnapshot> getUser(String documenId) {
     try {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+      final stream = FirebaseFirestore.instance
           .collection('Users')
           .doc(documenId)
-          .get();
-      if (documentSnapshot.exists) {
-        String? avatarUrl = documentSnapshot['avatarUrl'];
-        return avatarUrl;
-      } else {
-        return null;
-      }
+          .snapshots();
+      return stream;
     } catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi khi lấy avatarUrl: $e');
-      return null;
+      print('Lỗi: $e');
+      throw e; // Rethrow lỗi nếu cần
+    }
+  }
+
+  // Hàm đăng xuất
+  static Future<void> signOutUser() async {
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('uid');
+      // Đăng xuất người dùng khỏi Firebase Auth
+      await _auth.signOut();
+    } catch (e) {
+      print('Lỗi khi đăng xuất: $e');
     }
   }
 }
