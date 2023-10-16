@@ -15,9 +15,9 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadVideos() async {
+  Future<void> loadVideos(String uid) async {
     _isLoading = true;
-    _videos = await TabVideoService.getVideosByUid();
+    _videos = await TabVideoService.getVideosByUid(uid);
     _isLoading = false;
     notifyListeners();
   }

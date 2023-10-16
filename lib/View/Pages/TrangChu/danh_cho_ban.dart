@@ -62,7 +62,6 @@ class _ForYouState extends State<ForYou> {
                             videoData!.profilePhoto,
                             videoData!.username,
                             videoData!.id);
-
                         if (!videoProvider.hasCheckedLike) {
                           videoProvider.hasCheckedLike = true;
                           CallVideoService()

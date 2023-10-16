@@ -45,8 +45,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: ManHinhDangKy(),
-      home: Bottom_Navigation_Bar(),
+      home: ManHinhDangKy(),
+      // home: Bottom_Navigation_Bar(),
     );
   }
 }

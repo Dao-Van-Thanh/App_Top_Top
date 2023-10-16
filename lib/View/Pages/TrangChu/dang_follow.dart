@@ -16,7 +16,6 @@ class _Following extends State<Following> {
       body: SafeArea(
         child: PageView.builder(
           onPageChanged: (int page) {
-            print("Page changed to $page");
           },
           scrollDirection: Axis.vertical,
           itemCount: 10,

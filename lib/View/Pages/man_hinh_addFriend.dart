@@ -82,10 +82,10 @@ class _AddFriendState extends State<AddFriend> {
                               border: InputBorder.none,
                             ),
                             onTap: () {
-                              print('TextField đã được nhấn');
+
                             },
                             onChanged: (text) {
-                              print(text);
+
                             },
                           )),
                     ),
@@ -200,8 +200,6 @@ Widget _buttonFollowAndDelete(String label, Color colorText, Color bg,
     onPressed: () {
       switch (label) {
         case 'Xóa':
-          print('xóa' + uid);
-
           break;
         case 'Follow':
           UserService().followUser('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2', uid);

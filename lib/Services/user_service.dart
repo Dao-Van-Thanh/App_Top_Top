@@ -15,7 +15,7 @@ class UserService {
     currentUserId = prefs.getString('uid');
     try {
       DocumentSnapshot userDoc =
-          await firestore.collection('Users').doc(currentUserId).get();
+      await firestore.collection('Users').doc(currentUserId).get();
       if (userDoc.exists) {
         Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>;
         return userData;
@@ -87,7 +87,7 @@ class UserService {
 
       // Lấy danh sách người bạn đã theo dõi một lần
       final followingList =
-          await getFollowingList('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2');
+      await getFollowingList('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2');
 
       for (var userDoc in userSnapshot.docs) {
         Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
@@ -112,13 +112,13 @@ class UserService {
     try {
       final firestoreInstance = FirebaseFirestore.instance;
       DocumentSnapshot currentUserDoc =
-          await firestoreInstance.collection('Users').doc(currentUserID).get();
+      await firestoreInstance.collection('Users').doc(currentUserID).get();
 
       if (currentUserDoc.exists) {
         Map<String, dynamic> currentUserData =
-            currentUserDoc.data() as Map<String, dynamic>;
+        currentUserDoc.data() as Map<String, dynamic>;
         List<String> followingList =
-            List<String>.from(currentUserData['following']);
+        List<String>.from(currentUserData['following']);
         return followingList;
       }
 
@@ -133,7 +133,6 @@ class UserService {
     try {
       String filePath = file.path.split('/').last;
       final path = 'images/${filePath}';
-      print(file.path);
       final ref = FirebaseStorage.instance.ref().child(path);
       UploadTask uploadTask = ref.putFile(File(file.path));
       TaskSnapshot snap = await uploadTask;
@@ -172,7 +171,6 @@ class UserService {
     }
   }
 
-  // Hàm đăng xuất
   static Future<void> signOutUser() async {
     try {
       final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -184,4 +182,5 @@ class UserService {
       print('Lỗi khi đăng xuất: $e');
     }
   }
+
 }

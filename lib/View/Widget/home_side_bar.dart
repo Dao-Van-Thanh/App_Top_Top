@@ -1,6 +1,28 @@
+
 import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/call_video_service.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:app/Provider/emoji_provider.dart';
+import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/TrangChu/dialog_comments.dart';
+import 'package:app/View/Widget/avatar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class HomeSideBar extends StatefulWidget {
+  const HomeSideBar({Key? key}) : super(key: key);
+
+  @override
+  State<HomeSideBar> createState() => _HomeSideBarState();
+}
+
+class _HomeSideBarState extends State<HomeSideBar>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
 
 class HomeSideBar extends StatelessWidget {
   final VideoProvider videoProvider;
@@ -8,6 +30,7 @@ class HomeSideBar extends StatelessWidget {
 
   const HomeSideBar(this.videoProvider, this.callVideoService, {Key? key})
       : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -120,3 +143,4 @@ class HomeSideBar extends StatelessWidget {
     );
   }
 }
+
