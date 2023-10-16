@@ -50,8 +50,8 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
             TextField(
               controller: emailController,
               cursorColor: Colors.pinkAccent,
-              decoration: InputDecoration(
-                focusedBorder: const UnderlineInputBorder(
+              decoration: const InputDecoration(
+                focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.pinkAccent), // Màu viền khi focus
                 ),
                 labelStyle: TextStyle(
@@ -60,12 +60,12 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 labelText: 'Email',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: passwordController,
               cursorColor: Colors.pinkAccent,
-              decoration: InputDecoration(
-                focusedBorder: const UnderlineInputBorder(
+              decoration: const InputDecoration(
+                focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.pinkAccent), // Màu viền khi focus
                 ),
                 labelStyle: TextStyle(
@@ -91,7 +91,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
             Container(
               alignment: Alignment.centerLeft,
               margin: EdgeInsets.only(left: 15),
-              child: Text(
+              child: const Text(
                 'Quên mật khẩu',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -119,10 +119,10 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                     duration: Duration(seconds: 3), // Độ dài hiển thị
                   ),
                 );
-                bool check = await service.DangNhapBangEmail(email, password) as bool;
+                bool check = await service.DangNhapBangEmail(email, password);
                 if(check){
                   Navigator.push(context, MaterialPageRoute(builder:
-                      (context) => Bottom_Navigation_Bar(),));
+                      (context) => const Bottom_Navigation_Bar(),));
                 }else{
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -137,17 +137,17 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                     if (states.contains(MaterialState.disabled)) {
-                      return Color.fromARGB(
+                      return const Color.fromARGB(
                           255, 210, 209, 209); // Màu xám khi không hợp lệ
                     }
                     return Colors.pinkAccent; // Màu đỏ khi hợp lệ
                   },
                 ),
                 fixedSize: MaterialStateProperty.all<Size>(
-                  Size(350, 50), // Kích thước của nút
+                  const Size(350, 50), // Kích thước của nút
                 ),
               ),
-              child: Text('Log in'),
+              child: const Text('Log in'),
             ),
           ],
         ),
