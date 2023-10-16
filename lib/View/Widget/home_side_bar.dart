@@ -1,7 +1,14 @@
 import 'dart:math';
 
+import 'package:app/Provider/emoji_provider.dart';
+import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/TrangChu/dialog_comments.dart';
+import 'package:app/View/Widget/avatar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeSideBar extends StatefulWidget {
   const HomeSideBar({Key? key}) : super(key: key);
@@ -32,6 +39,7 @@ class _HomeSideBarState extends State<HomeSideBar>
     _animationController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +93,15 @@ class _HomeSideBarState extends State<HomeSideBar>
           if (iconName == 'heart') {
             heartIconColor = Colors.red;
           } else if (iconName == 'comment') {
-            commentIconColor = Colors.blue;
+            showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Provider<EmojiProvider>(
+                    create: (_) => EmojiProvider(),
+                    child: CommentsDialog(),
+                  );
+                },
+            );
           } else if (iconName == 'bookmark') {
             bookmarkIconColor = Colors.yellow;
           } else if (iconName == 'share') {
@@ -148,4 +164,6 @@ class _HomeSideBarState extends State<HomeSideBar>
       ],
     );
   }
+
+
 }
