@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:app/Model/video_model.dart';
 import 'package:app/Provider/profile_provider.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -18,7 +19,6 @@ class GridViewVideo extends StatefulWidget {
 }
 
 class _GridViewVideoState extends State<GridViewVideo> {
-  late VideoPlayerController _controller;
   bool _isLooping = false; // Đặt mặc định để lặp lại
 
   @override
@@ -60,8 +60,26 @@ class _GridViewVideoState extends State<GridViewVideo> {
               fit: StackFit.expand,
               alignment: Alignment.bottomRight,
               children: [
-                VideoPlayer(
-                  _createVideoPlayerController(video.videoUrl),
+                // Sử dụng Chewie để phát video thay vì VideoPlayer
+                Chewie(
+                  controller: ChewieController(
+                    videoPlayerController: VideoPlayerController.network(
+                      video.videoUrl,
+                    ),
+                    autoPlay: false, // Tắt tự động phát video
+                    looping: true, // Cho phép lặp lại video
+                    allowMuting: true, // Cho phép tắt tiếng
+                    showControls: false, // Tắt hiển thị các điều khiển
+                    showOptions: false, // Tắt hiển thị tùy chọn video (chẳng hạn như tua video)
+                    aspectRatio: 1/1, // Tùy chỉnh tỷ lệ khung hình
+                    autoInitialize: true, // Tự động khởi tạo videoPlayerController khi được tạo
+                    errorBuilder: (context, errorMessage) {
+                      // Xử lý lỗi video (nếu có)
+                      return Center(
+                        child: Text('Lỗi: $errorMessage'),
+                      );
+                    },
+                  ),
                 ),
                 Positioned(
                   bottom: 10,
@@ -86,16 +104,17 @@ class _GridViewVideoState extends State<GridViewVideo> {
     );
   }
 
-  VideoPlayerController _createVideoPlayerController(String videoUrl) {
-    final controller = VideoPlayerController.network(videoUrl);
-    controller.setLooping(_isLooping);
-    // Đặt thời gian ban đầu cho video (2 giây)
-    controller.initialize().then((_) {
-      controller.seekTo(Duration(seconds: 2));
-      controller.play();
-    });
-    return controller;
-  }
+  //
+  // VideoPlayerController _createVideoPlayerController(String videoUrl) {
+  //   controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+  //   // controller.setLooping(true);
+  //   // Đặt thời gian ban đầu cho video (2 giây)
+  //   // controller.initialize().then((_) {
+  //   //   controller.seekTo(Duration(seconds: 1));
+  //   //   controller.play();
+  //   // });
+  //   return controller;
+  // }
 
   Widget _getDataFirebase(BuildContext context, provider) {
     return FutureBuilder<List<VideoModel>>(

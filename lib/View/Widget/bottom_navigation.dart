@@ -35,7 +35,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
                 });
               },
               type: BottomNavigationBarType.fixed,
-              backgroundColor: Color.fromARGB(255, 23, 1, 1),
+              backgroundColor: const Color.fromARGB(255, 23, 1, 1),
               selectedItemColor: Colors.white,
               unselectedItemColor: Colors.grey,
               currentIndex: pageIdx,
