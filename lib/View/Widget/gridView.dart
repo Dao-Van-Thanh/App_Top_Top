@@ -104,19 +104,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
     );
   }
 
-  //
-  // VideoPlayerController _createVideoPlayerController(String videoUrl) {
-  //   controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
-  //   // controller.setLooping(true);
-  //   // Đặt thời gian ban đầu cho video (2 giây)
-  //   // controller.initialize().then((_) {
-  //   //   controller.seekTo(Duration(seconds: 1));
-  //   //   controller.play();
-  //   // });
-  //   return controller;
-  // }
-
-  Widget _getDataFirebase(BuildContext context, provider) {
+  Widget _getDataFirebase(BuildContext context) {
     return FutureBuilder<List<VideoModel>>(
       future: TabVideoService.getVideosByUid(widget.uid),
       builder: (context, snapshot) {
@@ -129,7 +117,6 @@ class _GridViewVideoState extends State<GridViewVideo> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Text('');
         }
-        provider.setVideos(snapshot.data!);
         return _content2(context, snapshot.data!);
       },
     );
@@ -139,16 +126,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Consumer<ProfileProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (provider.videos.isEmpty) {
-            return _getDataFirebase(context, provider);
-          }
-          return _content2(context, provider.videos);
-        },
-      ),
+      body: _getDataFirebase(context)
     );
   }
 }

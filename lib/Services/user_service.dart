@@ -127,7 +127,7 @@ class UserService {
     try {
       final firestoreInstance = FirebaseFirestore.instance;
       DocumentSnapshot currentUserDoc =
-       await firestoreInstance.collection('Users').doc(currentUserID).get();
+      await firestoreInstance.collection('Users').doc(currentUserID).get();
       if (currentUserDoc.exists) {
         Map<String, dynamic> currentUserData =
         currentUserDoc.data() as Map<String, dynamic>;
