@@ -1,4 +1,3 @@
-import 'package:app/View/Pages/Chats/man_hinh_chat.dart';
 import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:app/View/Pages/TrangChu/trang_chu.dart';
 import 'package:app/View/Widget/custom_icon_add_video.dart';
@@ -20,7 +19,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
     Manhinhtrangchu(),
     Text('2'),
     ManHinhQuayVideo(),
-    ManHinhChat('rgGweizR6ZbK98pS3MHa'),
+    Text('4'),
     ManHinhProfile(),
   ];
 

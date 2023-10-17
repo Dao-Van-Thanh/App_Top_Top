@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app/Model/chat_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -55,37 +54,23 @@ class UserService {
     }
   }
 
-  Future<void> followUser( String targetUserID) async {
+  Future<void> followUser(String currentUserID, String targetUserID) async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if(user != null){
-        final firestoreInstance = FirebaseFirestore.instance;
-        await firestoreInstance.collection('Users').doc(user.uid).update({
-          'following': FieldValue.arrayUnion([targetUserID]),
-        });
-
-        await firestoreInstance.collection('Users').doc(targetUserID).update({
-          'follower': FieldValue.arrayUnion([user.uid]),
-        });
-      }
+      final firestoreInstance = FirebaseFirestore.instance;
+      await firestoreInstance.collection('Users').doc(currentUserID).update({
+        'following': FieldValue.arrayUnion([targetUserID]),
+      });
     } catch (e) {
       print("Error following user: $e");
     }
   }
 
-  Future<void> unfollowUser(String targetUserID) async {
+  Future<void> unfollowUser(String currentUserID, String targetUserID) async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if(user != null){
-        final firestoreInstance = FirebaseFirestore.instance;
-        await firestoreInstance.collection('Users').doc(user.uid).update({
-          'following': FieldValue.arrayRemove([targetUserID]),
-        });
-
-        await firestoreInstance.collection('Users').doc(targetUserID).update({
-          'follower': FieldValue.arrayRemove([user.uid]),
-        });
-      }
+      final firestoreInstance = FirebaseFirestore.instance;
+      await firestoreInstance.collection('Users').doc(currentUserID).update({
+        'following': FieldValue.arrayRemove([targetUserID]),
+      });
     } catch (e) {
       print("Error unfollowing user: $e");
     }
@@ -93,29 +78,30 @@ class UserService {
 
   Future<List<Map<String, dynamic>>?> getListFriend() async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if(user != null){
-        final firestoreInstance = FirebaseFirestore.instance;
-        final userCollection = firestoreInstance.collection('Users');
+      final firestoreInstance = FirebaseFirestore.instance;
+      final userCollection = firestoreInstance.collection('Users');
 
-        QuerySnapshot userSnapshot = await userCollection.get();
+      QuerySnapshot userSnapshot = await userCollection.get();
 
-        List<Map<String, dynamic>> usersList = [];
+      List<Map<String, dynamic>> usersList = [];
 
-        // Lấy danh sách người bạn đã theo dõi một lần
-        final followingList =
-        await getFollowingList(user.uid);
-        for (var userDoc in userSnapshot.docs) {
-          Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-          final targetUserID = userData['uid'].toString();
-          // Kiểm tra xem người dùng có trong danh sách bạn bè đã theo dõi chưa
-          if (!followingList.contains(targetUserID) &&
-              targetUserID != user.uid) {
-            usersList.add(userData);
-          }
+      // Lấy danh sách người bạn đã theo dõi một lần
+      final followingList =
+          await getFollowingList('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2');
+
+      for (var userDoc in userSnapshot.docs) {
+        Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+        final targetUserID = userData['uid'].toString();
+
+        // Kiểm tra xem người dùng có trong danh sách bạn bè đã theo dõi chưa
+
+        if (!followingList.contains(targetUserID) &&
+            targetUserID != 'lxCeVjiVu3YeZcgjZJ3fN8TAGBG2') {
+          usersList.add(userData);
         }
-        return usersList;
       }
+
+      return usersList;
     } catch (e) {
       print("Error getting users: $e");
       return null;
@@ -127,6 +113,7 @@ class UserService {
       final firestoreInstance = FirebaseFirestore.instance;
       DocumentSnapshot currentUserDoc =
           await firestoreInstance.collection('Users').doc(currentUserID).get();
+
       if (currentUserDoc.exists) {
         Map<String, dynamic> currentUserData =
             currentUserDoc.data() as Map<String, dynamic>;
@@ -134,6 +121,7 @@ class UserService {
             List<String>.from(currentUserData['following']);
         return followingList;
       }
+
       return [];
     } catch (e) {
       print("Error getting following list: $e");
