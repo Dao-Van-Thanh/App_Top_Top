@@ -1,4 +1,8 @@
+
+import 'package:app/View/Pages/Chats/man_hinh_chat.dart';
+
 import 'package:app/Services/user_service.dart';
+
 import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
 import 'package:app/View/Widget/custom_icon_add_video.dart';
@@ -26,7 +30,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
     Manhinhtrangchu(),
     Text('2'),
     ManHinhQuayVideo(),
-    Text('4'),
+    ManHinhChat('rgGweizR6ZbK98pS3MHa'),
     ManHinhProfile(),
   ];
 
@@ -81,26 +85,6 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
                 ),
               ],
             ),
-            BottomNavigationBarItem(
-              icon: CustomIconButtonAddVideo(),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.message,
-                size: 30,
-              ),
-              label: 'Hộp thư',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                size: 30,
-              ),
-              label: 'Cá nhân',
-            ),
-          ],
-        ),
       ),
       body: pages[pageIdx],
     );

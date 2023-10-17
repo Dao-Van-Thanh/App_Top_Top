@@ -15,7 +15,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../Provider/profile_provider.dart';
 
 class ManHinhProfile extends StatefulWidget {
   const ManHinhProfile({Key? key}) : super(key: key);
@@ -135,6 +138,8 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 onSelected: (value) {
                   if (value == 'item1') {
                     setState(() {
+                      ProfileProvider provider = Provider.of(context,listen: false);
+                      provider.setVideos([]);
                       UserService.signOutUser();
                       Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),)
