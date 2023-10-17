@@ -1,6 +1,7 @@
-import 'package:app/View/Pages/TrangChu/dang_follow.dart';
 import 'package:app/View/Pages/TrangChu/danh_cho_ban.dart';
 import 'package:flutter/material.dart';
+
+import 'dang_follow.dart';
 
 class Manhinhtrangchu extends StatefulWidget {
   @override
@@ -14,8 +15,7 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(length: 2, vsync: this, initialIndex: 0);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
   @override
@@ -29,9 +29,10 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black,
         elevation: 0,
         title: TabBar(
+          indicator: BoxDecoration(),
           controller: _tabController,
           tabs: [
             Tab(
@@ -45,11 +46,7 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
         actions: [
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () {
-
-              // Hành động khi nhấn vào biểu tượng tìm kiếm
-              // Có thể điều hướng đến màn hình tìm kiếm hoặc thực hiện hành động tìm kiếm ở đây
-            },
+            onPressed: () {},
           ),
         ],
       ),

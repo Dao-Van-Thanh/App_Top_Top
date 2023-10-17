@@ -5,7 +5,6 @@ import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/TrangChu/dialog_comments.dart';
 import 'package:app/View/Widget/avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -87,17 +86,32 @@ class _HomeSideBarState extends State<HomeSideBar>
   }
 
   Widget _sideBarItem(
-      String iconName, String label, TextStyle style, Color iconColor) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (iconName == 'heart') {
-            heartIconColor = Colors.red;
-          } else if (iconName == 'comment') {
-            showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return FutureBuilder(
+      String iconName, int label, TextStyle style, int index1, Color color, BuildContext context ) {
+    IconData iconData;
+    // Dựa vào tên iconName, bạn có thể map nó thành IconData tương ứng
+    if (iconName == 'heart') {
+      iconData = Icons.favorite;
+    } else if (iconName == 'comment') {
+      iconData = Icons.comment;
+    } else if (iconName == 'share') {
+      iconData = Icons.share;
+    } else {
+      iconData = Icons.star;
+    }
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            switch (iconName) {
+              case 'heart':
+                videoProvider.incrementLike();
+                callVideoService.likeVideo(videoProvider.videoId);
+                break;
+              case 'comment':
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return FutureBuilder(
                     future: FirebaseAuth.instance.authStateChanges().first,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -106,34 +120,33 @@ class _HomeSideBarState extends State<HomeSideBar>
                         final user = snapshot.data as User?;
 
                         if (user != null) {
-                          return CommentsDialog(); // Truyền uid vào CommentsDialog
+                          return CommentsDialog(videoProvider.videoId); // Truyền uid vào CommentsDialog
                         } else {
                           return Text('Người dùng không đăng nhập');
                         }
                       }
                     },
-                  );
-                },
-            );
-          } else if (iconName == 'bookmark') {
-            bookmarkIconColor = Colors.yellow;
-          } else if (iconName == 'share') {
-            shareIconColor = Colors.green;
-          }
-        });
-      },
-      child: Column(
-        children: [
-          SvgPicture.asset('assets/$iconName.svg', color: iconColor),
-          SizedBox(
-            height: 5,
+                    );
+                  },
+                );
+                break;
+              default:
+            }
+          },
+          child: Icon(
+            iconData,
+            size: 30,
+            color: color,
           ),
-          Text(
-            label,
-            style: style,
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Text(
+          label.toString(),
+          style: style,
+        ),
+      ],
     );
   }
 
