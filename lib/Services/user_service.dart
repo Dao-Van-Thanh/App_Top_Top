@@ -112,6 +112,7 @@ class UserService {
           if (!followingList.contains(targetUserID) &&
               targetUserID != user.uid) {
             usersList.add(userData);
+
           }
         }
         return usersList;
