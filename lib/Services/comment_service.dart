@@ -37,6 +37,20 @@ class CommentService{
       throw e; // Rethrow lỗi nếu cần
     }
   }
+  // Future<void> repliesCmt(String commentId,String uId,String commnet){
+  //   final videoCollection = FirebaseFirestore.instance.collection("Videos");
+  //   try{
+  //     Map<String,dynamic> repliesCMT={
+  //       'uid':uId,
+  //       'replies':commnet,
+  //     }
+  //     return '';
+  //   }catch (e) {
+  //     // Xử lý lỗi nếu có
+  //     print('Lỗi: $e');
+  //     throw e; // Rethrow lỗi nếu cần
+  //   }
+  // }
   Future<UserModel?> getUserDataForUid(String uid) async {
     DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
         .collection('Users')  // Thay đổi tên bảng Firestore theo thiết lập của bạn

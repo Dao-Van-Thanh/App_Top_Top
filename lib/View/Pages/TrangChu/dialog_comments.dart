@@ -21,7 +21,7 @@ class CommentsDialog extends StatefulWidget {
 }
 
 class _CommentsDialogState extends State<CommentsDialog> {
-  String uId = '';
+  String? uId = '';
   bool checkLogin = false;
   final textController = TextEditingController();
   bool isEmoji = false;
@@ -29,7 +29,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
   late UserModel userModel ;
   String videoId = 'HL3uUmTFa7uICZUAsJeg';
   CommentService commentService = CommentService();
-  
+
   @override
   void initState() {
     // TODO: implement initState
@@ -38,18 +38,18 @@ class _CommentsDialogState extends State<CommentsDialog> {
   }
 
   Future<void> _getId() async {
-    final saveUid = FirebaseAuth.instance.currentUser;
+    final saveUid = await FirebaseAuth.instance.currentUser;
     if (saveUid != null) {
       setState(() {
         uId = saveUid.uid;
         checkLogin = true;
       });
-      CommentService().getAvatarUrl(uId).then((url) {
-        setState(() {
-          avatarURL = url;
-        });
+      CommentService().getAvatarUrl(uId!).then((url) {
+        if (url != null)
+          setState(() {
+            avatarURL = url;
+          });
       });
-
     } else {
       setState(() {
         checkLogin = false;
@@ -61,85 +61,80 @@ class _CommentsDialogState extends State<CommentsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot>(
-      stream: CommentService().getCmtVideo(videoId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Text("Error: ${snapshot.error}");
-        } else {
-          final data = snapshot.data?.data() as Map<String, dynamic>;
-          final comments = data?['comments'] as List<dynamic>;
-          List<String> uIds = [];
-          comments.forEach( (comment) {
-            if (comment is Map<String, dynamic> && comment.containsKey('uid')) {
-              String uid = comment['uid'];
-              uIds.add(uid);
-            }
-          });
-          if (comments.length == 0) {
-            return Stack(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(width: 50),
-                        Text("Không có bình luận nào.",
-                            style: TextStyle(fontSize: 18)),
-                        Positioned(
-                          bottom: 0,
-                          child:
-                          footerDialog(
-                              avatarURL!,
-                              videoId),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-            );
-          }
-          return Scaffold(
-            body: Container(
-              width: MediaQuery.of(context).size.width,
-              // color: Colors.redAccent,
-              child: Stack(
-                children: [
-                  ListView.builder(
-                      itemCount: comments.length,
-                      itemBuilder: (context, index) {
-                        return showComment( cmtData: comments[index]);
-                      }),
-                  Positioned(
-                      bottom: 0,
-                      child: Column(
-                        children: [
-                          footerDialog(
-                              avatarURL!,
-                              videoId),
-                          // SizedBox(
-                          //   height: 200,
-                          //   child: EmojiPicker(
-                          //     textEditingController: textController,
-                          //     config: Config(
-                          //       columns: 3,
-                          //     ),
-                          //   ),
-                          // )
-                        ],
-                      )),
-                ],
-              ),
-            ),
-          );
-        }
-      },
-    );
+     return StreamBuilder<DocumentSnapshot<Object?>>(
+       stream: CommentService().getCmtVideo(videoId),
+       builder: (context, snapshot) {
+         if (snapshot.connectionState == ConnectionState.waiting) {
+           return const Center(child: CircularProgressIndicator());
+         } else if (snapshot.hasError) {
+           return Text("Error: ${snapshot.error}");
+         } else {
+           final data = snapshot.data?.data() as Map<String, dynamic> ?? {};
+           final comments = data?['comments'] as List<dynamic>;
+           // comments.sort();
+           if (comments.length == 0) {
+             return Stack(
+               // mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 Container(
+                   child: Column(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       SizedBox(width: 50),
+                       Text("Không có bình luận nào.",
+                           style: TextStyle(fontSize: 18)),
+                       Positioned(
+                         bottom: 0,
+                         child:
+                         footerDialog(
+                             avatarURL!,
+                             videoId),
+                       ),
+                     ],
+                   ),
+                 )
+               ],
+             );
+           }
+           return Scaffold(
+             body: Container(
+               width: MediaQuery.of(context).size.width,
+               // color: Colors.redAccent,
+               child: Stack(
+                 children: [
+                   ListView.builder(
+                       itemCount: comments.length,
+                       reverse: false,
+                       itemBuilder: (context, index) {
+                         final reversedComments = comments.reversed.toList();
+                         return showComment(cmtData: reversedComments[index]);
+                       }),
+                   Positioned(
+                       bottom: 0,
+                       child: Column(
+                         children: [
+                           footerDialog(
+                               avatarURL!,
+                               videoId),
+                           // SizedBox(
+                           //   height: 200,
+                           //   child: EmojiPicker(
+                           //     textEditingController: textController,
+                           //     config: Config(
+                           //       columns: 3,
+                           //     ),
+                           //   ),
+                           // )
+                         ],
+                       )),
+                 ],
+               ),
+             ),
+           );
+         }
+       },
+     );
   }
-
   footerDialog(String urlImage, String videoId) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -153,17 +148,13 @@ class _CommentsDialogState extends State<CommentsDialog> {
               FutureBuilder(
                   future: precacheImage(NetworkImage(urlImage), context),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return AvatarCircle(
-                      urlImage: urlImage,
-                      widthImage: 50,
-                      heightImagel: 50,
-                    );
-                  } else if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else {
-                    return Icon(Icons.error);
-                  }
+                  return avatarURL != null
+                      ? AvatarCircle(
+                    urlImage: urlImage,
+                    widthImage: 50,
+                    heightImagel: 50,
+                  )
+                      : CircularProgressIndicator();
                 },
               ),
               SizedBox(width: 5),
@@ -199,7 +190,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                       IconButton(
                           onPressed: () {
                             CommentService().sendCmt(
-                                videoId, textController.text.trim(), uId);
+                                videoId, textController.text.trim(), uId!);
                             textController.clear();
                           },
                           icon: Icon(Icons.send))
@@ -219,9 +210,6 @@ class showComment extends StatelessWidget {
   const showComment({super.key,  required this.cmtData});
   // final Map<String, dynamic> userData;
   final Map<String, dynamic> cmtData;
-
-
-
   @override
   Widget build(BuildContext context) {
     Timestamp timestamp = cmtData['timestamp'];
@@ -230,20 +218,23 @@ class showComment extends StatelessWidget {
     Duration duration = now.difference(dateTime);
     int s = duration.inSeconds;
     String? times;
+    bool showReplyTextField = false;
     String uid = cmtData['uid'];
     if (s < 60) {
-      String time = "${s}giây";
+      String time = "${s} giây";
       times = time;
     } else if (s >= 60 && s < 3600) {
       int p = duration.inMinutes;
-      String time = "${p}phút";
+      String time = "${p} phút";
       times = time;
     } else if (s >= 3600 && s < 86400) {
       int h = duration.inHours;
-      String time = "${h}giờ";
+      String time = "${h} giờ";
       times = time;
     } else {
-      print("Ngày");
+      int day = duration.inDays;
+      String time = "${day} ngày";
+      times = time;
     }
     Future<UserModel?> getUserModel() async {
       return CommentService().getUserDataForUid(cmtData['uid']);
@@ -254,35 +245,40 @@ class showComment extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(color: Colors.white);
           } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Text('+++++Error: ${snapshot.error}');
           } else {
-            UserModel userModel = snapshot.data!;
+
+            UserModel? userModel = snapshot.data != null ? snapshot.data! : null;
             return Container(
               margin: EdgeInsets.all(10),
               child: Row(
                 children: [
-                  AvatarCircle(urlImage: userModel.avatarURL, widthImage: 50, heightImagel: 50),
+                  AvatarCircle(urlImage: userModel!.avatarURL, widthImage: 50, heightImagel: 50),
                   SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        userModel.fullName,
+                        userModel!.fullName,
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey
                         ),
                       ),
-                      SizedBox(height: 5),
-                      Text(
-                        cmtData['text']?? '',
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black
+                      SizedBox(height: 10),
+                      Container(
+                        width: MediaQuery.of(context).size.width-150,
+                        child: Text(
+                          cmtData['text']?? '',
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black
+                          ),
+                          // softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 4,
-                        overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 5),
                       Row(
@@ -290,11 +286,34 @@ class showComment extends StatelessWidget {
                           Text(
                             times?? '',
 
+                          ),
+                          TextButton(onPressed: (){
+
+                          }, child: Text("Trả lời",style: TextStyle(color: Colors.black))
                           )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 20,
+                              child:Divider(
+                                color: Colors.grey,
+                                height: 20,
+                                thickness: 1,
+                              ),
+                          ),
+                          SizedBox(width: 5),
+                          TextButton(onPressed: (){
+
+                          }, child: Text("Xem 5 câu trả lời",style: TextStyle(
+                            color: Colors.grey
+                          ),))
+
                         ],
                       )
                     ],
-                  )
+                  ),
                 ],
               ),
             );

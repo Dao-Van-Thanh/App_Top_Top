@@ -6,6 +6,7 @@ import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
+import 'package:app/Provider/text_provider.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
@@ -34,6 +35,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => FollowProvider()),
       ChangeNotifierProvider(create: (context) => QuayVideoProvider()),
       ChangeNotifierProvider(create: (context) => ProfileProvider()),
+      ChangeNotifierProvider(create: (context) => TextProvider()),
     ],
     child: MyApp(),
 
