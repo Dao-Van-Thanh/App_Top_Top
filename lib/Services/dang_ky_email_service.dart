@@ -30,7 +30,7 @@ class DangKyEmailService {
         phone: '',
         age: age.toString(),
         uid: _auth.currentUser!.uid,
-        avatarURL: 'https://tse3.mm.bing.net/th?id=OIP.NRgJJNrJhlvqRpWFwurtHQHaHa&pid=Api&P=0&h=220',
+        avatarURL: 'https://firebasestorage.googleapis.com/v0/b/app-top-top.appspot.com/o/images%2Favatar_default.jfif?alt=media&token=5ddfd838-bfd6-456b-a15b-63721ddeb113&_gl=1*r8bhmr*_ga*NTIwNjEzMzU1LjE2OTU4NzAyOTk.*_ga_CW55HF8NVT*MTY5NzQyNDUzOC43MC4xLjE2OTc0Mjg4NjcuNTIuMC4w',
         follower: [],
         following: [],
         idTopTop: '@${createName(email)}',

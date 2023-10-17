@@ -12,14 +12,7 @@ class AddFriend extends StatefulWidget {
 }
 
 class _AddFriendState extends State<AddFriend> {
-  Future<List<Map<String, dynamic>>?>? _userData;
   bool _hasInitialized = false;
-  @override
-  void initState() {
-    super.initState();
-    _userData = UserService().getListFriend();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +39,7 @@ class _AddFriendState extends State<AddFriend> {
         ),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>?>(
-        future: _userData,
+        future: UserService().getListFriend(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -81,12 +74,8 @@ class _AddFriendState extends State<AddFriend> {
                               prefixIcon: Icon(Icons.search),
                               border: InputBorder.none,
                             ),
-                            onTap: () {
-
-                            },
-                            onChanged: (text) {
-
-                            },
+                            onTap: () {},
+                            onChanged: (text) {},
                           )),
                     ),
                   ),
@@ -114,6 +103,7 @@ class _AddFriendState extends State<AddFriend> {
 
 class UserCard extends StatelessWidget {
   final Map<String, dynamic> userData;
+
   UserCard({required this.userData});
 
   @override
@@ -138,10 +128,12 @@ class UserCard extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                height: 90,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -150,37 +142,40 @@ class UserCard extends StatelessWidget {
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: followProvider.isFollowed
                           ? [
-                              _buttonFollowAndDelete(
-                                  'Xóa',
-                                  Colors.black,
-                                  Colors.grey[300]!,
-                                  userData['uid'],
-                                  followProvider,
-                                  150),
+                              Expanded(
+                                child: _buttonFollowAndDelete(
+                                    'Xóa',
+                                    Colors.black,
+                                    Colors.grey[300]!,
+                                    userData['uid'],
+                                    followProvider,
+                                    150),
+                              ),
                               const SizedBox(width: 8),
-                              _buttonFollowAndDelete(
-                                  'Follow',
-                                  Colors.white,
-                                  Colors.red[400]!,
-                                  userData['uid'],
-                                  followProvider,
-                                  150),
+                              Expanded(
+                                child: _buttonFollowAndDelete(
+                                    'Follow',
+                                    Colors.white,
+                                    Colors.red[400]!,
+                                    userData['uid'],
+                                    followProvider,
+                                    150),
+                              ),
                             ]
                           : [
-                              _buttonFollowAndDelete(
-                                  'Đang Follow',
-                                  Colors.black,
-                                  Colors.grey[300]!,
-                                  userData['uid'],
-                                  followProvider,
-                                  300),
+                              Expanded(
+                                child: _buttonFollowAndDelete(
+                                    'Đang Follow',
+                                    Colors.black,
+                                    Colors.grey[300]!,
+                                    userData['uid'],
+                                    followProvider,
+                                    300),
+                              ),
                             ],
                     )
                   ],
@@ -202,19 +197,19 @@ Widget _buttonFollowAndDelete(String label, Color colorText, Color bg,
         case 'Xóa':
           break;
         case 'Follow':
-          UserService().followUser('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2', uid);
+          UserService().followUser(uid);
           followProvider.isAcctionFollowed();
           break;
         case 'Đang Follow':
-          UserService().unfollowUser('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2', uid);
+          UserService().unfollowUser(uid);
           followProvider.unFollow();
           break;
         default:
       }
     },
     style: ButtonStyle(
-      minimumSize: MaterialStateProperty.all(Size(size.toDouble(), 40)),
-      maximumSize: MaterialStateProperty.all(const Size(500, 50)),
+      // minimumSize: MaterialStateProperty.all(Size(size.toDouble(), 40)),
+      // maximumSize: MaterialStateProperty.all(const Size(500, 50)),
       shape: MaterialStateProperty.all<OutlinedBorder>(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
