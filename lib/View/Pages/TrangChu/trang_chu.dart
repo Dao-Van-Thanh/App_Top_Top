@@ -1,6 +1,8 @@
 import 'package:app/View/Pages/TrangChu/danh_cho_ban.dart';
 import 'package:flutter/material.dart';
 
+import 'dang_follow.dart';
+
 class Manhinhtrangchu extends StatefulWidget {
   @override
   State<Manhinhtrangchu> createState() => _ManhinhtrangchuState();
@@ -53,7 +55,7 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
           controller: _tabController,
           children: [
             ForYou(),
-            // Following(),
+            Following(),
           ],
         ),
       ),

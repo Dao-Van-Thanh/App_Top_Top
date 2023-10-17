@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Provider/dang_nhap_sdt_provider.dart';
+import 'View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'firebase_options.dart';
 
 void main() async {

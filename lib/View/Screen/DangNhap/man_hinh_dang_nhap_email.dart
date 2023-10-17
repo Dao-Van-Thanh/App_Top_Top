@@ -56,7 +56,6 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 labelStyle: TextStyle(
                     color: Colors.grey
                 ),
-                labelStyle: TextStyle(color: Colors.grey),
                 labelText: 'Email',
               ),
             ),
@@ -71,7 +70,6 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 labelStyle: TextStyle(
                     color: Colors.grey
                 ),
-                labelStyle: TextStyle(color: Colors.grey),
                 labelText: 'Password',
               ),
               obscureText: true,
