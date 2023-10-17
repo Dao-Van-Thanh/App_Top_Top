@@ -1,5 +1,7 @@
-import 'dart:math';
 
+import 'package:app/Services/call_video_service.dart';
+import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:app/Provider/emoji_provider.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/TrangChu/dialog_comments.dart';
@@ -10,39 +12,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeSideBar extends StatefulWidget {
-  const HomeSideBar({Key? key}) : super(key: key);
+import '../../Provider/video_provider.dart';
+import '../Pages/Others/man_hinh_nguoi_khac.dart';
 
-  @override
-  State<HomeSideBar> createState() => _HomeSideBarState();
-}
-
-class _HomeSideBarState extends State<HomeSideBar>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-
-  Color heartIconColor = Colors.white;
-  Color commentIconColor = Colors.white;
-  Color bookmarkIconColor = Colors.white;
-  Color shareIconColor = Colors.white;
-
-  @override
-  void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _animationController.forward();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-
+class HomeSideBar extends StatelessWidget {
+  final VideoProvider videoProvider;
+  final CallVideoService callVideoService;
+  const HomeSideBar(this.videoProvider, this.callVideoService, {Key? key})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final CallVideoService callVideoService;
     TextStyle style = Theme.of(context)
         .textTheme
         .bodyText1!
@@ -56,29 +36,12 @@ class _HomeSideBarState extends State<HomeSideBar>
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _profileImageButton(),
-            _sideBarItem('heart', '100', style, heartIconColor),
-            _sideBarItem('comment', '100', style, commentIconColor),
-            _sideBarItem('bookmark', '', style, bookmarkIconColor),
-            _sideBarItem('sharee', '', style, shareIconColor),
-            AnimatedBuilder(
-              animation: _animationController,
-              child: Stack(
-                children: [
-                  Container(
-                    height: 30,
-                    width: 30,
-                    child: Image.asset('assets/cd.png'),
-                  )
-                ],
-              ),
-              builder: (context, child) {
-                return Transform.rotate(
-                  angle: 2 * pi * _animationController.value,
-                  child: child,
-                );
-              },
-            ),
+            _profileImageButton(context),
+            _sideBarItem('heart', videoProvider.countLike, style, 0,
+                videoProvider.iconColors[0],context),
+            _sideBarItem('comment', videoProvider.countComment, style, 1,
+                videoProvider.iconColors[1],context),
+            _sideBarItem('share', 1, style, 2, videoProvider.iconColors[2],context),
           ],
         ),
       ),
@@ -111,21 +74,9 @@ class _HomeSideBarState extends State<HomeSideBar>
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return FutureBuilder(
-                    future: FirebaseAuth.instance.authStateChanges().first,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else {
-                        final user = snapshot.data as User?;
-
-                        if (user != null) {
-                          return CommentsDialog(videoProvider.videoId); // Truyền uid vào CommentsDialog
-                        } else {
-                          return Text('Người dùng không đăng nhập');
-                        }
-                      }
-                    },
+                    return Provider<EmojiProvider>(
+                      create: (_) => EmojiProvider(),
+                      child: CommentsDialog(videoProvider.videoId),
                     );
                   },
                 );
@@ -150,46 +101,46 @@ class _HomeSideBarState extends State<HomeSideBar>
     );
   }
 
-  Widget _profileImageButton() {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.bottomCenter,
-      children: [
-        Container(
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(20),
-            image: DecorationImage(
-              image: NetworkImage(
-                  "https://www.imgacademy.com/sites/default/files/ncsa-homepage-row-2022.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
-          transform: Matrix4.translationValues(5, 0, 0),
-        ),
-        Positioned(
-          bottom: -10,
-          child: Container(
+  Widget _profileImageButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhNguoiKhac(uid: videoProvider.authorId)));
+      },
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.bottomCenter,
+        children: [
+          Container(
+            height: 40,
+            width: 40,
             decoration: BoxDecoration(
-              color: Colors.red,
+              border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(25),
-
+              image: DecorationImage(
+                image: NetworkImage(videoProvider.profilePhoto),
+                fit: BoxFit.cover,
+              ),
             ),
             transform: Matrix4.translationValues(5, 0, 0),
-
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 17,
-
+          ),
+          Positioned(
+            bottom: -10,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              transform: Matrix4.translationValues(5, 0, 0),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 17,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
-
-
 }
+
