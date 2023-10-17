@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CommentsDialog extends StatefulWidget {
-  const CommentsDialog({Key? key}) : super(key: key);
+  final String videoId;
+  const CommentsDialog(this.videoId, {Key? key}) : super(key: key);
 
   @override
   State<CommentsDialog> createState() => _CommentsDialogState();
@@ -19,7 +20,6 @@ class _CommentsDialogState extends State<CommentsDialog> {
   final user = FirebaseAuth.instance.currentUser;
   late UserModel userModel;
   final textController = TextEditingController();
-  String videoId = 'HL3uUmTFa7uICZUAsJeg';
   String? avatarURL;
   CommentService commentService = CommentService();
   List<UserModel> userModels = [];
@@ -41,7 +41,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream: CommentService().getCmtVideo(videoId),
+      stream: CommentService().getCmtVideo(widget.videoId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -61,7 +61,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                     "Không có bình luận nào.",
                     style: TextStyle(fontSize: 18),
                   ),
-                  footerDialog(avatarURL!, videoId),
+                  footerDialog(avatarURL!, widget.videoId),
                 ],
               ),
             );
@@ -84,7 +84,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                     bottom: 0,
                     child: Column(
                       children: [
-                        footerDialog(avatarURL!, videoId),
+                        footerDialog(avatarURL!, widget.videoId),
                       ],
                     ),
                   ),
