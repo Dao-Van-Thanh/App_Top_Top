@@ -12,11 +12,11 @@ class UserService {
 
   // Lấy thông tin user
   Future<Map<String, dynamic>?> getDataUser() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    currentUserId = preferences.getString('uid');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    currentUserId = prefs.getString('uid');
     try {
       DocumentSnapshot userDoc =
-          await firestore.collection('Users').doc(currentUserId).get();
+      await firestore.collection('Users').doc(currentUserId).get();
       if (userDoc.exists) {
         Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>;
         return userData;
@@ -126,12 +126,12 @@ class UserService {
     try {
       final firestoreInstance = FirebaseFirestore.instance;
       DocumentSnapshot currentUserDoc =
-          await firestoreInstance.collection('Users').doc(currentUserID).get();
+       await firestoreInstance.collection('Users').doc(currentUserID).get();
       if (currentUserDoc.exists) {
         Map<String, dynamic> currentUserData =
-            currentUserDoc.data() as Map<String, dynamic>;
+        currentUserDoc.data() as Map<String, dynamic>;
         List<String> followingList =
-            List<String>.from(currentUserData['following']);
+        List<String>.from(currentUserData['following']);
         return followingList;
       }
       return [];
@@ -194,4 +194,5 @@ class UserService {
       print('Lỗi khi đăng xuất: $e');
     }
   }
+
 }

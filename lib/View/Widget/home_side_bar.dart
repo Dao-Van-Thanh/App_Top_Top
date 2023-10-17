@@ -1,7 +1,17 @@
-import 'dart:math';
 
+import 'package:app/Provider/video_provider.dart';
+import 'package:app/Services/call_video_service.dart';
+import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:app/Provider/emoji_provider.dart';
+import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/TrangChu/dialog_comments.dart';
+import 'package:app/View/Widget/avatar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeSideBar extends StatefulWidget {
   const HomeSideBar({Key? key}) : super(key: key);
@@ -14,27 +24,17 @@ class _HomeSideBarState extends State<HomeSideBar>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
-  Color heartIconColor = Colors.white;
-  Color commentIconColor = Colors.white;
-  Color bookmarkIconColor = Colors.white;
-  Color shareIconColor = Colors.white;
+class HomeSideBar extends StatelessWidget {
+  final VideoProvider videoProvider;
+  final CallVideoService callVideoService;
 
-  @override
-  void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _animationController.forward();
-    super.initState();
-  }
+  const HomeSideBar(this.videoProvider, this.callVideoService, {Key? key})
+      : super(key: key);
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final CallVideoService callVideoService;
     TextStyle style = Theme.of(context)
         .textTheme
         .bodyText1!
@@ -49,28 +49,11 @@ class _HomeSideBarState extends State<HomeSideBar>
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             _profileImageButton(),
-            _sideBarItem('heart', '100', style, heartIconColor),
-            _sideBarItem('comment', '100', style, commentIconColor),
-            _sideBarItem('bookmark', '', style, bookmarkIconColor),
-            _sideBarItem('sharee', '', style, shareIconColor),
-            AnimatedBuilder(
-              animation: _animationController,
-              child: Stack(
-                children: [
-                  Container(
-                    height: 30,
-                    width: 30,
-                    child: Image.asset('assets/cd.png'),
-                  )
-                ],
-              ),
-              builder: (context, child) {
-                return Transform.rotate(
-                  angle: 2 * pi * _animationController.value,
-                  child: child,
-                );
-              },
-            ),
+            _sideBarItem('heart', videoProvider.countLike, style, 0,
+                videoProvider.iconColors[0]),
+            _sideBarItem('comment', videoProvider.countComment, style, 1,
+                videoProvider.iconColors[1]),
+            _sideBarItem('share', 1, style, 2, videoProvider.iconColors[2]),
           ],
         ),
       ),
@@ -78,33 +61,48 @@ class _HomeSideBarState extends State<HomeSideBar>
   }
 
   Widget _sideBarItem(
-      String iconName, String label, TextStyle style, Color iconColor) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          if (iconName == 'heart') {
-            heartIconColor = Colors.red;
-          } else if (iconName == 'comment') {
-            commentIconColor = Colors.blue;
-          } else if (iconName == 'bookmark') {
-            bookmarkIconColor = Colors.yellow;
-          } else if (iconName == 'share') {
-            shareIconColor = Colors.green;
-          }
-        });
-      },
-      child: Column(
-        children: [
-          SvgPicture.asset('assets/$iconName.svg', color: iconColor),
-          SizedBox(
-            height: 5,
+      String iconName, int label, TextStyle style, int index1, Color color) {
+    IconData iconData;
+    // Dựa vào tên iconName, bạn có thể map nó thành IconData tương ứng
+    if (iconName == 'heart') {
+      iconData = Icons.favorite;
+    } else if (iconName == 'comment') {
+      iconData = Icons.comment;
+    } else if (iconName == 'share') {
+      iconData = Icons.share;
+    } else {
+      // Icon mặc định hoặc xử lý các trường hợp khác
+      iconData = Icons.star;
+    }
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            switch (iconName) {
+              case 'heart':
+                videoProvider.incrementLike();
+                callVideoService.likeVideo(videoProvider.videoId);
+                break;
+              case 'comment':
+                // Xử lý cho mục 'comment'
+                break;
+              default:
+            }
+          },
+          child: Icon(
+            iconData,
+            size: 30,
+            color: color,
           ),
-          Text(
-            label,
-            style: style,
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Text(
+          label.toString(),
+          style: style,
+        ),
+      ],
     );
   }
 
@@ -114,14 +112,13 @@ class _HomeSideBarState extends State<HomeSideBar>
       alignment: Alignment.bottomCenter,
       children: [
         Container(
-          height: 35,
-          width: 35,
+          height: 40,
+          width: 40,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(25),
             image: DecorationImage(
-              image: NetworkImage(
-                  "https://www.imgacademy.com/sites/default/files/ncsa-homepage-row-2022.jpg"),
+              image: NetworkImage(videoProvider.profilePhoto),
               fit: BoxFit.cover,
             ),
           ),
@@ -133,15 +130,12 @@ class _HomeSideBarState extends State<HomeSideBar>
             decoration: BoxDecoration(
               color: Colors.red,
               borderRadius: BorderRadius.circular(25),
-
             ),
             transform: Matrix4.translationValues(5, 0, 0),
-
             child: Icon(
               Icons.add,
               color: Colors.white,
               size: 17,
-
             ),
           ),
         ),
@@ -149,3 +143,4 @@ class _HomeSideBarState extends State<HomeSideBar>
     );
   }
 }
+

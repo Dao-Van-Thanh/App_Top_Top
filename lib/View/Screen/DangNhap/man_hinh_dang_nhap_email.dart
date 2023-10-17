@@ -1,4 +1,3 @@
-import 'package:app/Services/dang_ky_email_service.dart';
 import 'package:app/Services/dang_nhap_email_service.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +24,8 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
   void updateButtonState() {
     setState(() {
       bool isEmailValid =
-      RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-          .hasMatch(emailController.text);
+          RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+              .hasMatch(emailController.text);
       bool isPasswordValid = passwordController.text.isNotEmpty;
 
       isButtonEnabled = isEmailValid && isPasswordValid;
@@ -57,6 +56,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 labelStyle: TextStyle(
                     color: Colors.grey
                 ),
+                labelStyle: TextStyle(color: Colors.grey),
                 labelText: 'Email',
               ),
             ),
@@ -71,6 +71,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 labelStyle: TextStyle(
                     color: Colors.grey
                 ),
+                labelStyle: TextStyle(color: Colors.grey),
                 labelText: 'Password',
               ),
               obscureText: true,
@@ -132,10 +133,10 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 }
 
               }
-                  : null,
+                 : null,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
+                  (Set<MaterialState> states) {
                     if (states.contains(MaterialState.disabled)) {
                       return const Color.fromARGB(
                           255, 210, 209, 209); // Màu xám khi không hợp lệ

@@ -141,7 +141,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                       ProfileProvider provider = Provider.of(context,listen: false);
                       provider.setVideos([]);
                       UserService.signOutUser();
-                      Navigator.push(context, 
+                      Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),)
                       );
                     });
