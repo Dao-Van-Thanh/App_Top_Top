@@ -45,10 +45,30 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
             UserModel userModel = UserModel.fromSnap(snapshot.data!);
             return Scaffold(
               backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pop(); // Để quay lại màn hình trước đó
+                  },
+                ),
+                title: Text(
+                    userModel.fullName,
+                    style: TextStyle(
+                      color: Colors.black
+                    ),
+                ),
+                centerTitle: true,
+              ),
               body: SafeArea(
                 child: Column(
                   children: [
-                    AppBarCustom(context, userModel.fullName),
+                    // AppBarCustom(context, userModel.fullName),
                     Avatar(userModel.avatarURL, context, isDialog, widget.uid),
                     SizedBox(height: 20),
                     text(
@@ -70,24 +90,30 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
         });
   }
 
-  AppBar AppBarCustom(BuildContext context, String fullname) {
-    return AppBar(
-      title: Text(
-        fullname,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-        ),
-      ),
-      centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+  Widget AppBarCustom(BuildContext context, String fullname) {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * 0.05,
+      child: Row(
+        children: [
+          Expanded(flex: 1, child: Container()),
+          Expanded(
+              flex: 8,
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  fullname,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              )),
+          Expanded(
+            flex: 1,
+            child: Container(
+              alignment: Alignment.center,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -221,21 +247,21 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
           ),
           SizedBox(width: 5,),
           OutlinedButton(
-            style: ButtonStyle(
-              minimumSize: MaterialStateProperty.all<Size>(
-                const Size(30,
-                    40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all<Size>(
+                  const Size(30,
+                      40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
+                ),
               ),
-            ),
-            onPressed: () {
-              OthersService service = OthersService();
-              service.UnFollowOther(idOther);
-            },
-            child: Icon(
-              color: Colors.black,
-              size: 20,
-              Icons.undo
-            )
+              onPressed: () {
+                OthersService service = OthersService();
+                service.UnFollowOther(idOther);
+              },
+              child: Icon(
+                  color: Colors.black,
+                  size: 20,
+                  Icons.undo
+              )
           ),
         ],
       );
@@ -290,14 +316,14 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                   tabs: [
                     Tab(
                         child: Icon(
-                      Icons.video_collection,
-                      color: Colors.black,
-                    )),
+                          Icons.video_collection,
+                          color: Colors.black,
+                        )),
                     Tab(
                         child: Icon(
-                      Icons.bookmark,
-                      color: Colors.black,
-                    )),
+                          Icons.bookmark,
+                          color: Colors.black,
+                        )),
                   ],
                   labelPadding: EdgeInsets.symmetric(horizontal: 0),
                 ),
@@ -367,13 +393,13 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
     if (image != null) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ShowAvatar(
-                urlImage: File(image.path),
-                onSave: () {
-                  Navigator.of(context).pop();
-                  isDialog = false;
-                },
-                uId: uId,
-              )));
+            urlImage: File(image.path),
+            onSave: () {
+              Navigator.of(context).pop();
+              isDialog = false;
+            },
+            uId: uId,
+          )));
     }
   }
 }

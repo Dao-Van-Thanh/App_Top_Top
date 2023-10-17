@@ -35,6 +35,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => QuayVideoProvider()),
       ChangeNotifierProvider(create: (context) => ProfileProvider()),
       ChangeNotifierProvider(create: (context) => VideoProvider()),
+
     ],
     child: MyApp(),
   ));

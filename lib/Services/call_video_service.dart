@@ -8,18 +8,6 @@ class CallVideoService {
   int lastVisibleIndex = 0;
   int batchSize = 10;
   final _auth = FirebaseAuth.instance;
-  // late final User firebaseUser;
-  // Stream<List<VideoModel>> getVideosStream() {
-  //   return _firestore.collection('Videos').limit(10).snapshots().map((snapshot) {
-  //     List<VideoModel> videoList = [];
-  //     snapshot.docs.forEach((doc) {
-  //       videoList.add(VideoModel.fromSnap(doc));
-  //     });
-  //     // Sao chép và lặp lại danh sách video 100 lần để có tổng cộng 1000 video
-  //     List<VideoModel> extendedVideoList = List.generate(100, (index) => videoList).expand((i) => i).toList();
-  //     return extendedVideoList;
-  //   });
-  // }
 
   Future<List<UserModel>> getFollowingUsers() async {
     List<UserModel> followingUsers = [];

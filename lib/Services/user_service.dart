@@ -102,21 +102,6 @@ class UserService {
 
         List<Map<String, dynamic>> usersList = [];
 
-<<<<<<<<< Temporary merge branch 1
-      // Lấy danh sách người bạn đã theo dõi một lần
-      final followingList =
-      await getFollowingList('lxCeVjiVu3YeZcgjZJ3fN8TAGBG2');
-
-      for (var userDoc in userSnapshot.docs) {
-        Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-        final targetUserID = userData['uid'].toString();
-
-        // Kiểm tra xem người dùng có trong danh sách bạn bè đã theo dõi chưa
-
-        if (!followingList.contains(targetUserID) &&
-            targetUserID != 'lxCeVjiVu3YeZcgjZJ3fN8TAGBG2') {
-          usersList.add(userData);
-=========
         // Lấy danh sách người bạn đã theo dõi một lần
         final followingList =
         await getFollowingList(user.uid);
@@ -129,7 +114,6 @@ class UserService {
             usersList.add(userData);
 
           }
->>>>>>>>> Temporary merge branch 2
         }
         return usersList;
       }
@@ -143,12 +127,7 @@ class UserService {
     try {
       final firestoreInstance = FirebaseFirestore.instance;
       DocumentSnapshot currentUserDoc =
-<<<<<<<<< Temporary merge branch 1
       await firestoreInstance.collection('Users').doc(currentUserID).get();
-
-=========
-          await firestoreInstance.collection('Users').doc(currentUserID).get();
->>>>>>>>> Temporary merge branch 2
       if (currentUserDoc.exists) {
         Map<String, dynamic> currentUserData =
         currentUserDoc.data() as Map<String, dynamic>;
