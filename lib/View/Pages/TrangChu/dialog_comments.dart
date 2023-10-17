@@ -13,8 +13,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CommentsDialog extends StatefulWidget {
-  const CommentsDialog({Key? key}) : super(key: key);
-  // final String videoId;
+  final String videoId;
+  const CommentsDialog(this.videoId, {Key? key}) : super(key: key);
 
   @override
   State<CommentsDialog> createState() => _CommentsDialogState();
@@ -27,7 +27,6 @@ class _CommentsDialogState extends State<CommentsDialog> {
   bool isEmoji = false;
   String? avatarURL;
   late UserModel userModel ;
-  String videoId = 'HL3uUmTFa7uICZUAsJeg';
   CommentService commentService = CommentService();
   
   @override
@@ -62,7 +61,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream: CommentService().getCmtVideo(videoId),
+      stream: CommentService().getCmtVideo(widget.videoId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -94,7 +93,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                           child:
                           footerDialog(
                               avatarURL!,
-                              videoId),
+                              widget.videoId),
                         ),
                       ],
                     ),
@@ -119,7 +118,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                         children: [
                           footerDialog(
                               avatarURL!,
-                              videoId),
+                              widget.videoId),
                           // SizedBox(
                           //   height: 200,
                           //   child: EmojiPicker(

@@ -7,16 +7,18 @@ class VideoProvider extends ChangeNotifier {
   String profilePhoto = '';
   String username = '';
   String videoId = '';
+  String authorId='';
   List<Color> iconColors = [Colors.white, Colors.white, Colors.white];
   bool hasCheckedLike = false;
   void setValue(int countLikedata, int countCommentdata, String captiondata,
-      String profilePhotodata, String usernamedata, String videoIddata) {
+      String profilePhotodata, String usernamedata, String videoIddata,String authorIdData) {
     countLike = countLikedata;
     countComment = countCommentdata;
     caption = captiondata;
     profilePhoto = profilePhotodata;
     username = usernamedata;
     videoId = videoIddata;
+    authorId = authorIdData;
   }
 
   void incrementLike() {

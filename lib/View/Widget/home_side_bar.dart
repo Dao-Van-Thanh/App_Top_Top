@@ -1,5 +1,4 @@
 
-import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/call_video_service.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -13,25 +12,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeSideBar extends StatefulWidget {
-  const HomeSideBar({Key? key}) : super(key: key);
-
-  @override
-  State<HomeSideBar> createState() => _HomeSideBarState();
-}
-
-class _HomeSideBarState extends State<HomeSideBar>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
+import '../../Provider/video_provider.dart';
+import '../Pages/Others/man_hinh_nguoi_khac.dart';
 
 class HomeSideBar extends StatelessWidget {
   final VideoProvider videoProvider;
   final CallVideoService callVideoService;
-
   const HomeSideBar(this.videoProvider, this.callVideoService, {Key? key})
       : super(key: key);
-
-
   @override
   Widget build(BuildContext context) {
     final CallVideoService callVideoService;
@@ -48,12 +36,12 @@ class HomeSideBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _profileImageButton(),
+            _profileImageButton(context),
             _sideBarItem('heart', videoProvider.countLike, style, 0,
-                videoProvider.iconColors[0]),
+                videoProvider.iconColors[0],context),
             _sideBarItem('comment', videoProvider.countComment, style, 1,
-                videoProvider.iconColors[1]),
-            _sideBarItem('share', 1, style, 2, videoProvider.iconColors[2]),
+                videoProvider.iconColors[1],context),
+            _sideBarItem('share', 1, style, 2, videoProvider.iconColors[2],context),
           ],
         ),
       ),
@@ -61,7 +49,7 @@ class HomeSideBar extends StatelessWidget {
   }
 
   Widget _sideBarItem(
-      String iconName, int label, TextStyle style, int index1, Color color) {
+      String iconName, int label, TextStyle style, int index1, Color color, BuildContext context ) {
     IconData iconData;
     // Dựa vào tên iconName, bạn có thể map nó thành IconData tương ứng
     if (iconName == 'heart') {
@@ -71,7 +59,6 @@ class HomeSideBar extends StatelessWidget {
     } else if (iconName == 'share') {
       iconData = Icons.share;
     } else {
-      // Icon mặc định hoặc xử lý các trường hợp khác
       iconData = Icons.star;
     }
     return Column(
@@ -84,7 +71,15 @@ class HomeSideBar extends StatelessWidget {
                 callVideoService.likeVideo(videoProvider.videoId);
                 break;
               case 'comment':
-                // Xử lý cho mục 'comment'
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Provider<EmojiProvider>(
+                      create: (_) => EmojiProvider(),
+                      child: CommentsDialog(videoProvider.videoId),
+                    );
+                  },
+                );
                 break;
               default:
             }
@@ -106,40 +101,45 @@ class HomeSideBar extends StatelessWidget {
     );
   }
 
-  Widget _profileImageButton() {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.bottomCenter,
-      children: [
-        Container(
-          height: 40,
-          width: 40,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(25),
-            image: DecorationImage(
-              image: NetworkImage(videoProvider.profilePhoto),
-              fit: BoxFit.cover,
-            ),
-          ),
-          transform: Matrix4.translationValues(5, 0, 0),
-        ),
-        Positioned(
-          bottom: -10,
-          child: Container(
+  Widget _profileImageButton(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhNguoiKhac(uid: videoProvider.authorId)));
+      },
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.bottomCenter,
+        children: [
+          Container(
+            height: 40,
+            width: 40,
             decoration: BoxDecoration(
-              color: Colors.red,
+              border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(25),
+              image: DecorationImage(
+                image: NetworkImage(videoProvider.profilePhoto),
+                fit: BoxFit.cover,
+              ),
             ),
             transform: Matrix4.translationValues(5, 0, 0),
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 17,
+          ),
+          Positioned(
+            bottom: -10,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              transform: Matrix4.translationValues(5, 0, 0),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 17,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
