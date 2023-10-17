@@ -1,5 +1,6 @@
 import 'package:app/Model/user_model.dart';
 import 'package:app/Model/video_model.dart';
+import 'package:app/Services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -8,49 +9,9 @@ class CallVideoService {
   int lastVisibleIndex = 0;
   int batchSize = 10;
   final _auth = FirebaseAuth.instance;
-  // late final User firebaseUser;
-  // Stream<List<VideoModel>> getVideosStream() {
-  //   return _firestore.collection('Videos').limit(10).snapshots().map((snapshot) {
-  //     List<VideoModel> videoList = [];
-  //     snapshot.docs.forEach((doc) {
-  //       videoList.add(VideoModel.fromSnap(doc));
-  //     });
-  //     // Sao chép và lặp lại danh sách video 100 lần để có tổng cộng 1000 video
-  //     List<VideoModel> extendedVideoList = List.generate(100, (index) => videoList).expand((i) => i).toList();
-  //     return extendedVideoList;
-  //   });
-  // }
-
-  Future<List<UserModel>> getFollowingUsers() async {
-    List<UserModel> followingUsers = [];
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(_auth.currentUser!.uid)
-        .get();
-    if (userDoc.exists) {
-      final data = userDoc.data() as Map<String, dynamic>?;
-      if (data != null && data['following'] != null) {
-        final followingUIDs = List<String>.from(data['following']);
-
-        for (String uid in followingUIDs) {
-          DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-              .collection('Users')
-              .doc(uid)
-              .get();
-          if (userSnapshot.exists) {
-            followingUsers.add(UserModel.fromSnap(userSnapshot));
-          }
-        }
-      }
-    }
-    print(followingUsers);
-    return followingUsers;
-  }
-
-
 
   Stream<List<VideoModel>> getVideosFollowingStream() async* {
-    final followingUserUIDs = await getFollowingUsers();
+    final followingUserUIDs = await UserService().getFollowingList(_auth.currentUser!.uid);
     if (followingUserUIDs.isEmpty) {
       yield <VideoModel>[]; // Trả về danh sách rỗng nếu không có người bạn đang follow
       return;
