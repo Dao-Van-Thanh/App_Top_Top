@@ -81,26 +81,6 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
                 ),
               ],
             ),
-            BottomNavigationBarItem(
-              icon: CustomIconButtonAddVideo(),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.message,
-                size: 30,
-              ),
-              label: 'Hộp thư',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                size: 30,
-              ),
-              label: 'Cá nhân',
-            ),
-          ],
-        ),
       ),
       body: pages[pageIdx],
     );

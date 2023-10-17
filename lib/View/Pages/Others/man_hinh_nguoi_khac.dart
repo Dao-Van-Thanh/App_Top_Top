@@ -70,30 +70,24 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
         });
   }
 
-  Widget AppBarCustom(BuildContext context, String fullname) {
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.05,
-      child: Row(
-        children: [
-          Expanded(flex: 1, child: Container()),
-          Expanded(
-              flex: 8,
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  fullname,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-              )),
-          Expanded(
-            flex: 1,
-            child: Container(
-              alignment: Alignment.center,
-            ),
-          ),
-        ],
+  AppBar AppBarCustom(BuildContext context, String fullname) {
+    return AppBar(
+      title: Text(
+        fullname,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
     );
   }
