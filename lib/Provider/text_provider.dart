@@ -4,6 +4,7 @@ class TextProvider extends ChangeNotifier{
   bool showFullText = false;
   void isFullText() {
     showFullText = !showFullText;
+    print(showFullText);
     notifyListeners();
   }
 }

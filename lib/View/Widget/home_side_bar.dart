@@ -5,6 +5,7 @@ import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/TrangChu/dialog_comments.dart';
 import 'package:app/View/Widget/avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -96,9 +97,21 @@ class _HomeSideBarState extends State<HomeSideBar>
             showModalBottomSheet(
                 context: context,
                 builder: (context) {
-                  return Provider<EmojiProvider>(
-                    create: (_) => EmojiProvider(),
-                    child: CommentsDialog(),
+                  return FutureBuilder(
+                    future: FirebaseAuth.instance.authStateChanges().first,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else {
+                        final user = snapshot.data as User?;
+
+                        if (user != null) {
+                          return CommentsDialog(); // Truyền uid vào CommentsDialog
+                        } else {
+                          return Text('Người dùng không đăng nhập');
+                        }
+                      }
+                    },
                   );
                 },
             );
