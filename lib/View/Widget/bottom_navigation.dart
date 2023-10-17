@@ -40,51 +40,51 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
       extendBody: true,
       bottomNavigationBar: ClipRect(
         child: BottomNavigationBar(
-              onTap: (idx) {
-                setState(() {
-                  pageIdx = idx;
-                });
-              },
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: const Color.fromARGB(255, 23, 1, 1),
-              selectedItemColor: Colors.white,
-              unselectedItemColor: Colors.grey,
-              currentIndex: pageIdx,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(
-                      Icons.home,
-                      size: 30,
-                  ),
-                  label: 'Trang chủ',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                      Icons.people,
-                      size: 30,
-                  ),
-                  label: 'Bạn bè',
-                ),
-                BottomNavigationBarItem(
-                  icon: CustomIconButtonAddVideo(),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                      Icons.message,
-                      size: 30,
-                  ),
-                  label: 'Hộp thư',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                      Icons.person,
-                      size: 30,
-                  ),
-                  label: 'Cá nhân',
-                ),
-              ],
+          onTap: (idx) {
+            setState(() {
+              pageIdx = idx;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color.fromARGB(255, 23, 1, 1),
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.grey,
+          currentIndex: pageIdx,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: 30,
+              ),
+              label: 'Trang chủ',
             ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.people,
+                size: 30,
+              ),
+              label: 'Bạn bè',
+            ),
+            BottomNavigationBarItem(
+              icon: CustomIconButtonAddVideo(),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.message,
+                size: 30,
+              ),
+              label: 'Hộp thư',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                size: 30,
+              ),
+              label: 'Cá nhân',
+            ),
+          ],
+        ),
       ),
       body: pages[pageIdx],
     );
