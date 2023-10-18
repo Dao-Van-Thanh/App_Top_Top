@@ -67,7 +67,7 @@ class ChatService {
   }
 
   //lấy ra tất cả phòng chat của id user
-  Stream<List<ChatModel>> getChatsByUserId() {
+  Stream<List<ChatModel>> getChatsByUser() {
     return FirebaseFirestore.instance
         .collection('Chats')
         .where('uid', arrayContains: user!.uid)

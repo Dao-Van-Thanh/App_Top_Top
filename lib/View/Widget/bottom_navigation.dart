@@ -32,7 +32,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
 
   List<Widget> pages = [
     Manhinhtrangchu(),
-    Text('2'),
+    Text('data'),
     ManHinhQuayVideo(),
     ManHinhHopThu(),
     ManHinhProfile(),
@@ -42,6 +42,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
     final pageProvider = Provider.of<PageProvider>(context);
     return Scaffold(
       extendBody: true,
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: ClipRect(
         child: BottomNavigationBar(
           onTap: (idx) {

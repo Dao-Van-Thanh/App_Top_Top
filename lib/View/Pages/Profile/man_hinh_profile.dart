@@ -10,7 +10,6 @@ import 'package:app/View/Pages/man_hinh_addFriend.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/avatar.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
-import 'package:app/View/Widget/text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Provider/profile_provider.dart';
+import '../../Widget/text.dart';
 
 class ManHinhProfile extends StatefulWidget {
   const ManHinhProfile({Key? key}) : super(key: key);

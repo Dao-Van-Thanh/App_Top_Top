@@ -1,17 +1,22 @@
+
 import 'package:app/Model/chat_model.dart';
 import 'package:app/Model/user_model.dart';
+import 'package:app/Provider/chats_provider.dart';
 import 'package:app/Services/chat_service.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Chats/man_hinh_chat.dart';
+import 'package:app/View/Widget/snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ManHinhHopThu extends StatelessWidget {
   ChatService service = ChatService();
-
   @override
   Widget build(BuildContext context) {
     ChatService service = ChatService();
+
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
@@ -26,7 +31,7 @@ class ManHinhHopThu extends StatelessWidget {
         centerTitle: true,
       ),
       body: StreamBuilder<List<ChatModel>>(
-          stream: service.getChatsByUserId(),
+          stream: service.getChatsByUser(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
@@ -34,24 +39,29 @@ class ManHinhHopThu extends StatelessWidget {
               print('${snapshot.error} ======================');
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
+              String? uid = FirebaseAuth.instance.currentUser?.uid;
               List<ChatModel>? ls = snapshot.data;
+              ls?.sort((a, b) {
+                // Lấy tin nhắn cuối cùng trong mỗi phòng chat (nếu có)
+                final aLastMessage = a.messages.isNotEmpty ? a.messages.last.timestamp : DateTime(0);
+                final bLastMessage = b.messages.isNotEmpty ? b.messages.last.timestamp : DateTime(0);
+                // Sắp xếp giảm dần (từ mới đến cũ)
+                return bLastMessage.compareTo(aLastMessage);
+              });
+
               return ListView.builder(
                 itemCount: ls?.length,
                 itemBuilder: (context, index) {
                   String? chat;
+                  String? idUserChat = '';
                   try{
                     chat = ls?[index].messages[ls[index].messages.length - 1].chat;
+                    idUserChat = ls?[index].messages[ls[index].messages.length - 1].idUserChat;
                   }catch(e){
                     chat = '';
+                    idUserChat = '';
                   }
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ManHinhChat(ls[index].id),)
-                      );
-                    },
-                    child: _itemGroupChat(context, ls![index],chat??''),
-                  );
+                  return _itemGroupChat(context, ls![index],chat??'',idUserChat!,uid!);
                   // return Text('data');
                 },
               );
@@ -60,7 +70,7 @@ class ManHinhHopThu extends StatelessWidget {
     ));
   }
 
-  Widget _itemGroupChat(BuildContext context, ChatModel model,String chat) {
+  Widget _itemGroupChat(BuildContext context, ChatModel model,String chat,String idUserChat,String uid) {
     String idOther = service.getIdOtherInListUID(model.uid);
     UserService userService = UserService();
     return StreamBuilder<DocumentSnapshot>(
@@ -73,43 +83,61 @@ class ManHinhHopThu extends StatelessWidget {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             UserModel userModel = UserModel.fromSnap(snapshot.data!);
-            return Container(
-              height: MediaQuery.sizeOf(context).height * 0.1,
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Row(
-                children: [
-                  Container(
-                    width: 60, // Điều chỉnh kích thước tùy ý
-                    height: 100, // Điều chỉnh kích thước tùy ý
-                    child: CircleAvatar(
-                      backgroundColor: Colors.blue,
-                      maxRadius: 60,
-                      backgroundImage: NetworkImage(userModel.avatarURL),
+            bool checkFollow = userModel.following!.contains(uid) && userModel.follower!.contains(uid);
+            return InkWell(
+              onTap: () {
+                if(checkFollow){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ManHinhChat(model.id),)
+                  );
+                }else{
+                  SnackBarWidget.showSnackbar(context,
+                      'Không thể nhắn tin cho người này, 2 người đang không follow nhau');
+                }
+              },
+              child: Container(
+                height: MediaQuery.sizeOf(context).height * 0.1,
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 60, // Điều chỉnh kích thước tùy ý
+                      height: 100, // Điều chỉnh kích thước tùy ý
+                      child: CircleAvatar(
+                        backgroundColor: Colors.blue,
+                        maxRadius: 60,
+                        backgroundImage: NetworkImage(userModel.avatarURL),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${userModel.fullName}',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        '$chat',
-                        style: TextStyle(
-                          color: Colors.grey,
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${userModel.fullName}',
+                          style: TextStyle(color: Colors.black, fontSize: 20),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        SizedBox(
+                          width: 200,
+                          child: Text(
+                            idUserChat != idOther ? 'Bạn: $chat' : '$chat',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: idUserChat != idOther ? Colors.grey : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             );
           }

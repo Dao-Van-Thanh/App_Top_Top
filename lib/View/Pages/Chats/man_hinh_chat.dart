@@ -1,8 +1,11 @@
+import 'package:app/Model/user_model.dart';
+import 'package:app/Provider/chats_provider.dart';
 import 'package:app/Services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
 import '../../../Model/chat_model.dart';
 
@@ -32,7 +35,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
           if (chatData != null) {
             final message = chatData.messages;
             final user = FirebaseAuth.instance.currentUser;
-            final lsID = service.getIdOtherInListUID(chatData.uid);
+            final idOther = service.getIdOtherInListUID(chatData.uid);
             // tự động cuộn xuống cuối
             SchedulerBinding.instance.addPostFrameCallback((_) {
               _controller.animateTo(
@@ -42,7 +45,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
             });
             return SafeArea(
               child: FutureBuilder<DocumentSnapshot>(
-                future: service.getUser(lsID),
+                future: service.getUser(idOther),
                 builder: (context, snapshot) {
                   return Scaffold(
                     backgroundColor: Colors.white,
@@ -109,7 +112,6 @@ class _ManHinhChatState extends State<ManHinhChat> {
                                         color: Colors.grey,
                                       ),
                                       onPressed: () {
-
                                       },
                                     ),
                                     const SizedBox(width: 5),
@@ -170,9 +172,6 @@ class _ManHinhChatState extends State<ManHinhChat> {
                       backgroundImage:
                           NetworkImage(snapshot.data!['avatarURL']),
                     ),
-                  ),
-                  SizedBox(
-                    height: 15,
                   ),
                   Text(
                     '${snapshot.data!['fullname']}',
