@@ -28,7 +28,6 @@ class Bottom_Navigation_Bar extends StatefulWidget {
 
 class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
 
-<<<<<<<<< Temporary merge branch 1
   int pageIdx = 0;
 
   List<Widget> pages = [
@@ -39,19 +38,9 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
     ManHinhProfile(),
   ];
 
-=========
->>>>>>>>> Temporary merge branch 2
   @override
   Widget build(BuildContext context) {
     final pageProvider = Provider.of<PageProvider>(context);
-    int pageIdx = 0;
-    List<Widget> pages = [
-      Manhinhtrangchu(),
-      Text('2'),
-      ManHinhQuayVideo(),
-      ManHinhChat('rgGweizR6ZbK98pS3MHa'),
-      ManHinhProfile(),
-    ];
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: ClipRect(
