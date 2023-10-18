@@ -218,9 +218,9 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                 40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
           ),
         ),
-        onPressed: () {
+        onPressed: () async {
           OthersService service = OthersService(); // Thay đổi cách khởi tạo đối tượng service
-          service.FollowOther(idOther);
+          await service.FollowOther(idOther);
         },
         child: const Text(
           'Follow',
@@ -233,6 +233,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           OutlinedButton(
+
             style: ButtonStyle(
               minimumSize: MaterialStateProperty.all<Size>(
                 const Size(100,

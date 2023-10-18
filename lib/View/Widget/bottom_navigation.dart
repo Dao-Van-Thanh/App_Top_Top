@@ -3,6 +3,7 @@ import 'package:app/Provider/page_provider.dart';
 import 'package:app/View/Pages/Chats/man_hinh_chat.dart';
 
 import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/Chats/man_hinh_hop_thu.dart';
 
 import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
@@ -27,17 +28,18 @@ class Bottom_Navigation_Bar extends StatefulWidget {
 
 class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
 
+  int pageIdx = 0;
+
+  List<Widget> pages = [
+    Manhinhtrangchu(),
+    Text('2'),
+    ManHinhQuayVideo(),
+    ManHinhHopThu(),
+    ManHinhProfile(),
+  ];
   @override
   Widget build(BuildContext context) {
     final pageProvider = Provider.of<PageProvider>(context);
-    int pageIdx = 0;
-    List<Widget> pages = [
-      Manhinhtrangchu(),
-      Text('2'),
-      ManHinhQuayVideo(),
-      ManHinhChat('rgGweizR6ZbK98pS3MHa'),
-      ManHinhProfile(),
-    ];
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: ClipRect(

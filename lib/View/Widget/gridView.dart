@@ -41,66 +41,69 @@ class _GridViewVideoState extends State<GridViewVideo> {
   }
 
   Widget _content2(BuildContext context, List<VideoModel> videos) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-      ),
-      primary: false,
-      itemCount: videos.length,
-      itemBuilder: (context, index) {
-        final video = videos[index];
-        return InkWell(
-          onTap: () {
-            print('${video.id}');
-          },
-          child: Container(
-            color: Colors.black,
-            margin: EdgeInsets.all(2),
-            child: Stack(
-              fit: StackFit.expand,
-              alignment: Alignment.bottomRight,
-              children: [
-                // Sử dụng Chewie để phát video thay vì VideoPlayer
-                Chewie(
-                  controller: ChewieController(
-                    videoPlayerController: VideoPlayerController.network(
-                      video.videoUrl,
+    return Container(
+      margin: EdgeInsets.only(top: 10),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+        ),
+        primary: false,
+        itemCount: videos.length,
+        itemBuilder: (context, index) {
+          final video = videos[index];
+          return InkWell(
+            onTap: () {
+              print('${video.id}');
+            },
+            child: Container(
+              color: Colors.black,
+              margin: EdgeInsets.all(2),
+              child: Stack(
+                fit: StackFit.expand,
+                alignment: Alignment.bottomRight,
+                children: [
+                  // Sử dụng Chewie để phát video thay vì VideoPlayer
+                  Chewie(
+                    controller: ChewieController(
+                      videoPlayerController: VideoPlayerController.network(
+                        video.videoUrl,
+                      ),
+                      autoPlay: false, // Tắt tự động phát video
+                      looping: true, // Cho phép lặp lại video
+                      allowMuting: true, // Cho phép tắt tiếng
+                      showControls: false, // Tắt hiển thị các điều khiển
+                      showOptions: false, // Tắt hiển thị tùy chọn video (chẳng hạn như tua video)
+                      aspectRatio: 1/1, // Tùy chỉnh tỷ lệ khung hình
+                      autoInitialize: true, // Tự động khởi tạo videoPlayerController khi được tạo
+                      errorBuilder: (context, errorMessage) {
+                        // Xử lý lỗi video (nếu có)
+                        return Center(
+                          child: Text('Lỗi: $errorMessage'),
+                        );
+                      },
                     ),
-                    autoPlay: false, // Tắt tự động phát video
-                    looping: true, // Cho phép lặp lại video
-                    allowMuting: true, // Cho phép tắt tiếng
-                    showControls: false, // Tắt hiển thị các điều khiển
-                    showOptions: false, // Tắt hiển thị tùy chọn video (chẳng hạn như tua video)
-                    aspectRatio: 1/1, // Tùy chỉnh tỷ lệ khung hình
-                    autoInitialize: true, // Tự động khởi tạo videoPlayerController khi được tạo
-                    errorBuilder: (context, errorMessage) {
-                      // Xử lý lỗi video (nếu có)
-                      return Center(
-                        child: Text('Lỗi: $errorMessage'),
-                      );
-                    },
                   ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  left: 0,
-                  child: Row(
-                    children: [
-                      SizedBox(width: 5),
-                      Icon(Icons.play_arrow, color: Colors.white),
-                      SizedBox(width: 5),
-                      Text(
-                        "${video.views.toString()} ",
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                  Positioned(
+                    bottom: 10,
+                    left: 0,
+                    child: Row(
+                      children: [
+                        SizedBox(width: 5),
+                        Icon(Icons.play_arrow, color: Colors.white),
+                        SizedBox(width: 5),
+                        Text(
+                          "${video.views.toString()} ",
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

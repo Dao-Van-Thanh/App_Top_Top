@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:app/Model/chat_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final user = FirebaseAuth.instance.currentUser;
+
   Stream<ChatModel?> getChatDataStream(String chatId) {
     return FirebaseFirestore.instance
         .collection('Chats')
@@ -12,18 +16,7 @@ class ChatService {
         .map((chatSnapshot) {
       try {
         if (chatSnapshot.exists) {
-          final chatData = chatSnapshot.data() as Map<String, dynamic>;
-          final List<dynamic> messageList = chatData['messages'];
-          final List<Message> messages = messageList
-              .map((messageJson) => Message.fromJson(messageJson as Map<String, dynamic>))
-              .toList();
-
-          final List<String> uid = List<String>.from(chatData['uid']);
-          return ChatModel(
-            id: chatSnapshot.id,
-            messages: messages,
-            uid: uid,
-          );
+          return ChatModel.fromJson(chatSnapshot.data()!, chatSnapshot.id);
 
         } else {
           return null;
@@ -34,7 +27,6 @@ class ChatService {
     });
   }
   List<String> getIdOther(List<Message> ls) {
-    final user = FirebaseAuth.instance.currentUser;
     if(user != null){
       return ls
           .where((message) => message.idUserChat != user!.uid)
@@ -73,4 +65,28 @@ class ChatService {
       print('Lỗi khi thêm tin nhắn: $e');
     }
   }
+
+  //lấy ra tất cả phòng chat của id user
+  Stream<List<ChatModel>> getChatsByUserId() {
+    return FirebaseFirestore.instance
+        .collection('Chats')
+        .where('uid', arrayContains: user!.uid)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs.map((chatDocument) {
+        return ChatModel.fromJson(chatDocument.data(),chatDocument.id);
+      }).toList();
+    });
+  }
+  String getIdOtherInListUID(List<String> ls){
+    for(var i in ls){
+      if(!i.contains(user!.uid)){
+        return i;
+      }
+    }
+    return '';
+  }
+
+
+
 }

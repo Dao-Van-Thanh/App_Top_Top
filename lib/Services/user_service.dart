@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/Model/chat_model.dart';
+import 'package:app/Services/others_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -56,6 +57,7 @@ class UserService {
   }
 
   Future<void> followUser( String targetUserID) async {
+    OthersService service = OthersService();
     try {
       final user = FirebaseAuth.instance.currentUser;
       if(user != null){
@@ -63,10 +65,11 @@ class UserService {
         await firestoreInstance.collection('Users').doc(user.uid).update({
           'following': FieldValue.arrayUnion([targetUserID]),
         });
-
         await firestoreInstance.collection('Users').doc(targetUserID).update({
           'follower': FieldValue.arrayUnion([user.uid]),
         });
+
+        service.createChatRoomsForUsers(user, targetUserID);
       }
     } catch (e) {
       print("Error following user: $e");
