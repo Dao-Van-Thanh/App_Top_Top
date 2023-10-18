@@ -20,7 +20,7 @@ class GridViewVideo extends StatefulWidget {
 
 class _GridViewVideoState extends State<GridViewVideo> {
   bool _isLooping = false; // Đặt mặc định để lặp lại
-
+  ChewieController? controller ;
   @override
   void initState() {
     super.initState();
@@ -29,6 +29,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
       provider.loadVideos(widget.uid);
     }
   }
+
 
   Future<Uint8List?> getThumbnail(String videoUrl) async {
     final uint8list = await VideoThumbnail.thumbnailData(
@@ -46,6 +47,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
+          childAspectRatio: 0.7,
         ),
         primary: false,
         itemCount: videos.length,
@@ -56,8 +58,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
               print('${video.id}');
             },
             child: Container(
-              color: Colors.black,
-              margin: EdgeInsets.all(2),
+              margin: EdgeInsets.all(10),
               child: Stack(
                 fit: StackFit.expand,
                 alignment: Alignment.bottomRight,
@@ -73,7 +74,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
                       allowMuting: true, // Cho phép tắt tiếng
                       showControls: false, // Tắt hiển thị các điều khiển
                       showOptions: false, // Tắt hiển thị tùy chọn video (chẳng hạn như tua video)
-                      aspectRatio: 1/1, // Tùy chỉnh tỷ lệ khung hình
+                      aspectRatio: 0.7, // Tùy chỉnh tỷ lệ khung hình
                       autoInitialize: true, // Tự động khởi tạo videoPlayerController khi được tạo
                       errorBuilder: (context, errorMessage) {
                         // Xử lý lỗi video (nếu có)
@@ -103,6 +104,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
             ),
           );
         },
+
       ),
     );
   }
