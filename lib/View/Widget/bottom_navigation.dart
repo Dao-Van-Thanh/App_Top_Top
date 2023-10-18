@@ -2,6 +2,7 @@
 import 'package:app/View/Pages/Chats/man_hinh_chat.dart';
 
 import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/Chats/man_hinh_hop_thu.dart';
 
 import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
@@ -30,7 +31,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
     Manhinhtrangchu(),
     Text('2'),
     ManHinhQuayVideo(),
-    ManHinhChat('rgGweizR6ZbK98pS3MHa'),
+    ManHinhHopThu(),
     ManHinhProfile(),
   ];
 

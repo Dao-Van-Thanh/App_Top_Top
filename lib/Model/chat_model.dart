@@ -11,17 +11,22 @@ class ChatModel {
     required this.uid,
   });
 
-  factory ChatModel.fromJson(Map<String, dynamic> json) {
-    // Phương thức factory để chuyển đổi dữ liệu JSON thành một đối tượng Chat
-    final List<dynamic> messageList = json['messages'];
-    final List<Message> messages =
-    messageList.map((messageJson) => Message.fromJson(messageJson)).toList();
-
+  factory ChatModel.fromJson(Map<String, dynamic> json, String id) {
     final List<String> uid = List<String>.from(json['uid']);
-
+    if (json['messages'].length > 0) {
+      final List<dynamic> messageList = json['messages'];
+      final List<Message> messages = messageList
+          .map((messageJson) => Message.fromJson(messageJson))
+          .toList();
+      return ChatModel(
+        id: id,
+        messages: messages,
+        uid: uid,
+      );
+    }
     return ChatModel(
-      id: json['id'],
-      messages: messages,
+      id: id,
+      messages: [],
       uid: uid,
     );
   }
@@ -48,12 +53,19 @@ class Message {
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
-    Timestamp timestamp = json['timestamp'];
-    // Phương thức factory để chuyển đổi dữ liệu JSON thành một đối tượng Message
+    if (json['timestamp'] != null) {
+      Timestamp timestamp = json['timestamp'];
+      // Phương thức factory để chuyển đổi dữ liệu JSON thành một đối tượng Message
+      return Message(
+        chat: json['chat'],
+        idUserChat: json['idUserChat'],
+        timestamp: timestamp.toDate(),
+      );
+    }
     return Message(
-      chat: json['chat'],
-      idUserChat: json['idUserChat'],
-      timestamp: timestamp.toDate(),
+      chat: '',
+      idUserChat: '',
+      timestamp: DateTime.now(),
     );
   }
 

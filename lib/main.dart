@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Provider/dang_nhap_sdt_provider.dart';
+import 'Provider/video_provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -50,8 +51,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ManHinhDangKy(),
-      // home: Bottom_Navigation_Bar(),
+      // home: ManHinhDangKy(),
+      home: Bottom_Navigation_Bar(),
     );
   }
 }
