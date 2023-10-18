@@ -126,7 +126,9 @@ class ManHinhHopThu extends StatelessWidget {
                         SizedBox(
                           width: 200,
                           child: Text(
-                            idUserChat != idOther ? 'Bạn: $chat' : '$chat',
+                            chat.isNotEmpty ?
+                            idUserChat != idOther ? 'Bạn: $chat' : '$chat'
+                            : 'Hãy bắt đầu cuộc trò chuyện',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

@@ -52,9 +52,12 @@ class ChatService {
     try {
       final chatRef = _firestore.collection('Chats').doc(chatId);
       // Thêm tin nhắn vào danh sách messages trong phòng chat
+      String idChat = _firestore.collection('Chats').doc().id;
+      print(idChat);
       await chatRef.update({
         'messages': FieldValue.arrayUnion([
           {
+            'idChat': idChat,
             'chat': chat,
             'idUserChat': idUserChat,
             'timestamp': DateTime.now(),
@@ -87,6 +90,17 @@ class ChatService {
     return '';
   }
 
+  Future<void> deleteMessageByChatId(String chatId, String idChatToDelete) async {
+    final chatRef = FirebaseFirestore.instance.collection('Chats').doc(chatId);
 
+    chatRef.get().then((chatDocument) {
+      final messages = chatDocument.data()?['messages'] as List<dynamic>;
 
+      final updatedMessages = messages.where((message) {
+        return message['idChat'] != idChatToDelete;
+      }).toList();
+
+      chatRef.update({'messages': updatedMessages});
+    });
+  }
 }
