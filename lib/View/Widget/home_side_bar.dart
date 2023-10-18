@@ -76,7 +76,7 @@ class HomeSideBar extends StatelessWidget {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return  CommentsDialog(videoProvider.videoId);
+                    return  CommentsDialog(videoId:videoProvider.videoId);
                   },
                 );
                 break;
