@@ -261,7 +261,7 @@ class ShowComment extends StatelessWidget {
 
                           ],
                         ),
-                            DividerRow(),
+                        DividerRow(),
                       ],
                     ),
                   ],
