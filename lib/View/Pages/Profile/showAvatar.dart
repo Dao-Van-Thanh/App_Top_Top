@@ -22,7 +22,7 @@ class ShowAvatar extends StatelessWidget {
               Positioned(
                   bottom: 0,
                   child: TextButton(
-                    onPressed: (){},
+                    onPressed: null,
                     child: Row(
                       children: [
                         textButton("Hủy",widthScreen,(){
