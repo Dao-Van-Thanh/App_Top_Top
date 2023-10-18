@@ -51,6 +51,7 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
         ],
       ),
       body: SafeArea(
+
         child: TabBarView(
           controller: _tabController,
           children: [

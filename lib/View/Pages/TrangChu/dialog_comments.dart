@@ -52,8 +52,9 @@ class _CommentsDialogState extends State<CommentsDialog> {
       resizeToAvoidBottomInset: true,
       body: Column(
         children: [
+          SizedBox(height: 5),
           Expanded(
-            flex: 8,
+            flex: 2,
             child: StreamBuilder<DocumentSnapshot>(
               stream: CommentService().getCmtVideo(widget.videoId),
               builder: (context, snapshot) {
@@ -83,8 +84,8 @@ class _CommentsDialogState extends State<CommentsDialog> {
           ),
           SingleChildScrollView(
             child: Expanded(
-              flex: 3,
-              child: FooterDialog(avatarURL: 'https://cdn.pixabay.com/photo/2023/08/29/19/42/goose-8222013_640.jpg', videoId: widget.videoId, textController: textController, uId: uId),
+              flex: 1,
+              child: FooterDialog(avatarURL: avatarURL, videoId: widget.videoId, textController: textController, uId: uId),
             ),
           ),
         ],
@@ -99,7 +100,12 @@ class FooterDialog extends StatelessWidget {
   final TextEditingController textController;
   final String? uId;
 
-  FooterDialog({required this.avatarURL, required this.videoId, required this.textController, required this.uId});
+  FooterDialog({
+    required this.avatarURL,
+    required this.videoId,
+    required this.textController,
+    required this.uId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -107,69 +113,61 @@ class FooterDialog extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       color: Colors.white,
       padding: EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Row(
         children: [
-          Row(
-            children: [
-              FutureBuilder(
-                future: precacheImage(NetworkImage(avatarURL!), context),
-                builder: (context, snapshot) {
-                  return avatarURL != null
-                      ? AvatarCircle(
-                    urlImage: avatarURL!,
-                    widthImage: 50,
-                    heightImage: 50,
-                  )
-                      : CircularProgressIndicator();
-                },
+          if (avatarURL != null)
+            AvatarCircle(
+              urlImage: avatarURL!,
+              widthImage: 50,
+              heightImage: 50,
+            )
+          else
+            CircularProgressIndicator(),
+          SizedBox(width: 5),
+          Expanded(
+            child: Card(
+              color: Colors.white70,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
               ),
-              SizedBox(width: 5),
-              Expanded(
-                child: Card(
-                  color: Colors.white70,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: TextField(
-                            maxLines: null,
-                            controller: textController,
-                            decoration: InputDecoration(
-                              hintText: 'Thêm bình luận...',
-                              border: InputBorder.none,
-                            ),
-                          ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20,top: 5,bottom: 5),
+                      child: TextField(
+                        maxLines: null,
+                        controller: textController,
+                        decoration: InputDecoration(
+                          hintText: 'Thêm bình luận...',
+                          border: InputBorder.none,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          // Handle emoji picker here.
-                        },
-                        icon: Icon(Icons.emoji_emotions),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          CommentService().sendCmt(videoId, textController.text.trim(), uId!);
-                          textController.clear();
-                        },
-                        icon: Icon(Icons.send),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  IconButton(
+                    onPressed: () {
+                      // Handle emoji picker here.
+                    },
+                    icon: Icon(Icons.emoji_emotions),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      CommentService().sendCmt(videoId, textController.text.trim(), uId!);
+                      textController.clear();
+                    },
+                    icon: Icon(Icons.send),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
 }
+
 
 class ShowComment extends StatelessWidget {
   final Map<String, dynamic> cmtData;
@@ -184,7 +182,7 @@ class ShowComment extends StatelessWidget {
     Duration duration = now.difference(dateTime);
     int s = duration.inSeconds;
     String? times;
-    String avarTest ='https://cdn.pixabay.com/photo/2023/08/29/19/42/goose-8222013_640.jpg';
+    // String avarTest ='https://cdn.pixabay.com/photo/2023/08/29/19/42/goose-8222013_640.jpg';
 
     if (s < 60) {
       String time = "${s} seconds";
@@ -217,7 +215,7 @@ class ShowComment extends StatelessWidget {
             child: Row(
               children: [
                 AvatarCircle(
-                  urlImage: avarTest,
+                  urlImage: userModel!.avatarURL,
                   widthImage: 50,
                   heightImage: 50,
                 ),
