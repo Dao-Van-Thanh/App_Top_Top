@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class CommentsDialog extends StatefulWidget {
   final String videoId;
-  const CommentsDialog(this.videoId, {Key? key}) : super(key: key);
+  const CommentsDialog(this.videoId);
 
   @override
   State<CommentsDialog> createState() => _CommentsDialogState();
