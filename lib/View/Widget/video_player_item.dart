@@ -54,7 +54,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
           if (isLoading)
             CircularProgressIndicator(
               strokeWidth: 4,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
         ],
       ),

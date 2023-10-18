@@ -4,6 +4,7 @@ import 'package:app/Provider/edit_item_profile_provider.dart';
 import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
+import 'package:app/Provider/page_provider.dart';
 import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/Provider/text_provider.dart';
@@ -39,6 +40,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => ProfileProvider()),
       ChangeNotifierProvider(create: (context) => VideoProvider()),
       ChangeNotifierProvider(create: (context) => TextProvider()),
+      ChangeNotifierProvider(create: (context) => PageProvider()),
     ],
     child: MyApp(),
 

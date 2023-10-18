@@ -23,14 +23,7 @@ class _ForYouState extends State<ForYou> {
           return Container(
             width: 200,
             height: 200,
-            color: Colors.grey[300],
-            child: const Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 4,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.blue), // Màu của vòng tròn
-              ),
-            ),
+            color: Colors.black,
           );
         } else if (snapshot.hasError) {
           return Text('Lỗi: ${snapshot.error}');
@@ -74,7 +67,6 @@ class _ForYouState extends State<ForYou> {
                             }
                           });
                         }
-
                         return Stack(
                           alignment: Alignment.bottomLeft,
                           children: [
