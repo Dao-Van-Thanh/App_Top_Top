@@ -32,8 +32,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
           if (chatData != null) {
             final message = chatData.messages;
             final user = FirebaseAuth.instance.currentUser;
-            final lsID = service.getIdOther(chatData.messages);
-            final String idOther = lsID[0];
+            final lsID = service.getIdOtherInListUID(chatData.uid);
             // tự động cuộn xuống cuối
             SchedulerBinding.instance.addPostFrameCallback((_) {
               _controller.animateTo(
@@ -43,7 +42,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
             });
             return SafeArea(
               child: FutureBuilder<DocumentSnapshot>(
-                future: service.getUser(lsID[0]),
+                future: service.getUser(lsID),
                 builder: (context, snapshot) {
                   return Scaffold(
                     backgroundColor: Colors.white,

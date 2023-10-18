@@ -4,6 +4,7 @@ import 'package:app/Provider/edit_item_profile_provider.dart';
 import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
+import 'package:app/Provider/page_provider.dart';
 import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/Provider/text_provider.dart';
@@ -17,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Provider/dang_nhap_sdt_provider.dart';
+import 'Provider/video_provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -38,6 +40,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => ProfileProvider()),
       ChangeNotifierProvider(create: (context) => VideoProvider()),
       ChangeNotifierProvider(create: (context) => TextProvider()),
+      ChangeNotifierProvider(create: (context) => PageProvider()),
     ],
     child: MyApp(),
 
@@ -50,8 +53,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ManHinhDangKy(),
-      // home: Bottom_Navigation_Bar(),
+      // home: ManHinhDangKy(),
+      home: Bottom_Navigation_Bar(),
     );
   }
 }

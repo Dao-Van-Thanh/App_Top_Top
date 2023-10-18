@@ -1,5 +1,6 @@
 
 import 'package:app/Services/call_video_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:app/Provider/emoji_provider.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Provider/page_provider.dart';
 import '../../Provider/video_provider.dart';
 import '../Pages/Others/man_hinh_nguoi_khac.dart';
 
@@ -99,9 +101,15 @@ class HomeSideBar extends StatelessWidget {
   }
 
   Widget _profileImageButton(BuildContext context) {
+    final _auth = FirebaseAuth.instance;
+    final pageProvider = Provider.of<PageProvider>(context);
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhNguoiKhac(uid: videoProvider.authorId)));
+        if(videoProvider.authorId == _auth.currentUser!.uid){
+          pageProvider.setPageProfile();
+        }else{
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhNguoiKhac(uid: videoProvider.authorId)));
+        }
       },
       child: Stack(
         clipBehavior: Clip.none,
