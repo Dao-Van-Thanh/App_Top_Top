@@ -73,10 +73,18 @@ class HomeSideBar extends StatelessWidget {
                 callVideoService.likeVideo(videoProvider.videoId);
                 break;
               case 'comment':
-                showModalBottomSheet(
+                showDialog(
                   context: context,
-                  builder: (context) {
-                    return  CommentsDialog(videoId:videoProvider.videoId);
+                  builder: (BuildContext context) {
+                    return Align(
+                      alignment: Alignment.bottomCenter, // Hiển thị ở cuối màn hình
+                      child: Container(
+                        width: double.infinity, // Đặt chiều rộng đầy đủ
+                        height: 700.0, // Đặt chiều cao cố định
+                        color: Colors.white, // Màu nền của dialog
+                        child: CommentsDialog(videoId:videoProvider.videoId), // Thay thế YourDialogContent bằng nội dung của bạn
+                      ),
+                    );
                   },
                 );
                 break;

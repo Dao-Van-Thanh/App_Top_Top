@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app/Model/user_model.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
+import 'package:app/View/Pages/Profile/man_hinh_trang_thai.dart';
 import 'package:app/View/Pages/Profile/showAvatar.dart';
 import 'package:app/View/Pages/Profile/tab_bookmark.dart';
 import 'package:app/View/Pages/Profile/tab_video.dart';
@@ -220,17 +221,22 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
           ),
         ),
         Expanded(
-          child: Container(
-            child: Column(
-              children: [
-                text(
-                    lable: follow.toString(),
-                    size: 20,
-                    fontWeight: FontWeight.w900),
-                const SizedBox(height: 5),
-                const text(
-                    lable: "Follower", size: 15, fontWeight: FontWeight.normal),
-              ],
+          child: GestureDetector(
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai()));
+            },
+            child: Container(
+              child: Column(
+                children: [
+                  text(
+                      lable: follow.toString(),
+                      size: 20,
+                      fontWeight: FontWeight.w900),
+                  const SizedBox(height: 5),
+                  const text(
+                      lable: "Follower", size: 15, fontWeight: FontWeight.normal),
+                ],
+              ),
             ),
           ),
         ),
