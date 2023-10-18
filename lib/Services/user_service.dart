@@ -164,7 +164,8 @@ class UserService {
     CollectionReference users = firestore.collection('Users');
     try{
       String imageUrl = await uploadFileToStorege(file);
-      final userDoc = users.doc(documenId);
+        final userDoc = users.doc(documenId);
+
       await userDoc.update({
         "avatarURL": imageUrl,
       });
