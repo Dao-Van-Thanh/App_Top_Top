@@ -208,7 +208,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
     bool check = message.idUserChat != uid;
     return GestureDetector (
       onLongPress: () {
-        showModalBottomSheet(
+        check ? showModalBottomSheet(
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(16),
@@ -219,7 +219,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
             builder: (context) {
               return _showModelOptions(context,widget.idPhongChat, message.idChat);
             },
-        );
+        ) : null;
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
