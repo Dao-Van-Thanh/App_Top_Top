@@ -98,7 +98,6 @@ class _CommentsDialogState extends State<CommentsDialog> {
               videoProvider: widget.videoProvider),
             ),
           ),
-          ),
         ],
       ),
     );

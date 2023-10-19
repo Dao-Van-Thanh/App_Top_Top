@@ -22,92 +22,108 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
     final Stream<List<VideoModel>> videoStream;
     videoStream = CallVideoService().getVideosStreamByAuthor(widget.uid);
 
-    return StreamBuilder<List<VideoModel>>(
-      stream: videoStream,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            width: 200,
-            height: 200,
-            color: Colors.black,
-          );
-        } else if (snapshot.hasError) {
-          return Text('Lỗi: ${snapshot.error}');
-        } else {
-          final videoList = snapshot.data;
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            body: SafeArea(
-              child: PageView.builder(
-                onPageChanged: (int page) {
-                  print(videoList!.length - 1);
-                  if (page == videoList!.length - 1) {
-                    print('video cuối cùng rồi xem cái lol đi học đi');
-                  }
-                },
-                scrollDirection: Axis.vertical,
-                itemCount: videoList?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final videoData = videoList?[index];
-                  return ChangeNotifierProvider<VideoProvider>(
-                    create: (context) => VideoProvider(),
-                    child: Consumer<VideoProvider>(
-                      builder: (context, videoProvider, child) {
-                        videoProvider.setValue(
-                            videoData!.likes.length,
-                            videoData!.comments.length,
-                            videoData!.caption,
-                            videoData!.profilePhoto,
-                            videoData!.username,
-                            videoData!.id,
-                            videoData!.uid
-                        );
-                        if (!videoProvider.hasCheckedLike) {
-                          videoProvider.hasCheckedLike = true;
-                          CallVideoService()
-                              .checkLike(videoData.likes.cast<String>())
-                              .then((liked) {
-                            if (liked) {
-                              videoProvider.changeColor();
-                            }
-                          });
-                        }
-                        return Stack(
-                          alignment: Alignment.bottomLeft,
-                          children: [
-                            VideoPlayerItem(videoData!.videoUrl,videoProvider),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                    height:
-                                    MediaQuery.of(context).size.height / 10,
-                                    child: VideoDetail(videoProvider),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+
+      body: StreamBuilder<List<VideoModel>>(
+        stream: videoStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              width: 200,
+              height: 200,
+              color: Colors.black,
+            );
+          } else if (snapshot.hasError) {
+            return Text('Lỗi: ${snapshot.error}');
+          } else {
+            final videoList = snapshot.data;
+            return Scaffold(
+              extendBodyBehindAppBar: true,
+              body: SafeArea(
+                child: PageView.builder(
+                  onPageChanged: (int page) {
+                    print(videoList!.length - 1);
+                    if (page == videoList!.length - 1) {
+                      print('video cuối cùng rồi xem cái lol đi học đi');
+                    }
+                  },
+                  scrollDirection: Axis.vertical,
+                  itemCount: videoList?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final videoData = videoList?[index];
+                    return ChangeNotifierProvider<VideoProvider>(
+                      create: (context) => VideoProvider(),
+                      child: Consumer<VideoProvider>(
+                        builder: (context, videoProvider, child) {
+                          videoProvider.setValue(
+                              videoData!.likes.length,
+                              videoData!.comments.length,
+                              videoData!.caption,
+                              videoData!.profilePhoto,
+                              videoData!.username,
+                              videoData!.id,
+                              videoData!.uid
+                          );
+                          if (!videoProvider.hasCheckedLike) {
+                            videoProvider.hasCheckedLike = true;
+                            CallVideoService()
+                                .checkLike(videoData.likes.cast<String>())
+                                .then((liked) {
+                              if (liked) {
+                                videoProvider.changeColor();
+                              }
+                            });
+                          }
+                          return Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: [
+                              VideoPlayerItem(videoData!.videoUrl,videoProvider),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height:
+                                      MediaQuery.of(context).size.height / 10,
+                                      child: VideoDetail(videoProvider),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height /
-                                        1.75,
-                                    child: HomeSideBar(
-                                        videoProvider, CallVideoService(),'man hinh nguoi khac',index,videoStream),
+                                  Expanded(
+                                    child: Container(
+                                      height: MediaQuery.of(context).size.height /
+                                          1.75,
+                                      child: HomeSideBar(
+                                          videoProvider, CallVideoService(),'man hinh nguoi khac',index,videoStream),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  );
-                },
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          );
-        }
-      },
+            );
+          }
+        },
+      ),
     );
   }
 }
