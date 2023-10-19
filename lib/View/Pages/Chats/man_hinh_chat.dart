@@ -1,11 +1,13 @@
-import 'package:app/Model/user_model.dart';
-import 'package:app/Provider/chats_provider.dart';
+import 'dart:io';
+
 import 'package:app/Services/chat_service.dart';
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../Model/chat_model.dart';
 
@@ -27,7 +29,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
       stream: service.getChatDataStream(widget.idPhongChat),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
@@ -113,6 +115,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                                           color: Colors.grey,
                                         ),
                                         onPressed: () {
+                                          showImagePicker(context,chatData.id);
                                         },
                                       ),
                                       const SizedBox(width: 5),
@@ -154,7 +157,52 @@ class _ManHinhChatState extends State<ManHinhChat> {
       },
     );
   }
+  Future<XFile?> pickVideo() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (result != null) {
+      final PlatformFile file = result.files.single;
+      return XFile(file.path!);
+    }
+    return null;
+  }
+  void showImagePicker(BuildContext context,String idPhongChat) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.photo_library),
+              title: Text('Chọn ảnh từ thư viện'),
+              onTap: () async {
+                await ImagePicker()
+                    .pickImage(source: ImageSource.gallery)
+                    .then((xfile) => {
+                        if(xfile != null){
+                          service.uploadFileToChat(file: File(xfile.path), idPhongChat: idPhongChat)
+                        }
+                    }
+                );
+                Navigator.pop(context);
 
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_camera),
+              title: Text('Chụp ảnh mới'),
+              onTap: () {
+                Navigator.pop(context);
+                // Gọi hàm chụp ảnh ở đây
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   Widget infoOther(BuildContext context, snapshot) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -164,7 +212,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
           children: snapshot.data == null
               ? []
               : [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Container(
@@ -183,7 +231,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                         fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 6,
                   ),
                   Text(
@@ -208,7 +256,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
     bool check = message.idUserChat != uid;
     return GestureDetector (
       onLongPress: () {
-        check ? showModalBottomSheet(
+        //kiểm tra nếu đúng là mình chat thì có quyền xóa chat đó
+        !check ? showModalBottomSheet(
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(16),
@@ -220,6 +269,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
               return _showModelOptions(context,widget.idPhongChat, message.idChat);
             },
         ) : null;
+        //
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),

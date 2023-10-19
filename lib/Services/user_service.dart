@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app/Model/chat_model.dart';
 import 'package:app/Services/others_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -158,6 +157,8 @@ class UserService {
       throw Exception("uploadImageToStorage:________________________$e");
     }
   }
+
+
 
   Future uploadFile(File file,String documenId) async {
     final firestore = FirebaseFirestore.instance;
