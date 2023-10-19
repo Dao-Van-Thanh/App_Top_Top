@@ -1,5 +1,6 @@
 import 'package:app/Model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CommentService{
   Stream<DocumentSnapshot> getCmtVideo(String videoId){
@@ -79,5 +80,41 @@ class CommentService{
       print('Lỗi khi lấy dữ liệu người dùng: $e');
       return null;
     }
+  }
+  Future<bool?> checkUser(String videoId,String cmtId)async{
+    try{
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+      final commentDoc = await FirebaseFirestore.instance
+          .collection('Videos/$videoId/comments')
+          .doc(cmtId)
+          .get();
+      print(commentDoc);
+
+      if (commentDoc.exists) {
+        final data = commentDoc.data() as Map<String, dynamic>;
+        final commentUid = data['uid'] as String;
+        print(userId == commentUid);
+
+        return userId == commentUid;
+      }
+    }catch (e) {
+      print('Lỗi khi check ngưi dùng: $e');
+      return false;
+    }
+  }
+  Future<bool?> deleteCmt(String videoId, String cmtId)async{
+    try{
+      final check = await checkUser(videoId, cmtId);
+      if(check==true){
+        await FirebaseFirestore.instance.collection('Videos/${videoId}/comments').doc(cmtId).delete();
+        return true;
+      }else{
+        return false;
+      }
+    }catch (e) {
+      print('Lỗi khi xóa bình luận: $e');
+      return null;
+    }
+
   }
 }

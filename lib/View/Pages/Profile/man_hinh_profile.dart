@@ -222,7 +222,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
         Expanded(
           child: GestureDetector(
             onTap: (){
-              // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai()));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(username: uId)));
             },
             child: Container(
               child: Column(

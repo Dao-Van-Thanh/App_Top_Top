@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 
 class TextProvider extends ChangeNotifier{
   bool showFullText = false;
-  void isFullText() {
-    showFullText = !showFullText;
-    print(showFullText);
+  void isFullText(bool pressed) {
+    showFullText = pressed;
     notifyListeners();
   }
 }
