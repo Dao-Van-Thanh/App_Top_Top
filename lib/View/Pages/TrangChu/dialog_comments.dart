@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import '../../../Provider/video_provider.dart';
 
 class CommentsDialog extends StatefulWidget {
-  const CommentsDialog({Key? key, required this.videoId, required this.videoProvider}) : super(key: key);
+  const CommentsDialog(
+      {Key? key, required this.videoId, required this.videoProvider})
+      : super(key: key);
   final String videoId;
   final VideoProvider videoProvider;
 
@@ -55,7 +57,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
       resizeToAvoidBottomInset: true,
       body: Column(
         children: [
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Expanded(
             flex: 2,
             child: StreamBuilder<DocumentSnapshot>(
@@ -68,7 +70,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                 } else {
                   final data =
                       snapshot.data?.data() as Map<String, dynamic> ?? {};
-                  final comments = data?['comments'] as List<dynamic>;
+                  final comments = data['comments'] as List<dynamic>;
                   if (comments.isEmpty) {
                     return const Center(
                       child: Text("Không có bình luận nào.",
@@ -80,7 +82,10 @@ class _CommentsDialogState extends State<CommentsDialog> {
                     reverse: false,
                     itemBuilder: (context, index) {
                       final reversedComments = comments.reversed.toList();
-                      return ShowComment(cmtData: reversedComments[index],videoId: widget.videoId,uid: uId);
+                      return ShowComment(
+                          cmtData: reversedComments[index],
+                          videoId: widget.videoId,
+                          uid: uId);
                     },
                   );
                 }
@@ -91,11 +96,12 @@ class _CommentsDialogState extends State<CommentsDialog> {
             child: Expanded(
               flex: 1,
               child: FooterDialog(
-                  avatarURL: 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg',
+                  avatarURL:
+                      'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg',
                   videoId: widget.videoId,
                   textController: textController,
                   uId: uId,
-              videoProvider: widget.videoProvider),
+                  videoProvider: widget.videoProvider),
             ),
           ),
         ],
@@ -124,18 +130,19 @@ class FooterDialog extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       color: Colors.white,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Row(
         children: [
           if (avatarURL != null)
-            AvatarCircle(
-              urlImage: avatarURL!,
-              widthImage: 50,
-              heightImage: 50,
+            CircleAvatar(
+                backgroundColor: Colors.black,
+                backgroundImage: NetworkImage(
+                  avatarURL!,
+                ),
             )
           else
-            CircularProgressIndicator(),
-          SizedBox(width: 5),
+            const CircularProgressIndicator(),
+          const SizedBox(width: 5),
           Expanded(
             child: Card(
               color: Colors.white70,
@@ -146,7 +153,8 @@ class FooterDialog extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
+                      padding:
+                          const EdgeInsets.only(left: 20, top: 5, bottom: 5),
                       child: TextField(
                         maxLines: null,
                         controller: textController,
@@ -161,12 +169,14 @@ class FooterDialog extends StatelessWidget {
                     onPressed: () {
                       // Handle emoji picker here.
                     },
-                    icon: Icon(Icons.emoji_emotions),
+                    icon: const Icon(Icons.emoji_emotions),
                   ),
                   IconButton(
                     onPressed: () {
-                      CommentService().sendCmt(videoId, textController.text.trim(), uId!);
-                      int index = videoProvider.listVideo.indexWhere((element) => element == videoId);
+                      CommentService()
+                          .sendCmt(videoId, textController.text.trim(), uId!);
+                      int index = videoProvider.listVideo
+                          .indexWhere((element) => element == videoId);
                       videoProvider.listVideo[index].comments.add('');
                       textController.clear();
                     },
@@ -185,7 +195,9 @@ class FooterDialog extends StatelessWidget {
 class ShowComment extends StatelessWidget {
   final Map<String, dynamic> cmtData;
 
-  ShowComment({required this.cmtData, required this.videoId, required this.uid});
+  ShowComment(
+      {required this.cmtData, required this.videoId, required this.uid});
+
   final String videoId;
   final String? uid;
 
@@ -198,7 +210,8 @@ class ShowComment extends StatelessWidget {
     int s = duration.inSeconds;
     String? times;
 
-    String avarTest = 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg';
+    String avarTest =
+        'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg';
 
     if (s < 60) {
       String time = "${s} seconds";
@@ -234,26 +247,26 @@ class ShowComment extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AvatarCircle(
-                  // urlImage: userModel!.avatarURL,
-                  urlImage: avarTest,
-                  widthImage: 50,
-                  heightImage: 50,
+                CircleAvatar(
+                  backgroundColor: Colors.black,
+                  backgroundImage: NetworkImage(
+                    userModel!.avatarURL,
+                  ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        userModel?.fullName ?? 'Unknown User',
+                        userModel.fullName,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Text(
                         cmtData['text'] ?? '',
                         style: const TextStyle(
@@ -289,7 +302,7 @@ class ShowComment extends StatelessWidget {
                               thickness: 1,
                             ),
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           TextButton(
                             onPressed: () {
                               // Xử lý hành động View Replies ở đây.
@@ -331,11 +344,12 @@ class ShowComment extends StatelessWidget {
                     onSelected: (String choice) {
                       if (choice == 'delete') {
                         showDialog(
-                            context: context,
-                            builder: (context) {
-                              print(check);
-                              return NotifiDelete(videoId: videoId,cmtId: cmtData['id']);
-                            },
+                          context: context,
+                          builder: (context) {
+                            print(check);
+                            return NotifiDelete(
+                                videoId: videoId, cmtId: cmtData['id']);
+                          },
                         );
                       }
                     },
@@ -352,6 +366,7 @@ class ShowComment extends StatelessWidget {
 
 class NotifiDelete extends StatelessWidget {
   const NotifiDelete({super.key, required this.videoId, required this.cmtId});
+
   final String videoId;
   final String cmtId;
 
@@ -365,11 +380,11 @@ class NotifiDelete extends StatelessWidget {
         actions: [
           Center(
             child: Container(
-              height: MediaQuery.of(context).size.height /2,
+              height: MediaQuery.of(context).size.height / 2,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   const Text(
                     "Bạn có chắc chắn muốn \n xóa comment ?",
                     style: TextStyle(
@@ -378,8 +393,8 @@ class NotifiDelete extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 5),
-                  Divider(color: Colors.grey),
+                  const SizedBox(height: 5),
+                  const Divider(color: Colors.grey),
                   TextButton(
                       onPressed: () {
                         CommentService().deleteCmt(videoId, cmtId);
@@ -391,7 +406,7 @@ class NotifiDelete extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 30,
                                   color: Colors.black)))),
-                  Divider(color: Colors.grey),
+                  const Divider(color: Colors.grey),
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -407,30 +422,5 @@ class NotifiDelete extends StatelessWidget {
             ),
           ),
         ]);
-  }
-}
-
-class AvatarCircle extends StatelessWidget {
-  final String urlImage;
-  final double widthImage;
-  final double heightImage;
-
-  AvatarCircle({
-    required this.urlImage,
-    required this.widthImage,
-    required this.heightImage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(widthImage / 2),
-      child: Image.network(
-        urlImage,
-        width: widthImage,
-        height: heightImage,
-        fit: BoxFit.cover,
-      ),
-    );
   }
 }
