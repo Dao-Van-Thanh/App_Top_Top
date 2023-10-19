@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Provider/profile_provider.dart';
 import '../../Widget/text.dart';
+import 'man_hinh_trang_thai.dart';
 
 class ManHinhProfile extends StatefulWidget {
   const ManHinhProfile({Key? key}) : super(key: key);
