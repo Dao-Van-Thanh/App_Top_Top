@@ -210,6 +210,9 @@ class ShowComment extends StatelessWidget {
     int s = duration.inSeconds;
     String? times;
 
+    final RenderObject? overlay = Overlay.of(context).context.findRenderObject();
+    Offset tapDownPosition = Offset.zero;
+
     String avarTest =
         'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg';
 
@@ -240,122 +243,124 @@ class ShowComment extends StatelessWidget {
         } else {
           UserModel? userModel = snapshot.data;
           bool check = cmtData['uid'] == uid;
+          List<PopupMenuItem<String>> items = [];
 
-          return Container(
-            margin: EdgeInsets.all(10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.black,
-                  backgroundImage: NetworkImage(
-                    userModel!.avatarURL,
+
+          return GestureDetector(
+            onTapDown: (TapDownDetails details) {
+              tapDownPosition = details.globalPosition;
+            },
+            onLongPress: (){
+              showMenu(context: context,
+                  position: RelativeRect.fromRect(
+                      Rect.fromLTWH(tapDownPosition.dx,
+                          tapDownPosition.dy, 30, 30),
+                      Rect.fromLTWH(0, 0,
+                          overlay!.paintBounds.size.width,
+                          overlay.paintBounds.size.height)),
+                items: [
+                 if(check)
+                  PopupMenuItem<String>(
+                    value: 'delete',
+                    child: Text('Xóa'),
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => NotifiDelete(videoId: videoId, cmtId: cmtData['id']));
+                    },
                   ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        userModel.fullName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                  const PopupMenuItem<String>(
+                    value: 'Sửa',
+                    child: Text('Chỉnh sửa bình luận'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'repost',
+                    child: Text('Repost'),
+                  ),
+              ]
+              );
+            },
+            child: Container(
+              margin: EdgeInsets.all(10),
+              color: Colors.transparent,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.black,
+                    backgroundImage: NetworkImage(
+                      userModel!.avatarURL,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          userModel.fullName,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        cmtData['text'] ?? '',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
+                        const SizedBox(height: 5),
+                        Text(
+                          cmtData['text'] ?? '',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            times ?? '',
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              // Xử lý hành động Reply ở đây.
-                            },
-                            child: const Text(
-                              "Trả lời",
-                              style: TextStyle(color: Colors.black),
+                        Row(
+                          children: [
+                            Text(
+                              times ?? '',
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 20,
-                            child: const Divider(
-                              color: Colors.grey,
-                              height: 20,
-                              thickness: 1,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          TextButton(
-                            onPressed: () {
-                              // Xử lý hành động View Replies ở đây.
-                            },
-                            child: const Text(
-                              "View 5 replies",
-                              style: TextStyle(
-                                color: Colors.grey,
+                            TextButton(
+                              onPressed: () {
+                                // Xử lý hành động Reply ở đây.
+                              },
+                              child: const Text(
+                                "Trả lời",
+                                style: TextStyle(color: Colors.black),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: PopupMenuButton<String>(
-                    itemBuilder: (BuildContext context) {
-                      List<PopupMenuItem<String>> items = [];
-                      if (check) {
-                        // Thêm mục "Xóa" chỉ khi check đúng
-                        items.add(
-                          const PopupMenuItem<String>(
-                            value: 'delete',
-                            child: Text('Xóa'),
-                          ),
-                        );
-                      }
-                      items.add(
-                        const PopupMenuItem<String>(
-                          value: 'repost',
-                          child: Text('Repost'),
+                          ],
                         ),
-                      );
-
-                      return items;
-                    },
-                    onSelected: (String choice) {
-                      if (choice == 'delete') {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            print(check);
-                            return NotifiDelete(
-                                videoId: videoId, cmtId: cmtData['id']);
-                          },
-                        );
-                      }
-                    },
+                        Row(
+                          children: [
+                            Container(
+                              width: 20,
+                              child: const Divider(
+                                color: Colors.grey,
+                                height: 20,
+                                thickness: 1,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            TextButton(
+                              onPressed: () {
+                                // Xử lý hành động View Replies ở đây.
+                              },
+                              child: const Text(
+                                "View 5 replies",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                )
-              ],
+                ],
+              ),
             ),
           );
         }
@@ -380,7 +385,7 @@ class NotifiDelete extends StatelessWidget {
         actions: [
           Center(
             child: Container(
-              height: MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height / 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -389,7 +394,7 @@ class NotifiDelete extends StatelessWidget {
                     "Bạn có chắc chắn muốn \n xóa comment ?",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 30,
+                      fontSize: 25,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -404,7 +409,7 @@ class NotifiDelete extends StatelessWidget {
                           child: Text('Xóa',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 30,
+                                  fontSize: 20,
                                   color: Colors.black)))),
                   const Divider(color: Colors.grey),
                   TextButton(
@@ -415,7 +420,7 @@ class NotifiDelete extends StatelessWidget {
                           child: Text('Hủy',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 30,
+                                  fontSize: 20,
                                   color: Colors.grey)))),
                 ],
               ),
