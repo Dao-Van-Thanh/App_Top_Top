@@ -18,10 +18,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ManHinhNguoiKhac extends StatefulWidget {
-  String uid;
+import '../../../Provider/video_provider.dart';
 
-  ManHinhNguoiKhac({Key? key, required this.uid}) : super(key: key);
+class ManHinhNguoiKhac extends StatefulWidget {
+  final String uid;
+  final VideoProvider videoProvider;
+
+  const ManHinhNguoiKhac(this.uid, this.videoProvider, {Key? key})
+      : super(key: key);
 
   @override
   State<ManHinhNguoiKhac> createState() => _ManHinhNguoiKhacState();
@@ -53,8 +57,8 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                     color: Colors.black,
                   ),
                   onPressed: () {
-                    Navigator.of(context)
-                        .pop(); // Để quay lại màn hình trước đó
+                    widget.videoProvider.changeControlVideo();
+                    Navigator.of(context).pop();
                   },
                 ),
                 title: Text(

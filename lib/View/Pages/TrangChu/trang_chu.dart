@@ -1,6 +1,7 @@
 import 'package:app/View/Pages/TrangChu/danh_cho_ban.dart';
+import 'package:app/View/Pages/TrangChu/timkiem_trangchu.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'dang_follow.dart';
 
 class Manhinhtrangchu extends StatefulWidget {
@@ -27,6 +28,7 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -46,7 +48,14 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
         actions: [
           IconButton(
             icon: Icon(Icons.search),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ManHinhTimKiem(),
+                ),
+              );
+            },
           ),
         ],
       ),

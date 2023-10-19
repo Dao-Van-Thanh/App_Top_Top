@@ -8,18 +8,20 @@ import 'package:provider/provider.dart';
 import '../../Widget/home_side_bar.dart';
 import '../../Widget/video_detail.dart';
 
-class ForYou extends StatefulWidget {
+class ManhinhVideoByAuthor extends StatefulWidget {
+  final String uid;
 
+  ManhinhVideoByAuthor({required this.uid});
   @override
-  State<ForYou> createState() => _ForYouState();
+  State<ManhinhVideoByAuthor> createState() => _ManhinhVideoByAuthorState();
 }
 
-class _ForYouState extends State<ForYou> {
-
+class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
-    videoStream = CallVideoService().getVideosStream();
+    videoStream = CallVideoService().getVideosStreamByAuthor(widget.uid);
+
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
       builder: (context, snapshot) {
@@ -34,15 +36,13 @@ class _ForYouState extends State<ForYou> {
         } else {
           final videoList = snapshot.data;
           return Scaffold(
-            resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
             body: SafeArea(
               child: PageView.builder(
                 onPageChanged: (int page) {
-                  print(page);
                   print(videoList!.length - 1);
                   if (page == videoList!.length - 1) {
-                      print('video cuối cùng rồi xem cái lol đi học đi');
+                    print('video cuối cùng rồi xem cái lol đi học đi');
                   }
                 },
                 scrollDirection: Axis.vertical,
@@ -92,7 +92,7 @@ class _ForYouState extends State<ForYou> {
                                     height: MediaQuery.of(context).size.height /
                                         1.75,
                                     child: HomeSideBar(
-                                        videoProvider, CallVideoService(),'manhinhchoban',index,videoStream),
+                                        videoProvider, CallVideoService(),'man hinh nguoi khac',index,videoStream),
                                   ),
                                 ),
                               ],
