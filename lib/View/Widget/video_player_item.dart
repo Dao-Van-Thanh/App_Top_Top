@@ -2,13 +2,13 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../Provider/video_provider.dart';
+
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
-  const VideoPlayerItem({
-    Key? key,
-    required this.videoUrl,
-  }) : super(key: key);
-
+  final VideoProvider videoProvider;
+  const VideoPlayerItem(this.videoUrl, this.videoProvider, {Key? key})
+      : super(key: key);
   @override
   _VideoPlayerItemState createState() => _VideoPlayerItemState();
 }
@@ -23,7 +23,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     super.initState();
     videoPlayerController = VideoPlayerController.network(widget.videoUrl);
     videoPlayerController.initialize().then((_) {
-      videoPlayerController.setVolume(0.5);
+      videoPlayerController.setVolume(1);
       videoPlayerController.play();
       setState(() {
         isLoading = false;
@@ -40,7 +40,11 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    if(widget.videoProvider.controlVideo){
+      videoPlayerController.play();
+    }else{
+      videoPlayerController.pause();
+    }
     return Container(
       width: size.width,
       height: size.height,
@@ -61,4 +65,3 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     );
   }
 }
-

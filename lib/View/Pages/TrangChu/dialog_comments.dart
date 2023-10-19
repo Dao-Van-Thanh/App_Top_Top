@@ -1,12 +1,14 @@
 import 'package:app/Model/user_model.dart';
+import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/comment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommentsDialog extends StatefulWidget {
-  const CommentsDialog({Key? key, required this.videoId}) : super(key: key);
+  const CommentsDialog({Key? key, required this.videoId, required this.videoProvider}) : super(key: key);
   final String videoId;
+  final VideoProvider videoProvider;
 
   @override
   State<CommentsDialog> createState() => _CommentsDialogState();
@@ -84,9 +86,8 @@ class _CommentsDialogState extends State<CommentsDialog> {
           ),
           SingleChildScrollView(
             child: Expanded(
-              flex: 1,
-              child: FooterDialog(avatarURL: avatarURL, videoId: widget.videoId, textController: textController, uId: uId),
-            ),
+              flex: 3,
+              child: FooterDialog(avatarURL: avatarURL, videoId: widget.videoId, textController: textController, uId: uId,videoProvider:widget.videoProvider),
           ),
         ],
       ),
@@ -99,13 +100,10 @@ class FooterDialog extends StatelessWidget {
   final String videoId;
   final TextEditingController textController;
   final String? uId;
+  final VideoProvider videoProvider;
 
-  FooterDialog({
-    required this.avatarURL,
-    required this.videoId,
-    required this.textController,
-    required this.uId,
-  });
+  FooterDialog({required this.avatarURL, required this.videoId, required this.textController, required this.uId, required this.videoProvider});
+
 
   @override
   Widget build(BuildContext context) {
@@ -143,23 +141,24 @@ class FooterDialog extends StatelessWidget {
                           border: InputBorder.none,
                         ),
                       ),
-                    ),
+                      IconButton(
+                        onPressed: () {
+                          // Handle emoji picker here.
+                        },
+                        icon: Icon(Icons.emoji_emotions),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          CommentService().sendCmt(videoId, textController.text.trim(), uId!);
+                          int index = videoProvider.listVideo.indexWhere((element) => element == videoId);
+                          videoProvider.listVideo[index].comments.add('');
+
+                          textController.clear();
+                        },
+                        icon: Icon(Icons.send),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    onPressed: () {
-                      // Handle emoji picker here.
-                    },
-                    icon: Icon(Icons.emoji_emotions),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      CommentService().sendCmt(videoId, textController.text.trim(), uId!);
-                      textController.clear();
-                    },
-                    icon: Icon(Icons.send),
-                  ),
-                ],
-              ),
             ),
           ),
         ],

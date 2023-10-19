@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Model/video_model.dart';
+
 class VideoProvider extends ChangeNotifier {
   int countLike = 0;
   int countComment = 0;
@@ -8,8 +10,11 @@ class VideoProvider extends ChangeNotifier {
   String username = '';
   String videoId = '';
   String authorId='';
+  bool controlVideo = true;
+
   List<Color> iconColors = [Colors.white, Colors.white, Colors.white];
   bool hasCheckedLike = false;
+  List<VideoModel> listVideo=[];
   void setValue(int countLikedata, int countCommentdata, String captiondata,
       String profilePhotodata, String usernamedata, String videoIddata,String authorIdData) {
     countLike = countLikedata;
@@ -20,7 +25,6 @@ class VideoProvider extends ChangeNotifier {
     videoId = videoIddata;
     authorId = authorIdData;
   }
-
   void incrementLike() {
     if (iconColors[0] == Colors.white) {
       iconColors[0] = Colors.red;
@@ -35,8 +39,10 @@ class VideoProvider extends ChangeNotifier {
     iconColors[0] = Colors.red;
     notifyListeners();
   }
-
-
+  void changeControlVideo(){
+    controlVideo = !controlVideo;
+    notifyListeners();
+  }
   void incrementComment() {
     countComment++;
     notifyListeners();
