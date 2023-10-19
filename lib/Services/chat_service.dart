@@ -1,6 +1,6 @@
-import 'dart:async';
-
+import 'dart:io';
 import 'package:app/Model/chat_model.dart';
+import 'package:app/Services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -101,5 +101,15 @@ class ChatService {
 
       chatRef.update({'messages': updatedMessages});
     });
+  }
+
+  Future uploadFileToChat({required File file,required String idPhongChat}) async{
+    UserService userService = UserService();
+    try{
+      String imageUrl = await userService.uploadFileToStorege(file);
+      addMessageToChat(idPhongChat, imageUrl, user!.uid);
+    }catch(e){
+      print('$e =========== Lỗi up load ảnh ở màn hình chat');
+    }
   }
 }

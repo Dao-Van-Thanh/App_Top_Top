@@ -91,7 +91,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
             child: Expanded(
               flex: 1,
               child: FooterDialog(
-                  avatarURL: 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg',
+                  avatarURL: avatarURL,
                   videoId: widget.videoId,
                   textController: textController,
                   uId: uId,
@@ -128,10 +128,11 @@ class FooterDialog extends StatelessWidget {
       child: Row(
         children: [
           if (avatarURL != null)
-            AvatarCircle(
-              urlImage: avatarURL!,
-              widthImage: 50,
-              heightImage: 50,
+            CircleAvatar(
+              backgroundColor: Colors.black,
+              backgroundImage: NetworkImage(
+                  avatarURL!,
+              ),
             )
           else
             CircularProgressIndicator(),
@@ -231,11 +232,11 @@ class ShowComment extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AvatarCircle(
-                  // urlImage: userModel!.avatarURL,
-                  urlImage: avarTest,
-                  widthImage: 50,
-                  heightImage: 50,
+                CircleAvatar(
+                  backgroundColor: Colors.black,
+                  backgroundImage: NetworkImage(
+                    userModel!.avatarURL,
+                  ),
                 ),
                 SizedBox(width: 10),
                 Expanded(
@@ -243,7 +244,7 @@ class ShowComment extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        userModel?.fullName ?? 'Unknown User',
+                        userModel.fullName,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -291,7 +292,7 @@ class ShowComment extends StatelessWidget {
                             onPressed: () {
                               // Xử lý hành động View Replies ở đây.
                             },
-                            child: Text(
+                            child: const Text(
                               "View 5 replies",
                               style: TextStyle(
                                 color: Colors.grey,
@@ -303,22 +304,6 @@ class ShowComment extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Center(
-                //     child: GestureDetector(
-                //   onTap: () {
-                //     showDialog(
-                //       context: context,
-                //       builder: (context) {
-                //         return NotifiDelete();
-                //       },
-                //     );
-                //   },
-                //   child: Image.asset(
-                //     'assets/dots.png',
-                //     height: 20,
-                //     width: 20,
-                //   ),
-                // )),
                 Center(
                   child: PopupMenuButton<String>(
                     itemBuilder: (BuildContext context) {
@@ -405,30 +390,5 @@ class NotifiDelete extends StatelessWidget {
             ),
           ),
         ]);
-  }
-}
-
-class AvatarCircle extends StatelessWidget {
-  final String urlImage;
-  final double widthImage;
-  final double heightImage;
-
-  AvatarCircle({
-    required this.urlImage,
-    required this.widthImage,
-    required this.heightImage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(widthImage / 2),
-      child: Image.network(
-        urlImage,
-        width: widthImage,
-        height: heightImage,
-        fit: BoxFit.cover,
-      ),
-    );
   }
 }
