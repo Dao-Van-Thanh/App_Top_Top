@@ -41,6 +41,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => VideoProvider()),
       ChangeNotifierProvider(create: (context) => TextProvider()),
       ChangeNotifierProvider(create: (context) => PageProvider()),
+
     ],
     child: MyApp(),
 
@@ -53,7 +54,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: ManHinhDangKy(),
       home: Bottom_Navigation_Bar(),
     );
   }

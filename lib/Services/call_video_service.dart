@@ -40,6 +40,18 @@ class CallVideoService {
       return videoList;
     });
   }
+  Stream<List<VideoModel>> getVideosStreamByAuthor(String uid) {
+    return _firestore.collection('Videos')
+        .where('uid', isEqualTo: uid)
+        .snapshots()
+        .map((querySnapshot) {
+      List<VideoModel> videoList = [];
+      querySnapshot.docs.forEach((doc) {
+        videoList.add(VideoModel.fromSnap(doc));
+      });
+      return videoList;
+    });
+  }
 
   Future<bool> checkLike(List<String> isdUserLiked) {
     for (var element in isdUserLiked) {

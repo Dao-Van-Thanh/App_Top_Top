@@ -13,6 +13,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Model/video_model.dart';
 import '../../Provider/page_provider.dart';
 import '../../Provider/video_provider.dart';
 import '../Pages/Others/man_hinh_nguoi_khac.dart';
@@ -20,8 +21,11 @@ import '../Pages/Others/man_hinh_nguoi_khac.dart';
 class HomeSideBar extends StatelessWidget {
   final VideoProvider videoProvider;
   final CallVideoService callVideoService;
-  const HomeSideBar(this.videoProvider, this.callVideoService, {Key? key})
-      : super(key: key);
+  final String labelScreen;
+  final int index;
+  Stream<List<VideoModel>> _videoStream;
+  HomeSideBar(this.videoProvider, this.callVideoService, this.labelScreen, this.index, this._videoStream);
+  Stream<List<VideoModel>> get videoStream => _videoStream;
   @override
   Widget build(BuildContext context) {
     final CallVideoService callVideoService;
@@ -69,14 +73,28 @@ class HomeSideBar extends StatelessWidget {
           onTap: () {
             switch (iconName) {
               case 'heart':
-                videoProvider.incrementLike();
-                callVideoService.likeVideo(videoProvider.videoId);
+                if(labelScreen =='videoManHinhSearch'){
+                  callVideoService.likeVideo(videoProvider.videoId);
+                  videoProvider.incrementLike();
+                  final _auth = FirebaseAuth.instance;
+                  final likes = videoProvider.listVideo[index].likes;
+                  if (likes.contains(_auth.currentUser!.uid)) {
+                    likes.remove(_auth.currentUser!.uid);
+                  } else {
+                    likes.add(_auth.currentUser!.uid);
+                  }
+                  videoProvider.listVideo[index].likes = likes;
+                  _videoStream = Stream.value(videoProvider as List<VideoModel>);
+                }else{
+                  videoProvider.incrementLike();
+                  callVideoService.likeVideo(videoProvider.videoId);
+                }
                 break;
               case 'comment':
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return  CommentsDialog(videoId:videoProvider.videoId);
+                    return  CommentsDialog(videoId:videoProvider.videoId,videoProvider:videoProvider);
                   },
                 );
                 break;
@@ -108,7 +126,8 @@ class HomeSideBar extends StatelessWidget {
         if(videoProvider.authorId == _auth.currentUser!.uid){
           pageProvider.setPageProfile();
         }else{
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhNguoiKhac(uid: videoProvider.authorId)));
+          videoProvider.changeControlVideo();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhNguoiKhac(videoProvider.authorId,videoProvider)));
         }
       },
       child: Stack(
