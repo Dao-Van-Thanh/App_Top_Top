@@ -1,9 +1,10 @@
 import 'package:app/Model/user_model.dart';
-import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/comment_service.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+import '../../../Provider/video_provider.dart';
 
 class CommentsDialog extends StatefulWidget {
   const CommentsDialog({Key? key, required this.videoId, required this.videoProvider}) : super(key: key);
@@ -65,11 +66,13 @@ class _CommentsDialogState extends State<CommentsDialog> {
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-                  final data = snapshot.data?.data() as Map<String, dynamic> ?? {};
+                  final data =
+                      snapshot.data?.data() as Map<String, dynamic> ?? {};
                   final comments = data?['comments'] as List<dynamic>;
                   if (comments.isEmpty) {
                     return Center(
-                      child: Text("Không có bình luận nào.", style: TextStyle(fontSize: 18)),
+                      child: Text("Không có bình luận nào.",
+                          style: TextStyle(fontSize: 18)),
                     );
                   }
                   return ListView.builder(
@@ -77,7 +80,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                     reverse: false,
                     itemBuilder: (context, index) {
                       final reversedComments = comments.reversed.toList();
-                      return ShowComment(cmtData: reversedComments[index]);
+                      return ShowComment(cmtData: reversedComments[index],videoId: widget.videoId);
                     },
                   );
                 }
@@ -86,8 +89,14 @@ class _CommentsDialogState extends State<CommentsDialog> {
           ),
           SingleChildScrollView(
             child: Expanded(
-              flex: 3,
-              child: FooterDialog(avatarURL: avatarURL, videoId: widget.videoId, textController: textController, uId: uId,videoProvider:widget.videoProvider),
+              flex: 1,
+              child: FooterDialog(
+                  avatarURL: 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg',
+                  videoId: widget.videoId,
+                  textController: textController,
+                  uId: uId,
+              videoProvider: widget.videoProvider),
+            ),
           ),
           ),
         ],
@@ -103,8 +112,13 @@ class FooterDialog extends StatelessWidget {
   final String? uId;
   final VideoProvider videoProvider;
 
-  FooterDialog({required this.avatarURL, required this.videoId, required this.textController, required this.uId, required this.videoProvider});
-
+  FooterDialog({
+    required this.avatarURL,
+    required this.videoId,
+    required this.textController,
+    required this.uId,
+    required this.videoProvider,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -133,11 +147,11 @@ class FooterDialog extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
                       child: TextField(
                         maxLines: null,
                         controller: textController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Thêm bình luận...',
                           border: InputBorder.none,
                         ),
@@ -169,11 +183,11 @@ class FooterDialog extends StatelessWidget {
   }
 }
 
-
 class ShowComment extends StatelessWidget {
   final Map<String, dynamic> cmtData;
 
-  ShowComment({required this.cmtData});
+  ShowComment({required this.cmtData, required this.videoId});
+  final String videoId;
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +197,7 @@ class ShowComment extends StatelessWidget {
     Duration duration = now.difference(dateTime);
     int s = duration.inSeconds;
     String? times;
-    // String avarTest ='https://cdn.pixabay.com/photo/2023/08/29/19/42/goose-8222013_640.jpg';
+    String avarTest = 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg';
 
     if (s < 60) {
       String time = "${s} seconds";
@@ -206,36 +220,39 @@ class ShowComment extends StatelessWidget {
       future: CommentService().getUserDataForUid(cmtData['uid']),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container();
+          return Container(); // Hiển thị tiêu đề tải dữ liệu
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          UserModel? userModel = snapshot.data != null ? snapshot.data! : null;
+          UserModel? userModel = snapshot.data;
+
           return Container(
             margin: EdgeInsets.all(10),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AvatarCircle(
-                  urlImage: userModel!.avatarURL,
+                  // urlImage: userModel!.avatarURL,
+                  urlImage: avarTest,
                   widthImage: 50,
                   heightImage: 50,
                 ),
                 SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userModel!.fullName,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        userModel?.fullName ?? 'Unknown User',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      width: MediaQuery.of(context).size.width - 150,
-                      child: Text(
+                      SizedBox(height: 5),
+                      Text(
                         cmtData['text'] ?? '',
                         style: TextStyle(
                           fontSize: 15,
@@ -244,56 +261,151 @@ class ShowComment extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Text(
-                          times ?? '',
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            // Handle reply action here.
-                          },
-                          child: Text(
-                            "Reply",
-                            style: TextStyle(color: Colors.black),
+                      Row(
+                        children: [
+                          Text(
+                            times ?? '',
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 20,
-                          child: Divider(
-                            color: Colors.grey,
-                            height: 20,
-                            thickness: 1,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        TextButton(
-                          onPressed: () {
-                            // Handle view replies action here.
-                          },
-                          child: Text(
-                            "View 5 replies",
-                            style: TextStyle(
-                              color: Colors.grey,
+                          TextButton(
+                            onPressed: () {
+                              // Xử lý hành động Reply ở đây.
+                            },
+                            child: Text(
+                              "Trả lời",
+                              style: TextStyle(color: Colors.black),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 20,
+                            child: Divider(
+                              color: Colors.grey,
+                              height: 20,
+                              thickness: 1,
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          TextButton(
+                            onPressed: () {
+                              // Xử lý hành động View Replies ở đây.
+                            },
+                            child: Text(
+                              "View 5 replies",
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
+                // Center(
+                //     child: GestureDetector(
+                //   onTap: () {
+                //     showDialog(
+                //       context: context,
+                //       builder: (context) {
+                //         return NotifiDelete();
+                //       },
+                //     );
+                //   },
+                //   child: Image.asset(
+                //     'assets/dots.png',
+                //     height: 20,
+                //     width: 20,
+                //   ),
+                // )),
+                Center(
+                  child: PopupMenuButton<String>(
+                    itemBuilder: (BuildContext context) {
+                      return <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                          value: 'delete',
+                          child: Text('Xóa'),
+                        ),
+                      ];
+                    },
+                    onSelected: (String choice) {
+                      if (choice == 'delete') {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return NotifiDelete(videoId: videoId,cmtId: cmtData['id']);
+                            },);
+                      }
+                    },
+                  ),
+                )
               ],
             ),
           );
         }
       },
     );
+  }
+}
+
+class NotifiDelete extends StatelessWidget {
+  const NotifiDelete({super.key, required this.videoId, required this.cmtId});
+  final String videoId;
+  final String cmtId;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        alignment: Alignment.center,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        actions: [
+          Center(
+            child: Container(
+              height: MediaQuery.of(context).size.height / 4.5,
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  Text(
+                    "Bạn có chắc chắn muốn \n xóa comment ?",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 5),
+                  Divider(color: Colors.grey),
+                  TextButton(
+                      onPressed: () {
+                        CommentService().deleteCmt(videoId, cmtId);
+                      },
+                      child: Center(
+                          child: Text('Xóa',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Colors.black)))),
+                  SizedBox(height: 5),
+                  Divider(color: Colors.grey),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Center(
+                          child: Text('Hủy',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color: Colors.grey)))),
+                ],
+              ),
+            ),
+          ),
+        ]);
   }
 }
 
