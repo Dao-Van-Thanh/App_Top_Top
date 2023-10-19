@@ -92,7 +92,6 @@ class ChatService {
 
   Future<void> deleteMessageByChatId(String chatId, String idChatToDelete) async {
     final chatRef = FirebaseFirestore.instance.collection('Chats').doc(chatId);
-
     chatRef.get().then((chatDocument) {
       final messages = chatDocument.data()?['messages'] as List<dynamic>;
 

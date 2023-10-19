@@ -1,8 +1,6 @@
 import 'package:app/Model/user_model.dart';
 import 'package:app/Services/comment_service.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommentsDialog extends StatefulWidget {
   const CommentsDialog({Key? key, required this.videoId}) : super(key: key);
@@ -105,6 +103,7 @@ class FooterDialog extends StatelessWidget {
   final String videoId;
   final TextEditingController textController;
   final String? uId;
+  final VideoProvider videoProvider;
 
   FooterDialog({
     required this.avatarURL,
@@ -125,7 +124,7 @@ class FooterDialog extends StatelessWidget {
             AvatarCircle(
               urlImage: avatarURL!,
               widthImage: 50,
-              heightImage: 50,
+              heightImagel: 50,
             )
           else
             CircularProgressIndicator(),
@@ -140,12 +139,11 @@ class FooterDialog extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20, top: 5, bottom: 5),
+                      padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
                       child: TextField(
                         maxLines: null,
                         controller: textController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Thêm bình luận...',
                           border: InputBorder.none,
                         ),
@@ -157,11 +155,11 @@ class FooterDialog extends StatelessWidget {
                       // Handle emoji picker here.
                     },
                     icon: Icon(Icons.emoji_emotions),
-                  ),
                   IconButton(
                     onPressed: () {
-                      CommentService()
-                          .sendCmt(videoId, textController.text.trim(), uId!);
+                      CommentService().sendCmt(videoId, textController.text.trim(), uId!);
+                      int index = videoProvider.listVideo.indexWhere((element) => element == videoId);
+                      videoProvider.listVideo[index].comments.add('');
                       textController.clear();
                     },
                     icon: Icon(Icons.send),
@@ -175,7 +173,6 @@ class FooterDialog extends StatelessWidget {
     );
   }
 }
-
 class ShowComment extends StatelessWidget {
   final Map<String, dynamic> cmtData;
 
