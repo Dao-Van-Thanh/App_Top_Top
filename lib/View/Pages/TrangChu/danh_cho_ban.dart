@@ -34,6 +34,7 @@ class _ForYouState extends State<ForYou> {
         } else {
           final videoList = snapshot.data;
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
             body: SafeArea(
               child: PageView.builder(

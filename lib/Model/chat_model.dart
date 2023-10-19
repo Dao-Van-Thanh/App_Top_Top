@@ -42,11 +42,13 @@ class ChatModel {
 }
 
 class Message {
+  String idChat;
   String chat; // Nội dung tin nhắn
   String idUserChat; // ID của người gửi
   DateTime timestamp; // Thời gian gửi tin nhắn
 
   Message({
+    required this.idChat,
     required this.chat,
     required this.idUserChat,
     required this.timestamp,
@@ -57,12 +59,14 @@ class Message {
       Timestamp timestamp = json['timestamp'];
       // Phương thức factory để chuyển đổi dữ liệu JSON thành một đối tượng Message
       return Message(
+        idChat: json['idChat'],
         chat: json['chat'],
         idUserChat: json['idUserChat'],
         timestamp: timestamp.toDate(),
       );
     }
     return Message(
+      idChat: '',
       chat: '',
       idUserChat: '',
       timestamp: DateTime.now(),
@@ -72,6 +76,7 @@ class Message {
   Map<String, dynamic> toJson() {
     // Phương thức để chuyển đối tượng Message thành dữ liệu JSON
     return {
+      'idChat': idChat,
       'chat': chat,
       'idUserChat': idUserChat,
       'timestamp': timestamp.toIso8601String(),

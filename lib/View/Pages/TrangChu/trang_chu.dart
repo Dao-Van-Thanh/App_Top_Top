@@ -28,6 +28,7 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -59,6 +60,7 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
         ],
       ),
       body: SafeArea(
+
         child: TabBarView(
           controller: _tabController,
           children: [

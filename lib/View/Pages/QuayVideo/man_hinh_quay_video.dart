@@ -1,10 +1,8 @@
 import 'package:app/Provider/quay_video_provider.dart';
-import 'package:app/View/Pages/QuayVideo/man_hinh_dang_video.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_kiem_tra_video.dart';
-import 'package:app/View/Pages/QuayVideo/man_hinh_kiem_tra_video.dart';
+import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 import 'package:provider/provider.dart';
 
 class ManHinhQuayVideo extends StatefulWidget {
@@ -13,9 +11,6 @@ class ManHinhQuayVideo extends StatefulWidget {
 }
 
 class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
-  // late QuayVideoProvider provider =
-  //     Provider.of<QuayVideoProvider>(context,listen: false);
-
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   bool _isRecording = false; // Biến trạng thái quay video
@@ -47,6 +42,7 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
   @override
   Widget build(BuildContext context) {
     XFile videoFile;
+
     return Consumer<QuayVideoProvider>(
         builder: (context, provider, _) {
           return Scaffold(
