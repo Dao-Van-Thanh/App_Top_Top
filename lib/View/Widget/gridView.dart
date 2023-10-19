@@ -9,6 +9,8 @@ import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../Services/tab_video_service.dart';
+import '../Pages/Others/man_hinh_video_by_author.dart';
+import '../Pages/TrangChu/danh_cho_ban.dart';
 
 class GridViewVideo extends StatefulWidget {
   String uid;
@@ -56,6 +58,13 @@ class _GridViewVideoState extends State<GridViewVideo> {
           return InkWell(
             onTap: () {
               print('${video.id}');
+              print('${video.uid}');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ManhinhVideoByAuthor(uid: video.uid,),
+                ),
+              );
             },
             child: Container(
               margin: EdgeInsets.all(10),

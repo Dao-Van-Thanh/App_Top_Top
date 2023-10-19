@@ -16,9 +16,10 @@ class Following extends StatefulWidget {
 class _Following extends State<Following> {
   @override
   Widget build(BuildContext context) {
-
+    final Stream<List<VideoModel>> videoStream;
+    videoStream = CallVideoService().getVideosFollowingStream();
     return StreamBuilder<List<VideoModel>>(
-      stream: CallVideoService().getVideosFollowingStream(),
+      stream: videoStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
@@ -72,7 +73,7 @@ class _Following extends State<Following> {
                         return Stack(
                           alignment: Alignment.bottomLeft,
                           children: [
-                            VideoPlayerItem(videoUrl: videoData!.videoUrl),
+                            VideoPlayerItem( videoData!.videoUrl,videoProvider),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -89,7 +90,7 @@ class _Following extends State<Following> {
                                     height: MediaQuery.of(context).size.height /
                                         1.75,
                                     child: HomeSideBar(
-                                        videoProvider, CallVideoService()),
+                                        videoProvider, CallVideoService(),'manhinhfollowing',index,videoStream),
                                   ),
                                 ),
                               ],

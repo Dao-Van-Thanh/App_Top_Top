@@ -8,20 +8,20 @@ import 'package:provider/provider.dart';
 import '../../Widget/home_side_bar.dart';
 import '../../Widget/video_detail.dart';
 
-class ForYou extends StatefulWidget {
+class ManhinhVideoSearch extends StatefulWidget {
+  final Stream<List<VideoModel>> videoStream;
 
+  ManhinhVideoSearch({required this.videoStream});
   @override
-  State<ForYou> createState() => _ForYouState();
+  State<ManhinhVideoSearch> createState() => _ManhinhVideoSearchrState();
 }
 
-class _ForYouState extends State<ForYou> {
-
+class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
   @override
   Widget build(BuildContext context) {
-    final Stream<List<VideoModel>> videoStream;
-    videoStream = CallVideoService().getVideosStream();
+
     return StreamBuilder<List<VideoModel>>(
-      stream: videoStream,
+      stream: widget.videoStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
@@ -34,15 +34,13 @@ class _ForYouState extends State<ForYou> {
         } else {
           final videoList = snapshot.data;
           return Scaffold(
-            resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
             body: SafeArea(
               child: PageView.builder(
                 onPageChanged: (int page) {
-                  print(page);
                   print(videoList!.length - 1);
                   if (page == videoList!.length - 1) {
-                      print('video cuối cùng rồi xem cái lol đi học đi');
+                    print('video cuối cùng rồi xem cái lol đi học đi');
                   }
                 },
                 scrollDirection: Axis.vertical,
@@ -62,6 +60,7 @@ class _ForYouState extends State<ForYou> {
                             videoData!.id,
                             videoData!.uid
                         );
+                        videoProvider.listVideo.addAll(videoList!);
                         if (!videoProvider.hasCheckedLike) {
                           videoProvider.hasCheckedLike = true;
                           CallVideoService()
@@ -92,7 +91,7 @@ class _ForYouState extends State<ForYou> {
                                     height: MediaQuery.of(context).size.height /
                                         1.75,
                                     child: HomeSideBar(
-                                        videoProvider, CallVideoService(),'manhinhchoban',index,videoStream),
+                                        videoProvider, CallVideoService(),'videoManHinhSearch',index,widget.videoStream),
                                   ),
                                 ),
                               ],

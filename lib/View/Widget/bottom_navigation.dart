@@ -37,6 +37,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> {
     ManHinhHopThu(),
     ManHinhProfile(),
   ];
+
   @override
   Widget build(BuildContext context) {
     final pageProvider = Provider.of<PageProvider>(context);
