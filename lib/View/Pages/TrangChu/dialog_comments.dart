@@ -1,10 +1,15 @@
 import 'package:app/Model/user_model.dart';
 import 'package:app/Services/comment_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../Provider/video_provider.dart';
+
 class CommentsDialog extends StatefulWidget {
-  const CommentsDialog({Key? key, required this.videoId}) : super(key: key);
+  const CommentsDialog({Key? key, required this.videoId, required this.videoProvider}) : super(key: key);
   final String videoId;
+  final VideoProvider videoProvider;
 
   @override
   State<CommentsDialog> createState() => _CommentsDialogState();
@@ -86,10 +91,11 @@ class _CommentsDialogState extends State<CommentsDialog> {
             child: Expanded(
               flex: 1,
               child: FooterDialog(
-                  avatarURL: avatarURL,
+                  avatarURL: 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg',
                   videoId: widget.videoId,
                   textController: textController,
-                  uId: uId),
+                  uId: uId,
+              videoProvider: widget.videoProvider),
             ),
           ),
         ],
@@ -110,6 +116,7 @@ class FooterDialog extends StatelessWidget {
     required this.videoId,
     required this.textController,
     required this.uId,
+    required this.videoProvider,
   });
 
   @override
@@ -124,7 +131,7 @@ class FooterDialog extends StatelessWidget {
             AvatarCircle(
               urlImage: avatarURL!,
               widthImage: 50,
-              heightImagel: 50,
+              heightImage: 50,
             )
           else
             CircularProgressIndicator(),
@@ -155,6 +162,7 @@ class FooterDialog extends StatelessWidget {
                       // Handle emoji picker here.
                     },
                     icon: Icon(Icons.emoji_emotions),
+                  ),
                   IconButton(
                     onPressed: () {
                       CommentService().sendCmt(videoId, textController.text.trim(), uId!);
@@ -173,6 +181,7 @@ class FooterDialog extends StatelessWidget {
     );
   }
 }
+
 class ShowComment extends StatelessWidget {
   final Map<String, dynamic> cmtData;
 
@@ -187,7 +196,7 @@ class ShowComment extends StatelessWidget {
     Duration duration = now.difference(dateTime);
     int s = duration.inSeconds;
     String? times;
-    // String avarTest = 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg';
+    String avarTest = 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg';
 
     if (s < 60) {
       String time = "${s} seconds";
@@ -223,7 +232,8 @@ class ShowComment extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AvatarCircle(
-                  urlImage: userModel!.avatarURL,
+                  // urlImage: userModel!.avatarURL,
+                  urlImage: avarTest,
                   widthImage: 50,
                   heightImage: 50,
                 ),
