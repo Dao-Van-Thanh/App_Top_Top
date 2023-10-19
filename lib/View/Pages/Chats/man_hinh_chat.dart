@@ -13,6 +13,7 @@ import '../../../Model/chat_model.dart';
 
 class ManHinhChat extends StatefulWidget {
   String idPhongChat;
+
   ManHinhChat(this.idPhongChat);
 
   @override
@@ -23,6 +24,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
   ChatService service = ChatService();
   ScrollController _controller = ScrollController();
   TextEditingController editingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -43,7 +45,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
               _controller.animateTo(
                 _controller.position.maxScrollExtent,
                 duration: const Duration(milliseconds: 10),
-                curve: Curves.easeOut,);
+                curve: Curves.easeOut,
+              );
             });
             return SafeArea(
               child: FutureBuilder<DocumentSnapshot>(
@@ -59,7 +62,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
                           color: Colors.black,
                         ),
                         onPressed: () {
-                          Navigator.of(context).pop(); // Để quay lại màn hình trước đó
+                          Navigator.of(context)
+                              .pop(); // Để quay lại màn hình trước đó
                         },
                       ),
                       title: Row(
@@ -69,7 +73,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
                               snapshot.data!['avatarURL'] != null)
                             CircleAvatar(
                               backgroundColor: Colors.blue,
-                              backgroundImage: NetworkImage(snapshot.data!['avatarURL']),
+                              backgroundImage:
+                                  NetworkImage(snapshot.data!['avatarURL']),
                             ),
                           const SizedBox(
                             width: 10,
@@ -93,55 +98,62 @@ class _ManHinhChatState extends State<ManHinhChat> {
                       child: Column(
                         children: [
                           Expanded(
-                              flex: 2,
-                              child:_chat(context, snapshot, chatData.messages, user!.uid),
+                            flex: 2,
+                            child: _chat(context, snapshot, chatData.messages,
+                                user!.uid),
                           ),
                           // ô chat
                           SingleChildScrollView(
                             child: Expanded(
-                              flex: 1,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 5,right: 5),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.attachment,
-                                          color: Colors.grey,
+                                flex: 1,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 5, right: 5),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.attachment,
+                                            color: Colors.grey,
+                                          ),
+                                          onPressed: () {
+                                            showImagePicker(
+                                                context, chatData.id);
+                                          },
                                         ),
-                                        onPressed: () {
-                                          showImagePicker(context,chatData.id);
-                                        },
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Expanded(
-                                        child: TextField(
-                                          controller: editingController,
-                                          maxLines: null,
-                                          decoration: const InputDecoration(
-                                            hintText: 'Nhập tin nhắn...',
-                                            border: InputBorder.none,
+                                        const SizedBox(width: 5),
+                                        Expanded(
+                                          child: TextField(
+                                            controller: editingController,
+                                            maxLines: null,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Nhập tin nhắn...',
+                                              border: InputBorder.none,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          if(editingController.text.isNotEmpty)
-                                          await service.addMessageToChat(widget.idPhongChat, editingController.text, user.uid);
-                                          editingController.text = '';
-                                        },
-                                        icon: Icon(Icons.send, color: Colors.blue),
-                                      ),
-                                    ],
+                                        IconButton(
+                                          onPressed: () async {
+                                            if (editingController
+                                                .text.isNotEmpty)
+                                              await service.addMessageToChat(
+                                                  widget.idPhongChat,
+                                                  editingController.text,
+                                                  user.uid);
+                                            editingController.text = '';
+                                          },
+                                          icon: Icon(Icons.send,
+                                              color: Colors.blue),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              )
-                            ),
+                                )),
                           )
                         ],
                       ),
@@ -157,6 +169,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
       },
     );
   }
+
   Future<XFile?> pickVideo() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
@@ -167,7 +180,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
     }
     return null;
   }
-  void showImagePicker(BuildContext context,String idPhongChat) {
+
+  void showImagePicker(BuildContext context, String idPhongChat) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -181,13 +195,14 @@ class _ManHinhChatState extends State<ManHinhChat> {
                 await ImagePicker()
                     .pickImage(source: ImageSource.gallery)
                     .then((xfile) => {
-                        if(xfile != null){
-                          service.uploadFileToChat(file: File(xfile.path), idPhongChat: idPhongChat)
-                        }
-                    }
-                );
+                          if (xfile != null)
+                            {
+                              service.uploadFileToChat(
+                                  file: File(xfile.path),
+                                  idPhongChat: idPhongChat)
+                            }
+                        });
                 Navigator.pop(context);
-
               },
             ),
             ListTile(
@@ -203,6 +218,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
       },
     );
   }
+
   Widget infoOther(BuildContext context, snapshot) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -243,7 +259,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                   ),
                   Text(
                     '${snapshot.data!['following'].length} đang follow   '
-                        '${snapshot.data!['follower'].length} follower',
+                    '${snapshot.data!['follower'].length} follower',
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -252,64 +268,107 @@ class _ManHinhChatState extends State<ManHinhChat> {
                 ]),
     );
   }
+
   Widget _itemChat(BuildContext context, Message message, String uid) {
-    bool check = message.idUserChat != uid;
-    return GestureDetector (
+    bool checkNguoiChat = message.idUserChat != uid;
+    bool checkURI = Uri.parse(message.chat).isAbsolute;
+
+    return GestureDetector(
       onLongPress: () {
         //kiểm tra nếu đúng là mình chat thì có quyền xóa chat đó
-        !check ? showModalBottomSheet(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16)
-                )
-            ),
-            context: context,
-            builder: (context) {
-              return _showModelOptions(context,widget.idPhongChat, message.idChat);
-            },
-        ) : null;
+        !checkNguoiChat
+            ? showModalBottomSheet(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16))),
+                context: context,
+                builder: (context) {
+                  return _showModelOptions(
+                      context, widget.idPhongChat, message.idChat);
+                },
+              )
+            : null;
         //
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
         child: Align(
-          alignment: check ? Alignment.centerLeft : Alignment.centerRight,
-          child: Container(
-            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width), // Đặt kích thước tối đa
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: check ? Colors.black12 : Colors.lightBlueAccent,
-              borderRadius: BorderRadius.circular(26),
-            ),
-            child: Text(
-              message.chat,
-              style: TextStyle(
-                color: check ? Colors.black : Colors.white,
-                fontSize: 20,
-              ),
-              maxLines: null,
-            ),
-          ),
+          alignment:
+              checkNguoiChat ? Alignment.centerLeft : Alignment.centerRight,
+          child: checkURI
+              ? InkWell(
+                onTap: () {
+                  showDialog(
+                    barrierDismissible: true,
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        backgroundColor: Colors.black,
+                        child: Image.network(
+                          message.chat,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                    width: 200, // Độ rộng của hình chữ nhật
+                    height: 300, // Độ cao của hình chữ nhật
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      border: Border.all(color: Colors.black), // Viền đen
+                      borderRadius: BorderRadius.circular(
+                          10), // Bo góc để tạo hình chữ nhật
+                    ),
+                    child: Image.network(
+                        message.chat), // Thay 'assets/your_image.png' bằng đường dẫn đến hình ảnh của bạn
+                  ),
+              )
+              : Container(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context)
+                          .size
+                          .width), // Đặt kích thước tối đa
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: checkNguoiChat
+                        ? Colors.black12
+                        : Colors.lightBlueAccent,
+                    borderRadius: BorderRadius.circular(26),
+                  ),
+                  child: Text(
+                    message.chat,
+                    style: TextStyle(
+                      color: checkNguoiChat ? Colors.black : Colors.white,
+                      fontSize: 20,
+                    ),
+                    maxLines: null,
+                  ),
+                ),
         ),
       ),
     );
   }
-  Widget _chat(BuildContext context,snapshot,List<Message> messages,String uid){
+
+  Widget _chat(
+      BuildContext context, snapshot, List<Message> messages, String uid) {
     return SingleChildScrollView(
       controller: _controller,
       child: Column(
         children: [
           infoOther(context, snapshot),
-          for (var message in messages)
-            _itemChat(context, message,uid),
+          for (var message in messages) _itemChat(context, message, uid),
         ],
       ),
     );
   }
-  Widget _showModelOptions(BuildContext context,String phongChat,String idChat){
+
+  Widget _showModelOptions(
+      BuildContext context, String phongChat, String idChat) {
     return Container(
-      height: MediaQuery.of(context).size.height*0.12,
+      height: MediaQuery.of(context).size.height * 0.12,
       alignment: Alignment.center,
       child: SizedBox(
         width: 70,
@@ -330,10 +389,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
                 size: 30,
               ),
               Text(
-                  'Xóa',
-                  style: TextStyle(
-                    color: Colors.red
-                  ),
+                'Xóa',
+                style: TextStyle(color: Colors.red),
               ),
             ],
           ),

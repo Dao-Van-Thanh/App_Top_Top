@@ -89,6 +89,7 @@ class OthersService {
         }
 
       }
+      // kiểm tra nếu cả 2 chũng follow thì tạo phòng chat
       final checkFollow = following.contains(idOther) && follower.contains(idOther);
       if(checkFollow){
         // 3. Nếu không có phòng chat thỏa mãn, tạo phòng chat mới.
