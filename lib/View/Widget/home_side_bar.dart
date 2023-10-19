@@ -135,8 +135,12 @@ class HomeSideBar extends StatelessWidget {
         if(videoProvider.authorId == _auth.currentUser!.uid){
           pageProvider.setPageProfile();
         }else{
-          videoProvider.changeControlVideo();
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhNguoiKhac(videoProvider.authorId,videoProvider)));
+          if(labelScreen == 'man hinh nguoi khac'){
+            Navigator.of(context).pop();
+          }else{
+            videoProvider.changeControlVideo();
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhNguoiKhac(videoProvider.authorId,videoProvider)));
+          }
         }
       },
       child: Stack(
