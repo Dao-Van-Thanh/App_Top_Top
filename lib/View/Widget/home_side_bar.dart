@@ -98,9 +98,9 @@ class HomeSideBar extends StatelessWidget {
                       alignment: Alignment.bottomCenter, // Hiển thị ở cuối màn hình
                       child: Container(
                         width: double.infinity, // Đặt chiều rộng đầy đủ
-                        height: 700.0, // Đặt chiều cao cố định
+                        height: 500, // Đặt chiều cao cố định
                         color: Colors.white, // Màu nền của dialog
-                        child: CommentsDialog(videoId:videoProvider.videoId,videoProvider:videoProvider), // Thay thế YourDialogContent bằng nội dung của bạn
+                        // child: CommentsDialog(videoId:videoProvider.videoId,videoProvider:videoProvider), // Thay thế YourDialogContent bằng nội dung của bạn
                       ),
                     );
                   },
@@ -163,7 +163,7 @@ class HomeSideBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(25),
               ),
               transform: Matrix4.translationValues(5, 0, 0),
-              child: Icon(
+              child: const Icon(
                 Icons.add,
                 color: Colors.white,
                 size: 17,
