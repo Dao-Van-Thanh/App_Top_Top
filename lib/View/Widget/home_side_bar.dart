@@ -63,6 +63,7 @@ class HomeSideBar extends StatelessWidget {
     } else {
       iconData = Icons.star;
     }
+    double heightDialog = MediaQuery.of(context).size.height * 0.6;
     return Column(
       children: [
         InkWell(
@@ -80,7 +81,7 @@ class HomeSideBar extends StatelessWidget {
                       alignment: Alignment.bottomCenter, // Hiển thị ở cuối màn hình
                       child: Container(
                         width: double.infinity, // Đặt chiều rộng đầy đủ
-                        height: 700.0, // Đặt chiều cao cố định
+                        height: heightDialog, // Đặt chiều cao cố định
                         color: Colors.white, // Màu nền của dialog
                         child: CommentsDialog(videoId:videoProvider.videoId), // Thay thế YourDialogContent bằng nội dung của bạn
                       ),
