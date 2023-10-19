@@ -1,8 +1,11 @@
+import 'package:app/Model/user_model.dart';
+import 'package:app/Provider/chats_provider.dart';
 import 'package:app/Services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
 import '../../../Model/chat_model.dart';
 
@@ -32,7 +35,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
           if (chatData != null) {
             final message = chatData.messages;
             final user = FirebaseAuth.instance.currentUser;
-            final lsID = service.getIdOtherInListUID(chatData.uid);
+            final idOther = service.getIdOtherInListUID(chatData.uid);
             // tự động cuộn xuống cuối
             SchedulerBinding.instance.addPostFrameCallback((_) {
               _controller.animateTo(
@@ -42,7 +45,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
             });
             return SafeArea(
               child: FutureBuilder<DocumentSnapshot>(
-                future: service.getUser(lsID),
+                future: service.getUser(idOther),
                 builder: (context, snapshot) {
                   return Scaffold(
                     backgroundColor: Colors.white,
@@ -88,52 +91,54 @@ class _ManHinhChatState extends State<ManHinhChat> {
                       child: Column(
                         children: [
                           Expanded(
-                              flex: 8,
+                              flex: 2,
                               child:_chat(context, snapshot, chatData.messages, user!.uid),
                           ),
                           // ô chat
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 5,right: 5),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.attachment,
-                                        color: Colors.grey,
+                          SingleChildScrollView(
+                            child: Expanded(
+                              flex: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5,right: 5),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.attachment,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                        },
                                       ),
-                                      onPressed: () {
-
-                                      },
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Expanded(
-                                      child: TextField(
-                                        controller: editingController,
-                                        maxLines: null,
-                                        decoration: const InputDecoration(
-                                          hintText: 'Nhập tin nhắn...',
-                                          border: InputBorder.none,
+                                      const SizedBox(width: 5),
+                                      Expanded(
+                                        child: TextField(
+                                          controller: editingController,
+                                          maxLines: null,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Nhập tin nhắn...',
+                                            border: InputBorder.none,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () async {
-                                        await service.addMessageToChat(widget.idPhongChat, editingController.text, user.uid);
-                                        editingController.text = '';
-                                      },
-                                      icon: Icon(Icons.send, color: Colors.blue),
-                                    ),
-                                  ],
+                                      IconButton(
+                                        onPressed: () async {
+                                          if(editingController.text.isNotEmpty)
+                                          await service.addMessageToChat(widget.idPhongChat, editingController.text, user.uid);
+                                          editingController.text = '';
+                                        },
+                                        icon: Icon(Icons.send, color: Colors.blue),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
+                              )
+                            ),
                           )
                         ],
                       ),
@@ -171,9 +176,6 @@ class _ManHinhChatState extends State<ManHinhChat> {
                           NetworkImage(snapshot.data!['avatarURL']),
                     ),
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
                   Text(
                     '${snapshot.data!['fullname']}',
                     style: const TextStyle(
@@ -204,30 +206,45 @@ class _ManHinhChatState extends State<ManHinhChat> {
   }
   Widget _itemChat(BuildContext context, Message message, String uid) {
     bool check = message.idUserChat != uid;
-    return Container(
-      margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
-      child: Align(
-        alignment: check ? Alignment.centerLeft : Alignment.centerRight,
-        child: Container(
-          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width), // Đặt kích thước tối đa
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: check ? Colors.black12 : Colors.lightBlueAccent,
-            borderRadius: BorderRadius.circular(26),
-          ),
-          child: Text(
-            message.chat,
-            style: TextStyle(
-              color: check ? Colors.black : Colors.white,
-              fontSize: 20,
+    return GestureDetector (
+      onLongPress: () {
+        showModalBottomSheet(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16)
+                )
             ),
-            maxLines: null,
+            context: context,
+            builder: (context) {
+              return _showModelOptions(context,widget.idPhongChat, message.idChat);
+            },
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+        child: Align(
+          alignment: check ? Alignment.centerLeft : Alignment.centerRight,
+          child: Container(
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width), // Đặt kích thước tối đa
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: check ? Colors.black12 : Colors.lightBlueAccent,
+              borderRadius: BorderRadius.circular(26),
+            ),
+            child: Text(
+              message.chat,
+              style: TextStyle(
+                color: check ? Colors.black : Colors.white,
+                fontSize: 20,
+              ),
+              maxLines: null,
+            ),
           ),
         ),
       ),
     );
   }
-
   Widget _chat(BuildContext context,snapshot,List<Message> messages,String uid){
     return SingleChildScrollView(
       controller: _controller,
@@ -240,26 +257,38 @@ class _ManHinhChatState extends State<ManHinhChat> {
       ),
     );
   }
-// child: Row(
-//   mainAxisAlignment: check ? MainAxisAlignment.start : MainAxisAlignment.end,
-//   children: [
-//     Container(
-//       height: double.infinity,
-//       alignment: Alignment.center,
-//       padding: EdgeInsets.all(10),
-//       decoration: BoxDecoration(
-//           color: check ? Colors.black12 : Colors.lightBlueAccent,
-//           borderRadius: BorderRadius.circular(26)
-//       ),
-//       child: Text(
-//         message.chat,
-//         style: TextStyle(
-//           color: check ? Colors.black : Colors.white,
-//           fontSize: 20
-//         ),
-//         maxLines: null,
-//       ),
-//     ),
-//   ],
-// ),
+  Widget _showModelOptions(BuildContext context,String phongChat,String idChat){
+    return Container(
+      height: MediaQuery.of(context).size.height*0.12,
+      alignment: Alignment.center,
+      child: SizedBox(
+        width: 70,
+        height: 70,
+        child: InkWell(
+          borderRadius: BorderRadius.all(Radius.circular(90)),
+          onTap: () async {
+            await service.deleteMessageByChatId(phongChat, idChat);
+            Navigator.pop(context);
+          },
+          child: const Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.delete,
+                color: Colors.red,
+                size: 30,
+              ),
+              Text(
+                  'Xóa',
+                  style: TextStyle(
+                    color: Colors.red
+                  ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

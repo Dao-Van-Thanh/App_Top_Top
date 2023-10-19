@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'Provider/chats_provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
 import 'Provider/video_provider.dart';
 import 'firebase_options.dart';
@@ -41,7 +42,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => VideoProvider()),
       ChangeNotifierProvider(create: (context) => TextProvider()),
       ChangeNotifierProvider(create: (context) => PageProvider()),
-
+      ChangeNotifierProvider(create: (context) => ChatsProfiver()),
     ],
     child: MyApp(),
 

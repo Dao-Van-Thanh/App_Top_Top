@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app/Model/user_model.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
+import 'package:app/View/Pages/Profile/man_hinh_trang_thai.dart';
 import 'package:app/View/Pages/Profile/showAvatar.dart';
 import 'package:app/View/Pages/Profile/tab_bookmark.dart';
 import 'package:app/View/Pages/Profile/tab_video.dart';
@@ -10,7 +11,6 @@ import 'package:app/View/Pages/man_hinh_addFriend.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/avatar.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
-import 'package:app/View/Widget/text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Provider/profile_provider.dart';
+import '../../Widget/text.dart';
 
 class ManHinhProfile extends StatefulWidget {
   const ManHinhProfile({Key? key}) : super(key: key);
@@ -220,17 +221,22 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
           ),
         ),
         Expanded(
-          child: Container(
-            child: Column(
-              children: [
-                text(
-                    lable: follow.toString(),
-                    size: 20,
-                    fontWeight: FontWeight.w900),
-                const SizedBox(height: 5),
-                const text(
-                    lable: "Follower", size: 15, fontWeight: FontWeight.normal),
-              ],
+          child: GestureDetector(
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai()));
+            },
+            child: Container(
+              child: Column(
+                children: [
+                  text(
+                      lable: follow.toString(),
+                      size: 20,
+                      fontWeight: FontWeight.w900),
+                  const SizedBox(height: 5),
+                  const text(
+                      lable: "Follower", size: 15, fontWeight: FontWeight.normal),
+                ],
+              ),
             ),
           ),
         ),
