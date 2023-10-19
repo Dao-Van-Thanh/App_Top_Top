@@ -16,6 +16,7 @@ class ManHinhTimKiem extends StatefulWidget {
 
 class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
   TextEditingController textInputSearch = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   List<String> captions = [];
   List<String> historySearchs = [
     'Thuy ngo 2',
@@ -53,6 +54,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
               child: TextField(
                 cursorColor: Colors.pinkAccent,
                 controller: textInputSearch,
+                focusNode: _focusNode,
                 decoration: const InputDecoration(
                   hintText: 'Tìm kiếm theo tên',
                   hintStyle: TextStyle(
@@ -112,6 +114,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                   return InkWell(
                     onTap: () {
                       print('Item $item được nhấn');
+                      _focusNode.unfocus();
                       setState(() {
                         textInputSearch.text = item;
                         textSearch = item;
@@ -138,7 +141,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                               crossAxisCount: 2,
                               mainAxisSpacing: 5,
                               crossAxisSpacing:5,
-                              mainAxisExtent: 350.0,
+                              mainAxisExtent: 328.0,
                         ),
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
@@ -156,6 +159,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                                 );
                               },
                               child: Container(
+                                color: Colors.black,
                                 child: Column(
                                   children: [
                                     Stack(
@@ -193,7 +197,8 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                                     Text(
                                       videoData!.caption,
                                       style: const TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 12,
+                                        color: Colors.white
                                       ),
                                     ),
                                   ],

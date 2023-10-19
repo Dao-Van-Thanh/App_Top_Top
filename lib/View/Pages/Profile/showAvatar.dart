@@ -37,10 +37,7 @@ class ShowAvatar extends StatelessWidget {
                       ],
                     )
                   )
-
-
               ),
-
             ],
           ),
     );
