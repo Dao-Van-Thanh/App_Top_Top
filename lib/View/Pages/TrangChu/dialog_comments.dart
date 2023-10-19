@@ -89,6 +89,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
               flex: 3,
               child: FooterDialog(avatarURL: avatarURL, videoId: widget.videoId, textController: textController, uId: uId,videoProvider:widget.videoProvider),
           ),
+          ),
         ],
       ),
     );
@@ -141,24 +142,25 @@ class FooterDialog extends StatelessWidget {
                           border: InputBorder.none,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          // Handle emoji picker here.
-                        },
-                        icon: Icon(Icons.emoji_emotions),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          CommentService().sendCmt(videoId, textController.text.trim(), uId!);
-                          int index = videoProvider.listVideo.indexWhere((element) => element == videoId);
-                          videoProvider.listVideo[index].comments.add('');
-
-                          textController.clear();
-                        },
-                        icon: Icon(Icons.send),
-                      ),
-                    ],
+                    ),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      // Handle emoji picker here.
+                    },
+                    icon: Icon(Icons.emoji_emotions),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      CommentService().sendCmt(videoId, textController.text.trim(), uId!);
+                      int index = videoProvider.listVideo.indexWhere((element) => element == videoId);
+                      videoProvider.listVideo[index].comments.add('');
+                      textController.clear();
+                    },
+                    icon: Icon(Icons.send),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
