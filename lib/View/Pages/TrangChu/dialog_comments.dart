@@ -1,99 +1,8 @@
-import 'package:app/Model/user_model.dart';
-import 'package:app/Provider/video_provider.dart';
-import 'package:app/Services/comment_service.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CommentsDialog extends StatefulWidget {
-  const CommentsDialog({Key? key, required this.videoId, required this.videoProvider}) : super(key: key);
-  final String videoId;
-  final VideoProvider videoProvider;
-
-  @override
-  State<CommentsDialog> createState() => _CommentsDialogState();
-}
-
-class _CommentsDialogState extends State<CommentsDialog> {
-  final textController = TextEditingController();
-  String? avatarURL;
-  CommentService commentService = CommentService();
-  String? uId;
-  bool checkLogin = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _getId();
-  }
-
-  Future<void> _getId() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      setState(() {
-        uId = user.uid;
-        checkLogin = true;
-      });
-      CommentService().getAvatarUrl(uId!).then((url) {
-        if (url != null) {
-          setState(() {
-            avatarURL = url;
-          });
-        }
-      });
-    } else {
-      setState(() {
-        checkLogin = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Column(
-        children: [
-          SizedBox(height: 5),
-          Expanded(
-            flex: 2,
-            child: StreamBuilder<DocumentSnapshot>(
-              stream: CommentService().getCmtVideo(widget.videoId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Text("Error: ${snapshot.error}");
-                } else {
-                  final data = snapshot.data?.data() as Map<String, dynamic> ?? {};
-                  final comments = data?['comments'] as List<dynamic>;
-                  if (comments.isEmpty) {
-                    return Center(
-                      child: Text("Không có bình luận nào.", style: TextStyle(fontSize: 18)),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: comments.length,
-                    reverse: false,
-                    itemBuilder: (context, index) {
-                      final reversedComments = comments.reversed.toList();
-                      return ShowComment(cmtData: reversedComments[index]);
-                    },
-                  );
-                }
-              },
-            ),
-          ),
-          SingleChildScrollView(
-            child: Expanded(
-              flex: 3,
-              child: FooterDialog(avatarURL: avatarURL, videoId: widget.videoId, textController: textController, uId: uId,videoProvider:widget.videoProvider),
-          ),
-        ],
-      ),
-    );
-  }
-}
+import '../../../Provider/video_provider.dart';
+import '../../../Services/comment_service.dart';
+import '../../Widget/avatar.dart';
 
 class FooterDialog extends StatelessWidget {
   final String? avatarURL;
@@ -102,8 +11,13 @@ class FooterDialog extends StatelessWidget {
   final String? uId;
   final VideoProvider videoProvider;
 
-  FooterDialog({required this.avatarURL, required this.videoId, required this.textController, required this.uId, required this.videoProvider});
-
+  FooterDialog({
+    required this.avatarURL,
+    required this.videoId,
+    required this.textController,
+    required this.uId,
+    required this.videoProvider,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +31,7 @@ class FooterDialog extends StatelessWidget {
             AvatarCircle(
               urlImage: avatarURL!,
               widthImage: 50,
-              heightImage: 50,
+              heightImagel: 50,
             )
           else
             CircularProgressIndicator(),
@@ -132,189 +46,37 @@ class FooterDialog extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20,top: 5,bottom: 5),
+                      padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5),
                       child: TextField(
                         maxLines: null,
                         controller: textController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Thêm bình luận...',
                           border: InputBorder.none,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          // Handle emoji picker here.
-                        },
-                        icon: Icon(Icons.emoji_emotions),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          CommentService().sendCmt(videoId, textController.text.trim(), uId!);
-                          int index = videoProvider.listVideo.indexWhere((element) => element == videoId);
-                          videoProvider.listVideo[index].comments.add('');
-
-                          textController.clear();
-                        },
-                        icon: Icon(Icons.send),
-                      ),
-                    ],
+                    ),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      // Handle emoji picker here.
+                    },
+                    icon: Icon(Icons.emoji_emotions),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      CommentService().sendCmt(videoId, textController.text.trim(), uId!);
+                      int index = videoProvider.listVideo.indexWhere((element) => element == videoId);
+                      videoProvider.listVideo[index].comments.add('');
+                      textController.clear();
+                    },
+                    icon: Icon(Icons.send),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-
-class ShowComment extends StatelessWidget {
-  final Map<String, dynamic> cmtData;
-
-  ShowComment({required this.cmtData});
-
-  @override
-  Widget build(BuildContext context) {
-    Timestamp timestamp = cmtData['timestamp'];
-    DateTime dateTime = timestamp.toDate();
-    DateTime now = DateTime.now();
-    Duration duration = now.difference(dateTime);
-    int s = duration.inSeconds;
-    String? times;
-    // String avarTest ='https://cdn.pixabay.com/photo/2023/08/29/19/42/goose-8222013_640.jpg';
-
-    if (s < 60) {
-      String time = "${s} seconds";
-      times = time;
-    } else if (s >= 60 && s < 3600) {
-      int p = duration.inMinutes;
-      String time = "${p} minutes";
-      times = time;
-    } else if (s >= 3600 && s < 86400) {
-      int h = duration.inHours;
-      String time = "${h} hours";
-      times = time;
-    } else {
-      int day = duration.inDays;
-      String time = "${day} days";
-      times = time;
-    }
-
-    return FutureBuilder<UserModel?>(
-      future: CommentService().getUserDataForUid(cmtData['uid']),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container();
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          UserModel? userModel = snapshot.data != null ? snapshot.data! : null;
-          return Container(
-            margin: EdgeInsets.all(10),
-            child: Row(
-              children: [
-                AvatarCircle(
-                  urlImage: userModel!.avatarURL,
-                  widthImage: 50,
-                  heightImage: 50,
-                ),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userModel!.fullName,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      width: MediaQuery.of(context).size.width - 150,
-                      child: Text(
-                        cmtData['text'] ?? '',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Text(
-                          times ?? '',
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            // Handle reply action here.
-                          },
-                          child: Text(
-                            "Reply",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 20,
-                          child: Divider(
-                            color: Colors.grey,
-                            height: 20,
-                            thickness: 1,
-                          ),
-                        ),
-                        SizedBox(width: 5),
-                        TextButton(
-                          onPressed: () {
-                            // Handle view replies action here.
-                          },
-                          child: Text(
-                            "View 5 replies",
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        }
-      },
-    );
-  }
-}
-
-class AvatarCircle extends StatelessWidget {
-  final String urlImage;
-  final double widthImage;
-  final double heightImage;
-
-  AvatarCircle({
-    required this.urlImage,
-    required this.widthImage,
-    required this.heightImage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(widthImage / 2),
-      child: Image.network(
-        urlImage,
-        width: widthImage,
-        height: heightImage,
-        fit: BoxFit.cover,
       ),
     );
   }

@@ -100,7 +100,7 @@ class HomeSideBar extends StatelessWidget {
                         width: double.infinity, // Đặt chiều rộng đầy đủ
                         height: 500, // Đặt chiều cao cố định
                         color: Colors.white, // Màu nền của dialog
-                        child: CommentsDialog(videoId:videoProvider.videoId,videoProvider:videoProvider), // Thay thế YourDialogContent bằng nội dung của bạn
+                        // child: CommentsDialog(videoId:videoProvider.videoId,videoProvider:videoProvider), // Thay thế YourDialogContent bằng nội dung của bạn
                       ),
                     );
                   },
