@@ -59,6 +59,7 @@ class OthersService {
   // hàm tạo phòng chat
   Future<void> createChatRoomsForUsers(user, idOther) async {
     try {
+      bool checkPhong = false;
       if (user == null) {
         throw Exception('User is not logged in');
       }
@@ -75,23 +76,36 @@ class OthersService {
       final chatsCollection = FirebaseFirestore.instance.collection('Chats');
       final querySnapshot = await chatsCollection.get();
       final existingChatRooms = querySnapshot.docs;
-      for (final chatRoom in existingChatRooms) {
-        final chatData = chatRoom.data() as Map<String, dynamic>;
-        final List<String> chatUid = List<String>.from(chatData['uid']);
-
-        // Kiểm tra xem danh sách chatUid trùng với danh sách following và follower.
-        final isMatchingChatRoom =
-            following.every((element) => chatUid.contains(element)) &&
-                follower.every((element) => chatUid.contains(element));
-        if (isMatchingChatRoom) {
-          // Phòng chat đã tồn tại, không cần tạo phòng chat mới.
-          return;
-        }
-
-      }
       // kiểm tra nếu cả 2 chũng follow thì tạo phòng chat
       final checkFollow = following.contains(idOther) && follower.contains(idOther);
-      if(checkFollow){
+      // for (final chatRoom in existingChatRooms) {
+      //   final chatData = chatRoom.data() as Map<String, dynamic>;
+      //   final List<String> chatUid = List<String>.from(chatData['uid']);
+      //
+      //   // Kiểm tra xem danh sách chatUid trùng với danh sách following và follower.
+      //
+      //   final isMatchingChatRoom =
+      //       chatUid.every((element) => follower.contains(element)) &&
+      //           chatUid.every((element) => following.contains(element));
+      //   print(isMatchingChatRoom);
+      //   if (isMatchingChatRoom) {
+      //     checkPhong = true;
+      //   }
+      // }
+      if (checkFollow) {
+        // 2. Truy cập bảng Chats và kiểm tra từng phòng chat.
+        for (final chatRoom in existingChatRooms) {
+          final chatData = chatRoom.data() as Map<String, dynamic>;
+          final List<String> chatUid = List<String>.from(chatData['uid']);
+
+          // Kiểm tra xem danh sách chatUid chứa cả hai ID.
+          if (chatUid.contains(user.uid) && chatUid.contains(idOther)) {
+            checkPhong = true;
+            break;  // Nếu đã tìm thấy phòng chat phù hợp, không cần kiểm tra thêm.
+          }
+        }
+      }
+      if(checkFollow && checkPhong == false){
         // 3. Nếu không có phòng chat thỏa mãn, tạo phòng chat mới.
         // Tạo mảng chứa cả hai ID.
         final idsToAdd = [user.uid, idOther];

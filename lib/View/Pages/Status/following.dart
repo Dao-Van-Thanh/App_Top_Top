@@ -97,9 +97,9 @@ class _FollowingScreenState extends State<FollowingScreen> {
         ElevatedButton(
           onPressed: () {
             if(check == true){
-              service.unfollowUser(idOther);
+              UserService().unfollowUser(idOther);
             }else{
-              service.followUser(idOther);
+              UserService().followUser(idOther);
             }
           },
           style: ElevatedButton.styleFrom(
