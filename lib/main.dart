@@ -2,6 +2,7 @@ import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/dang_ky_sdt_provider.dart';
 import 'package:app/Provider/edit_item_profile_provider.dart';
 import 'package:app/Provider/edit_profile_provider.dart';
+import 'package:app/Provider/emoji_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/Provider/page_provider.dart';
@@ -9,7 +10,9 @@ import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/Provider/text_provider.dart';
 import 'package:app/Provider/video_provider.dart';
+import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
+import 'package:app/View/Pages/Status/man_hinh_trang_thai.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -43,6 +46,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => TextProvider()),
       ChangeNotifierProvider(create: (context) => PageProvider()),
       ChangeNotifierProvider(create: (context) => ChatsProfiver()),
+      ChangeNotifierProvider(create: (context) => EmojiProvider()),
     ],
     child: MyApp(),
 
@@ -56,6 +60,7 @@ class MyApp extends StatelessWidget {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Bottom_Navigation_Bar(),
+      // home: ManHinhProfile(),
     );
   }
 }
