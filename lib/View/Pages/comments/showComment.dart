@@ -87,7 +87,21 @@ class ShowComment extends StatelessWidget {
                       PopupMenuItem(
                         child: Text('Chỉnh sửa bình luận'),
                         onTap: () {
-
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Column(
+                                    children: [
+                                      TextField(
+                                      decoration: InputDecoration(
+                                      hintText: 'Nhập'
+                                      )
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },);
                         },
 
                       ),

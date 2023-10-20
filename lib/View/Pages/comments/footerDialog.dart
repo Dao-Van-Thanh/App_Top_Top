@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../Provider/emoji_provider.dart';
 import '../../../Provider/video_provider.dart';
@@ -12,13 +11,13 @@ class FooterDialog extends StatelessWidget {
   final String? uId;
   final VideoProvider videoProvider;
 
-  FooterDialog({
-    required this.avatarURL,
-    required this.videoId,
-    required this.textController,
-    required this.uId,
-    required this.videoProvider
-  });
+  FooterDialog(
+      {required this.avatarURL,
+      required this.videoId,
+      required this.textController,
+      required this.uId,
+      required this.videoProvider});
+
   @override
   Widget build(BuildContext context) {
     EmojiProvider setComment = EmojiProvider();
@@ -53,10 +52,10 @@ class FooterDialog extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding:
-                      const EdgeInsets.only(left: 20, top: 5, bottom: 5),
+                          const EdgeInsets.only(left: 20, top: 5, bottom: 5),
                       child: TextField(
                         maxLines: null,
-                        controller: check ? textController:TextEditingController(text: setComment.id),
+                        controller: textController,
                         decoration: const InputDecoration(
                           hintText: 'Thêm bình luận...',
                           border: InputBorder.none,
@@ -74,10 +73,10 @@ class FooterDialog extends StatelessWidget {
                     onPressed: () {
                       CommentService()
                           .sendCmt(videoId, textController.text.trim(), uId!);
+                      textController.clear();
                       int index = videoProvider.listVideo
                           .indexWhere((element) => element == videoId);
                       videoProvider.listVideo[index].comments.add('');
-                      textController.clear();
                     },
                     icon: Icon(Icons.send),
                   ),

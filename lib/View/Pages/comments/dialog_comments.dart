@@ -1,11 +1,8 @@
-import 'package:app/Model/user_model.dart';
-import 'package:app/Provider/emoji_provider.dart';
 import 'package:app/Services/comment_service.dart';
 import 'package:app/View/Pages/comments/showComment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../Provider/video_provider.dart';
 import 'footerDialog.dart';
@@ -100,8 +97,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
             child: Expanded(
               flex: 1,
               child: FooterDialog(
-                  avatarURL:
-                      'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg',
+                  avatarURL: avatarURL,
                   videoId: widget.videoId,
                   textController: textController,
                   uId: uId,
