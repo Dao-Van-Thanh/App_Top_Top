@@ -26,7 +26,6 @@ class OthersService {
           .update({
         'following': FieldValue.arrayUnion([idOther])
       });
-
       await FirebaseFirestore.instance.collection('Users').doc(idOther).update({
         'follower': FieldValue.arrayUnion([user.uid])
       });
@@ -55,6 +54,7 @@ class OthersService {
       print('Lỗi khi cập nhật trường following: $e');
     }
   }
+
 
   // hàm tạo phòng chat
   Future<void> createChatRoomsForUsers(user, idOther) async {

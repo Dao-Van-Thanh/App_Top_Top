@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,7 @@ class _Following extends State<Following> {
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
+    final _auth = FirebaseAuth.instance;
     videoStream = CallVideoService().getVideosFollowingStream();
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
@@ -68,12 +70,17 @@ class _Following extends State<Following> {
                               videoProvider.changeColor();
                             }
                           });
+                          CallVideoService().checkFollowing(videoData.uid).then((value) => {
+                            if (value || videoData.uid == _auth.currentUser!.uid){
+                              videoProvider.setHasFollowing()
+                            }
+                          });
                         }
 
                         return Stack(
                           alignment: Alignment.bottomLeft,
                           children: [
-                            VideoPlayerItem( videoData!.videoUrl,videoProvider),
+                            VideoPlayerItem( videoData!.videoUrl,videoData.id,videoProvider),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [

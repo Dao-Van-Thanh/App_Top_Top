@@ -61,6 +61,20 @@ class CallVideoService {
     }
     return Future.value(false);
   }
+  Future<bool> checkFollowing(String uid) async {
+    List<String> userForllowingByAuthor = await UserService().getFollowerList(uid);
+    for (var element in userForllowingByAuthor) {
+      if (element == _auth.currentUser!.uid) {
+        return Future.value(true);
+      }
+    }
+    return Future.value(false);
+  }
+  Future<void> setView(String videoId) async{
+    await _firestore.collection('Videos').doc(videoId).update({
+      'views': FieldValue.increment(1)
+    });
+  }
 
   likeVideo(String id) async {
     DocumentSnapshot doc = await _firestore.collection('Videos').doc(id).get();
