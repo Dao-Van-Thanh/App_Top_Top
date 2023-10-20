@@ -89,7 +89,6 @@ class _GridViewVideoState extends State<GridViewVideo> {
                           child: Text('Lỗi: $errorMessage'),
                         );
                       },
-
                       placeholder: Center(
                         child: Container(
                             child: CircularProgressIndicator()
