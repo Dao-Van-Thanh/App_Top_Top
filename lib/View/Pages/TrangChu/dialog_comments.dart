@@ -70,7 +70,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                       snapshot.data?.data() as Map<String, dynamic> ?? {};
                   final comments = data?['comments'] as List<dynamic>;
                   if (comments.isEmpty) {
-                    return Center(
+                    return const Center(
                       child: Text("Không có bình luận nào.",
                           style: TextStyle(fontSize: 18)),
                     );
@@ -80,7 +80,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                     reverse: false,
                     itemBuilder: (context, index) {
                       final reversedComments = comments.reversed.toList();
-                      return ShowComment(cmtData: reversedComments[index],videoId: widget.videoId);
+                      return ShowComment(cmtData: reversedComments[index],videoId: widget.videoId,uid: uId);
                     },
                   );
                 }
@@ -91,7 +91,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
             child: Expanded(
               flex: 1,
               child: FooterDialog(
-                  avatarURL: avatarURL,
+                  avatarURL: 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg',
                   videoId: widget.videoId,
                   textController: textController,
                   uId: uId,
@@ -128,11 +128,10 @@ class FooterDialog extends StatelessWidget {
       child: Row(
         children: [
           if (avatarURL != null)
-            CircleAvatar(
-              backgroundColor: Colors.black,
-              backgroundImage: NetworkImage(
-                  avatarURL!,
-              ),
+            AvatarCircle(
+              urlImage: avatarURL!,
+              widthImage: 50,
+              heightImage: 50,
             )
           else
             CircularProgressIndicator(),
@@ -186,8 +185,9 @@ class FooterDialog extends StatelessWidget {
 class ShowComment extends StatelessWidget {
   final Map<String, dynamic> cmtData;
 
-  ShowComment({required this.cmtData, required this.videoId});
+  ShowComment({required this.cmtData, required this.videoId, required this.uid});
   final String videoId;
+  final String? uid;
 
   @override
   Widget build(BuildContext context) {
@@ -197,6 +197,7 @@ class ShowComment extends StatelessWidget {
     Duration duration = now.difference(dateTime);
     int s = duration.inSeconds;
     String? times;
+
     String avarTest = 'https://cdn.pixabay.com/photo/2016/02/13/13/11/oldtimer-1197800_1280.jpg';
 
     if (s < 60) {
@@ -225,6 +226,7 @@ class ShowComment extends StatelessWidget {
           return Text('Error: ${snapshot.error}');
         } else {
           UserModel? userModel = snapshot.data;
+          bool check = cmtData['uid'] == uid;
 
           return Container(
             margin: EdgeInsets.all(10),
@@ -232,11 +234,11 @@ class ShowComment extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.black,
-                  backgroundImage: NetworkImage(
-                    userModel!.avatarURL,
-                  ),
+                AvatarCircle(
+                  // urlImage: userModel!.avatarURL,
+                  urlImage: avarTest,
+                  widthImage: 50,
+                  heightImage: 50,
                 ),
                 SizedBox(width: 10),
                 Expanded(
@@ -244,8 +246,8 @@ class ShowComment extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        userModel.fullName,
-                        style: TextStyle(
+                        userModel?.fullName ?? 'Unknown User',
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
@@ -254,7 +256,7 @@ class ShowComment extends StatelessWidget {
                       SizedBox(height: 5),
                       Text(
                         cmtData['text'] ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                           color: Colors.black,
                         ),
@@ -270,7 +272,7 @@ class ShowComment extends StatelessWidget {
                             onPressed: () {
                               // Xử lý hành động Reply ở đây.
                             },
-                            child: Text(
+                            child: const Text(
                               "Trả lời",
                               style: TextStyle(color: Colors.black),
                             ),
@@ -281,7 +283,7 @@ class ShowComment extends StatelessWidget {
                         children: [
                           Container(
                             width: 20,
-                            child: Divider(
+                            child: const Divider(
                               color: Colors.grey,
                               height: 20,
                               thickness: 1,
@@ -307,20 +309,34 @@ class ShowComment extends StatelessWidget {
                 Center(
                   child: PopupMenuButton<String>(
                     itemBuilder: (BuildContext context) {
-                      return <PopupMenuEntry<String>>[
-                        PopupMenuItem<String>(
-                          value: 'delete',
-                          child: Text('Xóa'),
+                      List<PopupMenuItem<String>> items = [];
+                      if (check) {
+                        // Thêm mục "Xóa" chỉ khi check đúng
+                        items.add(
+                          const PopupMenuItem<String>(
+                            value: 'delete',
+                            child: Text('Xóa'),
+                          ),
+                        );
+                      }
+                      items.add(
+                        const PopupMenuItem<String>(
+                          value: 'repost',
+                          child: Text('Repost'),
                         ),
-                      ];
+                      );
+
+                      return items;
                     },
                     onSelected: (String choice) {
                       if (choice == 'delete') {
                         showDialog(
                             context: context,
                             builder: (context) {
+                              print(check);
                               return NotifiDelete(videoId: videoId,cmtId: cmtData['id']);
-                            },);
+                            },
+                        );
                       }
                     },
                   ),
@@ -349,11 +365,12 @@ class NotifiDelete extends StatelessWidget {
         actions: [
           Center(
             child: Container(
-              height: MediaQuery.of(context).size.height / 4.5,
+              height: MediaQuery.of(context).size.height /2,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(height: 10),
-                  Text(
+                  const Text(
                     "Bạn có chắc chắn muốn \n xóa comment ?",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -366,20 +383,20 @@ class NotifiDelete extends StatelessWidget {
                   TextButton(
                       onPressed: () {
                         CommentService().deleteCmt(videoId, cmtId);
+                        Navigator.of(context).pop();
                       },
-                      child: Center(
+                      child: const Center(
                           child: Text('Xóa',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 30,
                                   color: Colors.black)))),
-                  SizedBox(height: 5),
                   Divider(color: Colors.grey),
                   TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Center(
+                      child: const Center(
                           child: Text('Hủy',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -390,5 +407,30 @@ class NotifiDelete extends StatelessWidget {
             ),
           ),
         ]);
+  }
+}
+
+class AvatarCircle extends StatelessWidget {
+  final String urlImage;
+  final double widthImage;
+  final double heightImage;
+
+  AvatarCircle({
+    required this.urlImage,
+    required this.widthImage,
+    required this.heightImage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(widthImage / 2),
+      child: Image.network(
+        urlImage,
+        width: widthImage,
+        height: heightImage,
+        fit: BoxFit.cover,
+      ),
+    );
   }
 }

@@ -75,7 +75,6 @@ class OthersService {
       final chatsCollection = FirebaseFirestore.instance.collection('Chats');
       final querySnapshot = await chatsCollection.get();
       final existingChatRooms = querySnapshot.docs;
-
       for (final chatRoom in existingChatRooms) {
         final chatData = chatRoom.data() as Map<String, dynamic>;
         final List<String> chatUid = List<String>.from(chatData['uid']);
@@ -84,21 +83,25 @@ class OthersService {
         final isMatchingChatRoom =
             following.every((element) => chatUid.contains(element)) &&
                 follower.every((element) => chatUid.contains(element));
-
         if (isMatchingChatRoom) {
           // Phòng chat đã tồn tại, không cần tạo phòng chat mới.
           return;
         }
+
       }
-      // 3. Nếu không có phòng chat thỏa mãn, tạo phòng chat mới.
-      // Tạo mảng chứa cả hai ID.
-      final idsToAdd = [user.uid, idOther];
-      // Thêm cả hai ID vào mảng 'uid' của các tài khoản Chats.
-      await chatsCollection.add({
-        'uid': FieldValue.arrayUnion(idsToAdd),
-        'messages': {}
-        // Thêm các trường dữ liệu khác của phòng chat (nếu cần).
-      });
+      // kiểm tra nếu cả 2 chũng follow thì tạo phòng chat
+      final checkFollow = following.contains(idOther) && follower.contains(idOther);
+      if(checkFollow){
+        // 3. Nếu không có phòng chat thỏa mãn, tạo phòng chat mới.
+        // Tạo mảng chứa cả hai ID.
+        final idsToAdd = [user.uid, idOther];
+        // Thêm cả hai ID vào mảng 'uid' của các tài khoản Chats.
+        await chatsCollection.add({
+          'uid': FieldValue.arrayUnion(idsToAdd),
+          'messages': {}
+          // Thêm các trường dữ liệu khác của phòng chat (nếu cần).
+        });
+      }
     } catch (e) {
       print('==================$e');
     }
