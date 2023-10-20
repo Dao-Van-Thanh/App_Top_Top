@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Provider/profile_provider.dart';
 import '../../Widget/text.dart';
-import 'man_hinh_trang_thai.dart';
+import '../Status/man_hinh_trang_thai.dart';
 
 class ManHinhProfile extends StatefulWidget {
   const ManHinhProfile({Key? key}) : super(key: key);
@@ -31,6 +31,7 @@ class ManHinhProfile extends StatefulWidget {
 class _ManHinhProfileState extends State<ManHinhProfile> {
   String uId = '';
   bool checkLogin = false;
+  String idFolloer = '';
 
   @override
   void initState() {
@@ -65,6 +66,10 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 return Text("Error: ${snapshot.error}");
               } else {
                 UserModel userModel = UserModel.fromSnap(snapshot.data!);
+                // idFolloer = userModel.follower as String;
+                List<String>? follower = userModel.follower;
+                List<String>? following = userModel.following;
+
                 return Scaffold(
                   backgroundColor: Colors.white,
                   body: SafeArea(
@@ -80,7 +85,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                         ),
                         SizedBox(height: 20),
                         TrangThai(userModel.following!.length,
-                            userModel.follower!.length, 5),
+                            userModel.follower!.length, 5,following!,follower!),
                         SizedBox(height: 30),
                         textButton(context),
                         SizedBox(height: 10),
@@ -199,31 +204,37 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     );
   }
 
-  TrangThai(int dangFollow, int follow, int like) {
+  TrangThai(int dangFollow, int follow, int like,List<String> following, List<String> follower) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Expanded(
-          child: Container(
-            child: Column(
-              children: [
-                text(
+          child: GestureDetector(
+            onTap: (){
+              // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(username: uId,follow: follow,follower: dangFollow,uid: uId,initTab: 0,following: following,ngfollow: follower,id: id)));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(uid: uId,follower: follower, following: following,initTab: 0)));
+            },
+            child: Container(
+              child: Column(
+                children: [
+                  text(
                     lable: dangFollow.toString(),
                     size: 20,
-                    fontWeight: FontWeight.w900),
-                SizedBox(height: 5),
-                const text(
-                    lable: "Đang follow",
-                    size: 15,
-                    fontWeight: FontWeight.normal),
-              ],
+                    fontWeight: FontWeight.w900,
+                  ),
+                  const SizedBox(height: 5),
+                  const text(
+                      lable: "Đang follow", size: 15, fontWeight: FontWeight.normal),
+                ],
+              ),
             ),
           ),
         ),
         Expanded(
           child: GestureDetector(
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(username: uId)));
+              // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(username: uId,follow: follow,follower: dangFollow,uid: uId,initTab: 0)));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(uid: uId,follower: follower, following: following,initTab: 1)));
             },
             child: Container(
               child: Column(
@@ -242,16 +253,24 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
           ),
         ),
         Expanded(
-          child: Container(
-            child: Column(
-              children: [
-                text(
+          child: GestureDetector(
+            onTap: (){
+              
+              print(uId);
+            },
+            child: Container(
+              child: Column(
+                children: [
+                  text(
                     lable: like.toString(),
                     size: 20,
-                    fontWeight: FontWeight.w900),
-                SizedBox(height: 5),
-                text(lable: "Thích", size: 15, fontWeight: FontWeight.normal),
-              ],
+                    fontWeight: FontWeight.w900,
+                  ),
+                  const SizedBox(height: 5),
+                  const text(
+                      lable: "Thích", size: 15, fontWeight: FontWeight.normal),
+                ],
+              ),
             ),
           ),
         ),
@@ -403,24 +422,32 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
             GestureDetector(
                 onTap: () {
                   showDialog(
+                    barrierDismissible: true,
                     context: context,
                     builder: (context) {
-                      return Dialog(
-                        insetPadding: const EdgeInsets.only(
-                            top: 350, bottom: 350, left: 10, right: 10),
-                        child: Center(
-                          child: Image.network(
-                            url,
-                            fit: BoxFit.scaleDown,
+                      return Center(
+                          child: Container(
                             width: double.infinity,
+                            height: MediaQuery.of(context).size.height * 0.5,
+                            child: Image.network(
+                              url,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                      );
+                        );
                     },
                   );
                 },
-                child: AvatarCircle(
-                    urlImage: url, widthImage: 100, heightImagel: 100)),
+                // child:
+                // AvatarCircle(
+                //     urlImage: url, widthImage: 100, heightImagel: 100)
+              child: CircleAvatar(
+                backgroundColor: Colors.black,
+                backgroundImage: NetworkImage(url),
+                radius: 50,
+
+              ),
+            ),
             Positioned(
               right: -10,
               child: Container(
