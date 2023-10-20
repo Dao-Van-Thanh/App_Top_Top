@@ -188,6 +188,19 @@ class UserService {
       throw e; // Rethrow lỗi nếu cần
     }
   }
+  Future<DocumentSnapshot> getUserFollow(String documenId) async {
+    try {
+      final document = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(documenId)
+          .get();
+      return document;
+    } catch (e) {
+      // Xử lý lỗi nếu có
+      print('Lỗi: $e');
+      throw e; // Rethrow lỗi nếu cần
+    }
+  }
 
   static Future<void> signOutUser() async {
     try {

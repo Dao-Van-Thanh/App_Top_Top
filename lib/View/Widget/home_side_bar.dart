@@ -1,17 +1,9 @@
 
 import 'package:app/Services/call_video_service.dart';
+import 'package:app/View/Pages/comments/dialog_comments.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
-import 'package:app/Provider/emoji_provider.dart';
-import 'package:app/Services/user_service.dart';
-import 'package:app/View/Pages/TrangChu/dialog_comments.dart';
-import 'package:app/View/Widget/avatar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Model/video_model.dart';
 import '../../Provider/page_provider.dart';
