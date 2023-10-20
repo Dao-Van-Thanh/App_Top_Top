@@ -261,6 +261,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
               onPressed: () {
                 OthersService service = OthersService();
                 service.UnFollowOther(idOther);
+                widget.videoProvider.setHasFollowing();
               },
               child: Icon(
                   color: Colors.black,
