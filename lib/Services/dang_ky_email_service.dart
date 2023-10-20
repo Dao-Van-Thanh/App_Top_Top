@@ -52,6 +52,7 @@ class DangKyEmailService {
     }
   }
 
+
   // Phương thức để kiểm tra xem người dùng đã đăng nhập hay chưa
   bool daDangNhap() {
     return _auth.currentUser != null;

@@ -21,7 +21,6 @@ import 'Provider/chats_provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
 import 'Provider/video_provider.dart';
 import 'firebase_options.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
