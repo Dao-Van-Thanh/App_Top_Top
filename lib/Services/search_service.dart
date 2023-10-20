@@ -1,5 +1,6 @@
 import 'package:app/Model/video_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -28,6 +29,17 @@ Stream<List<VideoModel>> getVideosByCaption(String caption) {
     return videoList;
   });
 }
+  Future<void> saveListHistory(List<String> dataList) async {
+    print(dataList);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('myList', dataList);
+  }
+  Future<List<String>> getListHistory() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? dataList = prefs.getStringList('myList');
+    print(dataList);
+    return dataList ?? [];
+  }
 
 
 }

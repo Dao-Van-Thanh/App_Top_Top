@@ -57,12 +57,10 @@ class _GridViewVideoState extends State<GridViewVideo> {
           final video = videos[index];
           return InkWell(
             onTap: () {
-              print('${video.id}');
-              print('${video.uid}');
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ManhinhVideoByAuthor(uid: video.uid,),
+                  builder: (context) => ManhinhVideoByAuthor(uid: video.uid,index:index),
                 ),
               );
             },

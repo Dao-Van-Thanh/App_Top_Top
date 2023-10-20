@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../Provider/video_provider.dart';
+import '../../Services/call_video_service.dart';
 
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
+  final String videoId;
   final VideoProvider videoProvider;
-  const VideoPlayerItem(this.videoUrl, this.videoProvider, {Key? key})
+  const VideoPlayerItem(this.videoUrl,this.videoId, this.videoProvider, {Key? key})
       : super(key: key);
   @override
   _VideoPlayerItemState createState() => _VideoPlayerItemState();
@@ -22,9 +24,13 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   void initState() {
     super.initState();
     videoPlayerController = VideoPlayerController.network(widget.videoUrl);
+    Future.delayed(Duration(seconds: 5), () {
+      CallVideoService().setView(widget.videoId);
+    });
     videoPlayerController.initialize().then((_) {
       videoPlayerController.setVolume(1);
       videoPlayerController.play();
+      videoPlayerController.setLooping(true);
       setState(() {
         isLoading = false;
       });

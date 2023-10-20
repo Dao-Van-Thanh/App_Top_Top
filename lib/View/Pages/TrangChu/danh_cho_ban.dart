@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:app/Model/video_model.dart';
 import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/call_video_service.dart';
 import 'package:app/View/Widget/video_player_item.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,10 +18,16 @@ class ForYou extends StatefulWidget {
 }
 
 class _ForYouState extends State<ForYou> {
-
+  PageController controller = PageController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
+    final _auth = FirebaseAuth.instance;
     videoStream = CallVideoService().getVideosStream();
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
@@ -38,6 +47,7 @@ class _ForYouState extends State<ForYou> {
             extendBodyBehindAppBar: true,
             body: SafeArea(
               child: PageView.builder(
+                controller: controller,
                 onPageChanged: (int page) {
                   print(page);
                   print(videoList!.length - 1);
@@ -71,11 +81,16 @@ class _ForYouState extends State<ForYou> {
                               videoProvider.changeColor();
                             }
                           });
+                          CallVideoService().checkFollowing(videoData.uid).then((value) => {
+                            if (value || videoData.uid == _auth.currentUser!.uid){
+                              videoProvider.setHasFollowing()
+                            }
+                          });
                         }
                         return Stack(
                           alignment: Alignment.bottomLeft,
                           children: [
-                            VideoPlayerItem(videoData!.videoUrl,videoProvider),
+                            VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
