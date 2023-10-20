@@ -152,21 +152,28 @@ class HomeSideBar extends StatelessWidget {
             ),
             transform: Matrix4.translationValues(5, 0, 0),
           ),
+          videoProvider.hasFollowing == false?
           Positioned(
             bottom: -10,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              transform: Matrix4.translationValues(5, 0, 0),
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 17,
+            child: GestureDetector(
+              onTap: () {
+                UserService().followUser(videoProvider.authorId);
+                videoProvider.setHasFollowing();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                transform: Matrix4.translationValues(5, 0, 0),
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 17,
+                ),
               ),
             ),
-          ),
+          ):SizedBox()
         ],
       ),
     );

@@ -2,16 +2,18 @@ import 'package:app/Model/video_model.dart';
 import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/call_video_service.dart';
 import 'package:app/View/Widget/video_player_item.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Widget/home_side_bar.dart';
 import '../../Widget/video_detail.dart';
-
+typedef void RestoreOriginalListCallback();
 class ManhinhVideoSearch extends StatefulWidget {
   final Stream<List<VideoModel>> videoStream;
+  final RestoreOriginalListCallback restoreOriginalList;
+  ManhinhVideoSearch({required this.videoStream, required this.restoreOriginalList});
 
-  ManhinhVideoSearch({required this.videoStream});
   @override
   State<ManhinhVideoSearch> createState() => _ManhinhVideoSearchrState();
 }
@@ -19,7 +21,7 @@ class ManhinhVideoSearch extends StatefulWidget {
 class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
   @override
   Widget build(BuildContext context) {
-
+    final _auth = FirebaseAuth.instance;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -30,6 +32,7 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
             color: Colors.white,
           ),
           onPressed: () {
+            widget.restoreOriginalList(); // Gọi callback để khôi phục danh sách ban đầu
             Navigator.of(context).pop();
           },
         ),
@@ -54,7 +57,7 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
                   onPageChanged: (int page) {
                     print(videoList!.length - 1);
                     if (page == videoList!.length - 1) {
-                      print('video cuối cùng rồi xem cái lol đi học đi');
+                      print('video cuối cùng rồi xem cái lol đi học đi');
                     }
                   },
                   scrollDirection: Axis.vertical,
@@ -84,11 +87,16 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
                                 videoProvider.changeColor();
                               }
                             });
+                            CallVideoService().checkFollowing(videoData.uid).then((value) => {
+                              if (value || videoData.uid == _auth.currentUser!.uid){
+                                videoProvider.setHasFollowing()
+                              }
+                            });
                           }
                           return Stack(
                             alignment: Alignment.bottomLeft,
                             children: [
-                              VideoPlayerItem(videoData!.videoUrl,videoProvider),
+                              VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [

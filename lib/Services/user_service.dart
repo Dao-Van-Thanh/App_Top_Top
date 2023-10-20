@@ -143,6 +143,24 @@ class UserService {
       return [];
     }
   }
+  Future<List<String>> getFollowerList(String currentUserID) async {
+    try {
+      final firestoreInstance = FirebaseFirestore.instance;
+      DocumentSnapshot currentUserDoc =
+      await firestoreInstance.collection('Users').doc(currentUserID).get();
+      if (currentUserDoc.exists) {
+        Map<String, dynamic> currentUserData =
+        currentUserDoc.data() as Map<String, dynamic>;
+        List<String> followingList =
+        List<String>.from(currentUserData['follower']);
+        return followingList;
+      }
+      return [];
+    } catch (e) {
+      print("Error getting following list: $e");
+      return [];
+    }
+  }
 
   Future uploadFileToStorege(File file) async {
     try {
