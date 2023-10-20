@@ -60,6 +60,7 @@ class ShowComment extends StatelessWidget {
           UserModel? userModel = snapshot.data;
           bool check = cmtData['uid'] == uid;
           EmojiProvider emojiProvider = EmojiProvider();
+          TextEditingController textEditingController = TextEditingController(text: cmtData['text']);
           return GestureDetector(
             onTapDown: (TapDownDetails details) {
               tapDownPosition = details.globalPosition;
@@ -91,14 +92,41 @@ class ShowComment extends StatelessWidget {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Column(
-                                    children: [
-                                      TextField(
-                                      decoration: InputDecoration(
-                                      hintText: 'Nhập'
-                                      )
-                                      ),
-                                    ],
+                                  title: SizedBox(
+                                    width: MediaQuery.of(context).size.width*0.5,
+                                    child: Column(
+                                      children: [
+                                        Text("Chỉnh sửa bình luận"),
+                                        TextField(
+
+                                        decoration: InputDecoration(
+                                        ),
+                                          controller: textEditingController,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+
+                                            ElevatedButton(
+                                              onPressed: (){
+                                                Navigator.of(context).pop();
+                                              }, child: Text(
+                                                "Hủy"
+                                            ),
+                                            ),
+                                            SizedBox(width: 50),
+                                            ElevatedButton(
+                                              onPressed: (){
+                                                CommentService().updateCmt(videoId, cmtData['id'],textEditingController.text.trim());
+                                                Navigator.of(context).pop();
+                                              }, child: Text(
+                                                "Gửi"
+                                            ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 );
                               },);

@@ -40,6 +40,7 @@ class CommentService {
     }
   }
 
+
   // Future<void> repliesCmt(String commentId,String uId,String commnet){
   //   final videoCollection = FirebaseFirestore.instance.collection("Videos");
   //   try{
@@ -108,6 +109,32 @@ class CommentService {
         }
       } else {
         print('Không tìm thấy tài liệu video');
+      }
+    } catch (e) {
+      print('Lỗi: $e');
+      throw e;
+    }
+  }
+  Future<void> updateCmt(String videoId,String commentId,String comment) async{
+    final videoDocRef = FirebaseFirestore.instance.collection("Videos").doc(
+        videoId);
+    try {
+      final videoDoc = await videoDocRef.get();
+      if (videoDoc.exists) {
+        List<dynamic> comments = videoDoc.data()?['comments'];
+
+        if (comments != null) {
+          for (int i = 0; i < comments.length; i++) {
+            if (comments[i]['id'] == commentId) {
+              comments[i]['text'] = comment; // Cập nhật nội dung của bình luận
+              break; // Thoát vòng lặp sau khi cập nhật xong
+            }
+          }
+
+          await videoDocRef.update({'comments': comments});
+        } else {
+        }
+      } else {
       }
     } catch (e) {
       print('Lỗi: $e');
