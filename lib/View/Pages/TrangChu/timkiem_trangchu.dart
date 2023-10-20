@@ -59,13 +59,14 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
           title: Container(
+              margin: EdgeInsets.only(right: 20,left: 20),
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(5.0),
               ),
-              width: 270,
               height: 35,
               child: TextField(
                 cursorColor: Colors.pinkAccent,
@@ -79,7 +80,10 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.w500,
                   ),
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.black45,
+                  ),
                   border: InputBorder.none,
                 ),
                 onTap: () {
@@ -102,6 +106,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                   });
                 },
               )),
+          centerTitle: true,
           leading: IconButton(
               icon: const Icon(
                 Icons.arrow_back_ios,
@@ -112,14 +117,14 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar()));
               }),
           leadingWidth: 20,
-          actions: const [
-            Padding(
-              padding: EdgeInsets.only(right: 8.0),
-              child: Text('Tìm kiếm',
-                  style: TextStyle(
-                      color: Colors.redAccent, fontWeight: FontWeight.w500)),
-            ),
-          ],
+          // actions: const [
+          //   Padding(
+          //     padding: EdgeInsets.only(right: 8.0),
+          //     child: Text('Tìm kiếm',
+          //         style: TextStyle(
+          //             color: Colors.redAccent, fontWeight: FontWeight.w500)),
+          //   ),
+          // ],
         ),
         body: textSearch.length <= 0
             ? ListView.builder(
