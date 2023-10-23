@@ -1,25 +1,33 @@
+import 'dart:async';
+
+import 'package:app/Model/video_model.dart';
+import 'package:app/Provider/video_provider.dart';
+import 'package:app/Services/call_video_service.dart';
+import 'package:app/View/Widget/video_detail.dart';
+import 'package:app/View/Widget/video_player_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'home_side_bar.dart';
 
-import '../../../Model/video_model.dart';
-import '../../../Provider/video_provider.dart';
-import '../../../Services/call_video_service.dart';
-import '../../Widget/home_side_bar.dart';
-import '../../Widget/video_detail.dart';
-import '../../Widget/video_player_item.dart';
+class ForYou extends StatefulWidget {
 
-class Following extends StatefulWidget {
   @override
-  State<Following> createState() => _Following();
+  State<ForYou> createState() => _ForYouState();
 }
 
-class _Following extends State<Following> {
+class _ForYouState extends State<ForYou> {
+  PageController controller = PageController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
     final _auth = FirebaseAuth.instance;
-    videoStream = CallVideoService().getVideosFollowingStream();
+    videoStream = CallVideoService().getVideosStream();
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
       builder: (context, snapshot) {
@@ -34,9 +42,11 @@ class _Following extends State<Following> {
         } else {
           final videoList = snapshot.data;
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
             body: SafeArea(
               child: PageView.builder(
+                controller: controller,
                 onPageChanged: (int page) {
                   print(page);
                   print(videoList!.length - 1);
@@ -54,12 +64,12 @@ class _Following extends State<Following> {
                       builder: (context, videoProvider, child) {
                         videoProvider.setValue(
                             videoData!.likes.length,
-                            videoData.comments.length,
-                            videoData.caption,
-                            videoData.profilePhoto,
-                            videoData.username,
-                            videoData.id,
-                            videoData.uid,
+                            videoData!.comments.length,
+                            videoData!.caption,
+                            videoData!.profilePhoto,
+                            videoData!.username,
+                            videoData!.id,
+                            videoData!.uid,
                           videoData.videoUrl
                         );
                         if (!videoProvider.hasCheckedLike) {
@@ -77,11 +87,10 @@ class _Following extends State<Following> {
                             }
                           });
                         }
-
                         return Stack(
                           alignment: Alignment.bottomLeft,
                           children: [
-                            VideoPlayerItem( videoData!.videoUrl,videoData.id,videoProvider),
+                            VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -98,7 +107,7 @@ class _Following extends State<Following> {
                                     height: MediaQuery.of(context).size.height /
                                         1.75,
                                     child: HomeSideBar(
-                                        videoProvider, CallVideoService(),'manhinhfollowing',index,videoStream),
+                                        videoProvider, CallVideoService(),'manhinhchoban',index,videoStream),
                                   ),
                                 ),
                               ],

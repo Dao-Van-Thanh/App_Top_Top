@@ -1,6 +1,9 @@
 
 import 'package:app/Services/call_video_service.dart';
+import 'package:app/View/Pages/QuayVideo/man_hinh_chinh_sua_video.dart';
 import 'package:app/View/Pages/comments/dialog_comments.dart';
+import 'package:app/View/Widget/appButtons.dart';
+import 'package:chewie/chewie.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +25,7 @@ class HomeSideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CallVideoService callVideoService;
+    final _auth = FirebaseAuth.instance;
     TextStyle style = Theme.of(context)
         .textTheme
         .bodyText1!
@@ -35,18 +39,72 @@ class HomeSideBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            _profileImageButton(context),
-            _sideBarItem('heart', videoProvider.countLike, style, 0,
-                videoProvider.iconColors[0],context),
-            _sideBarItem('comment', videoProvider.countComment, style, 1,
-                videoProvider.iconColors[1],context),
-            _sideBarItem('share', 1, style, 2, videoProvider.iconColors[2],context),
+            Container(
+              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              child: _profileImageButton(context),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              child: _sideBarItem('heart', videoProvider.countLike, style, 0, videoProvider.iconColors[0], context),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              child: _sideBarItem('comment', videoProvider.countComment, style, 1, videoProvider.iconColors[1], context),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              child: _sideBarItem('share', 1, style, 2, videoProvider.iconColors[2], context),
+            ),
+            videoProvider.authorId == _auth.currentUser!.uid
+                ? Container(
+              margin: EdgeInsets.only(bottom: 10), // Điều chỉnh khoảng cách dưới
+              child: _sideBarItem('more', 1, style, 2, videoProvider.iconColors[2], context),
+            )
+                : SizedBox(),
           ],
         ),
       ),
     );
   }
-
+  var labelIcon ={
+    Icons.delete_forever:"Xóa",
+    Icons.edit:"Chỉnh sửa",
+    Icons.download:"Lưu video",
+    Icons.push_pin:"Ghim",
+    Icons.speed:"Tốc độ",
+    Icons.speed_outlined:"Tốc độ1",
+    Icons.speed_sharp:"Tốc độ2",
+    Icons.shutter_speed_outlined:"Tốc độ3",
+  };
+  _showDialog(context) {
+    final pageProvider = Provider.of<PageProvider>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text('Xóa video này?',style: TextStyle(fontSize: 20),),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Đóng hộp thoại
+              },
+              child:
+                  Text('Hủy',style: TextStyle(color: Colors.grey.withOpacity(0.8)),),
+            ),
+            TextButton(
+              onPressed: () {
+                CallVideoService().deleteVideo(videoProvider.videoId);
+                Navigator.of(context).pop();
+                pageProvider.setPageProfile();
+              },
+              child:
+              Text('Xóa', style: TextStyle(color: Colors.black),),
+            ),
+          ],
+        );
+      },
+    );
+  }
   Widget _sideBarItem(
       String iconName, int label, TextStyle style, int index1, Color color, BuildContext context ) {
     IconData iconData;
@@ -58,7 +116,7 @@ class HomeSideBar extends StatelessWidget {
     } else if (iconName == 'share') {
       iconData = Icons.share;
     } else {
-      iconData = Icons.star;
+      iconData = Icons.more_horiz;
     }
     double heightDialog = MediaQuery.of(context).size.height * 0.6;
     return Column(
@@ -100,19 +158,84 @@ class HomeSideBar extends StatelessWidget {
                   },
                 );
                 break;
+              case 'more':
+                showDialog(context: context, builder: (BuildContext context) {
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: double.infinity,
+                      height: 230,
+                      color: Colors.white,
+                      padding: const EdgeInsets.only(top: 10, left: 10),
+                      child: Column(
+                        children: [
+                          Text('Gửi đến', style: TextStyle(color: Colors.black)),
+                          SizedBox(height: 10),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                              children: List.generate(10, (index) {
+                                return Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: AppButtons(size: 60, color: Colors.grey, backgroundColor: Colors.grey, boderColor: Colors.grey),
+                                );
+                              }),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                              children: List.generate(labelIcon.length, (index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    // Xử lý sự kiện khi mục được nhấn
+                                    switch (labelIcon.values.elementAt(index)) {
+                                      case 'Xóa':
+                                        Navigator.of(context).pop();
+                                        _showDialog(context);
+                                        break;
+                                      case 'Chỉnh sửa':
+                                        Navigator.of(context).pop();
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ManHinhChinhSuaVideo(videoProvider: videoProvider),
+                                          ),
+                                        );
+                                        break;
+                                      default:
+                                      // Thực hiện hành động mặc định khi nhấn vào các mục khác
+                                        break;
+                                    }
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 10),
+                                    child: AppButtons(size: 60, color: Colors.black, backgroundColor: Colors.grey.withOpacity(0.3), boderColor: Colors.grey.withOpacity(0.3), text: labelIcon.values.elementAt(index), icon: labelIcon.keys.elementAt(index)),
+                                  ),
+                                );
+                              }),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                });
+                break;
               default:
             }
           },
           child: Icon(
             iconData,
-            size: 30,
+            size: 35,
             color: color,
           ),
         ),
         const SizedBox(
           height: 5,
         ),
-        Text(
+        iconData==Icons.more_horiz?SizedBox():Text(
           label.toString(),
           style: style,
         ),
@@ -122,7 +245,7 @@ class HomeSideBar extends StatelessWidget {
 
   Widget _profileImageButton(BuildContext context) {
     final _auth = FirebaseAuth.instance;
-    final pageProvider = Provider.of<PageProvider>(context);
+    final pageProvider = Provider.of<PageProvider>(context, listen: false);;
     return GestureDetector(
       onTap: () {
         if(videoProvider.authorId == _auth.currentUser!.uid){
@@ -141,8 +264,8 @@ class HomeSideBar extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           Container(
-            height: 40,
-            width: 40,
+            height: 45,
+            width: 45,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(25),

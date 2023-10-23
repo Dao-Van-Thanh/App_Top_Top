@@ -208,8 +208,6 @@ Widget _buttonFollowAndDelete(String label, Color colorText, Color bg,
       }
     },
     style: ButtonStyle(
-      // minimumSize: MaterialStateProperty.all(Size(size.toDouble(), 40)),
-      // maximumSize: MaterialStateProperty.all(const Size(500, 50)),
       shape: MaterialStateProperty.all<OutlinedBorder>(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
