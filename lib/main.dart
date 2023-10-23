@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       home: Bottom_Navigation_Bar(),
-      // home: ManHinhProfile(),
+      // home: ManHinhDangKy(),
     );
   }
 }
