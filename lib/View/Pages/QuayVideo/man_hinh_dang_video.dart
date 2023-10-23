@@ -116,16 +116,131 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                       ),
                     ),
                     Container(
-                      height: 70,
-                      color: Colors.pink,
+                      child: Row(
+                        children: [
+                          // Biểu tượng "person"
+                          Icon(
+                            Icons.person_outline,
+                            size: 30.0,
+                          ),
+                          SizedBox(width: 10.0), // Khoảng cách giữa biểu tượng và văn bản
+                          // Dòng văn bản "Gắn thẻ mọi người"
+                          Text(
+                            'Gắn thẻ mọi người',
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                          Spacer(),
+                          Icon(
+                            Icons.navigate_next_sharp, // Thay thế bằng biểu tượng mong muốn
+                          ),
+                        ],
+                      ),
+
                     ),
+                    SizedBox(height: 13.0,),
                     Container(
-                      height: 70,
-                      color: Colors.yellow,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            size: 30
+                          ),
+                          SizedBox(width: 10.0,),
+                          Text(
+                            'Vị trí',
+                            style:TextStyle(fontSize: 20.0),
+                          ),
+                          Spacer(),
+                          Icon(
+                            Icons.navigate_next_sharp, // Thay thế bằng biểu tượng mong muốn
+                          ),
+                        ],
+                      ),
                     ),
+                    SizedBox(height: 13.0,),
                     Container(
-                      height: 70,
-                      color: Colors.green,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.add,
+                            size: 30,
+                          ),
+                          SizedBox(width: 10.0,),
+                          Text(
+                            'Thêm liên kết',
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                          Spacer(),
+                          Icon(
+                            Icons.navigate_next
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 13.0,),
+                    Container(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.comment_bank_outlined,
+                            size: 30,
+                          ),
+                          SizedBox(width: 10.0,),
+                          Text(
+                            'Cho phép bình luận ',
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                          Spacer(),
+                          Switch(
+                            value: true, // Giá trị bật/tắt (có thể thay đổi tùy thuộc vào trạng thái thực tế)
+                            onChanged: (value) {
+                              // Xử lý sự kiện khi nút bật/tắt được thay đổi
+                              print("Switch value: $value");
+                            },
+                          ),
+
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 13.0,),
+                    Container(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.person_off_outlined,
+                            size: 30,
+                          ),
+                          SizedBox(width: 10.0,),
+                          Text(
+                            'Ai cũng có thể xem bài đăng này',
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                          Spacer(),
+                          Icon(
+                              Icons.navigate_next
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 13.0,),
+                    Container(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.download_outlined,
+                            size: 30,
+                          ),
+                          SizedBox(width: 10.0,),
+                          Text(
+                            'Lưu vào thiết bị',
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                          Spacer(),
+                          Icon(
+                              Icons.navigate_next
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
