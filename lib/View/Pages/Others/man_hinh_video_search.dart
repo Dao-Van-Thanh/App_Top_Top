@@ -75,7 +75,8 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
                               videoData!.profilePhoto,
                               videoData!.username,
                               videoData!.id,
-                              videoData!.uid
+                              videoData!.uid,
+                              videoData!.videoUrl
                           );
                           videoProvider.listVideo.addAll(videoList!);
                           if (!videoProvider.hasCheckedLike) {

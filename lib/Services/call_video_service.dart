@@ -89,4 +89,18 @@ class CallVideoService {
       });
     }
   }
+  Future<void> deleteVideo(String videoId) async {
+    print(videoId);
+    await _firestore.collection('Videos').doc(videoId).delete();
+  }
+  Future<void> updateVideoCaption(String videoId, String newCaption) async {
+    try {
+      await _firestore.collection('Videos').doc(videoId).update({
+        'caption': newCaption,
+      });
+    } catch (error) {
+      print('Error updating caption: $error');
+    }
+  }
+
 }

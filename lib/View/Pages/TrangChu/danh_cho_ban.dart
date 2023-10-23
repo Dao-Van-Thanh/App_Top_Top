@@ -65,12 +65,13 @@ class _ForYouState extends State<ForYou> {
                       builder: (context, videoProvider, child) {
                         videoProvider.setValue(
                             videoData!.likes.length,
-                            videoData!.comments.length,
-                            videoData!.caption,
-                            videoData!.profilePhoto,
-                            videoData!.username,
-                            videoData!.id,
-                            videoData!.uid
+                            videoData.comments.length,
+                            videoData.caption,
+                            videoData.profilePhoto,
+                            videoData.username,
+                            videoData.id,
+                            videoData.uid,
+                          videoData.videoUrl
                         );
                         if (!videoProvider.hasCheckedLike) {
                           videoProvider.hasCheckedLike = true;
