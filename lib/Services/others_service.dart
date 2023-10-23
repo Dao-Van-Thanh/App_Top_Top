@@ -78,20 +78,7 @@ class OthersService {
       final existingChatRooms = querySnapshot.docs;
       // kiểm tra nếu cả 2 chũng follow thì tạo phòng chat
       final checkFollow = following.contains(idOther) && follower.contains(idOther);
-      // for (final chatRoom in existingChatRooms) {
-      //   final chatData = chatRoom.data() as Map<String, dynamic>;
-      //   final List<String> chatUid = List<String>.from(chatData['uid']);
-      //
-      //   // Kiểm tra xem danh sách chatUid trùng với danh sách following và follower.
-      //
-      //   final isMatchingChatRoom =
-      //       chatUid.every((element) => follower.contains(element)) &&
-      //           chatUid.every((element) => following.contains(element));
-      //   print(isMatchingChatRoom);
-      //   if (isMatchingChatRoom) {
-      //     checkPhong = true;
-      //   }
-      // }
+
       if (checkFollow) {
         // 2. Truy cập bảng Chats và kiểm tra từng phòng chat.
         for (final chatRoom in existingChatRooms) {

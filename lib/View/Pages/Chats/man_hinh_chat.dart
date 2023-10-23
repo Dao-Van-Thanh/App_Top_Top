@@ -1,5 +1,7 @@
 import 'dart:io';
-
+import 'package:app/Provider/chats_provider.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:app/Services/chat_service.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../../Model/chat_model.dart';
 
@@ -24,7 +27,14 @@ class _ManHinhChatState extends State<ManHinhChat> {
   ChatService service = ChatService();
   ScrollController _controller = ScrollController();
   TextEditingController editingController = TextEditingController();
+  bool emojiShowing = false;
 
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ChatsProfiver>(context,listen: false);
+    provider.emojiShowing = false;
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -48,6 +58,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                 curve: Curves.easeOut,
               );
             });
+            final provider = Provider.of<ChatsProfiver>(context);
             return SafeArea(
               child: FutureBuilder<DocumentSnapshot>(
                 future: service.getUser(idOther),
@@ -84,6 +95,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
                             Container(
                               child: Text(
                                 '${snapshot.data!['fullname']}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
@@ -98,62 +111,139 @@ class _ManHinhChatState extends State<ManHinhChat> {
                       child: Column(
                         children: [
                           Expanded(
-                            flex: 2,
-                            child: _chat(context, snapshot, chatData.messages,
-                                user!.uid),
+                            child: GestureDetector(
+                              onTap: () => {
+                                provider.setEmojiShowing(false),
+                                FocusScope.of(context).requestFocus(FocusNode())
+                              },
+                              child: _chat(context, snapshot, chatData.messages,
+                                  user!.uid),
+                            ),
                           ),
                           // ô chat
                           SingleChildScrollView(
-                            child: Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 5, right: 5),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.attachment,
-                                            color: Colors.grey,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 5, right: 5),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border:
+                                            Border.all(color: Colors.grey),
+                                        borderRadius:
+                                            BorderRadius.circular(25),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(
+                                              Icons.attachment,
+                                              color: Colors.grey,
+                                            ),
+                                            onPressed: () {
+                                              showImagePicker(
+                                                  context, chatData.id);
+                                            },
                                           ),
-                                          onPressed: () {
-                                            showImagePicker(
-                                                context, chatData.id);
-                                          },
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Expanded(
-                                          child: TextField(
-                                            controller: editingController,
-                                            maxLines: null,
-                                            decoration: const InputDecoration(
-                                              hintText: 'Nhập tin nhắn...',
-                                              border: InputBorder.none,
+                                          const SizedBox(width: 5),
+                                          Expanded(
+                                            child: TextField(
+                                              controller: editingController,
+                                              maxLines: null,
+                                              decoration:
+                                                  const InputDecoration(
+                                                hintText:
+                                                    'Nhập tin nhắn...',
+                                                border: InputBorder.none,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        IconButton(
-                                          onPressed: () async {
-                                            if (editingController
-                                                .text.isNotEmpty)
-                                              await service.addMessageToChat(
-                                                  widget.idPhongChat,
-                                                  editingController.text,
-                                                  user.uid);
-                                            editingController.text = '';
-                                          },
-                                          icon: Icon(Icons.send,
-                                              color: Colors.blue),
-                                        ),
-                                      ],
+                                          IconButton(
+                                            onPressed: () {
+                                              provider.setEmojiShowing(!provider.emojiShowing);
+                                            },
+                                            icon: const Icon(
+                                              Icons.tag_faces_sharp,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                )),
+                                  IconButton(
+                                    onPressed: () async {
+                                      if (editingController
+                                          .text.trim().isNotEmpty) {
+                                        String chat = editingController.text;
+                                        editingController.text = '';
+                                        await service.addMessageToChat(
+                                            widget.idPhongChat,
+                                            chat,
+                                            user.uid);
+                                        editingController.text = '';
+                                      }
+                                    },
+                                    icon: const Icon(Icons.send,
+                                        color: Colors.blue),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          Offstage(
+                            offstage: !provider.emojiShowing,
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              child: EmojiPicker(
+                                // onEmojiSelected: (Category category, Emoji emoji) {
+                                //   // Do something when emoji is tapped (optional)
+                                // },
+                                onBackspacePressed: () {
+                                  // Do something when the user taps the backspace button (optional)
+                                  // Set it to null to hide the Backspace-Button
+                                },
+                                textEditingController: editingController,
+                                // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                                config: Config(
+                                  columns: 7,
+                                  emojiSizeMax: 32 *
+                                      (foundation.defaultTargetPlatform ==
+                                              TargetPlatform.iOS
+                                          ? 1.30
+                                          : 1.0),
+                                  // Issue: https://github.com/flutter/flutter/issues/28894
+                                  verticalSpacing: 0,
+                                  horizontalSpacing: 0,
+                                  gridPadding: EdgeInsets.zero,
+                                  initCategory: Category.RECENT,
+                                  bgColor: Color(0xFFF2F2F2),
+                                  indicatorColor: Colors.blue,
+                                  iconColor: Colors.grey,
+                                  iconColorSelected: Colors.blue,
+                                  backspaceColor: Colors.blue,
+                                  skinToneDialogBgColor: Colors.white,
+                                  skinToneIndicatorColor: Colors.grey,
+                                  enableSkinTones: true,
+                                  recentTabBehavior: RecentTabBehavior.RECENT,
+                                  recentsLimit: 28,
+                                  noRecents: const Text(
+                                    'No Recents',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black26),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  // Needs to be const Widget
+                                  loadingIndicator: const SizedBox.shrink(),
+                                  // Needs to be const Widget
+                                  tabIndicatorAnimDuration: kTabScrollDuration,
+                                  categoryIcons: const CategoryIcons(),
+                                  buttonMode: ButtonMode.MATERIAL,
+                                ),
+                              ),
+                            ),
                           )
                         ],
                       ),
@@ -242,6 +332,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                   ),
                   Text(
                     '${snapshot.data!['fullname']}',
+                    maxLines: 1,
                     style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -298,34 +389,34 @@ class _ManHinhChatState extends State<ManHinhChat> {
               checkNguoiChat ? Alignment.centerLeft : Alignment.centerRight,
           child: checkURI
               ? InkWell(
-                onTap: () {
-                  showDialog(
-                    barrierDismissible: true,
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        backgroundColor: Colors.black,
-                        child: Image.network(
-                          message.chat,
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Container(
+                  onTap: () {
+                    showDialog(
+                      barrierDismissible: true,
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          backgroundColor: Colors.black,
+                          child: Image.network(
+                            message.chat,
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
                     width: 200, // Độ rộng của hình chữ nhật
                     height: 300, // Độ cao của hình chữ nhật
                     decoration: BoxDecoration(
                       color: Colors.black,
                       border: Border.all(color: Colors.black), // Viền đen
                       borderRadius: BorderRadius.circular(
-                          10), // Bo góc để tạo hình chữ nhật
+                          10), // Bo góc để tạo hì nh chữ nhật
                     ),
-                    child: Image.network(
-                        message.chat), // Thay 'assets/your_image.png' bằng đường dẫn đến hình ảnh của bạn
+                    child: Image.network(message
+                        .chat), // Thay 'assets/your_image.png' bằng đường dẫn đến hình ảnh của bạn
                   ),
-              )
+                )
               : Container(
                   constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context)
@@ -336,7 +427,11 @@ class _ManHinhChatState extends State<ManHinhChat> {
                     color: checkNguoiChat
                         ? Colors.black12
                         : Colors.lightBlueAccent,
-                    borderRadius: BorderRadius.circular(26),
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(checkNguoiChat ? 0 : 26),
+                        bottomRight: Radius.circular(checkNguoiChat ? 26 : 0),
+                        topRight: Radius.circular(26),
+                        topLeft: Radius.circular(26)),
                   ),
                   child: Text(
                     message.chat,

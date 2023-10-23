@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Bottom_Navigation_Bar(),
-      // home: ManHinhProfile(),
+      // home: ManHinhDangKy(),
     );
   }
 }
