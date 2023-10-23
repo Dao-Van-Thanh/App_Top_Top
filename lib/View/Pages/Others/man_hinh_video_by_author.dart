@@ -77,7 +77,8 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                               videoData!.profilePhoto,
                               videoData!.username,
                               videoData!.id,
-                              videoData!.uid
+                              videoData!.uid,
+                              videoData!.videoUrl
                           );
                           if (!videoProvider.hasCheckedLike) {
                             videoProvider.hasCheckedLike = true;

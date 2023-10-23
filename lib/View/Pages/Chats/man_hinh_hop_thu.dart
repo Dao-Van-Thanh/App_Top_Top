@@ -58,18 +58,21 @@ class ManHinhHopThu extends StatelessWidget {
                 itemBuilder: (context, index) {
                   String? chat;
                   String? idUserChat = '';
+                  String? timestamp = '' ;
                   try {
                     chat =
                         ls?[index].messages[ls[index].messages.length - 1].chat;
                     idUserChat = ls?[index]
                         .messages[ls[index].messages.length - 1]
                         .idUserChat;
+                    timestamp = ls?[index].messages[ls[index].messages.length - 1].timestamp.toString();
                   } catch (e) {
                     chat = '';
                     idUserChat = '';
+                    timestamp = '' ;
                   }
                   return _itemGroupChat(
-                      context, ls![index], chat ?? '', idUserChat!, uid!);
+                      context, ls![index], chat ?? '', idUserChat!, uid!,timestamp!);
                   // return Text('data');
                 },
               );
@@ -79,9 +82,16 @@ class ManHinhHopThu extends StatelessWidget {
   }
 
   Widget _itemGroupChat(BuildContext context, ChatModel model, String chat,
-      String idUserChat, String uid) {
+      String idUserChat, String uid, String timestampme) {
     String idOther = service.getIdOtherInListUID(model.uid);
     UserService userService = UserService();
+    String time = '';
+    try{
+      time = UserService.formattedTimeAgo(DateTime.parse(timestampme));
+    }catch(e){
+
+      time = '';
+    }
     return StreamBuilder<DocumentSnapshot>(
         stream: userService.getUser(idOther),
         builder: (context, snapshot) {
@@ -95,7 +105,8 @@ class ManHinhHopThu extends StatelessWidget {
             bool checkFollow = userModel.following!.contains(uid) &&
                 userModel.follower!.contains(uid);
             Timestamp timestamp = snapshot.data!['lastActive'];
-            String lastActive = UserService.formattedTimeAgo(timestamp.toDate());
+            String lastActive =
+                UserService.formattedTimeAgo(timestamp.toDate());
             return InkWell(
               onTap: () {
                 if (checkFollow) {
@@ -116,23 +127,28 @@ class ManHinhHopThu extends StatelessWidget {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1 , // Điều chỉnh kích thước tùy ý
+                      width: MediaQuery.of(context).size.width *
+                          0.13, // Điều chỉnh kích thước tùy ý
                       child: Stack(alignment: Alignment.bottomRight, children: [
                         CircleAvatar(
                           backgroundColor: Colors.blue,
-                          maxRadius: 60,
+                          maxRadius: MediaQuery.of(context).size.width * 0.06,
+                          // maxRadius: MediaQuery.of(context).size.width * 0.05,
                           backgroundImage: NetworkImage(userModel.avatarURL),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).size.height * 0.006
+                          ),
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.02,
                             width: MediaQuery.of(context).size.width * 0.02,
                             decoration: BoxDecoration(
-                              color: snapshot.data?['isOnline'] ? Colors.green : Colors.grey,
+                              color: snapshot.data?['isOnline']
+                                  ? Colors.green
+                                  : Colors.grey,
                               shape: BoxShape.circle,
                             ),
-
                           ),
                         )
                       ]),
@@ -148,6 +164,8 @@ class ManHinhHopThu extends StatelessWidget {
                           Text(
                             '${userModel.fullName}',
                             style: TextStyle(color: Colors.black, fontSize: 20),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(
                             height: 5,
@@ -173,16 +191,22 @@ class ManHinhHopThu extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(bottom: 20),
                       alignment: Alignment.bottomCenter,
+                      padding: EdgeInsets.only(bottom: 20),
                       width: MediaQuery.sizeOf(context).height * 0.05,
-                      child: Text(
-                          lastActive,
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.end,
-                      ),
+                      child: snapshot.data!['isOnline']
+                          ? const SizedBox()
+                          : Flexible(
+                              child: Text(
+                                lastActive,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.03,
+                                ),
+                                textAlign: TextAlign.end,
+                              ),
+                            ),
                     )
                   ],
                 ),
