@@ -1,12 +1,15 @@
 import 'package:app/View/Widget/gridView.dart';
 import 'package:flutter/material.dart';
 
-class TabBookMark extends StatelessWidget {
-  const TabBookMark({super.key});
+import '../../../Provider/page_provider.dart';
 
+class TabBookMark extends StatelessWidget {
+  String uid;
+  String label;
+  PageProvider pageProvider;
+  TabBookMark(this.uid,this.label,this.pageProvider);
   @override
   Widget build(BuildContext context) {
-    // return gridView();
-    return Text('data');
+    return GridViewVideo(uid,label,pageProvider);
   }
 }

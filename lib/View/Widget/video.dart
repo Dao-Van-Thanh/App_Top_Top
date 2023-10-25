@@ -65,6 +65,7 @@ class _ForYouState extends State<ForYou> {
                         videoProvider.setValue(
                             videoData!.likes.length,
                             videoData!.comments.length,
+                            videoData!.userSaveVideos!.length,
                             videoData!.caption,
                             videoData!.profilePhoto,
                             videoData!.username,
