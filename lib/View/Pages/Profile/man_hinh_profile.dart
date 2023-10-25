@@ -381,8 +381,8 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 margin: EdgeInsets.only(top: 40),
                 child: TabBarView(
                   children: [
-                    TabVideo(uid,pageProvider),
-                    TabBookMark(),
+                    TabVideo(uid,'TabVideo',pageProvider),
+                    TabBookMark(uid,'TabBookMark',pageProvider),
                   ],
                 ),
               ),

@@ -311,8 +311,8 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                 margin: EdgeInsets.only(top: 40),
                 child: TabBarView(
                   children: [
-                    TabVideo(widget.uid,pageProvider),
-                    TabBookMark(),
+                    TabVideo(widget.uid,'TabVideo',pageProvider),
+                    TabBookMark(widget.uid,'TabBookMark',pageProvider),
                   ],
                 ),
               ),
