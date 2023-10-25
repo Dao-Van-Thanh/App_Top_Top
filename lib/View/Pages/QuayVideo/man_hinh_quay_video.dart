@@ -34,7 +34,10 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
 
   @override
   void dispose() {
-    // Giải phóng resources khi không cần sử dụng camera nữa
+    // Giải phóng resources khi không cần sử dụng camera nữa và đảm bảo dừng quay video (nếu đang quay)
+    if (_controller.value.isRecordingVideo) {
+      _controller.stopVideoRecording();
+    }
     _controller.dispose();
     super.dispose();
   }

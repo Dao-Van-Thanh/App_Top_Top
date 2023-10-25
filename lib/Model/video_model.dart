@@ -11,6 +11,7 @@ class VideoModel {
   String caption;
   String videoUrl;
   String profilePhoto;
+  bool blockComments;
   int views;
 
   VideoModel(
@@ -24,6 +25,7 @@ class VideoModel {
         required this.caption,
         required this.videoUrl,
         required this.views,
+        required this.blockComments,
         required this.profilePhoto});
 
   Map<String, dynamic> toJson() => {
@@ -37,6 +39,7 @@ class VideoModel {
     "songName": songName,
     "caption": caption,
     "views": views,
+    "blockComments": blockComments,
     "videoUrl": videoUrl,
   };
 
@@ -53,6 +56,7 @@ class VideoModel {
       caption: snapshot['caption'],
       videoUrl: snapshot['videoUrl'],
       views: snapshot['views'],
+      blockComments: snapshot['blockComments'],
       profilePhoto: snapshot['profilePhoto'],
     );
   }

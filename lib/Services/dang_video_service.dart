@@ -46,7 +46,7 @@ class DangVideoService{
   }
 
   // hàm thêm video vào bảng videos
-  Future<void> _addVideoToFirestore(String videoUrl, String caption) async {
+  Future<void> _addVideoToFirestore(String videoUrl, String caption,bool blockComments) async {
     if (user == null) {
       print('Người dùng chưa đăng nhập.');
       return;
@@ -57,7 +57,6 @@ class DangVideoService{
 
     final CollectionReference videosCollection =
       FirebaseFirestore.instance.collection('Videos');
-
     try {
       await videosCollection.add({
         'username': userDoc['fullname'], // Sử dụng userDoc để lấy fullname
@@ -68,6 +67,7 @@ class DangVideoService{
         'songName': 'Tên bài hát',
         'caption': caption,
         'videoUrl': videoUrl,
+        'blockComments': blockComments,
         'views' : 0,
         'profilePhoto': userDoc['avatarURL'], // Sử dụng userDoc để lấy avatarURL
       });
@@ -79,11 +79,11 @@ class DangVideoService{
 
 
   // hàm chính: đăng video
-  Future<bool> DangVideo(String caption,XFile file) async {
+  Future<bool> DangVideo(String caption,bool blockComments,XFile file) async {
       try{
         String videoUrl = await _uploadVideoToStorage(file) ?? '';
         if(videoUrl.isNotEmpty){
-          await _addVideoToFirestore(videoUrl,caption);
+          await _addVideoToFirestore(videoUrl,caption,blockComments);
           return true;
         }else{
           return false;
@@ -92,5 +92,4 @@ class DangVideoService{
         return false;
       }
   }
-
 }

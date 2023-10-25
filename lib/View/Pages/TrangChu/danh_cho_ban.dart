@@ -64,7 +64,8 @@ class _ForYouState extends State<ForYou> {
                     child: Consumer<VideoProvider>(
                       builder: (context, videoProvider, child) {
                         videoProvider.setValue(
-                            videoData!.likes.length,
+                            videoData!.blockComments,
+                            videoData.likes.length,
                             videoData.comments.length,
                             videoData.caption,
                             videoData.profilePhoto,
