@@ -64,8 +64,4 @@ class VideoProvider extends ChangeNotifier {
     countComment++;
     notifyListeners();
   }
-  void changeBlockChecked(){
-    blockComments = !blockComments;
-    notifyListeners();
-  }
 }
