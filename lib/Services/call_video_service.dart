@@ -52,6 +52,20 @@ class CallVideoService {
       return videoList;
     });
   }
+  Stream<List<VideoModel>> getVideoBookmarks(String uid) {
+    final CollectionReference videosCollection = FirebaseFirestore.instance.collection('Videos');
+    return videosCollection
+        .where('userSaveVideos', arrayContains: uid)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => VideoModel.fromSnap(doc))
+          .toList();
+    })
+        .handleError((error) {
+      print('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
+    });
+  }
 
   Future<bool> checkLike(List<String> isdUserLiked) {
     for (var element in isdUserLiked) {
