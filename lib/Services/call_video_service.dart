@@ -61,6 +61,14 @@ class CallVideoService {
     }
     return Future.value(false);
   }
+  Future<bool> checkUserSaveVideo(List<String> isdUserSave) {
+    for (var element in isdUserSave) {
+      if (element == _auth.currentUser!.uid) {
+        return Future.value(true);
+      }
+    }
+    return Future.value(false);
+  }
   Future<bool> checkFollowing(String uid) async {
     List<String> userForllowingByAuthor = await UserService().getFollowerList(uid);
     for (var element in userForllowingByAuthor) {
@@ -101,6 +109,24 @@ class CallVideoService {
       });
     } catch (error) {
       print('Error updating caption: $error');
+    }
+  }
+   saveVideo(String videoId) async{
+    DocumentSnapshot doc = await _firestore.collection('Users').doc(_auth.currentUser!.uid).get();
+    if ((doc.data()! as dynamic)['saveVideos'].contains(videoId)) {
+      await _firestore.collection('Users').doc(_auth.currentUser!.uid).update({
+        'saveVideos': FieldValue.arrayRemove([videoId]),
+      });
+      await _firestore.collection('Videos').doc(videoId).update({
+        'userSaveVideos': FieldValue.arrayRemove([_auth.currentUser!.uid]),
+      });
+    } else {
+      await _firestore.collection('Users').doc(_auth.currentUser!.uid).update({
+        'saveVideos': FieldValue.arrayUnion([videoId]),
+      });
+      await _firestore.collection('Videos').doc(videoId).update({
+        'userSaveVideos': FieldValue.arrayUnion([_auth.currentUser!.uid]),
+      });
     }
   }
 

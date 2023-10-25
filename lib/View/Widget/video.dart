@@ -66,6 +66,7 @@ class _ForYouState extends State<ForYou> {
                             videoData!.blockComments,
                             videoData!.likes.length,
                             videoData!.comments.length,
+                            videoData!.userSaveVideos!.length,
                             videoData!.caption,
                             videoData!.profilePhoto,
                             videoData!.username,

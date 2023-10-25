@@ -69,6 +69,7 @@ class DangVideoService{
         'videoUrl': videoUrl,
         'blockComments': blockComments,
         'views' : 0,
+        'userSaveVideos' : [],
         'profilePhoto': userDoc['avatarURL'], // Sử dụng userDoc để lấy avatarURL
       });
       print('Video đã được thêm vào Firestore.');

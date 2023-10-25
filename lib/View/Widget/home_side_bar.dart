@@ -49,7 +49,11 @@ class HomeSideBar extends StatelessWidget {
             ),
             Container(
               margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
-              child: _sideBarItem('comment', videoProvider.countComment, style, 1, videoProvider.iconColors[1], context),
+              child: _sideBarItem('comment', videoProvider.countComment, style, 1, Colors.white, context),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              child: _sideBarItem('save', videoProvider.countSave, style, 2, videoProvider.iconColors[1], context),
             ),
             Container(
               margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
@@ -115,7 +119,10 @@ class HomeSideBar extends StatelessWidget {
       iconData = Icons.comment;
     } else if (iconName == 'share') {
       iconData = Icons.share;
-    } else {
+    }
+    else if (iconName == 'save') {
+      iconData = Icons.bookmark;
+    }else {
       iconData = Icons.more_horiz;
     }
     double heightDialog = MediaQuery.of(context).size.height * 0.6;
@@ -140,6 +147,24 @@ class HomeSideBar extends StatelessWidget {
                 }else{
                   videoProvider.incrementLike();
                   callVideoService.likeVideo(videoProvider.videoId);
+                }
+                break;
+              case 'save':
+                if(labelScreen =='videoManHinhSearch'){
+                  videoProvider.incrementSaveVideo();
+                  callVideoService.saveVideo(videoProvider.videoId);
+                  final _auth = FirebaseAuth.instance;
+                  final userSaveVides = videoProvider.listVideo[index].userSaveVideos;
+                  if (userSaveVides!.contains(_auth.currentUser!.uid)) {
+                    userSaveVides.remove(_auth.currentUser!.uid);
+                  } else {
+                    userSaveVides.add(_auth.currentUser!.uid);
+                  }
+                  videoProvider.listVideo[index].userSaveVideos = userSaveVides;
+                  _videoStream = Stream.value(videoProvider as List<VideoModel>);
+                }else{
+                  videoProvider.incrementSaveVideo();
+                  callVideoService.saveVideo(videoProvider.videoId);
                 }
                 break;
               case 'comment':

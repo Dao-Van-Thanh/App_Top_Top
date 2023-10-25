@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 
 class TabVideo extends StatelessWidget {
   String uid;
+  String label;
   PageProvider pageProvider;
-  TabVideo(this.uid, this.pageProvider);
+  TabVideo(this.uid,this.label,this.pageProvider);
 
   @override
   Widget build(BuildContext context) {
-    return GridViewVideo(uid,pageProvider);
+    return GridViewVideo(uid,label,pageProvider);
   }
 }
