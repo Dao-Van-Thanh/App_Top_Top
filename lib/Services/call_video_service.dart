@@ -101,10 +101,11 @@ class CallVideoService {
     print(videoId);
     await _firestore.collection('Videos').doc(videoId).delete();
   }
-  Future<void> updateVideoCaption(String videoId, String newCaption) async {
+  Future<void> updateVideoCaption(String videoId, String newCaption,bool blockComments) async {
     try {
       await _firestore.collection('Videos').doc(videoId).update({
         'caption': newCaption,
+        'blockComments' : blockComments
       });
     } catch (error) {
       print('Error updating caption: $error');

@@ -21,7 +21,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
   late VideoPlayerController _videoController;
   TextEditingController controller = TextEditingController();
   bool isUploading = false;
-
+  bool blockComments = false;
 
 
   @override
@@ -86,7 +86,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                             child: TextField(
                               controller: controller,
                               textAlignVertical: TextAlignVertical.top,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'Viết nội dung video của bạn ở đây',
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.all(10),
@@ -116,7 +116,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                       ),
                     ),
                     Container(
-                      child: Row(
+                      child: const Row(
                         children: [
                           // Biểu tượng "person"
                           Icon(
@@ -139,7 +139,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                     ),
                     SizedBox(height: 13.0,),
                     Container(
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(
                             Icons.location_on_outlined,
@@ -159,7 +159,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                     ),
                     SizedBox(height: 13.0,),
                     Container(
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(
                             Icons.add,
@@ -181,21 +181,21 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                     Container(
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.comment_bank_outlined,
                             size: 30,
                           ),
                           SizedBox(width: 10.0,),
-                          Text(
+                          const Text(
                             'Cho phép bình luận ',
                             style: TextStyle(fontSize: 20.0),
                           ),
                           Spacer(),
                           Switch(
-                            value: true, // Giá trị bật/tắt (có thể thay đổi tùy thuộc vào trạng thái thực tế)
+                            value: provider.isChecked, // Giá trị bật/tắt (có thể thay đổi tùy thuộc vào trạng thái thực tế)
                             onChanged: (value) {
-                              // Xử lý sự kiện khi nút bật/tắt được thay đổi
-                              print("Switch value: $value");
+                              provider.setChecked();
+                              blockComments = !value;
                             },
                           ),
 
@@ -280,7 +280,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
 
                                   DangVideoService service = DangVideoService();
                                   bool check =
-                                  await service.DangVideo(controller.text, widget.xflie);
+                                  await service.DangVideo(controller.text,blockComments, widget.xflie);
                                   if (check) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(

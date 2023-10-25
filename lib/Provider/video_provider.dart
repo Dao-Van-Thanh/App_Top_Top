@@ -12,6 +12,7 @@ class VideoProvider extends ChangeNotifier {
   String videoId = '';
   String authorId='';
   String videoUrl ='';
+  bool blockComments =false;
   bool controlVideo = true;
   List<Color> iconColors = [Colors.white, Colors.white, Colors.white];
   bool hasCheckedLike = false;
@@ -27,9 +28,19 @@ class VideoProvider extends ChangeNotifier {
     hasCheckSave = !hasCheckSave;
     notifyListeners();
   }
-  void setValue(int countLikedata, int countCommentdata,int countSavedata,String captiondata,
-      String profilePhotodata, String usernamedata, String videoIddata,String authorIdData, String videoUrlData) {
+  void setValue(
+      bool blockCommentsData,
+      int countLikedata,
+      int countCommentdata,
+      int countSavedata,
+      String captiondata,
+      String profilePhotodata,
+      String usernamedata,
+      String videoIddata,
+      String authorIdData,
+      String videoUrlData) {
     countLike = countLikedata;
+    blockComments = blockCommentsData;
     countComment = countCommentdata;
     countSave = countSavedata;
     caption = captiondata;

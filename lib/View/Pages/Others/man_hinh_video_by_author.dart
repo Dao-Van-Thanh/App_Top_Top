@@ -71,6 +71,7 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                       child: Consumer<VideoProvider>(
                         builder: (context, videoProvider, child) {
                           videoProvider.setValue(
+                              videoData!.blockComments,
                               videoData!.likes.length,
                               videoData!.comments.length,
                               videoData.userSaveVideos!.length,

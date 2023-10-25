@@ -69,6 +69,7 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
                       child: Consumer<VideoProvider>(
                         builder: (context, videoProvider, child) {
                           videoProvider.setValue(
+                              videoData!.blockComments,
                               videoData!.likes.length,
                               videoData!.comments.length,
                               videoData.userSaveVideos!.length,

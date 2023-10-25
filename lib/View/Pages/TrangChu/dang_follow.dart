@@ -53,6 +53,7 @@ class _Following extends State<Following> {
                     child: Consumer<VideoProvider>(
                       builder: (context, videoProvider, child) {
                         videoProvider.setValue(
+                            videoData!.blockComments,
                             videoData!.likes.length,
                             videoData.comments.length,
                             videoData.userSaveVideos!.length,
