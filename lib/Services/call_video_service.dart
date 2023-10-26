@@ -32,7 +32,11 @@ class CallVideoService {
   }
 
   Stream<List<VideoModel>> getVideosStream() {
-    return _firestore.collection('Videos').limit(10).snapshots().map((snapshot) {
+    return _firestore
+        .collection('Videos')
+        .orderBy('views', descending: true) // Sắp xếp theo trường 'view' giảm dần (cao nhất đến thấp nhất)
+        .snapshots()
+        .map((snapshot) {
       List<VideoModel> videoList = [];
       snapshot.docs.forEach((doc) {
         videoList.add(VideoModel.fromSnap(doc));
@@ -40,6 +44,7 @@ class CallVideoService {
       return videoList;
     });
   }
+
   Stream<List<VideoModel>> getVideosStreamByAuthor(String uid) {
     return _firestore.collection('Videos')
         .where('uid', isEqualTo: uid)
