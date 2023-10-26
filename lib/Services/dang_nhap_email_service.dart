@@ -27,8 +27,7 @@ class DangNhapEmailService {
           print('Full Name: ${userModel.fullName}');
           print('Age: ${userModel.age}');
           print('${userModel.uid}');
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString('uid', userModel.uid);
+
           return true;
         } else {
           print('Không tìm thấy thông tin người dùng trong Firestore.');

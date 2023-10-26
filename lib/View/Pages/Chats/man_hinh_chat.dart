@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:app/Provider/chats_provider.dart';
+import 'package:app/Services/notifications_service.dart';
+import 'package:app/Services/user_service.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:app/Services/chat_service.dart';
@@ -50,6 +52,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
             final message = chatData.messages;
             final user = FirebaseAuth.instance.currentUser;
             final idOther = service.getIdOtherInListUID(chatData.uid);
+            NotificationsService notificationsService = NotificationsService();
             // tự động cuộn xuống cuối
             SchedulerBinding.instance.addPostFrameCallback((_) {
               _controller.animateTo(
@@ -178,11 +181,22 @@ class _ManHinhChatState extends State<ManHinhChat> {
                                           .text.trim().isNotEmpty) {
                                         String chat = editingController.text;
                                         editingController.text = '';
-                                        await service.addMessageToChat(
+                                        final check = await service.addMessageToChat(
                                             widget.idPhongChat,
                                             chat,
                                             user.uid);
-                                        editingController.text = '';
+                                        if(check){
+                                          final checkOnline =
+                                              await UserService
+                                                  .checkUserOnline(uid: idOther);
+                                          if(!checkOnline){
+                                            notificationsService.sendNotification(
+                                                title: 'Tin nhăn mới!',
+                                                body: chat,
+                                                idOther: idOther
+                                            );
+                                          }
+                                        }
                                       }
                                     },
                                     icon: const Icon(Icons.send,
