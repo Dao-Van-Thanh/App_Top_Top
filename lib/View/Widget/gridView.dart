@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:app/Model/video_model.dart';
 import 'package:app/Provider/profile_provider.dart';
+import 'package:app/View/Pages/Others/man_hinh_video_bookmart.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ManhinhVideoByAuthor(uid: video.uid,index:index),
+                  builder: (context) => widget.label=='TabVideo'?ManhinhVideoByAuthor(uid: video.uid,index:index):ManHinhVideoByBookMart(index:index),
                 ),
               );
             },
