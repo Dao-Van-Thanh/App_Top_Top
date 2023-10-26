@@ -4,6 +4,8 @@ import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../Services/notifications_service.dart';
+
 class DangKySdtProvider extends ChangeNotifier{
   bool isPhoneNumberCheck= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -91,6 +93,9 @@ class DangKySdtProvider extends ChangeNotifier{
         changCheckOTP(true);
         changeLoading(false);
       }else{
+        NotificationsService notifications = NotificationsService();
+        await notifications.requestPermission();
+        await notifications.getToken();
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),));
         // đăng ký thành công và chuyển sang màn hình home()

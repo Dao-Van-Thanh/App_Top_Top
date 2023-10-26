@@ -10,13 +10,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ManHinhHopThu extends StatelessWidget {
+import '../../../Services/notifications_service.dart';
+
+class ManHinhHopThu extends StatefulWidget {
+  @override
+  State<ManHinhHopThu> createState() => _ManHinhHopThuState();
+}
+
+class _ManHinhHopThuState extends State<ManHinhHopThu> {
   ChatService service = ChatService();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     ChatService service = ChatService();
-
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,

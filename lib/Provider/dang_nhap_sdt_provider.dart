@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Services/notifications_service.dart';
+
 class DangNhapSdtProvider extends ChangeNotifier{
   bool isPhoneNumberCheck= false;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -73,6 +75,7 @@ class DangNhapSdtProvider extends ChangeNotifier{
   }
 
   void verifyOTP(BuildContext context,String otp) async {
+    NotificationsService notifications = NotificationsService();
     try {
       changeLoading(true);
       // Tạo một PhoneAuthCredential từ OTP và verificationId
@@ -87,9 +90,8 @@ class DangNhapSdtProvider extends ChangeNotifier{
       changCheckOTP(false);
       changeLoading(false);
       // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
-      print(userCredential.user!.uid);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('uid', userCredential.user!.uid);
+      await notifications.requestPermission();
+      await notifications.getToken();
       Navigator.push(context, MaterialPageRoute(builder:
           (context) => Bottom_Navigation_Bar(),));
     } catch (e) {
