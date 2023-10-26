@@ -4,6 +4,8 @@ import 'package:app/Services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'notifications_service.dart';
+
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final user = FirebaseAuth.instance.currentUser;
@@ -48,7 +50,7 @@ class ChatService {
       throw e; // Rethrow lỗi nếu cần
     }
   }
-  Future<void> addMessageToChat(String chatId, String chat, String idUserChat) async {
+  Future<bool> addMessageToChat(String chatId, String chat, String idUserChat) async {
     try {
       final chatRef = _firestore.collection('Chats').doc(chatId);
       // Thêm tin nhắn vào danh sách messages trong phòng chat
@@ -64,8 +66,10 @@ class ChatService {
           }
         ]),
       });
+      return true;
     } catch (e) {
       print('Lỗi khi thêm tin nhắn: $e');
+      return false;
     }
   }
 
@@ -107,9 +111,13 @@ class ChatService {
     UserService userService = UserService();
     try{
       String imageUrl = await userService.uploadFileToStorege(file);
-      addMessageToChat(idPhongChat, imageUrl, user!.uid);
+      final check = await addMessageToChat(idPhongChat, imageUrl, user!.uid);
+      if(check){
+        return true;
+      }return false;
     }catch(e){
       print('$e =========== Lỗi up load ảnh ở màn hình chat');
+      return false;
     }
   }
 }

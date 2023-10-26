@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/Services/notifications_service.dart';
 import 'package:app/Services/others_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -67,7 +68,14 @@ class UserService {
         await firestoreInstance.collection('Users').doc(targetUserID).update({
           'follower': FieldValue.arrayUnion([user.uid]),
         });
-
+        NotificationsService notificationsService = NotificationsService();
+        final data = await getDataUser();
+        print('======================');
+        notificationsService.sendNotification(
+            title: data?['fullname'] ?? '',
+            body: 'Đã follow bạn',
+            idOther: targetUserID
+        );
         service.createChatRoomsForUsers(user, targetUserID);
       }
     } catch (e) {
@@ -251,5 +259,21 @@ class UserService {
     } else {
       return 'Vừa xong';
     }
+  }
+
+  static Future<bool> checkUserOnline({required String uid}) async {
+    final document = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .get();
+    if (document.exists) {
+      final userData = document.data() as Map<String, dynamic>?;
+      if (userData != null) {
+        // Trường 'isOnline' tồn tại và là kiểu bool
+        bool isOnline = userData['isOnline'];
+        return isOnline;
+      }
+    }
+    return false;
   }
 }
