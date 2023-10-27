@@ -36,7 +36,7 @@ class NotifiDelete extends StatelessWidget {
                   const Divider(color: Colors.grey),
                   TextButton(
                       onPressed: () {
-                        CommentService().deleteCmt(videoId, cmtId);
+                        CommentService().removeComment(videoId, cmtId);
                         Navigator.of(context).pop();
                       },
                       child: const Center(
