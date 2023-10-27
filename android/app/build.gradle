@@ -52,8 +52,18 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    // Thêm dependencies Firebase và Facebook Auth vào đây
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+
+        implementation 'com.facebook.android:facebook-login:12.0.0' // Thay phiên bản theo phiên bản Facebook bạn đang sử dụng
+    }
 }
 
 flutter {
     source '../..'
 }
+

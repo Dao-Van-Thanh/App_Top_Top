@@ -56,6 +56,8 @@ dependencies:
   emoji_picker_flutter: ^1.6.2
   intl: ^0.18.1
   chewie: ^1.7.1
+  flutter_facebook_auth: ^4.0.0
+  google_sign_in: ^6.1.5
   dio: ^4.0.4
   gallery_saver: ^2.3.2
 
