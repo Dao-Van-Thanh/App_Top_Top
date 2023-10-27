@@ -1,5 +1,6 @@
 import 'package:app/Model/video_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchService {
@@ -15,6 +16,21 @@ class SearchService {
     } catch (e) {
       print('Error fetching data: $e');
       throw Exception('Failed to load captions from Firestore');
+    }
+  }
+  Future<List<String>> getFollowingList() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    try {
+      DocumentSnapshot docUser = await FirebaseFirestore.instance.collection("Users").doc(uid).get();
+      Map<String,dynamic> data = docUser.data() as Map<String,dynamic>;
+      List<String> idFollowing = data['following'] !=null
+          ? List<String>.from(data['following'])
+          : [];
+      return idFollowing;
+    } catch (e) {
+      print('Error fetching following list: $e');
+      throw e;
     }
   }
 Stream<List<VideoModel>> getVideosByCaption(String caption) {
