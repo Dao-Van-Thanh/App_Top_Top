@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Model/user_model.dart';
+
 class UserService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String? currentUserId;
@@ -276,4 +278,5 @@ class UserService {
     }
     return false;
   }
+
 }

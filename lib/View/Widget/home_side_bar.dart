@@ -168,17 +168,15 @@ class HomeSideBar extends StatelessWidget {
                 }
                 break;
               case 'comment':
-                showDialog(
+                showBottomSheet(
                   context: context,
+                  enableDrag: true,
                   builder: (BuildContext context) {
-                    return Align(
-                      alignment: Alignment.bottomCenter, // Hiển thị ở cuối màn hình
-                      child: Container(
-                        width: double.infinity, // Đặt chiều rộng đầy đủ
-                        height: heightDialog, // Đặt chiều cao cố định
-                        color: Colors.white, // Màu nền của dialog
-                        child: CommentsDialog(videoId:videoProvider.videoId,videoProvider: videoProvider), // Thay thế YourDialogContent bằng nội dung của bạn
-                      ),
+                    return Container(
+                      width: double.infinity, // Đặt chiều rộng đầy đủ
+                      height: heightDialog, // Đặt chiều cao cố định
+                      color: Colors.white, // Màu nền của dialog
+                      child: CommentsDialog(videoId:videoProvider.videoId,videoProvider: videoProvider,commentsSize: videoProvider.countComment), // Thay thế YourDialogContent bằng nội dung của bạn
                     );
                   },
                 );

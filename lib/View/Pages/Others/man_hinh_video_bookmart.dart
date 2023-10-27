@@ -74,15 +74,16 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                         builder: (context, videoProvider, child) {
                           videoProvider.setValue(
                               videoData!.blockComments,
-                              videoData!.likes.length,
-                              videoData!.comments.length,
+                              videoData.likes.length,
+                              videoData.comments.length,
                               videoData.userSaveVideos!.length,
-                              videoData!.caption,
-                              videoData!.profilePhoto,
-                              videoData!.username,
-                              videoData!.id,
-                              videoData!.uid,
-                              videoData!.videoUrl
+                              videoData.caption,
+                              videoData.profilePhoto,
+                              videoData.username,
+                              videoData.id,
+                              videoData.uid,
+                              videoData.videoUrl,
+                              videoData.blockComments
                           );
                           videoProvider.listVideo.addAll(videoList!);
                           if (!videoProvider.hasCheckedLike) {
@@ -106,32 +107,37 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                               }
                             });
                           }
-                          return Stack(
-                            alignment: Alignment.bottomLeft,
-                            children: [
-                              VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.height / 10,
-                                      child: VideoDetail(videoProvider),
+                          return GestureDetector(
+                            onTap: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            },
+                            child: Stack(
+                              alignment: Alignment.bottomLeft,
+                              children: [
+                                VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        height:
+                                        MediaQuery.of(context).size.height / 10,
+                                        child: VideoDetail(videoProvider),
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height /
-                                          1.75,
-                                      child: HomeSideBar(
-                                          videoProvider, CallVideoService(),'videoManHinhSearch',index,videoStream),
+                                    Expanded(
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height /
+                                            1.75,
+                                        child: HomeSideBar(
+                                            videoProvider, CallVideoService(),'videoManHinhSearch',index,videoStream),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           );
                         },
                       ),

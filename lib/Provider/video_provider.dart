@@ -50,7 +50,8 @@ class VideoProvider extends ChangeNotifier {
       String usernamedata,
       String videoIddata,
       String authorIdData,
-      String videoUrlData) {
+      String videoUrlData,
+      bool blockCommentData) {
     countLike = countLikedata;
     blockComments = blockCommentsData;
     countComment = countCommentdata;
@@ -61,6 +62,7 @@ class VideoProvider extends ChangeNotifier {
     videoId = videoIddata;
     authorId = authorIdData;
     videoUrl = videoUrlData;
+    blockComments = blockCommentsData;
   }
   void incrementLike() {
     if (iconColors[0] == Colors.white) {

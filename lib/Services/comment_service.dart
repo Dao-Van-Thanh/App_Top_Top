@@ -1,9 +1,10 @@
+import 'package:app/Model/comment_model.dart';
 import 'package:app/Model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class CommentService {
-  Stream<DocumentSnapshot> getCmtVideo(String videoId) {
+  Stream<DocumentSnapshot> getCommentsInVideo(String videoId) {
     try {
       final stream = FirebaseFirestore.instance
           .collection("Videos")
@@ -17,27 +18,70 @@ class CommentService {
     }
   }
 
-  Future<void> sendCmt(String videoId, String comment, String uId) async {
-    final videoCollection = FirebaseFirestore.instance.collection("Videos");
+  Future<void> sendComment(String videoId, String comment, String uId) async {
     try {
-      final commentId = FirebaseFirestore.instance
+      // thêm comment vào collection Comments
+      final commentCollection = FirebaseFirestore.instance
           .collection("Videos")
-          .doc()
-          .id;
-      Map<String, dynamic> commentData = {
-        'id': commentId,
-        'uid': uId,
-        'text': comment,
-        'timestamp': DateTime.now(),
-      };
-      await videoCollection.doc(videoId).update({
-        'comments': FieldValue.arrayUnion([commentData]),
+          .doc(videoId)
+          .collection('Comments');
+
+      // Tạo một đối tượng Comment từ dữ liệu comment
+      CommentModel commentData = CommentModel(
+        id: '',
+        // Id sẽ được Firebase tạo tự động
+        uid: uId,
+        text: comment,
+        likes: [],
+        recomments: [],
+        timestamp: Timestamp.fromDate(DateTime.now()),
+      );
+      // Chuyển đối tượng Comment thành một Map
+      Map<String, dynamic> commentMap = commentData.toJson();
+
+      // Thêm một comment mới vào collection 'Comments'
+      final commentDocRef = await commentCollection.add(commentMap);
+
+      // thêm comment vào trường comments trong bảng Videos
+      final videoCollection =
+          FirebaseFirestore.instance.collection('Videos').doc(videoId);
+      videoCollection.update({
+        'comments': FieldValue.arrayUnion([commentDocRef.id])
       });
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi: $e');
       throw e; // Rethrow lỗi nếu cần
     }
+  }
+
+  Future<void> likeComment(String idVideo, String idComment, bool liked) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance
+        .collection("Videos")
+        .doc(idVideo)
+        .collection('Comments')
+        .doc(idComment)
+        .update({
+      'likes':
+          liked ? FieldValue.arrayRemove([uid]) : FieldValue.arrayUnion([uid])
+    });
+  }
+
+  Future<void> removeComment(String idVideo, String idComment) async {
+    await FirebaseFirestore.instance
+        .collection("Videos")
+        .doc(idVideo)
+        .update({
+      'comments' : FieldValue.arrayRemove([idComment])
+    });
+    await FirebaseFirestore.instance
+        .collection("Videos")
+        .doc(idVideo)
+        .collection('Comments')
+        .doc(idComment)
+        .delete();
+
   }
 
   // Future<void> repliesCmt(String commentId,String uId,String commnet){
@@ -54,27 +98,13 @@ class CommentService {
   //     throw e; // Rethrow lỗi nếu cần
   //   }
   // }
-  Future<UserModel?> getUserDataForUid(String uid) async {
-    DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-        .collection(
-        'Users') // Thay đổi tên bảng Firestore theo thiết lập của bạn
-        .doc(uid)
-        .get();
-    if (userDataSnapshot.exists) {
-      final userModel = UserModel.fromSnap(userDataSnapshot);
-      return userModel;
-    } else {
-      return null; // Hoặc giá trị mặc định khác tùy theo bạn
-    }
-  }
 
   Future<String?> getAvatarUrl(String uid) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-      DocumentSnapshot userDoc = await firestore.collection('Users')
-          .doc(uid)
-          .get();
+      DocumentSnapshot userDoc =
+          await firestore.collection('Users').doc(uid).get();
 
       if (userDoc.exists) {
         String? avatarUrl = userDoc.get('avatarURL');
@@ -88,30 +118,26 @@ class CommentService {
     }
   }
 
-  Future<void> deleteCmt(String videoId, String commentId) async {
-    final videoDocRef = FirebaseFirestore.instance.collection("Videos").doc(
-        videoId);
-
-    try {
-      final videoDoc = await videoDocRef.get();
-      if (videoDoc.exists) {
-        List<dynamic> comments = videoDoc.data()?['comments'];
-
-        if (comments != null) {
-          final updatedComments = comments.where((comment) =>
-          comment['id'] != commentId).toList();
-
-          await videoDocRef.update({'comments': updatedComments});
-          print('Xóa bình luận thành công');
-        } else {
-          print('Không có danh sách bình luận.');
-        }
-      } else {
-        print('Không tìm thấy tài liệu video');
-      }
-    } catch (e) {
-      print('Lỗi: $e');
-      throw e;
-    }
+  Stream<DocumentSnapshot> getCommentById(String idVideo, String idComment) {
+    final commentSnap = FirebaseFirestore.instance
+        .collection('Videos')
+        .doc(idVideo)
+        .collection('Comments')
+        .doc(idComment)
+        .snapshots();
+    return commentSnap;
   }
+
+  Future<void> updateComment(String idVideo, String idComment,String commentUpdate) async {
+      await FirebaseFirestore.instance
+          .collection('Videos')
+          .doc(idVideo)
+          .collection('Comments')
+          .doc(idComment)
+          .update({
+            'text' : commentUpdate
+      });
+  }
+
+
 }

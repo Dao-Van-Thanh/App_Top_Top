@@ -72,7 +72,7 @@ class FooterDialog extends StatelessWidget {
                   IconButton(
                     onPressed: () {
                       CommentService()
-                          .sendCmt(videoId, textController.text.trim(), uId!);
+                          .sendComment(videoId, textController.text.trim(), uId!);
                       textController.clear();
                       int index = videoProvider.listVideo
                           .indexWhere((element) => element == videoId);
