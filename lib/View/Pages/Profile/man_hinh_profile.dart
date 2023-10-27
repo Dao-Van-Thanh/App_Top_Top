@@ -6,7 +6,7 @@ import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
 import 'package:app/View/Pages/Profile/showAvatar.dart';
 import 'package:app/View/Pages/Profile/tab_bookmark.dart';
 import 'package:app/View/Pages/Profile/tab_video.dart';
-import 'package:app/View/Pages/man_hinh_addFriend.dart';
+import 'package:app/View/Pages/Profile/man_hinh_addFriend.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/avatar.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
@@ -17,6 +17,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../Provider/page_provider.dart';
 import '../../../Provider/profile_provider.dart';
 import '../../Widget/text.dart';
 import '../Status/man_hinh_trang_thai.dart';
@@ -55,6 +56,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final pageProvider = Provider.of<PageProvider>(context);
     bool isDialog = false;
     return checkLogin
         ? StreamBuilder<DocumentSnapshot>(
@@ -89,7 +91,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                         SizedBox(height: 30),
                         textButton(context),
                         SizedBox(height: 10),
-                        Expanded(child: TastBar(userModel.uid)),
+                        Expanded(child: TastBar(userModel.uid,pageProvider)),
                       ],
                     ),
                   ),
@@ -367,7 +369,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     );
   }
 
-  TastBar(String uid) {
+  TastBar(String uid, PageProvider pageProvider) {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -379,8 +381,8 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 margin: EdgeInsets.only(top: 40),
                 child: TabBarView(
                   children: [
-                    TabVideo(uid),
-                    TabBookMark(),
+                    TabVideo(uid,'TabVideo',pageProvider),
+                    TabBookMark(uid,'TabBookMark',pageProvider),
                   ],
                 ),
               ),

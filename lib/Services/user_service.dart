@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:app/Services/notifications_service.dart';
 import 'package:app/Services/others_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Model/user_model.dart';
 
 class UserService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -67,7 +70,14 @@ class UserService {
         await firestoreInstance.collection('Users').doc(targetUserID).update({
           'follower': FieldValue.arrayUnion([user.uid]),
         });
-
+        NotificationsService notificationsService = NotificationsService();
+        final data = await getDataUser();
+        print('======================');
+        notificationsService.sendNotification(
+            title: data?['fullname'] ?? '',
+            body: 'Đã follow bạn',
+            idOther: targetUserID
+        );
         service.createChatRoomsForUsers(user, targetUserID);
       }
     } catch (e) {
@@ -230,6 +240,43 @@ class UserService {
     } catch (e) {
       print('Lỗi khi đăng xuất: $e');
     }
+  }
+
+  static Future<void> updateStatusUser(Map<String,dynamic> data) async{
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update(data);
+  }
+  static String formattedTimeAgo(DateTime timestamp) {
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays} ngày trước';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} giờ trước';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} phút trước';
+    } else {
+      return 'Vừa xong';
+    }
+  }
+
+  static Future<bool> checkUserOnline({required String uid}) async {
+    final document = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .get();
+    if (document.exists) {
+      final userData = document.data() as Map<String, dynamic>?;
+      if (userData != null) {
+        // Trường 'isOnline' tồn tại và là kiểu bool
+        bool isOnline = userData['isOnline'];
+        return isOnline;
+      }
+    }
+    return false;
   }
 
 }

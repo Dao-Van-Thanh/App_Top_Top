@@ -47,7 +47,6 @@ class _MyEditItemProfileState extends State<EditItemProfile> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-
               UserService().editDataUser(widget.uid,provider.getLabel.toString(),
                   provider.getTextController.text);
               editProfileProvider.updateProfileData(

@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Services/notifications_service.dart';
+
 class CreateDateOfBirth extends StatefulWidget {
   const CreateDateOfBirth({super.key});
 
@@ -107,6 +109,7 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
               ElevatedButton(
                 onPressed: isCheckAge
                     ? () async {
+                        NotificationsService notifications = NotificationsService();
                         String dayOfBirth =
                             '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
                         final result = await dangKyEmailService.dangKyBangEmail(
@@ -115,6 +118,8 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                             ageUser!,
                             dayOfBirth);
                         if (result == null) {
+                          await notifications.requestPermission();
+                          await notifications.getToken();
                           Navigator.push(
                               context,
                               MaterialPageRoute(

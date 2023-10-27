@@ -7,7 +7,7 @@ import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
 import 'package:app/View/Pages/Profile/showAvatar.dart';
 import 'package:app/View/Pages/Profile/tab_bookmark.dart';
 import 'package:app/View/Pages/Profile/tab_video.dart';
-import 'package:app/View/Pages/man_hinh_addFriend.dart';
+import 'package:app/View/Pages/Profile/man_hinh_addFriend.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/avatar.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
@@ -16,8 +16,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../Provider/page_provider.dart';
 import '../../../Provider/video_provider.dart';
 
 class ManHinhNguoiKhac extends StatefulWidget {
@@ -38,6 +40,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
   @override
   Widget build(BuildContext context) {
     bool isDialog = false;
+    final pageProvider = Provider.of<PageProvider>(context);
     return StreamBuilder<DocumentSnapshot>(
         stream: UserService().getUser(widget.uid),
         builder: (context, snapshot) {
@@ -85,7 +88,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                     SizedBox(height: 30),
                     textButton(context, userModel.uid),
                     SizedBox(height: 10),
-                    Expanded(child: TastBar()),
+                    Expanded(child: TastBar(pageProvider)),
                   ],
                 ),
               ),
@@ -296,7 +299,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
       },
     );
   }
-  TastBar() {
+  TastBar(PageProvider pageProvider) {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -308,8 +311,8 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                 margin: EdgeInsets.only(top: 40),
                 child: TabBarView(
                   children: [
-                    TabVideo(widget.uid),
-                    TabBookMark(),
+                    TabVideo(widget.uid,'TabVideo',pageProvider),
+                    TabBookMark(widget.uid,'TabBookMark',pageProvider),
                   ],
                 ),
               ),

@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Provider/page_provider.dart';
 import 'man_hinh_edit_item_profile.dart';
 
 class EditProfile extends StatelessWidget {
@@ -14,7 +15,6 @@ class EditProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final editItemProvider = Provider.of<EditItemProfileProvider>(context);
     final editProfileProvider = Provider.of<EditProfileProvider>(context);
-
     return FutureBuilder<Map<String, dynamic>?>(
       future: UserService().getDataUser(),
       builder: (context, snapshot) {

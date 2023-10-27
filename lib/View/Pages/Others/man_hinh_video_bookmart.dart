@@ -1,27 +1,31 @@
-import 'package:app/Model/video_model.dart';
-import 'package:app/Provider/video_provider.dart';
-import 'package:app/Services/call_video_service.dart';
-import 'package:app/View/Widget/video_player_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Model/video_model.dart';
+import '../../../Provider/video_provider.dart';
+import '../../../Services/call_video_service.dart';
+import '../../../Services/tab_video_service.dart';
 import '../../Widget/home_side_bar.dart';
 import '../../Widget/video_detail.dart';
-typedef void RestoreOriginalListCallback();
-class ManhinhVideoSearch extends StatefulWidget {
-  final Stream<List<VideoModel>> videoStream;
-  final RestoreOriginalListCallback restoreOriginalList;
-  ManhinhVideoSearch({required this.videoStream, required this.restoreOriginalList});
+import '../../Widget/video_player_item.dart';
+
+class ManHinhVideoByBookMart extends StatefulWidget {
+  final int index;
+   ManHinhVideoByBookMart({Key? key, required this.index}) : super(key: key);
 
   @override
-  State<ManhinhVideoSearch> createState() => _ManhinhVideoSearchrState();
+  State<ManHinhVideoByBookMart> createState() => _ManHinhVideoByBookMartState();
 }
 
-class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
+class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
   @override
   Widget build(BuildContext context) {
+    final Stream<List<VideoModel>> videoStream;
     final _auth = FirebaseAuth.instance;
+    videoStream = CallVideoService().getVideoBookmarks(_auth.currentUser!.uid);
+    PageController controller = PageController(initialPage: widget.index);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -32,13 +36,12 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
             color: Colors.white,
           ),
           onPressed: () {
-            widget.restoreOriginalList(); // Gọi callback để khôi phục danh sách ban đầu
             Navigator.of(context).pop();
           },
         ),
       ),
       body: StreamBuilder<List<VideoModel>>(
-        stream: widget.videoStream,
+        stream: videoStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
@@ -54,6 +57,7 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
               extendBodyBehindAppBar: true,
               body: SafeArea(
                 child: PageView.builder(
+                  controller: controller,
                   onPageChanged: (int page) {
                     print(videoList!.length - 1);
                     if (page == videoList!.length - 1) {
@@ -70,15 +74,15 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
                         builder: (context, videoProvider, child) {
                           videoProvider.setValue(
                               videoData!.blockComments,
-                              videoData!.likes.length,
-                              videoData!.comments.length,
+                              videoData.likes.length,
+                              videoData.comments.length,
                               videoData.userSaveVideos!.length,
-                              videoData!.caption,
-                              videoData!.profilePhoto,
-                              videoData!.username,
-                              videoData!.id,
-                              videoData!.uid,
-                              videoData!.videoUrl,
+                              videoData.caption,
+                              videoData.profilePhoto,
+                              videoData.username,
+                              videoData.id,
+                              videoData.uid,
+                              videoData.videoUrl,
                               videoData.blockComments
                           );
                           videoProvider.listVideo.addAll(videoList!);
@@ -104,7 +108,9 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
                             });
                           }
                           return GestureDetector(
-                            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+                            onTap: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            },
                             child: Stack(
                               alignment: Alignment.bottomLeft,
                               children: [
@@ -125,7 +131,7 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
                                         height: MediaQuery.of(context).size.height /
                                             1.75,
                                         child: HomeSideBar(
-                                            videoProvider, CallVideoService(),'videoManHinhSearch',index,widget.videoStream),
+                                            videoProvider, CallVideoService(),'videoManHinhSearch',index,videoStream),
                                       ),
                                     ),
                                   ],

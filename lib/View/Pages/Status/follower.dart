@@ -1,10 +1,11 @@
-import 'package:app/Provider/emoji_provider.dart';
+import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Widget/sreach_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Model/user_model.dart';
+import '../Others/man_hinh_nguoi_khac.dart';
 
 class FollowerScreen extends StatefulWidget {
   FollowerScreen({this.uId, required this.follower});
@@ -43,7 +44,6 @@ class _FollowerScreenState extends State<FollowerScreen> {
                         UserModel followerUser =
                         UserModel.fromSnap(snapshot.data!);
                         String followingUserName =followerUser.fullName;
-                        print(followingUserName);
                         // Hiển thị thông tin người dùng theo ý của bạn
                         bool check = followerUser.follower!.contains(widget.uId);
                         return ItemView(
@@ -58,29 +58,37 @@ class _FollowerScreenState extends State<FollowerScreen> {
                     },
                   );
                 },
-              ))
+              )),
         ],
       ),
     );
   }
 
   Widget ItemView(String userName, String Url, String idTikTok,String uid, String idOther,bool check) {
+    VideoProvider videoProvider = VideoProvider();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            SizedBox(
-              child: CircleAvatar(
-                foregroundColor: Colors.black,
-                foregroundImage: NetworkImage(Url),
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhNguoiKhac(idOther,videoProvider)));
+              },
+              child: SizedBox(
+                child: CircleAvatar(
+                  foregroundColor: Colors.black,
+                  foregroundImage: NetworkImage(Url),
+                ),
               ),
             ),
             SizedBox(width: 10),
             Column(
               children: [
                 Text(
-                  userName,
+                  userName.length > 20
+                      ? '${userName.substring(0, 20)}...'
+                      : userName,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 5),
