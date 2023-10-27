@@ -4,6 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Widget/user_card.dart';
+
 class AddFriend extends StatefulWidget {
   AddFriend({Key? key}) : super(key: key);
 
@@ -86,7 +88,7 @@ class _AddFriendState extends State<AddFriend> {
                     itemBuilder: (context, index) {
                       final followProvider = ChangeNotifierProvider.value(
                         value: FollowProvider(),
-                        child: UserCard(userData: userData[index]),
+                        child: UserCard(userData: userData[index],heightImage: 80,widthImage: 80,checkScreen: true),
                       );
                       return followProvider;
                     },
@@ -101,123 +103,6 @@ class _AddFriendState extends State<AddFriend> {
   }
 }
 
-class UserCard extends StatelessWidget {
-  final Map<String, dynamic> userData;
 
-  UserCard({required this.userData});
 
-  @override
-  Widget build(BuildContext context) {
-    final followProvider = Provider.of<FollowProvider>(context);
-    return Container(
-      height: 100,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-        child: Row(
-          children: [
-            ClipOval(
-              child: CachedNetworkImage(
-                imageUrl: userData['avatarURL'],
-                fit: BoxFit.cover,
-                height: 80,
-                width: 80,
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        userData['fullname'],
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: followProvider.isFollowed
-                          ? [
-                              Expanded(
-                                child: _buttonFollowAndDelete(
-                                    'Xóa',
-                                    Colors.black,
-                                    Colors.grey[300]!,
-                                    userData['uid'],
-                                    followProvider,
-                                    150),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: _buttonFollowAndDelete(
-                                    'Follow',
-                                    Colors.white,
-                                    Colors.red[400]!,
-                                    userData['uid'],
-                                    followProvider,
-                                    150),
-                              ),
-                            ]
-                          : [
-                              Expanded(
-                                child: _buttonFollowAndDelete(
-                                    'Đang Follow',
-                                    Colors.black,
-                                    Colors.grey[300]!,
-                                    userData['uid'],
-                                    followProvider,
-                                    300),
-                              ),
-                            ],
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
 
-Widget _buttonFollowAndDelete(String label, Color colorText, Color bg,
-    String uid, FollowProvider followProvider, int size) {
-  return ElevatedButton(
-    onPressed: () {
-      switch (label) {
-        case 'Xóa':
-          break;
-        case 'Follow':
-          UserService().followUser(uid);
-          followProvider.isAcctionFollowed();
-          break;
-        case 'Đang Follow':
-          UserService().unfollowUser(uid);
-          followProvider.unFollow();
-          break;
-        default:
-      }
-    },
-    style: ButtonStyle(
-      shape: MaterialStateProperty.all<OutlinedBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
-      backgroundColor: MaterialStateProperty.all(bg),
-    ),
-    child: Text(
-      label.toString(),
-      style: TextStyle(color: colorText),
-    ),
-  );
-}
