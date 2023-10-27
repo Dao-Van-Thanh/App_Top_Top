@@ -11,12 +11,10 @@ import '../Model/user_model.dart';
 
 class UserService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String? currentUserId;
 
   // Lấy thông tin user
   Future<Map<String, dynamic>?> getDataUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    currentUserId = prefs.getString('uid');
+    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
     try {
       DocumentSnapshot userDoc =
       await firestore.collection('Users').doc(currentUserId).get();
@@ -74,7 +72,7 @@ class UserService {
         final data = await getDataUser();
         print('======================');
         notificationsService.sendNotification(
-            title: data?['fullname'] ?? '',
+            title: data!['fullname'],
             body: 'Đã follow bạn',
             idOther: targetUserID
         );

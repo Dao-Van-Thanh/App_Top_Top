@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../Provider/comments_provider.dart';
 import '../../../Provider/video_provider.dart';
 import '../../../Services/comment_service.dart';
+import 'footerDialog.dart';
 
-class FooterDialog extends StatefulWidget {
+class FooterDialogTemp extends StatefulWidget {
   final String? avatarURL;
   final String videoId;
   final String? uId;
   // final VideoProvider videoProvider;
 
-  FooterDialog(
+  FooterDialogTemp(
       {required this.avatarURL,
       required this.videoId,
       required this.uId,
@@ -18,10 +19,10 @@ class FooterDialog extends StatefulWidget {
       });
 
   @override
-  State<FooterDialog> createState() => _FooterDialogState();
+  State<FooterDialogTemp> createState() => _FooterDialogState();
 }
 
-class _FooterDialogState extends State<FooterDialog> {
+class _FooterDialogState extends State<FooterDialogTemp> {
   FocusNode myFocusNode = FocusNode();
 
   @override
@@ -63,13 +64,37 @@ class _FooterDialogState extends State<FooterDialog> {
                     child: Padding(
                       padding:
                           const EdgeInsets.only(left: 20, top: 5, bottom: 5),
-                      child: TextField(
-                        focusNode: myFocusNode,
-                        maxLines: null,
-                        controller: textEditingController,
-                        decoration: const InputDecoration(
-                          hintText: 'Thêm bình luận...',
-                          border: InputBorder.none,
+                      child: GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    FooterDialog(
+                                      avatarURL: widget.avatarURL,
+                                      videoId: widget.videoId,
+                                      uId: widget.uId,
+                                    ),
+                                    Container(
+                                      height: MediaQuery.of(context)
+                                          .viewInsets
+                                          .bottom,
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: const TextField(
+                          enabled: false,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            hintText: 'Thêm bình luận...',
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
                     ),
@@ -82,10 +107,9 @@ class _FooterDialogState extends State<FooterDialog> {
                   ),
                   IconButton(
                     onPressed: () {
-                      CommentService()
-                          .sendComment(widget.videoId, textEditingController.text.trim(), widget.uId!);
-                      textEditingController.clear();
-                      Navigator.pop(context);
+                      // CommentService()
+                      //     .sendComment(widget.videoId, textEditingController.text.trim(), widget.uId!);
+                      // textEditingController.clear();
                       // int index = videoProvider.listVideo
                       //     .indexWhere((element) => element == videoId);
                       // videoProvider.listVideo[index].comments.add('');

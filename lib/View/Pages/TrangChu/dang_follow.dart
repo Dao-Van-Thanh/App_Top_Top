@@ -34,6 +34,7 @@ class _Following extends State<Following> {
         } else {
           final videoList = snapshot.data;
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
             body: SafeArea(
               child: PageView.builder(

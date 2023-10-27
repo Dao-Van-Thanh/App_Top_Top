@@ -1,4 +1,4 @@
-import 'package:app/Provider/emoji_provider.dart';
+import 'package:app/Provider/comments_provider.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Widget/sreach_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
