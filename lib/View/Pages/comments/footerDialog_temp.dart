@@ -9,6 +9,7 @@ class FooterDialogTemp extends StatefulWidget {
   final String? avatarURL;
   final String videoId;
   final String? uId;
+
   // final VideoProvider videoProvider;
 
   FooterDialogTemp(
@@ -73,10 +74,10 @@ class _FooterDialogState extends State<FooterDialogTemp> {
                                 child: Column(
                                   children: [
                                     FooterDialog(
-                                      avatarURL: widget.avatarURL,
-                                      videoId: widget.videoId,
-                                      uId: widget.uId,
-                                    ),
+                                        avatarURL: widget.avatarURL,
+                                        videoId: widget.videoId,
+                                        uId: widget.uId,
+                                        ),
                                     Container(
                                       height: MediaQuery.of(context)
                                           .viewInsets
@@ -101,18 +102,33 @@ class _FooterDialogState extends State<FooterDialogTemp> {
                   ),
                   IconButton(
                     onPressed: () {
-                      // Handle emoji picker here.
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                FooterDialog(
+                                  avatarURL: widget.avatarURL,
+                                  videoId: widget.videoId,
+                                  uId: widget.uId,
+                                ),
+                                Container(
+                                  height: MediaQuery.of(context)
+                                      .viewInsets
+                                      .bottom,
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     },
                     icon: const Icon(Icons.emoji_emotions),
                   ),
                   IconButton(
                     onPressed: () {
-                      // CommentService()
-                      //     .sendComment(widget.videoId, textEditingController.text.trim(), widget.uId!);
-                      // textEditingController.clear();
-                      // int index = videoProvider.listVideo
-                      //     .indexWhere((element) => element == videoId);
-                      // videoProvider.listVideo[index].comments.add('');
+
                     },
                     icon: Icon(Icons.send),
                   ),

@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Model/user_model.dart';
+import '../../../Provider/video_provider.dart';
+import '../../../Services/user_service.dart';
+import '../../Widget/sreach_user.dart';
 import '../Others/man_hinh_nguoi_khac.dart';
 
 class FollowerScreen extends StatefulWidget {
