@@ -14,6 +14,10 @@ class VideoProvider extends ChangeNotifier {
   String videoUrl ='';
   bool blockComments =false;
   bool controlVideo = true;
+
+  bool isDownloading = false;
+  bool downloadSuccess = false;
+
   List<Color> iconColors = [Colors.white, Colors.white, Colors.white];
   bool hasCheckedLike = false;
   bool hasCheckSave = false;
@@ -26,6 +30,14 @@ class VideoProvider extends ChangeNotifier {
   }
   void setHasSave(){
     hasCheckSave = !hasCheckSave;
+    notifyListeners();
+  }
+  void setIsDownloading(){
+    isDownloading = !isDownloading;
+    notifyListeners();
+  }
+  void setDownloadSuccess(){
+    downloadSuccess = !downloadSuccess;
     notifyListeners();
   }
   void setValue(
