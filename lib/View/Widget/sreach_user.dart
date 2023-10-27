@@ -5,7 +5,9 @@ class searchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
+      margin: EdgeInsets.all(15),
       height: 40,
       decoration: BoxDecoration(
         color: Colors.grey[300],
