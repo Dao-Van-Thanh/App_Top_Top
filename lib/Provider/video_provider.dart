@@ -40,6 +40,8 @@ class VideoProvider extends ChangeNotifier {
     downloadSuccess = !downloadSuccess;
     notifyListeners();
   }
+
+
   void setValue(
       bool blockCommentsData,
       int countLikedata,

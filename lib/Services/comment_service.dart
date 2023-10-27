@@ -17,6 +17,21 @@ class CommentService {
       throw e; // Rethrow lỗi nếu cần
     }
   }
+  Stream<DocumentSnapshot> getReCommentsInComment(String videoId,String idComment) {
+    try {
+      final stream = FirebaseFirestore.instance
+          .collection("Videos")
+          .doc(videoId)
+          .collection("Comments")
+          .doc(idComment)
+          .snapshots();
+      return stream;
+    } catch (e) {
+      // Xử lý lỗi nếu có
+      print('Lỗi: $e');
+      throw e; // Rethrow lỗi nếu cần
+    }
+  }
 
   Future<void> sendComment(String videoId, String comment, String uId) async {
     try {
@@ -54,6 +69,47 @@ class CommentService {
       throw e; // Rethrow lỗi nếu cần
     }
   }
+  Future<void> sendReComment(String videoId,String idComment, String comment, String uId) async {
+    try {
+      // thêm comment vào collection Comments
+      final recommentCollection = FirebaseFirestore.instance
+          .collection("Videos")
+          .doc(videoId)
+          .collection('Comments')
+          .doc(idComment)
+          .collection('Recomments');
+
+      // Tạo một đối tượng Comment từ dữ liệu comment
+      CommentModel commentData = CommentModel(
+        id: '',
+        uid: uId,
+        text: comment,
+        likes: [],
+        recomments: [],
+        timestamp: Timestamp.fromDate(DateTime.now()),
+      );
+      // Chuyển đối tượng Comment thành một Map
+      Map<String, dynamic> commentMap = commentData.toJson();
+
+      // Thêm một comment mới vào collection 'Comments'
+      final commentDocRef = await recommentCollection.add(commentMap);
+
+      // thêm comment vào trường comments trong bảng Videos
+      final commentCollection =
+      FirebaseFirestore.instance
+          .collection('Videos')
+          .doc(videoId)
+          .collection('Comments')
+          .doc(idComment);
+      commentCollection.update({
+        'recomments': FieldValue.arrayUnion([commentDocRef.id])
+      });
+    } catch (e) {
+      // Xử lý lỗi nếu có
+      print('Lỗi: $e');
+      throw e; // Rethrow lỗi nếu cần
+    }
+  }
 
   Future<void> likeComment(String idVideo, String idComment, bool liked) async {
     final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -67,6 +123,21 @@ class CommentService {
           liked ? FieldValue.arrayRemove([uid]) : FieldValue.arrayUnion([uid])
     });
   }
+  Future<void> likeReComment(String idVideo, String idComment,String idReComment, bool liked) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    await FirebaseFirestore.instance
+        .collection("Videos")
+        .doc(idVideo)
+        .collection('Comments')
+        .doc(idComment)
+        .collection('Recomments')
+        .doc(idReComment)
+        .update({
+      'likes':
+          liked ? FieldValue.arrayRemove([uid]) : FieldValue.arrayUnion([uid])
+    });
+  }
+
 
   Future<void> removeComment(String idVideo, String idComment) async {
     await FirebaseFirestore.instance
@@ -76,6 +147,7 @@ class CommentService {
       'comments' : FieldValue.arrayRemove([idComment])
     });
     await FirebaseFirestore.instance
+
         .collection("Videos")
         .doc(idVideo)
         .collection('Comments')
@@ -83,21 +155,25 @@ class CommentService {
         .delete();
 
   }
+  Future<void> removeReComment(String idVideo, String idComment,String idRecomment) async {
+    await FirebaseFirestore.instance
+        .collection("Videos")
+        .doc(idVideo)
+        .collection('Comments')
+        .doc(idComment)
+        .update({
+      'recomments' : FieldValue.arrayRemove([idRecomment])
+    });
+    await FirebaseFirestore.instance
+        .collection("Videos")
+        .doc(idVideo)
+        .collection('Comments')
+        .doc(idComment)
+        .collection('Recomments')
+        .doc(idRecomment)
+        .delete();
 
-  // Future<void> repliesCmt(String commentId,String uId,String commnet){
-  //   final videoCollection = FirebaseFirestore.instance.collection("Videos");
-  //   try{
-  //     Map<String,dynamic> repliesCMT={
-  //       'uid':uId,
-  //       'replies':commnet,
-  //     }
-  //     return '';
-  //   }catch (e) {
-  //     // Xử lý lỗi nếu có
-  //     print('Lỗi: $e');
-  //     throw e; // Rethrow lỗi nếu cần
-  //   }
-  // }
+  }
 
   Future<String?> getAvatarUrl(String uid) async {
     try {
@@ -119,13 +195,22 @@ class CommentService {
   }
 
   Stream<DocumentSnapshot> getCommentById(String idVideo, String idComment) {
-    final commentSnap = FirebaseFirestore.instance
+    return FirebaseFirestore.instance
         .collection('Videos')
         .doc(idVideo)
         .collection('Comments')
         .doc(idComment)
         .snapshots();
-    return commentSnap;
+  }
+  Stream<DocumentSnapshot> getReCommentById(String idVideo, String idComment,String idReComment) {
+    return FirebaseFirestore.instance
+        .collection('Videos')
+        .doc(idVideo)
+        .collection('Comments')
+        .doc(idComment)
+        .collection('Recomments')
+        .doc(idReComment)
+        .snapshots();
   }
 
   Future<void> updateComment(String idVideo, String idComment,String commentUpdate) async {
@@ -138,6 +223,17 @@ class CommentService {
             'text' : commentUpdate
       });
   }
-
+  Future<void> updateReComment(String idVideo, String idComment,String idRecomment,String commentUpdate) async {
+      await FirebaseFirestore.instance
+          .collection('Videos')
+          .doc(idVideo)
+          .collection('Comments')
+          .doc(idComment)
+          .collection('Recomments')
+          .doc(idRecomment)
+          .update({
+            'text' : commentUpdate
+      });
+  }
 
 }

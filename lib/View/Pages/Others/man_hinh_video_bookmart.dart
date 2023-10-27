@@ -27,6 +27,8 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
     videoStream = CallVideoService().getVideoBookmarks(_auth.currentUser!.uid);
     PageController controller = PageController(initialPage: widget.index);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
