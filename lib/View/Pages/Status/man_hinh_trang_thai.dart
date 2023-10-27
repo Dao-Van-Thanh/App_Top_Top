@@ -85,6 +85,7 @@ class _ManHinhTrangThaiState extends State<ManHinhTrangThai> with TickerProvider
                 child: TabBarView(
                   controller: _tabController,
                   children: [
+
                     FollowingScreen(uId: widget.uid,following: widget.following),
                     FollowerScreen(uId: widget.uid,follower: widget.follower,),
                     FriendScreen(),
@@ -119,7 +120,6 @@ class _ManHinhTrangThaiState extends State<ManHinhTrangThai> with TickerProvider
           GestureDetector(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => AddFriend()));
-
             },
             child: Image.asset(
               'assets/adduser.png',

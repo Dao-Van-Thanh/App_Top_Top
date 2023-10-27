@@ -42,8 +42,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                     } else if (snapshot.hasError) {
                       return Text("Error: ${snapshot.error}");
                     } else {
-                      UserModel followingUser =
-                      UserModel.fromSnap(snapshot.data!);
+                      UserModel followingUser = UserModel.fromSnap(snapshot.data!);
                       String followingUserName = followingUser.fullName;
                       // Hiển thị thông tin người dùng theo ý của bạn
                       bool check = followingUser.follower!.contains(widget.uId);
@@ -114,7 +113,6 @@ class _FollowingScreenState extends State<FollowingScreen> {
 
   Widget ItemView(String userName, String Url, String idTikTok,String uid, String idOther,bool check) {
     VideoProvider videoProvider = VideoProvider();
-    final followProvider = Provider.of<FollowProvider>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -149,20 +147,23 @@ class _FollowingScreenState extends State<FollowingScreen> {
             ),
           ],
         ),
-        ElevatedButton(
-          onPressed: () {
-            if(check == true){
-              UserService().unfollowUser(idOther);
-            }else{
-              UserService().followUser(idOther);
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            primary: check ? Colors.grey : Colors.redAccent, // Màu nền đỏ
-            onPrimary: Colors.white, // Màu chữ trắng
-            minimumSize: const Size(150, 40), // Đặt chiều dài và chiều rộng mong muốn
+        Container(
+          margin: EdgeInsets.all(20),
+          child: ElevatedButton(
+            onPressed: () {
+              if(check == true){
+                UserService().unfollowUser(idOther);
+              }else{
+                UserService().followUser(idOther);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              primary: check ? Colors.grey : Colors.redAccent, // Màu nền đỏ
+              onPrimary: Colors.white, // Màu chữ trắng
+              minimumSize: const Size(150, 40), // Đặt chiều dài và chiều rộng mong muốn
+            ),
+            child: check ? const Text("Đang Follow") : const Text("Follow"),
           ),
-          child: check ? const Text("Đang Follow") : const Text("Follow"),
         ),
       ],
     );
