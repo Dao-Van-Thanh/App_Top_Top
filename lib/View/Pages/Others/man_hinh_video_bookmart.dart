@@ -1,27 +1,30 @@
-import 'package:app/Model/video_model.dart';
-import 'package:app/Provider/video_provider.dart';
-import 'package:app/Services/call_video_service.dart';
-import 'package:app/View/Widget/video_player_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Model/video_model.dart';
+import '../../../Provider/video_provider.dart';
+import '../../../Services/call_video_service.dart';
+import '../../../Services/tab_video_service.dart';
 import '../../Widget/home_side_bar.dart';
 import '../../Widget/video_detail.dart';
+import '../../Widget/video_player_item.dart';
 
-class ManhinhVideoByAuthor extends StatefulWidget {
-  final String uid;
+class ManHinhVideoByBookMart extends StatefulWidget {
   final int index;
-  ManhinhVideoByAuthor({required this.uid,required this.index});
+   ManHinhVideoByBookMart({Key? key, required this.index}) : super(key: key);
+
   @override
-  State<ManhinhVideoByAuthor> createState() => _ManhinhVideoByAuthorState();
+  State<ManHinhVideoByBookMart> createState() => _ManHinhVideoByBookMartState();
 }
-class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
+
+class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuth.instance;
     final Stream<List<VideoModel>> videoStream;
-    videoStream = CallVideoService().getVideosStreamByAuthor(widget.uid);
+    final _auth = FirebaseAuth.instance;
+    videoStream = CallVideoService().getVideoBookmarks(_auth.currentUser!.uid);
     PageController controller = PageController(initialPage: widget.index);
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +40,6 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
           },
         ),
       ),
-
       body: StreamBuilder<List<VideoModel>>(
         stream: videoStream,
         builder: (context, snapshot) {
@@ -59,7 +61,7 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                   onPageChanged: (int page) {
                     print(videoList!.length - 1);
                     if (page == videoList!.length - 1) {
-                      print('video cuối cùng rồi xem cái lol đi học đi');
+                      print('video cuối cùng rồi xem cái lol đi học đi');
                     }
                   },
                   scrollDirection: Axis.vertical,
@@ -82,6 +84,7 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                               videoData!.uid,
                               videoData!.videoUrl
                           );
+                          videoProvider.listVideo.addAll(videoList!);
                           if (!videoProvider.hasCheckedLike) {
                             videoProvider.hasCheckedLike = true;
                             CallVideoService()
@@ -123,7 +126,7 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                                       height: MediaQuery.of(context).size.height /
                                           1.75,
                                       child: HomeSideBar(
-                                          videoProvider, CallVideoService(),'man hinh nguoi khac',index,videoStream),
+                                          videoProvider, CallVideoService(),'videoManHinhSearch',index,videoStream),
                                     ),
                                   ),
                                 ],

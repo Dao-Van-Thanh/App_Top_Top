@@ -11,7 +11,9 @@ class VideoModel {
   String caption;
   String videoUrl;
   String profilePhoto;
+  bool blockComments;
   int views;
+  List<String>? userSaveVideos;
 
   VideoModel(
       {required this.username,
@@ -23,8 +25,10 @@ class VideoModel {
         required this.songName,
         required this.caption,
         required this.videoUrl,
+        required this.blockComments,
         required this.views,
-        required this.profilePhoto});
+        required this.profilePhoto,
+        this.userSaveVideos});
 
   Map<String, dynamic> toJson() => {
     "username": username,
@@ -36,8 +40,10 @@ class VideoModel {
     "shareCount": shareCount,
     "songName": songName,
     "caption": caption,
+    "blockComments": blockComments,
     "views": views,
     "videoUrl": videoUrl,
+    "userSaveVideos": [],
   };
 
   static VideoModel fromSnap(DocumentSnapshot snap) {
@@ -52,8 +58,12 @@ class VideoModel {
       songName: snapshot['songName'],
       caption: snapshot['caption'],
       videoUrl: snapshot['videoUrl'],
+      blockComments: snapshot['blockComments'],
       views: snapshot['views'],
       profilePhoto: snapshot['profilePhoto'],
+      userSaveVideos: (snapshot['userSaveVideos'] as List<dynamic>?)
+          ?.map((e) => e.toString())
+          .toList(),
     );
   }
 }

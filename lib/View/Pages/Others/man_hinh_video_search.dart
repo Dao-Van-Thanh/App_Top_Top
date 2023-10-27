@@ -69,8 +69,10 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
                       child: Consumer<VideoProvider>(
                         builder: (context, videoProvider, child) {
                           videoProvider.setValue(
+                              videoData!.blockComments,
                               videoData!.likes.length,
                               videoData!.comments.length,
+                              videoData.userSaveVideos!.length,
                               videoData!.caption,
                               videoData!.profilePhoto,
                               videoData!.username,
@@ -91,6 +93,12 @@ class _ManhinhVideoSearchrState extends State<ManhinhVideoSearch> {
                             CallVideoService().checkFollowing(videoData.uid).then((value) => {
                               if (value || videoData.uid == _auth.currentUser!.uid){
                                 videoProvider.setHasFollowing()
+                              }
+                            });
+                            CallVideoService().checkUserSaveVideo(videoData.userSaveVideos!.cast<String>())
+                                .then((save){
+                              if (save) {
+                                videoProvider.changeColorSave();
                               }
                             });
                           }

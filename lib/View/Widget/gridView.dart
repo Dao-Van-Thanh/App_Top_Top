@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:app/Model/video_model.dart';
 import 'package:app/Provider/profile_provider.dart';
+import 'package:app/View/Pages/Others/man_hinh_video_bookmart.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +16,9 @@ import '../Pages/TrangChu/danh_cho_ban.dart';
 
 class GridViewVideo extends StatefulWidget {
   String uid;
+  String label;
   PageProvider pageProvider;
-  GridViewVideo(this.uid, this.pageProvider);
+  GridViewVideo(this.uid,this.label ,this.pageProvider);
 
   @override
   _GridViewVideoState createState() => _GridViewVideoState();
@@ -62,7 +64,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ManhinhVideoByAuthor(uid: video.uid,index:index),
+                  builder: (context) => widget.label=='TabVideo'?ManhinhVideoByAuthor(uid: video.uid,index:index):ManHinhVideoByBookMart(index:index),
                 ),
               );
             },
@@ -125,7 +127,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
 
   Widget _getDataFirebase(BuildContext context) {
     return FutureBuilder<List<VideoModel>>(
-      future: TabVideoService.getVideosByUid(widget.uid),
+      future: widget.label=='TabVideo'?TabVideoService.getVideosByUid(widget.uid):TabVideoService.getVideoBookmarks(widget.uid),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(

@@ -9,6 +9,7 @@ class UserModel {
   String phone;
   List<String>? following;
   List<String>? follower;
+  List<String>? saveVideos;
   String avatarURL;
   String uid;
   String idTopTop;
@@ -24,7 +25,8 @@ class UserModel {
       required this.uid,
       required this.birth,
       this.follower,
-      this.following});
+      this.following,
+      this.saveVideos});
 
   Map<String, dynamic> toJson() => {
         "fullname": fullName,
@@ -37,6 +39,7 @@ class UserModel {
         "phone": phone,
         "follower": [],
         "following": [],
+        "saveVideos": [],
       };
 
   static UserModel fromSnap(DocumentSnapshot snap) {
@@ -54,6 +57,9 @@ class UserModel {
           ?.map((e) => e.toString())
           .toList(),
       following: (snapshotData['following'] as List<dynamic>?)
+          ?.map((e) => e.toString())
+          .toList(),
+      saveVideos: (snapshotData['saveVideos'] as List<dynamic>?)
           ?.map((e) => e.toString())
           .toList(),
       gender: snapshotData['gender'] ?? 'None',
