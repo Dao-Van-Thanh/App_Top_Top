@@ -33,6 +33,7 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
+        leading: SizedBox(),
         title: TabBar(
           indicator: BoxDecoration(),
           controller: _tabController,
@@ -60,7 +61,6 @@ class _ManhinhtrangchuState extends State<Manhinhtrangchu>
         ],
       ),
       body: SafeArea(
-
         child: TabBarView(
           controller: _tabController,
           children: [

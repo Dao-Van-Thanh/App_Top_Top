@@ -170,15 +170,16 @@ class HomeSideBar extends StatelessWidget {
               case 'comment':
                 showBottomSheet(
                   context: context,
-                  enableDrag: true,
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: double.infinity, // Đặt chiều rộng đầy đủ
-                      height: heightDialog, // Đặt chiều cao cố định
-                      color: Colors.white, // Màu nền của dialog
-                      child: CommentsDialog(videoId:videoProvider.videoId,videoProvider: videoProvider,commentsSize: videoProvider.countComment), // Thay thế YourDialogContent bằng nội dung của bạn
-                    );
-                  },
+                  builder: (BuildContext context) => Container(
+                    width: double.infinity,
+                    height: heightDialog,
+                    color: Colors.white,
+                    child: CommentsDialog(
+                      videoId: videoProvider.videoId,
+                      videoProvider: videoProvider,
+                      commentsSize: videoProvider.countComment,
+                    ),
+                  ),
                 );
                 break;
               case 'more':

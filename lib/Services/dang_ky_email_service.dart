@@ -45,8 +45,6 @@ class DangKyEmailService {
           .catchError((error, StackTrace) {
         print(error);
       }); // Đăng ký thành công, trả về null để chỉ ra không có lỗi
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('uid', userModel.uid);
     } catch (e) {
       return e.toString(); // Trả về thông báo lỗi nếu đăng ký thất bại
     }
