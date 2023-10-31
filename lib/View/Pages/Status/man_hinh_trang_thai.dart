@@ -1,5 +1,6 @@
 import 'package:app/Model/user_model.dart';
 import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/Profile/man_hinh_addFriend.dart';
 import 'package:app/View/Pages/Status/follower.dart';
 import 'package:app/View/Pages/Status/following.dart';
 import 'package:app/View/Pages/Status/friendScreen.dart';
@@ -52,7 +53,6 @@ class _ManHinhTrangThaiState extends State<ManHinhTrangThai> with TickerProvider
           return Text("Error: ${snapshot.error}");
         } else {
           UserModel userModel = UserModel.fromSnap(snapshot.data!);
-
           return DefaultTabController(
             length: 4,
             child: Scaffold(
@@ -85,6 +85,7 @@ class _ManHinhTrangThaiState extends State<ManHinhTrangThai> with TickerProvider
                 child: TabBarView(
                   controller: _tabController,
                   children: [
+
                     FollowingScreen(uId: widget.uid,following: widget.following),
                     FollowerScreen(uId: widget.uid,follower: widget.follower,),
                     FriendScreen(),
@@ -116,10 +117,15 @@ class _ManHinhTrangThaiState extends State<ManHinhTrangThai> with TickerProvider
             ),
           ),
           Text(username, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 20)),
-          Image.asset(
-            'assets/adduser.png',
-            width: 30,
-            height: 30,
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddFriend()));
+            },
+            child: Image.asset(
+              'assets/adduser.png',
+              width: 30,
+              height: 30,
+            ),
           )
         ],
       ),

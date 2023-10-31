@@ -3,7 +3,7 @@ import 'package:app/Provider/dang_ky_sdt_provider.dart';
 import 'package:app/Provider/dang_nhap_facebook_provider.dart';
 import 'package:app/Provider/edit_item_profile_provider.dart';
 import 'package:app/Provider/edit_profile_provider.dart';
-import 'package:app/Provider/emoji_provider.dart';
+import 'package:app/Provider/comments_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/Provider/page_provider.dart';
@@ -57,7 +57,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (context) => TextProvider()),
       ChangeNotifierProvider(create: (context) => PageProvider()),
       ChangeNotifierProvider(create: (context) => ChatsProfiver()),
-      ChangeNotifierProvider(create: (context) => EmojiProvider()),
+      ChangeNotifierProvider(create: (context) => CommentsProvider()),
       ChangeNotifierProvider(create: (context) => DangNhapFacebookProvider()),
     ],
     child: MyApp(),
@@ -70,7 +70,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ManHinhDangKy(),
+      // home: ManHinhDangKy(),
+      home: Bottom_Navigation_Bar(),
     );
   }
 }
