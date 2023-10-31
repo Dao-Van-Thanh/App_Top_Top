@@ -4,14 +4,17 @@ import 'package:app/View/Pages/QuayVideo/man_hinh_dang_video.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../Model/music_model.dart';
+import '../../../Provider/music_provider.dart';
+import '../../Widget/app_item_music.dart';
 class ManHinhKiemTraVideo extends StatefulWidget {
   final XFile file;
-
   ManHinhKiemTraVideo(this.file);
 
   @override
@@ -67,6 +70,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
   @override
   void initState() {
     super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
     videoController = VideoPlayerController.file(File(widget.file.path));
     videoController?.play();
     // Đảm bảo rằng video đã được khởi tạo trước khi thực hiện thao tác
@@ -127,7 +131,8 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                               height: double.maxFinite,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  videoController?.dispose(); // Giải phóng tài nguyên
+                                  videoController
+                                      ?.dispose(); // Giải phóng tài nguyên
                                   Navigator.push(context,
                                         MaterialPageRoute(builder:
                                             (context) =>
@@ -153,6 +158,33 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                 elevation: 0,
                 backgroundColor: Colors.transparent,
                 centerTitle: true,
+                title: GestureDetector(
+                  onTap: () {
+                    showBottomDialog(context);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 5, right: 5),
+                    height: 40,
+                    width: 140,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black.withOpacity(0.6)),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.music_note,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        Expanded(
+                            child: Text(
+                          'Thêm âm thanh',
+                          style: TextStyle(color: Colors.white, fontSize: 15),
+                        ))
+                      ],
+                    ),
+                  ),
+                ),
                 leading: IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () async {
@@ -183,5 +215,54 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
         child: Text('Không có video để hiển thị'),
       );
     }
+  }
+
+
+  AudioPlayer audioPlayer = AudioPlayer();
+  String audioUrl =
+      'https://d016-118-70-48-14.ngrok-free.app/uploads/1698396298071-Baddie-IVE-11947733.mp3';
+  bool isCheck = true;
+  void showBottomDialog(BuildContext context) {
+    final musicProvider = Provider.of<MusicProvider>(context, listen: false);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Đặt isScrollControlled thành true
+      builder: (BuildContext context) {
+        return Container(
+            padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+            height: 300,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
+            child: ListView.builder(
+                itemCount: musicProvider.musics.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: GestureDetector(
+                      onTap: () async {
+                        final player = AudioPlayer(); // Create a player
+                        // if (isCheck == true) {
+                        //   final duration = await player.setUrl(audioUrl);
+                        //   player.stop();
+                        //   print('dung phat nhac');
+                        // }
+                        setState(() {
+                          musicProvider.musics[index].isFocus = musicProvider.musics[index].isFocus==true?false:true;
+                        });
+                      },
+                        child: AppItemMusic(
+                          thumb: musicProvider.musics[index].thumb,
+                          title: musicProvider.musics[index].title,
+                          isForcus: musicProvider.musics[index].isFocus,
+                        ),
+                    ),
+                  );
+                }));
+      },
+    );
   }
 }

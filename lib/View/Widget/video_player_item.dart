@@ -40,13 +40,11 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
       });
     });
   }
-
   @override
   void dispose() {
     super.dispose();
     videoPlayerController.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

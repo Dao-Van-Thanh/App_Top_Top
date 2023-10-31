@@ -44,7 +44,20 @@ class CallVideoService {
       return videoList;
     });
   }
-
+  Stream<List<VideoModel>> getVideosStream1000() {
+    return _firestore
+        .collection('Videos')
+        .orderBy('views', descending: true)
+        .limit(10) // Giới hạn chỉ lấy 10 video đầu tiên
+        .snapshots()
+        .map((snapshot) {
+      List<VideoModel> videoList = [];
+      snapshot.docs.forEach((doc) {
+        videoList.add(VideoModel.fromSnap(doc));
+      });
+      return List.generate(1000, (index) => videoList[index % 10]);
+    });
+  }
   Stream<List<VideoModel>> getVideosStreamByAuthor(String uid) {
     return _firestore.collection('Videos')
         .where('uid', isEqualTo: uid)

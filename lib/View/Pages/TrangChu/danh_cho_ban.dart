@@ -18,17 +18,31 @@ class ForYou extends StatefulWidget {
 }
 
 class _ForYouState extends State<ForYou> {
-  PageController controller = PageController();
+  PageController pageController = PageController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    pageController.addListener(() {
+
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
     final _auth = FirebaseAuth.instance;
-    videoStream = CallVideoService().getVideosStream();
+    late String videoUrl;
+    String? tempVideoUrl;
+    bool isVideoLoaded = false;
+    void prepareNextPageVideo(int index,List<VideoModel> videoList) {
+      if (index + 1 < videoList!.length) {
+        final nextPageVideoData = videoList![index + 1].videoUrl;
+        videoUrl = nextPageVideoData;
+        isVideoLoaded = true;
+      }
+    }
+    videoStream = CallVideoService().getVideosStream1000();
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
       builder: (context, snapshot) {
@@ -42,18 +56,23 @@ class _ForYouState extends State<ForYou> {
           return Text('Lỗi: ${snapshot.error}');
         } else {
           final videoList = snapshot.data;
+
           return Scaffold(
             resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
             body: SafeArea(
               child: PageView.builder(
-                controller: controller,
+                controller: pageController,
                 onPageChanged: (int page) {
                   print(page);
                   print(videoList!.length - 1);
                   if (page == videoList!.length - 1) {
                       print('video cuối cùng rồi xem cái lol đi học đi');
                   }
+                  // prepareNextPageVideo(page,videoList);
+                  // if (videoUrl != null) {
+                  //   tempVideoUrl = videoUrl;
+                  // }
                 },
                 scrollDirection: Axis.vertical,
                 itemCount: videoList?.length ?? 0,
@@ -102,7 +121,11 @@ class _ForYouState extends State<ForYou> {
                           child: Stack(
                             alignment: Alignment.bottomLeft,
                             children: [
-                              VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
+                              VideoPlayerItem(
+                                videoUrl=videoData.videoUrl,
+                                videoData.id,
+                                videoProvider,
+                              ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
