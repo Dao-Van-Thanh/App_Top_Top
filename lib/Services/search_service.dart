@@ -33,6 +33,15 @@ class SearchService {
       throw e;
     }
   }
+  Future<String> getUserById(String uid) async{
+    try{
+      DocumentSnapshot docUser = await FirebaseFirestore.instance.collection("Users").doc(uid).get();
+      return 'null';
+    }catch (e) {
+      print('Error fetching following list: $e');
+      throw e;
+    }
+  }
 Stream<List<VideoModel>> getVideosByCaption(String caption) {
   return _firestore.collection('Videos')
       .where('caption', isEqualTo: caption)
