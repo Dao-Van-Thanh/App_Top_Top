@@ -12,6 +12,7 @@ class DangNhapSdtProvider extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool isChecked = false;
   String phone = '';
+  String email ='';
   String error = '';
   bool isLoading = false;
   String verificationId = '';
@@ -43,6 +44,10 @@ class DangNhapSdtProvider extends ChangeNotifier {
     this.phone = phone;
     notifyListeners();
   }
+  void changeEmail(String email) {
+    this.email = email;
+    notifyListeners();
+  }
 
   void changeLoading(bool loading) {
     this.isLoading = loading;
@@ -52,6 +57,19 @@ class DangNhapSdtProvider extends ChangeNotifier {
   void changePhoneNumberCheck(bool isPhoneNumberCheck) {
     this.isPhoneNumberCheck = isPhoneNumberCheck;
     notifyListeners();
+  }
+
+  Future<void> sendPasswordResetEmail() async {
+    print('sendPasswordRestEmail');
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: email,
+      );
+      // Gửi email xác minh mật khẩu thành công
+    } catch (e) {
+      print('Lỗi: $e');
+      // Xử lý lỗi
+    }
   }
 
   Future<void> dangNhapPhone(BuildContext context) async {
