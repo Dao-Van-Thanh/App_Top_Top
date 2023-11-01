@@ -5,6 +5,7 @@ import 'package:app/View/Pages/comments/footerDialog.dart';
 import 'package:app/View/Pages/comments/footer_dialog_recomment.dart';
 import 'package:app/View/Pages/comments/notifileDelete.dart';
 import 'package:app/View/Pages/comments/recomment.dart';
+import 'package:app/View/Widget/list_recomments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,119 +45,104 @@ class ShowComment extends StatelessWidget {
         CommentModel commentModel = CommentModel.fromSnapshot(
             snapshot.data as DocumentSnapshot<Map<String, dynamic>>);
         bool check = commentModel.uid == uid;
-        CommentsProvider emojiProvider = CommentsProvider();
         String time =
         UserService.formattedTimeAgo(commentModel.timestamp.toDate());
         bool isLiked = commentModel.likes.contains(uid);
-        MediaQueryData mediaQueryData = MediaQuery.of(context);
-        double screenHeight = mediaQueryData.size.height;
-        double keyboardHeight = screenHeight - mediaQueryData.viewInsets.bottom;
+
         return StreamBuilder<DocumentSnapshot>(
           stream: UserService().getUser(commentModel.uid),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
-              return snapshot.data != null
-                  ? Consumer<CommentsProvider>(
-                builder: (context, provider, child) {
-                  return GestureDetector(
-                    onTapDown: (TapDownDetails details) {
-                      tapDownPosition = details.globalPosition;
-                    },
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    onLongPress: () {
-                      showMenu(
-                          context: context,
-                          position: RelativeRect.fromRect(
-                              Rect.fromLTWH(tapDownPosition.dx,
-                                  tapDownPosition.dy, 30, 30),
-                              Rect.fromLTWH(
-                                  0,
-                                  0,
-                                  overlay!.paintBounds.size.width,
-                                  overlay.paintBounds.size.height)),
-                          items: [
-                            if (check)
-                              PopupMenuItem<String>(
-                                value: 'delete',
-                                child: const Text('Xóa'),
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => NotifiDelete(
-                                          videoId: idVideo,
-                                          cmtId: idComment));
-                                },
-                              ),
-                            if (check)
-                              PopupMenuItem(
-                                child: Text('Chỉnh sửa bình luận'),
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Column(
-                                          children: [
-                                            TextField(
-                                                controller:
-                                                controllerSuaComment,
-                                                decoration: InputDecoration(
-                                                    hintText:
-                                                    '${commentModel.text}')),
-                                            TextButton(
-                                                onPressed: () {
-                                                  if (controllerSuaComment
-                                                      .text
-                                                      .trim()
-                                                      .isNotEmpty) {
-                                                    commentService
-                                                        .updateComment(
-                                                      idVideo,
-                                                      idComment,
-                                                      controllerSuaComment
-                                                          .text
-                                                          .trim(),
-                                                    );
-                                                    Navigator.pop(
-                                                        context);
-                                                  }
-                                                },
-                                                child: Text('Sửa'))
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            const PopupMenuItem<String>(
-                              value: 'repost',
-                              child: Text('Repost'),
-                            ),
-                          ]);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.all(10),
-                      color: Colors.transparent,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.black,
-                            backgroundImage: NetworkImage(
-                              snapshot.data?['avatarURL'] ?? '',
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            flex: 9,
-                            child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+              return snapshot.data == null
+                  ? SizedBox()
+                  : Consumer<CommentsProvider>(
+                      builder: (context, provider, child) {
+                        return GestureDetector(
+                          onTapDown: (TapDownDetails details) {
+                            tapDownPosition = details.globalPosition;
+                          },
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          },
+                          onLongPress: () {
+                            showMenu(
+                                context: context,
+                                position: RelativeRect.fromRect(
+                                    Rect.fromLTWH(tapDownPosition.dx,
+                                        tapDownPosition.dy, 30, 30),
+                                    Rect.fromLTWH(
+                                        0,
+                                        0,
+                                        overlay!.paintBounds.size.width,
+                                        overlay.paintBounds.size.height)),
+                                items: [
+                                  if (check)
+                                    PopupMenuItem<String>(
+                                      value: 'delete',
+                                      child: const Text('Xóa'),
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => NotifiDelete(
+                                                videoId: idVideo,
+                                                cmtId: idComment));
+                                      },
+                                    ),
+                                  if (check)
+                                    PopupMenuItem(
+                                      child: Text('Chỉnh sửa bình luận'),
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Column(
+                                                children: [
+                                                  TextField(
+                                                      controller:
+                                                          controllerSuaComment,
+                                                      decoration: InputDecoration(
+                                                          hintText:
+                                                              '${commentModel.text}')),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        if (controllerSuaComment
+                                                            .text
+                                                            .trim()
+                                                            .isNotEmpty) {
+                                                          commentService
+                                                              .updateComment(
+                                                            idVideo,
+                                                            idComment,
+                                                            controllerSuaComment
+                                                                .text
+                                                                .trim(),
+                                                          );
+                                                          Navigator.pop(
+                                                              context);
+                                                        }
+                                                      },
+                                                      child: Text('Sửa'))
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  const PopupMenuItem<String>(
+                                    value: 'repost',
+                                    child: Text('Repost'),
+                                  ),
+                                ]);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(10),
+                            color: Colors.transparent,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   snapshot.data?['fullname'] ?? '',
@@ -304,6 +290,38 @@ class ShowComment extends StatelessWidget {
                                               ),
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                      commentModel.recomments.isEmpty
+                                          ? const SizedBox.shrink()
+                                          : ListRecommets(idVideo, idComment)
+                                    ],
+                                  ),
+                                ),
+                                //like
+                                Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        IconButton(
+                                            onPressed: () => {
+                                                  commentService.likeComment(
+                                                      idVideo,
+                                                      idComment,
+                                                      isLiked)
+                                                },
+                                            icon: Icon(
+                                              isLiked
+                                                  ? Icons.favorite
+                                                  : Icons.favorite_border,
+                                              color: isLiked
+                                                  ? Colors.red
+                                                  : Colors.grey,
+                                            )),
+                                        Text('${commentModel.likes.length}')
                                         )
                                             : SizedBox(),
                                       ],
@@ -314,6 +332,9 @@ class ShowComment extends StatelessWidget {
                               ],
                             ),
                           ),
+                        );
+                      },
+                    );
                           //like
                           Expanded(
                               flex: 1,
