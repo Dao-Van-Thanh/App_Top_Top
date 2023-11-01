@@ -44,7 +44,6 @@ class UserModel {
 
   static UserModel fromSnap(DocumentSnapshot snap) {
     var snapshotData = snap.data() as Map<String, dynamic>;
-
     return UserModel(
       idTopTop: snapshotData['idTopTop'] ?? '',
       fullName: snapshotData['fullname'] ?? '',

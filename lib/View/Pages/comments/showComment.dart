@@ -28,7 +28,7 @@ class ShowComment extends StatelessWidget {
     CommentService commentService = CommentService();
     String uid = FirebaseAuth.instance.currentUser!.uid;
     final RenderObject? overlay =
-        Overlay.of(context).context.findRenderObject();
+    Overlay.of(context).context.findRenderObject();
 
     Offset tapDownPosition = Offset.zero;
 
@@ -46,7 +46,7 @@ class ShowComment extends StatelessWidget {
             snapshot.data as DocumentSnapshot<Map<String, dynamic>>);
         bool check = commentModel.uid == uid;
         String time =
-            UserService.formattedTimeAgo(commentModel.timestamp.toDate());
+        UserService.formattedTimeAgo(commentModel.timestamp.toDate());
         bool isLiked = commentModel.likes.contains(uid);
 
         return StreamBuilder<DocumentSnapshot>(
@@ -144,80 +144,150 @@ class ShowComment extends StatelessWidget {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CircleAvatar(
-                                  backgroundColor: Colors.black,
-                                  backgroundImage: NetworkImage(
-                                    snapshot.data?['avatarURL'] ?? '',
+                                Text(
+                                  snapshot.data?['fullname'] ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
                                   ),
                                 ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  flex: 9,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        snapshot.data?['fullname'] ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  commentModel.text ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                  ),
+                                  maxLines:
+                                  null, // Để cho phép xuống dòng
+                                  softWrap:
+                                  true, // Cho phép tự động xuống dòng khi cần
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      time ?? '',
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        if (!blockComments) {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            builder: (context) {
+                                              return SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    FooterDialogReComment(
+                                                        nameUserReComment:
+                                                        snapshot.data?[
+                                                        'fullname'] ??
+                                                            '',
+                                                        idComment:
+                                                        idComment,
+                                                        videoId: idVideo,
+                                                        uId: uid),
+                                                    Container(
+                                                      height:
+                                                      MediaQuery.of(
+                                                          context)
+                                                          .viewInsets
+                                                          .bottom,
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }
+                                      },
+                                      child: const Text(
+                                        "Trả lời",
+                                        style: TextStyle(
+                                            color: Colors.black),
                                       ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        commentModel.text ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
+                                    ),
+                                  ],
+                                ),
+                                StreamBuilder(
+                                  stream: commentService
+                                      .getReCommentsInComment(
+                                      idVideo, idComment),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                          child:
+                                          CircularProgressIndicator());
+                                    } else if (snapshot.hasError) {
+                                      return Text(
+                                          "Error: ${snapshot.error}");
+                                    }
+                                    final data = snapshot.data?.data()
+                                    as Map<String, dynamic>;
+                                    var recomments = data['recomments']
+                                    as List<dynamic>;
+                                    if (recomments.isNotEmpty) {
+                                      recomments =
+                                          recomments.reversed.toList();
+                                    }
+                                    return recomments.length != 0
+                                        ? Column(
+                                      children: [
+                                        provider.showReComments
+                                            ? Column(
+                                          children: recomments
+                                              .map((e) =>
+                                              ReComment(
+                                                  idVideo,
+                                                  idComment,
+                                                  e))
+                                              .toList(),
+                                        )
+                                            : Row(
+                                          children: [
+                                            Container(
+                                              width: 20,
+                                              child:
+                                              const Divider(
+                                                color: Colors
+                                                    .grey,
+                                                height: 20,
+                                                thickness: 1,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                width: 5),
+                                            TextButton(
+                                              onPressed: () {
+                                                provider
+                                                    .setShowReComments();
+                                              },
+                                              child: Text(
+                                                "view ${recomments.length}",
+                                                style:
+                                                const TextStyle(
+                                                  color: Colors
+                                                      .grey,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        maxLines:
-                                            null, // Để cho phép xuống dòng
-                                        softWrap:
-                                            true, // Cho phép tự động xuống dòng khi cần
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            time ?? '',
-                                          ),
-                                          TextButton(
+                                        provider.showReComments
+                                            ? Align(
+                                          child: TextButton(
                                             onPressed: () {
-                                              if (!blockComments) {
-                                                showModalBottomSheet(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return SingleChildScrollView(
-                                                      child: Column(
-                                                        children: [
-                                                          FooterDialogReComment(
-                                                              nameUserReComment:
-                                                                  snapshot.data?[
-                                                                          'fullname'] ??
-                                                                      '',
-                                                              idComment:
-                                                                  idComment,
-                                                              videoId: idVideo,
-                                                              uId: uid),
-                                                          Container(
-                                                            height:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .viewInsets
-                                                                    .bottom,
-                                                          )
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              }
+                                              provider
+                                                  .setShowReComments();
                                             },
                                             child: const Text(
-                                              "Trả lời",
-                                              style: TextStyle(
-                                                  color: Colors.black),
+                                              "— Đóng —",
+                                              style:
+                                              TextStyle(
+                                                color: Colors
+                                                    .grey,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -252,14 +322,52 @@ class ShowComment extends StatelessWidget {
                                                   : Colors.grey,
                                             )),
                                         Text('${commentModel.likes.length}')
+                                        )
+                                            : SizedBox(),
                                       ],
-                                    ))
+                                    )
+                                        : SizedBox();
+                                  },
+                                )
                               ],
                             ),
                           ),
                         );
                       },
                     );
+                          //like
+                          Expanded(
+                              flex: 1,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                      onPressed: () => {
+                                        commentService.likeComment(
+                                            idVideo,
+                                            idComment,
+                                            isLiked)
+                                      },
+                                      icon: Icon(
+                                        isLiked
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: isLiked
+                                            ? Colors.red
+                                            : Colors.grey,
+                                      )),
+                                  Text('${commentModel.likes.length}')
+                                ],
+                              ))
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              )
+                  : SizedBox();
             }
           },
         );

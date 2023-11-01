@@ -5,6 +5,8 @@ import 'package:app/Services/tab_video_service.dart';
 class ProfileProvider with ChangeNotifier {
   List<VideoModel> _videos = [];
   bool _isLoading = false;
+  TextEditingController searchController = TextEditingController();
+  String isSearch = '';
 
   List<VideoModel> get videos => _videos;
   bool get isLoading => _isLoading;
@@ -19,6 +21,10 @@ class ProfileProvider with ChangeNotifier {
     _isLoading = true;
     _videos = await TabVideoService.getVideosByUid(uid);
     _isLoading = false;
+    notifyListeners();
+  }
+  void setSearch(TextEditingController checkSearch){
+    searchController = checkSearch;
     notifyListeners();
   }
 }

@@ -36,7 +36,6 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     notification.firebaseNotification(context);
-
     //Sửa trạng thái người dùng đã online
     UserService.updateStatusUser(
         {'lastActive': DateTime.now(), 'isOnline': true});
