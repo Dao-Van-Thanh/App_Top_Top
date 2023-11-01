@@ -191,7 +191,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                                                   .checkUserOnline(uid: idOther);
                                           if(!checkOnline){
                                             notificationsService.sendNotification(
-                                                title: 'Tin nhăn mới!',
+                                                title: 'Tin nhăn mới từ ${snapshot.data!['fullname'] ?? 'người dùng'} ',
                                                 body: chat,
                                                 idOther: idOther
                                             );

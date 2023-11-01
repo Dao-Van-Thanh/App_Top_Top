@@ -5,6 +5,8 @@ import 'package:app/Services/others_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/user_model.dart';
@@ -277,4 +279,29 @@ class UserService {
     return false;
   }
 
+  Future<void> getCurrentLocation(String uid) async {
+    var status = await Permission.location.status;
+
+    if (status.isGranted) {
+      // Người dùng đã cấp quyền, có thể lấy vị trí.
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      print('Vị trí: $position');
+    } else {
+      if (status.isGranted) {
+        // Quyền chưa được cấp, yêu cầu người dùng.
+        var result = await Permission.location.request();
+        if (result.isGranted) {
+          Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+          print('Vị trí: $position');
+        } else {
+          // Xử lý trường hợp người dùng từ chối quyền.
+          print('Người dùng từ chối quyền vị trí.');
+        }
+      } else {
+        // Người dùng đã từ chối hoặc vô hiệu hóa quyền.
+        // Hướng dẫn người dùng mở cài đặt để cấp quyền.
+        openAppSettings();
+      }
+    }
+  }
 }

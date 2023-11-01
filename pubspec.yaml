@@ -63,6 +63,8 @@ dependencies:
   google_sign_in: ^6.1.5
   dio: ^4.0.4
   gallery_saver: ^2.3.2
+  geolocator: ^10.1.0
+  permission_handler: ^11.0.1
 
 
 dev_dependencies:

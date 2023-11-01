@@ -5,6 +5,7 @@ import 'package:app/View/Pages/comments/footerDialog.dart';
 import 'package:app/View/Pages/comments/footer_dialog_recomment.dart';
 import 'package:app/View/Pages/comments/notifileDelete.dart';
 import 'package:app/View/Pages/comments/recomment.dart';
+import 'package:app/View/Widget/list_recomments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,21 +45,19 @@ class ShowComment extends StatelessWidget {
         CommentModel commentModel = CommentModel.fromSnapshot(
             snapshot.data as DocumentSnapshot<Map<String, dynamic>>);
         bool check = commentModel.uid == uid;
-        CommentsProvider emojiProvider = CommentsProvider();
         String time =
             UserService.formattedTimeAgo(commentModel.timestamp.toDate());
         bool isLiked = commentModel.likes.contains(uid);
-        MediaQueryData mediaQueryData = MediaQuery.of(context);
-        double screenHeight = mediaQueryData.size.height;
-        double keyboardHeight = screenHeight - mediaQueryData.viewInsets.bottom;
+
         return StreamBuilder<DocumentSnapshot>(
           stream: UserService().getUser(commentModel.uid),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {
-              return snapshot.data != null
-                  ? Consumer<CommentsProvider>(
+              return snapshot.data == null
+                  ? SizedBox()
+                  : Consumer<CommentsProvider>(
                       builder: (context, provider, child) {
                         return GestureDetector(
                           onTapDown: (TapDownDetails details) {
@@ -223,94 +222,9 @@ class ShowComment extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      StreamBuilder(
-                                        stream: commentService
-                                            .getReCommentsInComment(
-                                                idVideo, idComment),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const Center(
-                                                child:
-                                                    CircularProgressIndicator());
-                                          } else if (snapshot.hasError) {
-                                            return Text(
-                                                "Error: ${snapshot.error}");
-                                          }
-                                          final data = snapshot.data?.data()
-                                              as Map<String, dynamic>;
-                                          var recomments = data['recomments']
-                                              as List<dynamic>;
-                                          if (recomments.isNotEmpty) {
-                                            recomments =
-                                                recomments.reversed.toList();
-                                          }
-                                          return recomments.length != 0
-                                              ? Column(
-                                                  children: [
-                                                    provider.showReComments
-                                                        ? Column(
-                                                            children: recomments
-                                                                .map((e) =>
-                                                                    ReComment(
-                                                                        idVideo,
-                                                                        idComment,
-                                                                        e))
-                                                                .toList(),
-                                                          )
-                                                        : Row(
-                                                            children: [
-                                                              Container(
-                                                                width: 20,
-                                                                child:
-                                                                    const Divider(
-                                                                  color: Colors
-                                                                      .grey,
-                                                                  height: 20,
-                                                                  thickness: 1,
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                  width: 5),
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  provider
-                                                                      .setShowReComments();
-                                                                },
-                                                                child: Text(
-                                                                  "view ${recomments.length}",
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                    provider.showReComments
-                                                        ? Align(
-                                                            child: TextButton(
-                                                              onPressed: () {
-                                                                provider
-                                                                    .setShowReComments();
-                                                              },
-                                                              child: const Text(
-                                                                "— Đóng —",
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: Colors
-                                                                      .grey,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : SizedBox(),
-                                                  ],
-                                                )
-                                              : SizedBox();
-                                        },
-                                      )
+                                      commentModel.recomments.isEmpty
+                                          ? const SizedBox.shrink()
+                                          : ListRecommets(idVideo, idComment)
                                     ],
                                   ),
                                 ),
@@ -345,8 +259,7 @@ class ShowComment extends StatelessWidget {
                           ),
                         );
                       },
-                    )
-                  : SizedBox();
+                    );
             }
           },
         );
