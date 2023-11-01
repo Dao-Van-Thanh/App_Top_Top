@@ -59,7 +59,7 @@ class CommentService {
 
       // thêm comment vào trường comments trong bảng Videos
       final videoCollection =
-          FirebaseFirestore.instance.collection('Videos').doc(videoId);
+      FirebaseFirestore.instance.collection('Videos').doc(videoId);
       videoCollection.update({
         'comments': FieldValue.arrayUnion([commentDocRef.id])
       });
@@ -120,7 +120,7 @@ class CommentService {
         .doc(idComment)
         .update({
       'likes':
-          liked ? FieldValue.arrayRemove([uid]) : FieldValue.arrayUnion([uid])
+      liked ? FieldValue.arrayRemove([uid]) : FieldValue.arrayUnion([uid])
     });
   }
   Future<void> likeReComment(String idVideo, String idComment,String idReComment, bool liked) async {
@@ -180,7 +180,7 @@ class CommentService {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       DocumentSnapshot userDoc =
-          await firestore.collection('Users').doc(uid).get();
+      await firestore.collection('Users').doc(uid).get();
 
       if (userDoc.exists) {
         String? avatarUrl = userDoc.get('avatarURL');
@@ -214,14 +214,14 @@ class CommentService {
   }
 
   Future<void> updateComment(String idVideo, String idComment,String commentUpdate) async {
-      await FirebaseFirestore.instance
-          .collection('Videos')
-          .doc(idVideo)
-          .collection('Comments')
-          .doc(idComment)
-          .update({
-            'text' : commentUpdate
-      });
+    await FirebaseFirestore.instance
+        .collection('Videos')
+        .doc(idVideo)
+        .collection('Comments')
+        .doc(idComment)
+        .update({
+      'text' : commentUpdate
+    });
   }
   Future<void> updateReComment(String idVideo, String idComment,String idRecomment,String commentUpdate) async {
       await FirebaseFirestore.instance
