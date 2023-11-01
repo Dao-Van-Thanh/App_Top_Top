@@ -58,91 +58,104 @@ class ShowComment extends StatelessWidget {
               return snapshot.data == null
                   ? SizedBox()
                   : Consumer<CommentsProvider>(
-                      builder: (context, provider, child) {
-                        return GestureDetector(
-                          onTapDown: (TapDownDetails details) {
-                            tapDownPosition = details.globalPosition;
-                          },
-                          onTap: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          },
-                          onLongPress: () {
-                            showMenu(
-                                context: context,
-                                position: RelativeRect.fromRect(
-                                    Rect.fromLTWH(tapDownPosition.dx,
-                                        tapDownPosition.dy, 30, 30),
-                                    Rect.fromLTWH(
-                                        0,
-                                        0,
-                                        overlay!.paintBounds.size.width,
-                                        overlay.paintBounds.size.height)),
-                                items: [
-                                  if (check)
-                                    PopupMenuItem<String>(
-                                      value: 'delete',
-                                      child: const Text('Xóa'),
-                                      onTap: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) => NotifiDelete(
-                                                videoId: idVideo,
-                                                cmtId: idComment));
-                                      },
-                                    ),
-                                  if (check)
-                                    PopupMenuItem(
-                                      child: Text('Chỉnh sửa bình luận'),
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: Column(
-                                                children: [
-                                                  TextField(
-                                                      controller:
-                                                          controllerSuaComment,
-                                                      decoration: InputDecoration(
-                                                          hintText:
-                                                              '${commentModel.text}')),
-                                                  TextButton(
-                                                      onPressed: () {
-                                                        if (controllerSuaComment
-                                                            .text
-                                                            .trim()
-                                                            .isNotEmpty) {
-                                                          commentService
-                                                              .updateComment(
-                                                            idVideo,
-                                                            idComment,
-                                                            controllerSuaComment
-                                                                .text
-                                                                .trim(),
-                                                          );
-                                                          Navigator.pop(
-                                                              context);
-                                                        }
-                                                      },
-                                                      child: Text('Sửa'))
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  const PopupMenuItem<String>(
-                                    value: 'repost',
-                                    child: Text('Repost'),
-                                  ),
-                                ]);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(10),
-                            color: Colors.transparent,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                builder: (context, provider, child) {
+                  return GestureDetector(
+                    onTapDown: (TapDownDetails details) {
+                      tapDownPosition = details.globalPosition;
+                    },
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    },
+                    onLongPress: () {
+                      showMenu(
+                          context: context,
+                          position: RelativeRect.fromRect(
+                              Rect.fromLTWH(tapDownPosition.dx,
+                                  tapDownPosition.dy, 30, 30),
+                              Rect.fromLTWH(
+                                  0,
+                                  0,
+                                  overlay!.paintBounds.size.width,
+                                  overlay.paintBounds.size.height)),
+                          items: [
+                            if (check)
+                              PopupMenuItem<String>(
+                                value: 'delete',
+                                child: const Text('Xóa'),
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => NotifiDelete(
+                                          videoId: idVideo,
+                                          cmtId: idComment));
+                                },
+                              ),
+                            if (check)
+                              PopupMenuItem(
+                                child: Text('Chỉnh sửa bình luận'),
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Column(
+                                          children: [
+                                            TextField(
+                                                controller:
+                                                controllerSuaComment,
+                                                decoration: InputDecoration(
+                                                    hintText:
+                                                    '${commentModel.text}')),
+                                            TextButton(
+                                                onPressed: () {
+                                                  if (controllerSuaComment
+                                                      .text
+                                                      .trim()
+                                                      .isNotEmpty) {
+                                                    commentService
+                                                        .updateComment(
+                                                      idVideo,
+                                                      idComment,
+                                                      controllerSuaComment
+                                                          .text
+                                                          .trim(),
+                                                    );
+                                                    Navigator.pop(
+                                                        context);
+                                                  }
+                                                },
+                                                child: Text('Sửa'))
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            const PopupMenuItem<String>(
+                              value: 'repost',
+                              child: Text('Repost'),
+                            ),
+                          ]);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(10),
+                      color: Colors.transparent,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.black,
+                            backgroundImage: NetworkImage(
+                              snapshot.data?['avatarURL'] ?? '',
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            flex: 9,
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   snapshot.data?['fullname'] ?? '',
@@ -209,132 +222,12 @@ class ShowComment extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                StreamBuilder(
-                                  stream: commentService
-                                      .getReCommentsInComment(
-                                      idVideo, idComment),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const Center(
-                                          child:
-                                          CircularProgressIndicator());
-                                    } else if (snapshot.hasError) {
-                                      return Text(
-                                          "Error: ${snapshot.error}");
-                                    }
-                                    final data = snapshot.data?.data()
-                                    as Map<String, dynamic>;
-                                    var recomments = data['recomments']
-                                    as List<dynamic>;
-                                    if (recomments.isNotEmpty) {
-                                      recomments =
-                                          recomments.reversed.toList();
-                                    }
-                                    return recomments.length != 0
-                                        ? Column(
-                                      children: [
-                                        provider.showReComments
-                                            ? Column(
-                                          children: recomments
-                                              .map((e) =>
-                                              ReComment(
-                                                  idVideo,
-                                                  idComment,
-                                                  e))
-                                              .toList(),
-                                        )
-                                            : Row(
-                                          children: [
-                                            Container(
-                                              width: 20,
-                                              child:
-                                              const Divider(
-                                                color: Colors
-                                                    .grey,
-                                                height: 20,
-                                                thickness: 1,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                                width: 5),
-                                            TextButton(
-                                              onPressed: () {
-                                                provider
-                                                    .setShowReComments();
-                                              },
-                                              child: Text(
-                                                "view ${recomments.length}",
-                                                style:
-                                                const TextStyle(
-                                                  color: Colors
-                                                      .grey,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        provider.showReComments
-                                            ? Align(
-                                          child: TextButton(
-                                            onPressed: () {
-                                              provider
-                                                  .setShowReComments();
-                                            },
-                                            child: const Text(
-                                              "— Đóng —",
-                                              style:
-                                              TextStyle(
-                                                color: Colors
-                                                    .grey,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      commentModel.recomments.isEmpty
-                                          ? const SizedBox.shrink()
-                                          : ListRecommets(idVideo, idComment)
-                                    ],
-                                  ),
-                                ),
-                                //like
-                                Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        IconButton(
-                                            onPressed: () => {
-                                                  commentService.likeComment(
-                                                      idVideo,
-                                                      idComment,
-                                                      isLiked)
-                                                },
-                                            icon: Icon(
-                                              isLiked
-                                                  ? Icons.favorite
-                                                  : Icons.favorite_border,
-                                              color: isLiked
-                                                  ? Colors.red
-                                                  : Colors.grey,
-                                            )),
-                                        Text('${commentModel.likes.length}')
-                                        )
-                                            : SizedBox(),
-                                      ],
-                                    )
-                                        : SizedBox();
-                                  },
-                                )
+                                commentModel.recomments.isEmpty
+                                    ? const SizedBox.shrink()
+                                    : ListRecommets(idVideo, idComment)
                               ],
                             ),
                           ),
-                        );
-                      },
-                    );
                           //like
                           Expanded(
                               flex: 1,
@@ -366,8 +259,7 @@ class ShowComment extends StatelessWidget {
                     ),
                   );
                 },
-              )
-                  : SizedBox();
+              );
             }
           },
         );
