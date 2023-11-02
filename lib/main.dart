@@ -6,6 +6,8 @@ import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Provider/comments_provider.dart';
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
+import 'package:app/Provider/load_videoProvider.dart';
+import 'package:app/Provider/music_provider.dart';
 import 'package:app/Provider/page_provider.dart';
 import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
@@ -14,6 +16,7 @@ import 'package:app/Provider/video_provider.dart';
 import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:app/View/Pages/Profile/tab_admin.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_kiem_tra_video.dart';
+import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +26,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Provider/chats_provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
 import 'View/Screen/DangKy/man_hinh_dang_ky.dart';
-import 'View/Widget/bottom_navigation.dart';
 import 'firebase_options.dart';
 
 Future<void> _backgroundMessageHandler(RemoteMessage message) async {
@@ -62,6 +64,8 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (context) => ChatsProfiver()),
       ChangeNotifierProvider(create: (context) => CommentsProvider()),
       ChangeNotifierProvider(create: (context) => DangNhapFacebookProvider()),
+      ChangeNotifierProvider(create: (context) => MusicProvider()),
+      ChangeNotifierProvider(create: (context) => LoadVideoProvider()),
     ],
     child: MyApp(),
   ));

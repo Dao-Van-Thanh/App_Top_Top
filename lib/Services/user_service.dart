@@ -73,7 +73,6 @@ class UserService {
         });
         NotificationsService notificationsService = NotificationsService();
         final data = await getDataUser();
-        print('======================');
         notificationsService.sendNotification(
             title: data!['fullname'],
             body: 'Đã follow bạn',
@@ -307,4 +306,5 @@ class UserService {
       }
     }
   }
+
 }

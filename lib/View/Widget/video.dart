@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app/Model/video_model.dart';
+import 'package:app/Provider/load_videoProvider.dart';
 import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/call_video_service.dart';
 import 'package:app/View/Widget/video_detail.dart';
@@ -8,25 +9,30 @@ import 'package:app/View/Widget/video_player_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'home_side_bar.dart';
 
-class ForYou extends StatefulWidget {
+class Video extends StatefulWidget {
 
   @override
-  State<ForYou> createState() => _ForYouState();
+  State<Video> createState() => _ForYouState();
 }
 
-class _ForYouState extends State<ForYou> {
-  PageController controller = PageController();
+class _ForYouState extends State<Video> {
+  PageController pageController = PageController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    pageController.addListener(() {
+    });
   }
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
     final _auth = FirebaseAuth.instance;
+    final loadVideoProvider = context.read<LoadVideoProvider>();
+    late String videoUrl;
     videoStream = CallVideoService().getVideosStream();
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
@@ -41,15 +47,17 @@ class _ForYouState extends State<ForYou> {
           return Text('Lỗi: ${snapshot.error}');
         } else {
           final videoList = snapshot.data;
+          List<String> videoUrl=[];
+          for(int i =0;i<videoList!.length;i++){
+            videoUrl.add(videoList![i].videoUrl);
+          }
           return Scaffold(
             resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
             body: SafeArea(
               child: PageView.builder(
-                controller: controller,
+                controller: pageController,
                 onPageChanged: (int page) {
-                  print(page);
-                  print(videoList!.length - 1);
                   if (page == videoList!.length - 1) {
                     print('video cuối cùng rồi xem cái lol đi học đi');
                   }
@@ -64,16 +72,16 @@ class _ForYouState extends State<ForYou> {
                       builder: (context, videoProvider, child) {
                         videoProvider.setValue(
                             videoData!.blockComments,
-                            videoData!.likes.length,
-                            videoData!.comments.length,
-                            videoData!.userSaveVideos!.length,
-                            videoData!.caption,
-                            videoData!.profilePhoto,
-                            videoData!.username,
-                            videoData!.id,
-                            videoData!.uid,
-                          videoData.videoUrl,
-                          videoData.blockComments
+                            videoData.likes.length,
+                            videoData.comments.length,
+                            videoData.userSaveVideos!.length,
+                            videoData.caption,
+                            videoData.profilePhoto,
+                            videoData.username,
+                            videoData.id,
+                            videoData.uid,
+                            videoData.videoUrl,
+                            videoData.blockComments
                         );
                         if (!videoProvider.hasCheckedLike) {
                           videoProvider.hasCheckedLike = true;
@@ -89,15 +97,24 @@ class _ForYouState extends State<ForYou> {
                               videoProvider.setHasFollowing()
                             }
                           });
+                          CallVideoService().checkUserSaveVideo(videoData.userSaveVideos!.cast<String>())
+                              .then((save){
+                            if (save) {
+                              videoProvider.changeColorSave();
+                            }
+                          });
                         }
                         return GestureDetector(
-                          onTap: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          },
+                          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
                           child: Stack(
                             alignment: Alignment.bottomLeft,
                             children: [
-                              VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
+                              VideoPlayerItem(
+                                videoData.videoUrl,
+                                videoData.id,
+                                videoProvider,
+                                videoData.songUrl
+                              ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
