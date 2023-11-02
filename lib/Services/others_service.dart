@@ -80,12 +80,18 @@ class OthersService {
         // 2. Truy cập bảng Chats và kiểm tra từng phòng chat.
         for (final chatRoom in existingChatRooms) {
           final chatData = chatRoom.data() as Map<String, dynamic>;
-          final List<String> chatUid = List<String>.from(chatData['uid']);
 
-          // Kiểm tra xem danh sách chatUid chứa cả hai ID.
-          if (chatUid.contains(user.uid) && chatUid.contains(idOther)) {
-            checkPhong = true;
-            break;  // Nếu đã tìm thấy phòng chat phù hợp, không cần kiểm tra thêm.
+          //kiểm tra xem có phòng chat nào không nếu không:
+          // => chưa tồn tại phòng chat
+          if(chatData.length == 0){
+            break;
+          }else{
+            final List<String> chatUid = List<String>.from(chatData['uid']);
+            // Kiểm tra xem danh sách chatUid chứa cả hai ID.
+            if (chatUid.contains(user.uid) && chatUid.contains(idOther)) {
+              checkPhong = true;
+              break;  // Nếu đã tìm thấy phòng chat phù hợp, không cần kiểm tra thêm.
+            }
           }
         }
       }

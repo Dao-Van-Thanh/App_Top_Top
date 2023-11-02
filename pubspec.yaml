@@ -66,6 +66,8 @@ dependencies:
   firebase_messaging: ^14.7.2
   http: ^0.13.6
   just_audio: ^0.9.35
+  share_plus: ^7.2.1
+  video_editor: ^3.0.0
 
 
 dev_dependencies:
