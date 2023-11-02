@@ -60,7 +60,7 @@ class UserModel {
           .toList(),
       saveVideos: (snapshotData['saveVideos'] as List<dynamic>?)
           ?.map((e) => e.toString())
-          .toList(),
+          .toList() ?? [],
       gender: snapshotData['gender'] ?? 'None',
       uid: snapshotData['uid'] ?? '',
     );

@@ -18,27 +18,12 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
   @override
   void initState() {
     super.initState();
-    // Khởi tạo controller cho camera
-    _controller = CameraController(
-      const CameraDescription(
-        name: '0', // Sử dụng camera sau (back camera)
-        lensDirection: CameraLensDirection.back,
-        sensorOrientation: 0,
-      ),
-      ResolutionPreset.high, // Chất lượng video
-    );
-
-    // Khởi tạo controller và chờ nó sẵn sàng
-    _initializeControllerFuture = _controller.initialize();
+    createController();
   }
 
   @override
   void dispose() {
-    // Giải phóng resources khi không cần sử dụng camera nữa và đảm bảo dừng quay video (nếu đang quay)
-    if (_controller.value.isRecordingVideo) {
-      _controller.stopVideoRecording();
-    }
-    _controller.dispose();
+    disController();
     super.dispose();
   }
 
@@ -65,7 +50,11 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           // Camera đã sẵn sàng, hiển thị nó trong widget CameraPreview
-                          return CameraPreview(_controller);
+                          if (_controller.value != null) {
+                            return CameraPreview(_controller);
+                          }
+                          return const Center(child: CircularProgressIndicator());
+
                         } else {
                           // Đợi camera sẵn sàng
                           return const Center(child: CircularProgressIndicator());
@@ -99,12 +88,16 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                                 setState(() {
                                   _isRecording = false;
                                 });
-                                Navigator.push(
+                                disController();
+                                await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ManHinhKiemTraVideo(videoFile),
                                     )
                                 );
+                                setState(() {
+                                  createController();
+                                });
                               } else {
                                 // Bắt đầu quay video
                                 await _controller.startVideoRecording();
@@ -133,12 +126,16 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                               onPressed: () async {
                                 XFile? file = await pickVideo();
                                 provider.setVideoFile(file!);
-                                Navigator.push(
+                                disController();
+                                await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ManHinhKiemTraVideo(file),
                                     )
                                 );
+                                setState(() {
+                                  createController();
+                                });
                               },
                               icon: const Icon(
                                 Icons.folder,
@@ -175,5 +172,24 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
       return XFile(file.path!);
     }
     return null;
+  }
+  void disController(){
+    if (_controller.value.isRecordingVideo) {
+      _controller.stopVideoRecording();
+    }
+    // Giữ lại trạng thái của controller trước khi dispose
+    _controller.dispose();
+  }
+
+  void createController(){
+    _controller = CameraController(
+      const CameraDescription(
+        name: '0',
+        lensDirection: CameraLensDirection.back,
+        sensorOrientation: 0,
+      ),
+      ResolutionPreset.high,
+    );
+    _initializeControllerFuture = _controller.initialize();
   }
 }

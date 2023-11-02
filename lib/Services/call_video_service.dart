@@ -168,4 +168,25 @@ class CallVideoService {
   //   });
   // }
 
+  Future<void> addShareCountInTablesVideo(String idVideo)async{
+    try{
+      print('=========================');
+      final videoSnap = await FirebaseFirestore.instance
+          .collection('Videos')
+          .doc(idVideo)
+          .get();
+      print('${videoSnap['shareCount']}=========================');
+      int shareCount = videoSnap['shareCount'] ?? 0;
+      shareCount++;
+      await FirebaseFirestore.instance
+          .collection('Videos')
+          .doc(idVideo)
+          .update({
+        'shareCount' : shareCount
+      });
+    }catch(e){
+      print('=======================$e');
+    }
+  }
+
 }

@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:app/Model/video_model.dart';
 import 'package:app/Services/search_service.dart';
-import 'package:app/View/Pages/TrangChu/trang_chu.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
+
 import '../../Widget/bottom_navigation.dart';
 import '../Others/man_hinh_video_search.dart';
 
@@ -21,24 +21,26 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
   TextEditingController textInputSearch = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   List<String> captions = [];
-  List<String> historySearchs = [
-  ];
+  List<String> historySearchs = [];
   List<String> recomments = [];
   bool isSearching = false;
   String textSearch = '';
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     loadCaptions(); // Gọi hàm để tải captions
   }
+
   @override
   void dispose() {
     super.dispose();
   }
+
   Future<void> loadCaptions() async {
     final fetchedCaptions = await SearchService().fetchCaptionsFromVideos();
     final history = await getListHistory();
-    setState((){
+    setState(() {
       Set<String> uniqueSet = history.toSet();
       historySearchs = uniqueSet.toList();
       captions = fetchedCaptions;
@@ -55,13 +57,14 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
     List<String>? dataList = prefs.getStringList('myList');
     return dataList ?? [];
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Container(
-              margin: EdgeInsets.only(right: 20,left: 20),
+              margin: EdgeInsets.only(right: 20, left: 20),
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
@@ -81,8 +84,8 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                     fontWeight: FontWeight.w500,
                   ),
                   prefixIcon: Icon(
-                      Icons.search,
-                      color: Colors.black45,
+                    Icons.search,
+                    color: Colors.black45,
                   ),
                   border: InputBorder.none,
                 ),
@@ -114,7 +117,10 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
               ),
               onPressed: () {
                 saveListHistory(historySearchs);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Bottom_Navigation_Bar()));
               }),
           leadingWidth: 20,
           // actions: const [
@@ -128,47 +134,51 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
         ),
         body: textSearch.length <= 0
             ? ListView.builder(
-          itemCount: isSearching ? recomments.length : historySearchs.length,
-          itemBuilder: (BuildContext context, int index) {
-            final item = isSearching ? recomments[index] : historySearchs[index];
-            return InkWell(
-              onTap: () {
-                print('Item $item được nhấn');
-                _focusNode.unfocus();
-                setState(() {
-                  textInputSearch.text = item;
-                  textSearch = item;
-                  historySearchs.add(textSearch);
-                  Set<String> uniqueSet = historySearchs.toSet();
-                  historySearchs = uniqueSet.toList();
-                });
-              },
-              child: ListTile(
-                contentPadding: EdgeInsets.all(0), // Để loại bỏ khoảng cách mặc định
-                title: Row(
-                  children: [
-                    Icon(Icons.history), // Icon bên trái
-                    Expanded(
-                      child: Text(item), // Văn bản ở giữa
+                itemCount:
+                    isSearching ? recomments.length : historySearchs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final item =
+                      isSearching ? recomments[index] : historySearchs[index];
+                  return InkWell(
+                    onTap: () {
+                      print('Item $item được nhấn');
+                      _focusNode.unfocus();
+                      setState(() {
+                        textInputSearch.text = item;
+                        textSearch = item;
+                        historySearchs.add(textSearch);
+                        Set<String> uniqueSet = historySearchs.toSet();
+                        historySearchs = uniqueSet.toList();
+                      });
+                    },
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      // Để loại bỏ khoảng cách mặc định
+                      title: Row(
+                        children: [
+                          Icon(Icons.history), // Icon bên trái
+                          Expanded(
+                            child: Text(item), // Văn bản ở giữa
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              // Xử lý khi người dùng nhấn vào biểu tượng close
+                              setState(() {
+                                historySearchs.remove(item);
+                              });
+                            },
+                            child:
+                                Icon(Icons.close), // Biểu tượng close bên phải
+                          ),
+                        ],
+                      ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        // Xử lý khi người dùng nhấn vào biểu tượng close
-                        setState(() {
-                          historySearchs.remove(item);
-                        });
-                      },
-                      child: Icon(Icons.close), // Biểu tượng close bên phải
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        )
+                  );
+                },
+              )
             : Padding(
-              padding: EdgeInsets.all(8.0),
-              child: StreamBuilder<List<VideoModel>>(
+                padding: EdgeInsets.all(8.0),
+                child: StreamBuilder<List<VideoModel>>(
                   stream:
                       SearchService().getVideosByCaption(textSearch.toString()),
                   builder: (context, snapshot) {
@@ -178,44 +188,50 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                       return GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing:5,
-                              mainAxisExtent: 328.0,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 5,
+                          crossAxisSpacing: 5,
+                          mainAxisExtent: 328.0,
                         ),
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           final videoData = snapshot.data?[index];
                           List<VideoModel> listSwap = snapshot.data!.toList();
-                          final originalListSwap = List<VideoModel>.from(listSwap);
-                            return GestureDetector(
-                              onTap: (){
-                                listSwap.insert(0, listSwap.removeAt(index));
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return ManhinhVideoSearch(videoStream: Stream.value(listSwap),
-                                        restoreOriginalList: () {
-                                          // Sử dụng callback để khôi phục danh sách ban đầu
-                                          listSwap = List<VideoModel>.from(originalListSwap);
-                                        },);
-                                    },
-                                  ),
-                                );
-                                print(index);
-                              },
-                              child: Container(
-                                color: Colors.black,
-                                child: Column(
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        Container(
-                                          height: 300.0, // Giới hạn chiều cao của Chewie
-                                          child: Chewie(
-                                            controller: ChewieController(
-                                              videoPlayerController: VideoPlayerController.network(
+                          final originalListSwap =
+                              List<VideoModel>.from(listSwap);
+                          return GestureDetector(
+                            onTap: () {
+                              listSwap.insert(0, listSwap.removeAt(index));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ManhinhVideoSearch(
+                                      videoStream: Stream.value(listSwap),
+                                      restoreOriginalList: () {
+                                        // Sử dụng callback để khôi phục danh sách ban đầu
+                                        listSwap = List<VideoModel>.from(
+                                            originalListSwap);
+                                      },
+                                    );
+                                  },
+                                ),
+                              );
+                              print(index);
+                            },
+                            child: Container(
+                              color: Colors.black,
+                              child: Column(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        height: 300.0,
+                                        // Giới hạn chiều cao của Chewie
+                                        child: Chewie(
+                                          controller: ChewieController(
+                                              videoPlayerController:
+                                                  VideoPlayerController.network(
                                                 videoData!.videoUrl,
                                               ),
                                               autoPlay: false,
@@ -225,39 +241,43 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                                               showOptions: false,
                                               aspectRatio: 0.8,
                                               autoInitialize: true,
-                                              errorBuilder: (context, errorMessage) {
+                                              errorBuilder:
+                                                  (context, errorMessage) {
                                                 return Center(
-                                                  child: Text('Lỗi: $errorMessage'),
+                                                  child: Text(
+                                                      'Lỗi: $errorMessage'),
                                                 );
                                               },
-                                              placeholder: Center(child: CircularProgressIndicator(),)
-                                            ),
+                                              placeholder: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              )),
+                                        ),
+                                      ),
+                                      if (videoData!.videoUrl == null)
+                                        Center(
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.black),
                                           ),
                                         ),
-                                        if (videoData!.videoUrl == null)
-                                          Center(
-                                            child: CircularProgressIndicator(
-                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                    Text(
-                                      videoData!.caption,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                    ],
+                                  ),
+                                  Text(
+                                    videoData!.caption,
+                                    style: const TextStyle(
+                                        fontSize: 12, color: Colors.white),
+                                  ),
+                                ],
                               ),
-                            );
+                            ),
+                          );
                         },
                       );
                     }
                   },
                 ),
-            ));
+              ));
   }
 }

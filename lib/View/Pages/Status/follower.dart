@@ -27,7 +27,7 @@ class _FollowerScreenState extends State<FollowerScreen> {
     return Scaffold(
       body: Column(
         children: [
-          searchWidget(),
+          // searchWidget(),
           SizedBox(height: 20),
           Expanded(
               child: ListView.builder(
