@@ -14,7 +14,7 @@ class QuayVideoProvider extends ChangeNotifier{
 
   void setVideoFile(XFile videoFile){
     this.videoFile = videoFile;
-    notifyListeners();
+    // notifyListeners();
   }
   void setChecked(){
     isChecked = !isChecked!;

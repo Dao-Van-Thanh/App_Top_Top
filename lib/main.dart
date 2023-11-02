@@ -24,7 +24,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Provider/chats_provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
 import 'View/Screen/DangKy/man_hinh_dang_ky.dart';
-import 'View/Widget/bottom_navigation.dart';
 import 'firebase_options.dart';
 
 Future<void> _backgroundMessageHandler(RemoteMessage message) async {

@@ -28,8 +28,8 @@ class MusicProvider extends ChangeNotifier {
         linkUrl: 'https://firebasestorage.googleapis.com/v0/b/tiktok-clone-eb2a1.appspot.com/o/inside-you-162760.mp3?alt=media&token=a728e6af-99e0-49f0-aae7-9467d5664ff2&_gl=1*12iz0y4*_ga*MTUzMjk2MDg3My4xNjk1NjQxMDA4*_ga_CW55HF8NVT*MTY5ODg0NjgyMy4xMDkuMS4xNjk4ODQ3MjMzLjUzLjAuMA..', isFocus: false),
   ];
 
-  String? _linkUrl;
-  String get linkUrl => _linkUrl!;
+  String _linkUrl = '';
+  String get linkUrl => _linkUrl;
   void initAudioPlayer(int index) async{
     await player.setUrl(musics[index].linkUrl);
     player.play();
