@@ -1,54 +1,76 @@
+import 'package:app/Provider/music_provider.dart';
 import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:provider/provider.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
+import '../../Provider/load_videoProvider.dart';
 import '../../Provider/video_provider.dart';
 import '../../Services/call_video_service.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final String videoId;
+  final String songUrl;
   final VideoProvider videoProvider;
-  const VideoPlayerItem(this.videoUrl,this.videoId, this.videoProvider, {Key? key})
+  const VideoPlayerItem(this.videoUrl,this.videoId, this.videoProvider, this.songUrl, {Key? key})
       : super(key: key);
   @override
   _VideoPlayerItemState createState() => _VideoPlayerItemState();
 }
 
 class _VideoPlayerItemState extends State<VideoPlayerItem> {
-  late VideoPlayerController videoPlayerController;
+  late VideoPlayerController? videoPlayerController;
   late ChewieController chewieController;
   bool isLoading = true;
   bool isPlay = true;
   bool _isSuccess = false;
+
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.network(widget.videoUrl);
-    videoPlayerController.initialize().then((_) {
-      videoPlayerController.setVolume(1);
-      videoPlayerController.play();
-      videoPlayerController.setLooping(true);
-      setState(() {
-        isLoading = false;
+    final loadVideoProvider = context.read<LoadVideoProvider>();
+    videoPlayerController = loadVideoProvider.videoPlayer;
+    if (videoPlayerController == null) {
+      videoPlayerController = VideoPlayerController.network(widget.videoUrl);
+    }
+    _initializeVideoPlayer();
+  }
+  void _initializeVideoPlayer() async{
+    if (videoPlayerController != null) {
+      videoPlayerController!.initialize().then((_) {
+        videoPlayerController!.setVolume(1);
+        videoPlayerController!.play();
+        videoPlayerController!.setLooping(true);
+        setState(() {
+          isLoading = false;
+        });
       });
-    });
+    }
   }
   @override
   void dispose() {
     super.dispose();
-    videoPlayerController.dispose();
+    videoPlayerController!.dispose();
   }
+  int count =0;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
+    final musicProvider = Provider.of<MusicProvider>(context, listen: false);
+
+    if(widget.songUrl.length>0 && musicProvider.isCheckMusicPlay==false){
+      musicProvider.initAudioPlayerForScreenVideo(widget.songUrl);
+      musicProvider.setIsCheckMusicPlay();
+    }
+      return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       body: GestureDetector(
@@ -58,10 +80,16 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
         onTap: () {
           widget.videoProvider.changeControlVideo();
           if(widget.videoProvider.controlVideo == true){
-            videoPlayerController.play();
-          }else(
-              videoPlayerController.pause()
-          );
+            videoPlayerController!.play();
+            if(widget.songUrl.length>0){
+              musicProvider.playAudio();
+            }
+          }else {
+            videoPlayerController!.pause();
+            if(widget.songUrl.length>0){
+              musicProvider.pauseAudio();
+            }
+          }
         },
         child: Container(
           width: size.width,
@@ -72,7 +100,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              VideoPlayer(videoPlayerController),
+              VideoPlayer(videoPlayerController!),
               if (isLoading)
                 CircularProgressIndicator(
                   strokeWidth: 4,

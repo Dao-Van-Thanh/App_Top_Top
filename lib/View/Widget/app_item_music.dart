@@ -1,15 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AppItemMusic extends StatelessWidget {
+class AppItemMusic extends StatefulWidget {
   final String thumb;
   final String title;
   final bool? isForcus;
   AppItemMusic({Key? key, required this.thumb, required this.title, required this.isForcus}) : super(key: key);
+
+  @override
+  State<AppItemMusic> createState() => _AppItemMusicState();
+}
+
+class _AppItemMusicState extends State<AppItemMusic> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color:isForcus!?Colors.grey.withOpacity(0.3):Colors.white,
+      color:widget.isForcus!?Colors.grey.withOpacity(0.3):Colors.white,
       child: Row(
         children: [
           Container(
@@ -23,7 +29,7 @@ class AppItemMusic extends StatelessWidget {
               ),
               image: DecorationImage(
                 image: NetworkImage(
-                  thumb,
+                  widget.thumb,
                 ),
                 fit: BoxFit.cover,
               ),
@@ -31,10 +37,10 @@ class AppItemMusic extends StatelessWidget {
           ),
           SizedBox(width: 10,),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start, // Đặt crossAxisAlignment thành CrossAxisAlignment.start
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                title,
+                widget.title,
                 style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ],

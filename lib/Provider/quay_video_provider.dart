@@ -5,10 +5,15 @@ class QuayVideoProvider extends ChangeNotifier{
   XFile? videoFile;
   bool isChecked = true;
   bool isControlMusic = false;
+  String title = 'Thêm âm thanh';
+
+  void setTitle(String text){
+    this.title = text;
+    notifyListeners();
+  }
 
   void setVideoFile(XFile videoFile){
     this.videoFile = videoFile;
-
     notifyListeners();
   }
   void setChecked(){
@@ -20,5 +25,7 @@ class QuayVideoProvider extends ChangeNotifier{
     isControlMusic = !isControlMusic!;
     notifyListeners();
   }
-
+  void dispose() {
+    super.dispose();
+  }
 }

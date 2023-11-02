@@ -1,5 +1,6 @@
 
 import 'package:app/Provider/page_provider.dart';
+import 'package:app/Services/call_video_service.dart';
 import 'package:app/Services/notifications_service.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Chats/man_hinh_hop_thu.dart';
@@ -41,6 +42,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> with Widg
       'lastActive':DateTime.now(),
       'isOnline':true
     });
+
   }
 
   // kiểm tra người dùng nếu offline

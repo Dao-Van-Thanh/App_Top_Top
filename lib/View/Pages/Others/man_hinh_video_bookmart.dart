@@ -116,7 +116,7 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                             child: Stack(
                               alignment: Alignment.bottomLeft,
                               children: [
-                                VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
+                                VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider,videoData.songUrl),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [

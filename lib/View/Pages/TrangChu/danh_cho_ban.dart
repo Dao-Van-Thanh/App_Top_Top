@@ -24,7 +24,6 @@ class _ForYouState extends State<ForYou> {
     // TODO: implement initState
     super.initState();
     pageController.addListener(() {
-
     });
   }
 
@@ -56,7 +55,6 @@ class _ForYouState extends State<ForYou> {
           return Text('Lỗi: ${snapshot.error}');
         } else {
           final videoList = snapshot.data;
-
           return Scaffold(
             resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
@@ -125,6 +123,7 @@ class _ForYouState extends State<ForYou> {
                                 videoUrl=videoData.videoUrl,
                                 videoData.id,
                                 videoProvider,
+                                videoData.songUrl,
                               ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,

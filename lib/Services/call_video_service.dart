@@ -34,7 +34,6 @@ class CallVideoService {
   Stream<List<VideoModel>> getVideosStream() {
     return _firestore
         .collection('Videos')
-        .orderBy('views', descending: true) // Sắp xếp theo trường 'view' giảm dần (cao nhất đến thấp nhất)
         .snapshots()
         .map((snapshot) {
       List<VideoModel> videoList = [];
@@ -48,14 +47,13 @@ class CallVideoService {
     return _firestore
         .collection('Videos')
         .orderBy('views', descending: true)
-        .limit(10) // Giới hạn chỉ lấy 10 video đầu tiên
         .snapshots()
         .map((snapshot) {
       List<VideoModel> videoList = [];
       snapshot.docs.forEach((doc) {
         videoList.add(VideoModel.fromSnap(doc));
       });
-      return List.generate(1000, (index) => videoList[index % 10]);
+      return videoList;
     });
   }
   Stream<List<VideoModel>> getVideosStreamByAuthor(String uid) {
@@ -161,5 +159,13 @@ class CallVideoService {
       });
     }
   }
+  // Future<void> updateUrlVideo() async{
+  //   await FirebaseFirestore.instance
+  //       .collection('Videos')
+  //       .doc()
+  //       .update({
+  //     'videoUrl' : 'https://a253-2a09-bac1-7a80-50-00-17-169.ngrok-free.app/uploads/1698302425463-Download%20(5).mp4'
+  //   });
+  // }
 
 }
