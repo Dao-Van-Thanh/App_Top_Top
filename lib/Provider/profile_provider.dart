@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:app/Model/video_model.dart';
 import 'package:app/Services/tab_video_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileProvider with ChangeNotifier {
   List<VideoModel> _videos = [];
   bool _isLoading = false;
   TextEditingController searchController = TextEditingController();
   String isSearch = '';
+  bool _isAdmin = false;
 
   List<VideoModel> get videos => _videos;
   bool get isLoading => _isLoading;
+  bool get isAdmin => _isAdmin;
 
-
+  void updateRoles(bool checkRoles){
+    _isAdmin = checkRoles;
+    notifyListeners();
+  }
   void setVideos(List<VideoModel> list){
     _videos = list;
     notifyListeners();

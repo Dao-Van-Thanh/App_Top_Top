@@ -1,19 +1,14 @@
 import 'package:app/Model/comment_model.dart';
-import 'package:app/Provider/text_provider.dart';
 import 'package:app/Services/user_service.dart';
-import 'package:app/View/Pages/comments/footerDialog.dart';
 import 'package:app/View/Pages/comments/footer_dialog_recomment.dart';
 import 'package:app/View/Pages/comments/notifileDelete.dart';
-import 'package:app/View/Pages/comments/recomment.dart';
 import 'package:app/View/Widget/list_recomments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Model/user_model.dart';
 import '../../../Provider/comments_provider.dart';
-import '../../../Provider/video_provider.dart';
 import '../../../Services/comment_service.dart';
 
 class ShowComment extends StatelessWidget {
