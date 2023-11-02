@@ -92,6 +92,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
 
   @override
   Widget build(BuildContext context) {
+    final musicProvider = Provider.of<MusicProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -131,12 +132,14 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                               height: double.maxFinite,
                               child: ElevatedButton(
                                 onPressed: () {
+                                  String songUrl = musicProvider.linkUrl;
                                   videoController
-                                      ?.dispose(); // Giải phóng tài nguyên
+                                      ?.dispose();
+                                  musicProvider.stopAudio();
                                   Navigator.push(context,
                                         MaterialPageRoute(builder:
                                             (context) =>
-                                                ManHinhDangVideo(widget.file),));
+                                                ManHinhDangVideo(widget.file,songUrl),));
                                 },
                                 child: Text('Tiếp'),
                                 style: ButtonStyle(
@@ -178,7 +181,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                         ),
                         Expanded(
                             child: Text(
-                          'Thêm âm thanh',
+                              provider.title,
                           style: TextStyle(color: Colors.white, fontSize: 15),
                         ))
                       ],
@@ -190,6 +193,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                   onPressed: () async {
                     bool cancel = (await _showCancelDialog()) as bool;
                     if (cancel) {
+                      provider.dispose();
                       Navigator.of(context).pop();
                     }
                   },
@@ -218,12 +222,9 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
   }
 
 
-  AudioPlayer audioPlayer = AudioPlayer();
-  String audioUrl =
-      'https://d016-118-70-48-14.ngrok-free.app/uploads/1698396298071-Baddie-IVE-11947733.mp3';
-  bool isCheck = true;
   void showBottomDialog(BuildContext context) {
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
+    final player = AudioPlayer();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Đặt isScrollControlled thành true
@@ -240,26 +241,29 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
             child: ListView.builder(
                 itemCount: musicProvider.musics.length,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: GestureDetector(
-                      onTap: () async {
-                        final player = AudioPlayer(); // Create a player
-                        // if (isCheck == true) {
-                        //   final duration = await player.setUrl(audioUrl);
-                        //   player.stop();
-                        //   print('dung phat nhac');
-                        // }
-                        setState(() {
-                          musicProvider.musics[index].isFocus = musicProvider.musics[index].isFocus==true?false:true;
-                        });
-                      },
-                        child: AppItemMusic(
-                          thumb: musicProvider.musics[index].thumb,
-                          title: musicProvider.musics[index].title,
-                          isForcus: musicProvider.musics[index].isFocus,
+                  return Consumer<MusicProvider>(
+                    builder: (context,musicProvider,child){
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: GestureDetector(
+                          onTap: () async {
+                            musicProvider.toggleMusicFocus(index);
+                            if(musicProvider.musics[index].isFocus == true){
+                                musicProvider.initAudioPlayer(index);
+                                provider.setTitle(musicProvider.musics[index].title);
+                              }else{
+                              musicProvider.stopAudio();
+                              provider.setTitle('Thêm âm thanh');
+                            }
+                          },
+                          child: AppItemMusic(
+                            thumb: musicProvider.musics[index].thumb,
+                            title: musicProvider.musics[index].title,
+                            isForcus: musicProvider.musics[index].isFocus,
+                          ),
                         ),
-                    ),
+                      );
+                    }
                   );
                 }));
       },

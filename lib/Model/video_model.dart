@@ -8,6 +8,7 @@ class VideoModel {
   List comments;
   int shareCount;
   String songName;
+  String songUrl;
   String caption;
   String videoUrl;
   String profilePhoto;
@@ -23,6 +24,7 @@ class VideoModel {
         required this.comments,
         required this.shareCount,
         required this.songName,
+        required this.songUrl,
         required this.caption,
         required this.videoUrl,
         required this.blockComments,
@@ -39,6 +41,7 @@ class VideoModel {
     "comments": comments,
     "shareCount": shareCount,
     "songName": songName,
+    "songUrl": songUrl,
     "caption": caption,
     "blockComments": blockComments,
     "views": views,
@@ -56,6 +59,7 @@ class VideoModel {
       comments: snapshot['comments'],
       shareCount: snapshot['shareCount'],
       songName: snapshot['songName'],
+      songUrl: snapshot['songUrl'],
       caption: snapshot['caption'],
       videoUrl: snapshot['videoUrl'],
       blockComments: snapshot['blockComments'],

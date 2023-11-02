@@ -2,6 +2,7 @@ import 'package:app/View/Pages/TrangChu/danh_cho_ban.dart';
 import 'package:app/View/Pages/TrangChu/timkiem_trangchu.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../Widget/video.dart';
 import 'dang_follow.dart';
 
 class Manhinhtrangchu extends StatefulWidget {

@@ -46,7 +46,7 @@ class DangVideoService{
   }
 
   // hàm thêm video vào bảng videos
-  Future<void> _addVideoToFirestore(String videoUrl, String caption,bool blockComments) async {
+  Future<void> _addVideoToFirestore(String videoUrl, String caption,bool blockComments, String songUrl) async {
     if (user == null) {
       print('Người dùng chưa đăng nhập.');
       return;
@@ -65,6 +65,7 @@ class DangVideoService{
         'comments': [],
         'shareCount': 0,
         'songName': 'Tên bài hát',
+        'songUrl':songUrl,
         'caption': caption,
         'videoUrl': videoUrl,
         'blockComments': blockComments,
@@ -80,11 +81,11 @@ class DangVideoService{
 
 
   // hàm chính: đăng video
-  Future<bool> DangVideo(String caption,bool blockComments,XFile file) async {
+  Future<bool> DangVideo(String caption,bool blockComments,XFile file, String musicChoose) async {
       try{
         String videoUrl = await _uploadVideoToStorage(file) ?? '';
         if(videoUrl.isNotEmpty){
-          await _addVideoToFirestore(videoUrl,caption,blockComments);
+          await _addVideoToFirestore(videoUrl,caption,blockComments,musicChoose);
           return true;
         }else{
           return false;
