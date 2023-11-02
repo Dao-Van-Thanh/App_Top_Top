@@ -11,6 +11,8 @@ import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/Provider/text_provider.dart';
 import 'package:app/Provider/video_provider.dart';
+import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
+import 'package:app/View/Pages/Profile/tab_admin.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_kiem_tra_video.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -71,7 +73,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: ManHinhDangKy(),
+      // home: ManHinhProfile(),
       home: Bottom_Navigation_Bar(),
     );
   }

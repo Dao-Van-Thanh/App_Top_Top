@@ -35,7 +35,6 @@ class _searchWidgetState extends State<searchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.controller);
     return Container(
       margin: EdgeInsets.all(15),
       height: 40,
@@ -45,6 +44,7 @@ class _searchWidgetState extends State<searchWidget> {
 
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
             onPressed: () {// Handle emoji picker here.
@@ -55,6 +55,7 @@ class _searchWidgetState extends State<searchWidget> {
            Expanded(
               child: TextField(
                 maxLines: 1,
+
                 controller: widget.controller,
                 decoration: InputDecoration(
                   hintText: 'Tìm kiếm User',
