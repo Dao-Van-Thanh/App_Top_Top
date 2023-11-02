@@ -39,8 +39,6 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar>
     //Sửa trạng thái người dùng đã online
     UserService.updateStatusUser(
         {'lastActive': DateTime.now(), 'isOnline': true});
-
-    UserService().getCurrentLocation('uid');
   }
 
   // kiểm tra người dùng nếu offline

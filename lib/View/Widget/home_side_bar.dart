@@ -3,11 +3,10 @@ import 'package:app/Services/call_video_service.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_chinh_sua_video.dart';
 import 'package:app/View/Pages/comments/dialog_comments.dart';
 import 'package:app/View/Widget/appButtons.dart';
-import 'package:chewie/chewie.dart';
+import 'package:app/View/Widget/share.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../Model/video_model.dart';
 import '../../Provider/page_provider.dart';
 import '../../Provider/video_provider.dart';
@@ -182,7 +181,7 @@ class HomeSideBar extends StatelessWidget {
                   ),
                 );
                 break;
-              case 'more':
+              case 'more':{
                 showDialog(context: context, builder: (BuildContext context) {
                   return Align(
                     alignment: Alignment.bottomCenter,
@@ -247,6 +246,11 @@ class HomeSideBar extends StatelessWidget {
                   );
                 });
                 break;
+              }
+              case 'share':{
+                ShareVideo.shareVideo(videoProvider.videoId, videoProvider.videoUrl);
+                break;
+              }
               default:
             }
           },
@@ -326,5 +330,6 @@ class HomeSideBar extends StatelessWidget {
       ),
     );
   }
+
 }
 
