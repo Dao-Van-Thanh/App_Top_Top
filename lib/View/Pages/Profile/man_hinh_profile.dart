@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:js_interop';
 
 import 'package:app/Model/user_model.dart';
 import 'package:app/Services/user_service.dart';

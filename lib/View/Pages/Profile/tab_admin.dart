@@ -1,5 +1,5 @@
 import 'package:app/Provider/profile_provider.dart';
-import 'package:app/Services/user_service.dart';
+import 'package:app/Services/admin_service.dart';
 import 'package:app/View/Widget/sreach_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +31,9 @@ class TabAdmin extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(flex:1,child: searchWidget(profileProvider: profileProvider, controller: controller)),
+          Expanded(flex:0,child: searchWidget(profileProvider: profileProvider, controller: controller)),
           Expanded(
-            flex: 8,
+            flex: 1,
             child: StreamBuilder(
                 stream: FirebaseFirestore.instance.collection("Users").snapshots(),
                 builder: (context, snapshot) {
@@ -43,17 +43,15 @@ class TabAdmin extends StatelessWidget {
                     return Text("Error: ${snapshot.error}");
                   }else{
                   final docs = snapshot.data!.docs;
-                  return Consumer<ProfileProvider>(
-                      builder: (context, value, child) {
-                        print(value.searchController.text);
-                        return ListView.builder(
+                  return ChangeNotifierProvider<ProfileProvider>(
+                    create: (context) => ProfileProvider(),
+                        child: ListView.builder (
                           itemCount: docs.length,
                           itemBuilder: (context, index) {
                             final data = docs[index].data();
-                            return UserCard(data);
+                            return UserCard(data,index);
                           },
-                        );
-                      },
+                        ),
                   );
 
                   }
@@ -64,7 +62,8 @@ class TabAdmin extends StatelessWidget {
       )
     );
   }
-  Widget UserCard(Map<String,dynamic> data){
+  Widget UserCard(Map<String,dynamic> data,int index){
+
     return Container(
 
       padding: EdgeInsets.all(10),
@@ -88,16 +87,23 @@ class TabAdmin extends StatelessWidget {
                   ],
                 ),
               ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Color(0x61EF307A)),
-                  minimumSize: MaterialStateProperty.all(Size(60, 40)), // Đặt kích thước tối thiểu (rộng x cao)
-                  padding: MaterialStateProperty.all(EdgeInsets.all(10)), // Đặt padding (khoảng cách xung quanh văn bản)
-                ),
-                onPressed: () {
-                  print(data['uid']);
+              Consumer<ProfileProvider>(
+                builder: (context, provier, child) {
+                  Color buttonColor = data['ban'] == true ? Color(0x61ABA8A8) : Color(0x61EF307A);
+                  String buttonText = data['ban'] == true ? 'UnBan' : 'Ban';
+                return ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(buttonColor),
+                    minimumSize: MaterialStateProperty.all(Size(60, 40)), // Đặt kích thước tối thiểu (rộng x cao)
+                    padding: MaterialStateProperty.all(EdgeInsets.all(10)), // Đặt padding (khoảng cách xung quanh văn bản)
+                  ),
+                  onPressed: () async{
+                    provier.banUser();
+                    await AdminService().banUser(data['uid'], provier.ban);
+                  },
+                  child: Text(buttonText),
+                );
                 },
-                child: Text("Vô hiệu hóa"),
               ),
               SizedBox(width: 10),
               ElevatedButton(
