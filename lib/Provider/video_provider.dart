@@ -5,15 +5,22 @@ import '../Model/video_model.dart';
 class VideoProvider extends ChangeNotifier {
   int countLike = 0;
   int countComment = 0;
+  int countSave = 0;
   String caption = '';
   String profilePhoto = '';
   String username = '';
   String videoId = '';
   String authorId='';
   String videoUrl ='';
+  bool blockComments =false;
   bool controlVideo = true;
+
+  bool isDownloading = false;
+  bool downloadSuccess = false;
+
   List<Color> iconColors = [Colors.white, Colors.white, Colors.white];
   bool hasCheckedLike = false;
+  bool hasCheckSave = false;
   bool hasFollowing = false;
   List<VideoModel> listVideo=[];
 
@@ -21,10 +28,33 @@ class VideoProvider extends ChangeNotifier {
     hasFollowing = !hasFollowing;
     notifyListeners();
   }
-  void setValue(int countLikedata, int countCommentdata, String captiondata,
-      String profilePhotodata, String usernamedata, String videoIddata,String authorIdData, String videoUrlData) {
+  void setHasSave(){
+    hasCheckSave = !hasCheckSave;
+    notifyListeners();
+  }
+  void setIsDownloading(){
+    isDownloading = !isDownloading;
+    notifyListeners();
+  }
+  void setDownloadSuccess(){
+    downloadSuccess = !downloadSuccess;
+    notifyListeners();
+  }
+  void setValue(
+      bool blockCommentsData,
+      int countLikedata,
+      int countCommentdata,
+      int countSavedata,
+      String captiondata,
+      String profilePhotodata,
+      String usernamedata,
+      String videoIddata,
+      String authorIdData,
+      String videoUrlData) {
     countLike = countLikedata;
+    blockComments = blockCommentsData;
     countComment = countCommentdata;
+    countSave = countSavedata;
     caption = captiondata;
     profilePhoto = profilePhotodata;
     username = usernamedata;
@@ -42,8 +72,24 @@ class VideoProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+  void incrementSaveVideo() {
+    if (iconColors[1] == Colors.white) {
+      iconColors[1] = Colors.yellow;
+      countSave += 1;
+    } else {
+      iconColors[1] = Colors.white;
+      countSave -= 1;
+    }
+    notifyListeners();
+  }
+
   void changeColor(){
     iconColors[0] = Colors.red;
+    notifyListeners();
+  }
+  void changeColorSave(){
+    iconColors[1] = Colors.yellow;
+
     notifyListeners();
   }
   void changeControlVideo(){

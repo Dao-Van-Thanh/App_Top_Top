@@ -1,5 +1,6 @@
 
 import 'package:app/Provider/page_provider.dart';
+import 'package:app/Services/notifications_service.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Chats/man_hinh_hop_thu.dart';
 import 'package:app/View/Pages/ManhinhShop.dart';
@@ -28,12 +29,14 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> with Widg
     ManHinhHopThu(),
     ManHinhProfile(),
   ];
+  final notification = NotificationsService();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    notification.firebaseNotification(context);
 
     //Sửa trạng thái người dùng đã online
     UserService.updateStatusUser({

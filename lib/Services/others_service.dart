@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../Model/user_model.dart';
-
 class OthersService {
   static Stream<DocumentSnapshot> getUserDataStream() {
     final user = FirebaseAuth.instance.currentUser;
@@ -78,7 +76,6 @@ class OthersService {
       final existingChatRooms = querySnapshot.docs;
       // kiểm tra nếu cả 2 chũng follow thì tạo phòng chat
       final checkFollow = following.contains(idOther) && follower.contains(idOther);
-
       if (checkFollow) {
         // 2. Truy cập bảng Chats và kiểm tra từng phòng chat.
         for (final chatRoom in existingChatRooms) {

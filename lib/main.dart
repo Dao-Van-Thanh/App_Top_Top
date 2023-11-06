@@ -17,6 +17,7 @@ import 'package:app/View/Pages/Status/man_hinh_trang_thai.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,12 +26,26 @@ import 'Provider/chats_provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
 import 'Provider/video_provider.dart';
 import 'firebase_options.dart';
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+
+Future<void> _backgroundMessageHandler(RemoteMessage message)async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await FirebaseMessaging.instance.getInitialMessage();
+
+  FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
+
   await SharedPreferences.getInstance();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => MyData()),

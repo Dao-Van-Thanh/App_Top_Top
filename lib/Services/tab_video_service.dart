@@ -44,5 +44,22 @@ class TabVideoService{
       return [];
     }
   }
+  static Future<List<VideoModel>> getVideoBookmarks(String uid) async {
+    try {
+      final CollectionReference videosCollection = FirebaseFirestore.instance.collection('Videos');
+      final QuerySnapshot querySnapshot = await videosCollection
+          .where('userSaveVideos', arrayContains: uid)
+          .get();
+      final List<VideoModel> videos = querySnapshot.docs
+          .map((doc) => VideoModel.fromSnap(doc))
+          .toList();
+      return videos;
+    } catch (error) {
+      print('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
+      return [];
+    }
+  }
+
+
 
 }

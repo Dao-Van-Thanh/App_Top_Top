@@ -16,15 +16,17 @@ class ManHinhChinhSuaVideo extends StatefulWidget {
   ManHinhChinhSuaVideo({required this.videoProvider});
 
   @override
-  State<ManHinhChinhSuaVideo> createState() => _ManHinhChinhSuaVideoState();
+  State<ManHinhChinhSuaVideo> createState() => _ManHinhChinhSuaVideoState(videoProvider.blockComments);
 }
 
 class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
+  bool checked;
+  _ManHinhChinhSuaVideoState(this.checked);
+
   @override
   Widget build(BuildContext context) {
     TextEditingController _textEditingController = TextEditingController();
     _textEditingController.text = widget.videoProvider.caption;
-    final pageProvider = Provider.of<PageProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -56,9 +58,9 @@ class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.25,
                     child: TextField(
-                      controller:_textEditingController ,
+                      controller: _textEditingController,
                       textAlignVertical: TextAlignVertical.top,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Viết nội dung video của bạn ở đây',
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.all(10),
@@ -75,32 +77,68 @@ class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
                     child: Container(
                       child: AspectRatio(
                         aspectRatio: 16 / 9,
-                        child: VideoPlayerItemEdit(widget.videoProvider.videoUrl),
+                        child:
+                            VideoPlayerItemEdit(widget.videoProvider.videoUrl),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
+            Container(
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.comment_bank_outlined,
+                    size: 30,
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  const Text(
+                    'Cho phép bình luận ',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  Spacer(),
+                  Switch(
+                    value: !checked,
+                    onChanged: (value) {
+                      setState(() {
+                        checked = !checked;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
             Flexible(
               child: GestureDetector(
                 onTap: () {
-                  CallVideoService().updateVideoCaption(widget.videoProvider.videoId, _textEditingController.text);
+                  CallVideoService().updateVideoCaption(
+                      widget.videoProvider.videoId,
+                      _textEditingController.text,
+                      checked);
                   Navigator.of(context).pop();
                 },
                 child: Container(
-                  margin: EdgeInsets.only(left: 10,right: 10),
+                  margin: EdgeInsets.only(left: 10, right: 10),
                   width: double.maxFinite,
                   height: 50,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.redAccent
-                  ),
+                      color: Colors.redAccent),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.arrow_upward,color: Colors.white,),
-                      Text('Lưu',style:TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)
+                      Icon(
+                        Icons.arrow_upward,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        'Lưu',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      )
                     ],
                   ),
                 ),

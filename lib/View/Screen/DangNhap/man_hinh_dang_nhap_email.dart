@@ -2,6 +2,8 @@ import 'package:app/Services/dang_nhap_email_service.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
+import '../../../Services/notifications_service.dart';
+
 class ManHinhDangNhapEmail extends StatefulWidget {
   @override
   _ManHinhDangNhapEmail createState() => _ManHinhDangNhapEmail();
@@ -119,7 +121,10 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                   ),
                 );
                 bool check = await service.DangNhapBangEmail(email, password);
+                NotificationsService notifications = NotificationsService();
                 if(check){
+                  await notifications.requestPermission();
+                  await notifications.getToken();
                   Navigator.push(context, MaterialPageRoute(builder:
                       (context) => const Bottom_Navigation_Bar(),));
                 }else{

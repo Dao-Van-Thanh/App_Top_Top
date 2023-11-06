@@ -32,7 +32,11 @@ class CallVideoService {
   }
 
   Stream<List<VideoModel>> getVideosStream() {
-    return _firestore.collection('Videos').limit(10).snapshots().map((snapshot) {
+    return _firestore
+        .collection('Videos')
+        .orderBy('views', descending: true) // Sắp xếp theo trường 'view' giảm dần (cao nhất đến thấp nhất)
+        .snapshots()
+        .map((snapshot) {
       List<VideoModel> videoList = [];
       snapshot.docs.forEach((doc) {
         videoList.add(VideoModel.fromSnap(doc));
@@ -40,6 +44,7 @@ class CallVideoService {
       return videoList;
     });
   }
+
   Stream<List<VideoModel>> getVideosStreamByAuthor(String uid) {
     return _firestore.collection('Videos')
         .where('uid', isEqualTo: uid)
@@ -52,9 +57,31 @@ class CallVideoService {
       return videoList;
     });
   }
+  Stream<List<VideoModel>> getVideoBookmarks(String uid) {
+    final CollectionReference videosCollection = FirebaseFirestore.instance.collection('Videos');
+    return videosCollection
+        .where('userSaveVideos', arrayContains: uid)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => VideoModel.fromSnap(doc))
+          .toList();
+    })
+        .handleError((error) {
+      print('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
+    });
+  }
 
   Future<bool> checkLike(List<String> isdUserLiked) {
     for (var element in isdUserLiked) {
+      if (element == _auth.currentUser!.uid) {
+        return Future.value(true);
+      }
+    }
+    return Future.value(false);
+  }
+  Future<bool> checkUserSaveVideo(List<String> isdUserSave) {
+    for (var element in isdUserSave) {
       if (element == _auth.currentUser!.uid) {
         return Future.value(true);
       }
@@ -93,13 +120,32 @@ class CallVideoService {
     print(videoId);
     await _firestore.collection('Videos').doc(videoId).delete();
   }
-  Future<void> updateVideoCaption(String videoId, String newCaption) async {
+  Future<void> updateVideoCaption(String videoId, String newCaption,bool blockComments) async {
     try {
       await _firestore.collection('Videos').doc(videoId).update({
         'caption': newCaption,
+        'blockComments' : blockComments
       });
     } catch (error) {
       print('Error updating caption: $error');
+    }
+  }
+   saveVideo(String videoId) async{
+    DocumentSnapshot doc = await _firestore.collection('Users').doc(_auth.currentUser!.uid).get();
+    if ((doc.data()! as dynamic)['saveVideos'].contains(videoId)) {
+      await _firestore.collection('Users').doc(_auth.currentUser!.uid).update({
+        'saveVideos': FieldValue.arrayRemove([videoId]),
+      });
+      await _firestore.collection('Videos').doc(videoId).update({
+        'userSaveVideos': FieldValue.arrayRemove([_auth.currentUser!.uid]),
+      });
+    } else {
+      await _firestore.collection('Users').doc(_auth.currentUser!.uid).update({
+        'saveVideos': FieldValue.arrayUnion([videoId]),
+      });
+      await _firestore.collection('Videos').doc(videoId).update({
+        'userSaveVideos': FieldValue.arrayUnion([_auth.currentUser!.uid]),
+      });
     }
   }
 
