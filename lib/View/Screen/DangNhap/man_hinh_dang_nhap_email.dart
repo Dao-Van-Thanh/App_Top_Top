@@ -1,6 +1,8 @@
+import 'package:app/Services/admin_service.dart';
 import 'package:app/Services/dang_nhap_email_service.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:app/View/Widget/text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Services/notifications_service.dart';
@@ -131,15 +133,25 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 );
                 bool check = await service.DangNhapBangEmail(email, password);
                 NotificationsService notifications = NotificationsService();
-                if(check){
-                  await notifications.requestPermission();
-                  await notifications.getToken();
-                  Navigator.push(context, MaterialPageRoute(builder:
-                      (context) => const Bottom_Navigation_Bar(),));
+                final _auth = FirebaseAuth.instance.currentUser!.uid;
+                bool checkBan = await AdminService().getBanUid(_auth);
+                if(!checkBan) {
+                  if (check) {
+                    await notifications.requestPermission();
+                    await notifications.getToken();
+                    Navigator.push(context, MaterialPageRoute(builder:
+                        (context) => const Bottom_Navigation_Bar(),));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Tài khoản không chính xác!'),
+                      ),
+                    );
+                  }
                 }else{
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Tài khoản không chính xác!'),
+                      content: Text('Tài khoản có quyền truy cập!'),
                     ),
                   );
                 }
