@@ -3,7 +3,45 @@ import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap.dart';
 import 'package:app/View/Widget/button.dart';
 import 'package:flutter/material.dart';
 
+import '../../../Provider/dang_nhap_google_provider.dart';
+import '../../../Services/dang_nhap_facebook_service.dart';
+import '../../Widget/bottom_navigation.dart';
+
 class ManHinhDangKy extends StatelessWidget {
+  final DangNhapGooogleProvider dangnhapGGprovider = DangNhapGooogleProvider();
+
+  Future<void> _signInWithFacebook(BuildContext context) async {
+    final authService = DangNhapFacebookService();
+    final userCredential = await authService.signInWithFacebook(context);
+
+    if (userCredential != null) {
+      // Xử lý khi đăng nhập thành công (nếu cần)
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar()),
+      );
+    } else {
+      // Xử lý khi đăng nhập thất bại
+      print('Dang nhap that bai');
+    }
+  }
+
+  Future<void> _signInWithGoogle(BuildContext context) async {
+    await dangnhapGGprovider
+        .signInWithGoogle(); // Gọi hàm đăng nhập với Google từ AuthProvider
+
+    if (dangnhapGGprovider.user != null) {
+      // Xử lý khi đăng nhập thành công (nếu cần)
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar()),
+      );
+    } else {
+      // Xử lý khi đăng nhập thất bại
+      print('Dang nhap that bai');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,28 +56,35 @@ class ManHinhDangKy extends StatelessWidget {
               Texts(
                   "Tạo hồ sơ, follow các tài khoản khác, quay\n video của chính bạn,v.v ",
                   18,
-
                   FontWeight.normal),
               SizedBox(height: 40),
               ButtonCusstom(
                   text: "Đăng ký bằng số điện thoại & Email",
                   icon: Icons.person,
                   onPress: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder:
-                            (context) => ManHinhDangKyEmailWithSDT(),)
-                    );
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ManHinhDangKyEmailWithSDT(),
+                        ));
                   }),
               SizedBox(height: 40),
               ButtonCusstom(
-                  text: "Tiếp tục với Google",
-                  icon: Icons.g_mobiledata_sharp,
-                  onPress: () {}),
+                text: "Tiếp tục với Google",
+                icon: Icons.g_mobiledata_sharp,
+                onPress: () async {
+                  await _signInWithGoogle(
+                      context); // Gọi hàm đăng nhập với Google
+                },
+              ),
               SizedBox(height: 40),
               ButtonCusstom(
-                  text: "Tiếp tục với facebook",
-                  icon: Icons.facebook,
-                  onPress: () {}),
+                text: "Tiếp tục với facebook",
+                icon: Icons.facebook,
+                onPress: () async {
+                  await _signInWithFacebook(context);
+                },
+              ),
               SizedBox(height: 100),
               textButton(
                   "Bạn đã có tài khoản?", 'Đăng nhập', 18, FontWeight.bold, () {

@@ -293,7 +293,7 @@ class HomeSideBar extends StatelessWidget {
                 child: const Icon(
                   Icons.add,
                   color: Colors.white,
-                  size: 17,
+                  size: 23,
                 ),
               ),
             ),

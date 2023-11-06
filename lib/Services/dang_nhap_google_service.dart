@@ -20,13 +20,16 @@ class DangNhapGooogleService {
       // Lưu thông tin người dùng vào Firestore
       await _userCollection.doc(userCredential.user!.uid).set({
         'uid': userCredential.user!.uid,
-        'displayName': userCredential.user!.displayName ?? '',
         'email': userCredential.user!.email ?? '',
         'avatarURL': userCredential.user!.photoURL,
+        'gender' :'',
         'follower': [],
         'following': [],
         'fullname': userCredential.user!.displayName ?? '',
         'idTopTop': '@${createName(userCredential.user!.email)}',
+        'birth' : '24/10/2003',
+        'phone' : '',
+        'age' :'20'
         // Thêm các thông tin khác nếu cần
       });
 

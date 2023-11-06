@@ -25,13 +25,16 @@ class DangNhapFacebookService {
           // Người dùng mới đăng nhập hoặc thông tin người dùng đã tồn tại, lưu thông tin vào Firestore
           await _firestore.collection('Users').doc(userCredential.user!.uid).set({
             'uid': userCredential.user!.uid,
-            'displayName': userCredential.user!.displayName ?? '',
             'email': userCredential.user!.email ?? '',
             'avatarURL': userCredential.user!.photoURL,
+            'gender' :' ',
             'follower': [],
             'following': [],
             'fullname': userCredential.user!.displayName ?? '',
             'idTopTop': '@${createName(userCredential.user!.email)}',
+            'birth' : '24/10/2003',
+            'phone' : '',
+            'age' :'20'
             // Thêm các trường khác nếu cần
           });
 

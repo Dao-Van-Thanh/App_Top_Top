@@ -2,6 +2,7 @@
 import 'package:app/Provider/page_provider.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Chats/man_hinh_hop_thu.dart';
+import 'package:app/View/Pages/ManhinhShop.dart';
 import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
 import 'package:app/View/Widget/custom_icon_add_video.dart';
@@ -22,7 +23,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> with Widg
   int pageIdx = 0;
   List<Widget> pages = [
     Manhinhtrangchu(),
-    Text('data'),
+    ManhinhShop(),
     ManHinhQuayVideo(),
     ManHinhHopThu(),
     ManHinhProfile(),
@@ -93,10 +94,10 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar> with Widg
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.people,
+                Icons.shopping_basket,
                 size: 30,
               ),
-              label: 'Bạn bè',
+              label: 'Shop',
             ),
             BottomNavigationBarItem(
               icon: CustomIconButtonAddVideo(),

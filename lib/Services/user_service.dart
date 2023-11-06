@@ -12,11 +12,11 @@ class UserService {
 
   // Lấy thông tin user
   Future<Map<String, dynamic>?> getDataUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    currentUserId = prefs.getString('uid');
+    final saveUid = FirebaseAuth.instance.currentUser;
+    print(saveUid!.uid);
     try {
       DocumentSnapshot userDoc =
-      await firestore.collection('Users').doc(currentUserId).get();
+      await firestore.collection('Users').doc(saveUid!.uid).get();
       if (userDoc.exists) {
         Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>;
         return userData;
@@ -32,7 +32,6 @@ class UserService {
   Future<void> editDataUser(String uid,String label, String value) async {
     final firestore = FirebaseFirestore.instance;
     CollectionReference users = firestore.collection('Users');
-
     try {
       final userDoc = users.doc(uid);
       Map<String, dynamic> updateData = {};

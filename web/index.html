@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -32,15 +19,36 @@
   <title>app</title>
   <link rel="manifest" href="manifest.json">
 
+  <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
+
   <script>
-    // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = null;
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
+  const serviceWorkerVersion = null;
+
+  // Cấu hình Firebase với API Key và thông tin dự án của bạn
+  var firebaseConfig = {
+    apiKey: "AIzaSyB1hgbiBMCNMytB1YB4cku5_GN-luIuI7M",
+    authDomain: "app-top-top.firebaseapp.com",
+    projectId: "app-top-top",
+    storageBucket: "app-top-top.appspot.com",
+    messagingSenderId: "2859234896",
+    appId: "1:2859234896:web:32f3bad10b51f0bd020355"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  // Cấu hình OAuth Client ID cho Google Sign-In
+  firebase.auth().useDeviceLanguage();
+  var provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({
+    'client_id': '2859234896-4sen0ve0tgcsoq7lq5m89em45ccbh97u.apps.googleusercontent.com',
+  });
+</script>
+
   <script src="flutter.js" defer></script>
 </head>
 <body>
-  <script>
+<script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({

@@ -21,6 +21,8 @@ class ManHinhDangNhap extends StatelessWidget {
       );
     } else {
       // Xử lý khi đăng nhập thất bại
+      print('Dang nhap that bai');
+
     }
   }
 
@@ -35,6 +37,7 @@ class ManHinhDangNhap extends StatelessWidget {
       );
     } else {
       // Xử lý khi đăng nhập thất bại
+      print('Dang nhap that bai');
     }
   }
 
