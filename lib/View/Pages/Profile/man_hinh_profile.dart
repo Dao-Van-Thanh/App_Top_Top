@@ -74,7 +74,6 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 final rolesProvider = Provider.of<ProfileProvider>(context,listen: false);
                 try{
                   String? roles = snapshot.data?['role'];
-                  print(roles);
                   rolesProvider.updateRoles(roles=='admin');
                 }catch(e){
                   rolesProvider.updateRoles(false);
@@ -303,11 +302,12 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
             ),
           ),
           onPressed: () {
+            // final uid = FirebaseAuth.instance.currentUser!.uid;
             Navigator.push(
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    EditProfile(),
+                    EditProfile(uid: uId),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   const begin = Offset(0.0,

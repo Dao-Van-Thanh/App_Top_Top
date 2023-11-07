@@ -1,7 +1,9 @@
 import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Services/admin_service.dart';
+import 'package:app/View/Pages/Admin/user_screen.dart';
 import 'package:app/View/Widget/sreach_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +51,11 @@ class TabAdmin extends StatelessWidget {
                           itemCount: docs.length,
                           itemBuilder: (context, index) {
                             final data = docs[index].data();
-                            return UserCard(data,index);
+                            final uid = data['uid'];
+                            if (uid != FirebaseAuth.instance.currentUser!.uid) {
+                              return UserCard(data, index, context);
+                            }
+                            return SizedBox.shrink();
                           },
                         ),
                   );
@@ -62,7 +68,7 @@ class TabAdmin extends StatelessWidget {
       )
     );
   }
-  Widget UserCard(Map<String,dynamic> data,int index){
+  Widget UserCard(Map<String,dynamic> data,int index,BuildContext context){
 
     return Container(
 
@@ -113,7 +119,7 @@ class TabAdmin extends StatelessWidget {
                   padding: MaterialStateProperty.all(EdgeInsets.all(10)), // Đặt padding (khoảng cách xung quanh văn bản)
                 ),
                 onPressed: () {
-                  print(data['uid']);
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserScreen(uid: data['uid'])));
                 },
                 child: Text("Chi tiết"),
               ),

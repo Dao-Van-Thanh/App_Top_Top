@@ -9,14 +9,14 @@ import '../../../Provider/page_provider.dart';
 import 'man_hinh_edit_item_profile.dart';
 
 class EditProfile extends StatelessWidget {
-  const EditProfile({Key? key}) : super(key: key);
-
+  EditProfile({Key? key, required this.uid}) : super(key: key);
+  final String uid;
   @override
   Widget build(BuildContext context) {
     final editItemProvider = Provider.of<EditItemProfileProvider>(context);
     final editProfileProvider = Provider.of<EditProfileProvider>(context);
     return FutureBuilder<Map<String, dynamic>?>(
-      future: UserService().getDataUser(),
+      future: UserService().getDataUser(uid),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
