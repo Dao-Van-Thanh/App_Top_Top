@@ -16,13 +16,11 @@ class _ManHinhDangNhapOTPState extends State<ManHinhDangNhapOTP> {
   late Timer _timer; // Đối tượng Timer để đếm ngược
   bool _isCodeSubmitted = true;
   late DangNhapSdtProvider provider = Provider.of<DangNhapSdtProvider>(context);
-
   @override
   void initState() {
     super.initState();
     startTimer(); // Bắt đầu đếm ngược khi màn hình được tạo
   }
-
   void startTimer() {
     const oneSecond = Duration(seconds: 1);
     _timer = Timer.periodic(

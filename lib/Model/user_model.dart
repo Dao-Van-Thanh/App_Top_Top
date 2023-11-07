@@ -44,7 +44,6 @@ class UserModel {
 
   static UserModel fromSnap(DocumentSnapshot snap) {
     var snapshotData = snap.data() as Map<String, dynamic>;
-
     return UserModel(
       idTopTop: snapshotData['idTopTop'] ?? '',
       fullName: snapshotData['fullname'] ?? '',
@@ -61,7 +60,7 @@ class UserModel {
           .toList(),
       saveVideos: (snapshotData['saveVideos'] as List<dynamic>?)
           ?.map((e) => e.toString())
-          .toList(),
+          .toList() ?? [],
       gender: snapshotData['gender'] ?? 'None',
       uid: snapshotData['uid'] ?? '',
     );

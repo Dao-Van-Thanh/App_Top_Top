@@ -3,11 +3,10 @@ import 'package:app/Services/call_video_service.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_chinh_sua_video.dart';
 import 'package:app/View/Pages/comments/dialog_comments.dart';
 import 'package:app/View/Widget/appButtons.dart';
-import 'package:chewie/chewie.dart';
+import 'package:app/View/Widget/share.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../Model/video_model.dart';
 import '../../Provider/page_provider.dart';
 import '../../Provider/video_provider.dart';
@@ -168,22 +167,21 @@ class HomeSideBar extends StatelessWidget {
                 }
                 break;
               case 'comment':
-                showDialog(
+                showBottomSheet(
                   context: context,
-                  builder: (BuildContext context) {
-                    return Align(
-                      alignment: Alignment.bottomCenter, // Hiển thị ở cuối màn hình
-                      child: Container(
-                        width: double.infinity, // Đặt chiều rộng đầy đủ
-                        height: heightDialog, // Đặt chiều cao cố định
-                        color: Colors.white, // Màu nền của dialog
-                        child: CommentsDialog(videoId:videoProvider.videoId,videoProvider: videoProvider), // Thay thế YourDialogContent bằng nội dung của bạn
-                      ),
-                    );
-                  },
+                  builder: (BuildContext context) => Container(
+                    width: double.infinity,
+                    height: heightDialog,
+                    color: Colors.white,
+                    child: CommentsDialog(
+                      videoId: videoProvider.videoId,
+                      videoProvider: videoProvider,
+                      commentsSize: videoProvider.countComment,
+                    ),
+                  ),
                 );
                 break;
-              case 'more':
+              case 'more':{
                 showDialog(context: context, builder: (BuildContext context) {
                   return Align(
                     alignment: Alignment.bottomCenter,
@@ -248,6 +246,11 @@ class HomeSideBar extends StatelessWidget {
                   );
                 });
                 break;
+              }
+              case 'share':{
+                ShareVideo.shareVideo(videoProvider.videoId, videoProvider.videoUrl);
+                break;
+              }
               default:
             }
           },
@@ -327,5 +330,6 @@ class HomeSideBar extends StatelessWidget {
       ),
     );
   }
+
 }
 

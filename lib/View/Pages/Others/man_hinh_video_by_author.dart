@@ -80,7 +80,8 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                               videoData!.username,
                               videoData!.id,
                               videoData!.uid,
-                              videoData!.videoUrl
+                              videoData!.videoUrl,
+                              videoData.blockComments
                           );
                           if (!videoProvider.hasCheckedLike) {
                             videoProvider.hasCheckedLike = true;
@@ -103,32 +104,35 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                               }
                             });
                           }
-                          return Stack(
-                            alignment: Alignment.bottomLeft,
-                            children: [
-                              VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.height / 10,
-                                      child: VideoDetail(videoProvider),
+                          return GestureDetector(
+                            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+                            child: Stack(
+                              alignment: Alignment.bottomLeft,
+                              children: [
+                                VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider,videoData.songUrl),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        height:
+                                        MediaQuery.of(context).size.height / 10,
+                                        child: VideoDetail(videoProvider),
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height /
-                                          1.75,
-                                      child: HomeSideBar(
-                                          videoProvider, CallVideoService(),'man hinh nguoi khac',index,videoStream),
+                                    Expanded(
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height /
+                                            1.75,
+                                        child: HomeSideBar(
+                                            videoProvider, CallVideoService(),'man hinh nguoi khac',index,videoStream),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           );
                         },
                       ),

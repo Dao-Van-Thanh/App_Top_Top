@@ -10,8 +10,8 @@ import 'package:video_player/video_player.dart'; // Import thư viện video_pla
 
 class ManHinhDangVideo extends StatefulWidget {
   final XFile xflie;
-
-  ManHinhDangVideo(this.xflie);
+  final String musicChoose;
+  ManHinhDangVideo(this.xflie, this.musicChoose);
 
   @override
   _ManHinhDangVideoState createState() => _ManHinhDangVideoState();
@@ -280,7 +280,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
 
                                   DangVideoService service = DangVideoService();
                                   bool check =
-                                  await service.DangVideo(controller.text,blockComments, widget.xflie);
+                                  await service.DangVideo(controller.text,blockComments, widget.xflie,widget.musicChoose);
                                   if (check) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(

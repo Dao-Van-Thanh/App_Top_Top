@@ -1,3 +1,4 @@
+import 'package:app/Services/user_service.dart';
 import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_otp.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +12,7 @@ class DangNhapSdtProvider extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool isChecked = false;
   String phone = '';
+  String email ='';
   String error = '';
   bool isLoading = false;
   String verificationId = '';
@@ -42,6 +44,10 @@ class DangNhapSdtProvider extends ChangeNotifier {
     this.phone = phone;
     notifyListeners();
   }
+  void changeEmail(String email) {
+    this.email = email;
+    notifyListeners();
+  }
 
   void changeLoading(bool loading) {
     this.isLoading = loading;
@@ -51,6 +57,19 @@ class DangNhapSdtProvider extends ChangeNotifier {
   void changePhoneNumberCheck(bool isPhoneNumberCheck) {
     this.isPhoneNumberCheck = isPhoneNumberCheck;
     notifyListeners();
+  }
+
+  Future<void> sendPasswordResetEmail() async {
+    print('sendPasswordRestEmail');
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: email,
+      );
+      // Gửi email xác minh mật khẩu thành công
+    } catch (e) {
+      print('Lỗi: $e');
+      // Xử lý lỗi
+    }
   }
 
   Future<void> dangNhapPhone(BuildContext context) async {
@@ -78,32 +97,31 @@ class DangNhapSdtProvider extends ChangeNotifier {
     try {
       changeLoading(true);
       User? existingUser = await FirebaseAuth.instance.currentUser;
-      if (existingUser != null) {
         // Tạo một PhoneAuthCredential từ OTP và verificationId
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId,
           smsCode: otp,
         );
-
         // Xác minh OTP và đăng nhập người dùng
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithCredential(credential);
-        setMessage('Thành công');
-        changCheckOTP(false);
-        changeLoading(false);
-        // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
-        await notifications.requestPermission();
-        await notifications.getToken();
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Bottom_Navigation_Bar(),
-            ));
-      }else{
+        final user = await UserService().getUser(userCredential.user!.uid);
+        if(user!= null){
+          setMessage('Thành công');
+          changCheckOTP(false);
+          changeLoading(false);
+          // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
+          await notifications.requestPermission();
+          await notifications.getToken();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Bottom_Navigation_Bar(),
+              ));
+        }
         setMessage('Tài khoản không đúng, hãy thử lại!');
         changCheckOTP(true);
         changeLoading(false);
-      }
     } catch (e) {
       changeLoading(false);
       changCheckOTP(true);

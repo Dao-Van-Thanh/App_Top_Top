@@ -34,7 +34,6 @@ class CallVideoService {
   Stream<List<VideoModel>> getVideosStream() {
     return _firestore
         .collection('Videos')
-        .orderBy('views', descending: true) // Sắp xếp theo trường 'view' giảm dần (cao nhất đến thấp nhất)
         .snapshots()
         .map((snapshot) {
       List<VideoModel> videoList = [];
@@ -44,7 +43,19 @@ class CallVideoService {
       return videoList;
     });
   }
-
+  Stream<List<VideoModel>> getVideosStream1000() {
+    return _firestore
+        .collection('Videos')
+        .orderBy('views', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      List<VideoModel> videoList = [];
+      snapshot.docs.forEach((doc) {
+        videoList.add(VideoModel.fromSnap(doc));
+      });
+      return videoList;
+    });
+  }
   Stream<List<VideoModel>> getVideosStreamByAuthor(String uid) {
     return _firestore.collection('Videos')
         .where('uid', isEqualTo: uid)
@@ -146,6 +157,35 @@ class CallVideoService {
       await _firestore.collection('Videos').doc(videoId).update({
         'userSaveVideos': FieldValue.arrayUnion([_auth.currentUser!.uid]),
       });
+    }
+  }
+  // Future<void> updateUrlVideo() async{
+  //   await FirebaseFirestore.instance
+  //       .collection('Videos')
+  //       .doc()
+  //       .update({
+  //     'videoUrl' : 'https://a253-2a09-bac1-7a80-50-00-17-169.ngrok-free.app/uploads/1698302425463-Download%20(5).mp4'
+  //   });
+  // }
+
+  Future<void> addShareCountInTablesVideo(String idVideo)async{
+    try{
+      print('=========================');
+      final videoSnap = await FirebaseFirestore.instance
+          .collection('Videos')
+          .doc(idVideo)
+          .get();
+      print('${videoSnap['shareCount']}=========================');
+      int shareCount = videoSnap['shareCount'] ?? 0;
+      shareCount++;
+      await FirebaseFirestore.instance
+          .collection('Videos')
+          .doc(idVideo)
+          .update({
+        'shareCount' : shareCount
+      });
+    }catch(e){
+      print('=======================$e');
     }
   }
 

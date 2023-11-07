@@ -3,19 +3,18 @@ import 'dart:io';
 import 'package:app/Model/user_model.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
+import 'package:app/View/Pages/Profile/man_hinh_addFriend.dart';
 import 'package:app/View/Pages/Profile/showAvatar.dart';
+import 'package:app/View/Pages/Profile/tab_admin.dart';
 import 'package:app/View/Pages/Profile/tab_bookmark.dart';
 import 'package:app/View/Pages/Profile/tab_video.dart';
-import 'package:app/View/Pages/man_hinh_addFriend.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
-import 'package:app/View/Widget/avatar.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Provider/page_provider.dart';
 import '../../../Provider/profile_provider.dart';
@@ -67,10 +66,19 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               } else if (snapshot.hasError) {
                 return Text("Error: ${snapshot.error}");
               } else {
+
                 UserModel userModel = UserModel.fromSnap(snapshot.data!);
                 // idFolloer = userModel.follower as String;
                 List<String>? follower = userModel.follower;
                 List<String>? following = userModel.following;
+                final rolesProvider = Provider.of<ProfileProvider>(context,listen: false);
+                try{
+                  String? roles = snapshot.data?['role'];
+                  print(roles);
+                  rolesProvider.updateRoles(roles=='admin');
+                }catch(e){
+                  rolesProvider.updateRoles(false);
+                }
 
                 return Scaffold(
                   backgroundColor: Colors.white,
@@ -365,51 +373,103 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
             style: TextStyle(color: Colors.black),
           ),
         ),
+        const SizedBox(width: 20),
+        Consumer<ProfileProvider>(
+          builder: (context, provider, child) {
+          return Visibility(
+            visible: provider.isAdmin,
+            child: OutlinedButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(20.0), // Đặt giá trị padding là 10
+                ),
+                minimumSize: MaterialStateProperty.all<Size>(
+                  const Size(100,
+                      40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        TabAdmin(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(0.0,
+                          1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
+                      const end = Offset
+                          .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
+                      const curve =
+                          Curves.easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var offsetAnimation = animation.drive(tween);
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: const Text(
+                'Quản lý người dùng',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          );
+          },
+
+        ),
+
       ],
     );
   }
 
   TastBar(String uid, PageProvider pageProvider) {
     return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Stack(
-            fit: StackFit.passthrough,
-            children: [
-              Container(
-                margin: EdgeInsets.only(top: 40),
-                child: TabBarView(
-                  children: [
-                    TabVideo(uid,'TabVideo',pageProvider),
-                    TabBookMark(uid,'TabBookMark',pageProvider),
-                  ],
+          length: 2,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            body: Stack(
+              fit: StackFit.passthrough,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 40),
+                  child: TabBarView(
+                    children: [
+                      TabVideo(uid,'TabVideo',pageProvider),
+                      TabBookMark(uid,'TabBookMark',pageProvider),
+                    ],
+                  ),
                 ),
-              ),
-              const Positioned(
-                top: 0,
-                right: 0,
-                left: 0,
-                child: TabBar(
-                  indicatorColor: Colors.black,
-                  tabs: [
-                    Tab(
-                        child: Icon(
-                      Icons.video_collection,
-                      color: Colors.black,
-                    )),
-                    Tab(
-                        child: Icon(
-                      Icons.bookmark,
-                      color: Colors.black,
-                    )),
-                  ],
-                  labelPadding: EdgeInsets.symmetric(horizontal: 0),
+                const Positioned(
+                  top: 0,
+                  right: 0,
+                  left: 0,
+                  child: TabBar(
+                    indicatorColor: Colors.black,
+                    tabs: [
+                      Tab(
+                          child: Icon(
+                        Icons.video_collection,
+                        color: Colors.black,
+                      )),
+                      Tab(
+                          child: Icon(
+                        Icons.bookmark,
+                        color: Colors.black,
+                      )),
+
+                    ],
+                    labelPadding: EdgeInsets.symmetric(horizontal: 0),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ));
+              ],
+            ),
+          )
+    );
   }
 
   showAvatarDialog(

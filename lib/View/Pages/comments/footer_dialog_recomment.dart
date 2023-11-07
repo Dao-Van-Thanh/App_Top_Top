@@ -2,31 +2,27 @@ import 'package:app/Provider/chats_provider.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../../Provider/comments_provider.dart';
-import '../../../Provider/video_provider.dart';
-import '../../../Services/comment_service.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import '../../../Services/comment_service.dart';
 
-class FooterDialog extends StatefulWidget {
-  final String? avatarURL;
+class FooterDialogReComment extends StatefulWidget {
   final String videoId;
-  final String? uId;
+  final String uId;
+  final String idComment;
+  final String nameUserReComment;
 
-  // final VideoProvider videoProvider;
-
-  FooterDialog(
-      {required this.avatarURL,
-      required this.videoId,
-      required this.uId,
-      // required this.videoProvider
-      });
+  FooterDialogReComment({
+    required this.idComment,
+    required this.videoId,
+    required this.uId,
+    required this.nameUserReComment,
+  });
 
   @override
-  State<FooterDialog> createState() => _FooterDialogState();
+  State<FooterDialogReComment> createState() => _FooterDialogReCommentState();
 }
 
-class _FooterDialogState extends State<FooterDialog> {
+class _FooterDialogReCommentState extends State<FooterDialogReComment> {
   FocusNode myFocusNode = FocusNode();
 
   @override
@@ -39,30 +35,19 @@ class _FooterDialogState extends State<FooterDialog> {
 
   @override
   Widget build(BuildContext context) {
-    CommentsProvider setComment = CommentsProvider();
-    bool check = setComment.reline;
     TextEditingController textEditingController = TextEditingController();
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        child: Consumer<ChatsProfiver>(
-          builder: (context, provider, child) {
-            return Column(
+    return Consumer<ChatsProfiver>(
+      builder: (context, provider, child) {
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
                     children: [
-                      if (widget.avatarURL != null)
-                        CircleAvatar(
-                          backgroundColor: Colors.black,
-                          backgroundImage: NetworkImage(
-                            widget.avatarURL!,
-                          ),
-                        )
-                      else
-                        const CircularProgressIndicator(),
-                      const SizedBox(width: 5),
                       Expanded(
                         child: Card(
                           color: Colors.white70,
@@ -76,11 +61,12 @@ class _FooterDialogState extends State<FooterDialog> {
                                   padding: const EdgeInsets.only(
                                       left: 20, top: 5, bottom: 5),
                                   child: TextField(
-                                    focusNode: myFocusNode,
                                     maxLines: null,
+                                    focusNode: myFocusNode,
                                     controller: textEditingController,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Thêm bình luận...',
+                                    decoration: InputDecoration(
+                                      hintText:
+                                      'Trả lời bình luận của ${widget.nameUserReComment}...',
                                       border: InputBorder.none,
                                     ),
                                   ),
@@ -99,8 +85,11 @@ class _FooterDialogState extends State<FooterDialog> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  CommentService().sendComment(widget.videoId,
-                                      textEditingController.text.trim(), widget.uId!);
+                                  CommentService().sendReComment(
+                                      widget.videoId,
+                                      widget.idComment,
+                                      textEditingController.text.trim(),
+                                      widget.uId);
                                   textEditingController.clear();
                                   Navigator.pop(context);
                                   // int index = videoProvider.listVideo
@@ -167,10 +156,12 @@ class _FooterDialogState extends State<FooterDialog> {
                       ),
                     ),
                   ),
-                ),
+                )
               ],
-            );
-          },
-        ));
+            ),
+          ),
+        );
+      },
+    );
   }
 }

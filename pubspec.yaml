@@ -60,6 +60,18 @@ dependencies:
   google_sign_in: ^6.1.5
   dio: ^4.0.4
   gallery_saver: ^2.3.2
+  geolocator: ^10.1.0
+  permission_handler: ^11.0.1
+  flutter_local_notifications: ^16.1.0
+  firebase_messaging: ^14.7.2
+  http: ^0.13.6
+  just_audio: ^0.9.35
+  flutter_cache_manager: ^3.3.1
+  share_plus: ^7.2.1
+  video_trimmer: ^3.0.1
+  ffmpeg_kit_flutter: ^6.0.3
+
+
 
 dev_dependencies:
   flutter_test:

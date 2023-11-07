@@ -1,8 +1,14 @@
+import 'package:app/Services/admin_service.dart';
 import 'package:app/Services/dang_nhap_email_service.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
+import 'package:app/View/Widget/text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Services/notifications_service.dart';
+import 'man_hinh_dang_nhap_sdt.dart';
+import 'man_hinh_quen_mat_khau_email.dart';
+import 'man_hinh_quen_mat_khau_sdt.dart';
 
 class ManHinhDangNhapEmail extends StatefulWidget {
   @override
@@ -92,11 +98,16 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
             Container(
               alignment: Alignment.centerLeft,
               margin: EdgeInsets.only(left: 15),
-              child: const Text(
-                'Quên mật khẩu',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+              child: TextButton(
+                onPressed: (){
+                  _showDialog(context);
+                },
+                child: const Text(
+                  'Quên mật khẩu',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -122,15 +133,25 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 );
                 bool check = await service.DangNhapBangEmail(email, password);
                 NotificationsService notifications = NotificationsService();
-                if(check){
-                  await notifications.requestPermission();
-                  await notifications.getToken();
-                  Navigator.push(context, MaterialPageRoute(builder:
-                      (context) => const Bottom_Navigation_Bar(),));
+                final _auth = FirebaseAuth.instance.currentUser!.uid;
+                bool checkBan = await AdminService().getBanUid(_auth);
+                if(!checkBan) {
+                  if (check) {
+                    await notifications.requestPermission();
+                    await notifications.getToken();
+                    Navigator.push(context, MaterialPageRoute(builder:
+                        (context) => const Bottom_Navigation_Bar(),));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Tài khoản không chính xác!'),
+                      ),
+                    );
+                  }
                 }else{
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Tài khoản không chính xác!'),
+                      content: Text('Tài khoản có quyền truy cập!'),
                     ),
                   );
                 }
@@ -156,6 +177,67 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
           ],
         ),
       ),
+    );
+  }
+  _showDialog(context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Center(child: Text('Đặt lại mật khẩu bằng',style: TextStyle(fontSize: 18),)),
+          actions: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Divider(
+                  height: 20, // Điều chỉnh chiều cao của đường dọc
+                  thickness: 2, // Điều chỉnh độ dày của đường dọc
+                  color: Colors.grey.withOpacity(0.4), // Màu của đường dọc
+                ),
+                    Center(
+                      child: TextButton(
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ManHinhQuenMatKhauSDT()),
+                          );},
+                        child: text(lable: 'Số điện thoại', size: 15, fontWeight: FontWeight.w400,),
+                      ),
+                    ),
+                Divider(
+                  height: 20, // Điều chỉnh chiều cao của đường dọc
+                  thickness: 2, // Điều chỉnh độ dày của đường dọc
+                  color: Colors.grey.withOpacity(0.4), // Màu của đường dọc
+                ),
+                TextButton(
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ManHinhQuenMatKhauEmail()),
+                        );
+                      },
+                      child: text(lable: 'Email', size: 15, fontWeight: FontWeight.w400,),
+                    ),
+                Divider(
+                  height: 20, // Điều chỉnh chiều cao của đường dọc
+                  thickness: 2, // Điều chỉnh độ dày của đường dọc
+                  color: Colors.grey.withOpacity(0.4), // Màu của đường dọc
+                ),
+                TextButton(
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                      child: text(lable: 'hủy', size: 15, fontWeight: FontWeight.w400,),
+                    )
+              ],
+            )
+          ],
+        );
+      },
     );
   }
 }
