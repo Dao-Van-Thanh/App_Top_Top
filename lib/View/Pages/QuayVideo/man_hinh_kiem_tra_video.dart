@@ -16,13 +16,13 @@ import '../../Widget/app_item_music.dart';
 class ManHinhKiemTraVideo extends StatefulWidget {
   final XFile file;
   ManHinhKiemTraVideo(this.file);
-
   @override
   State<ManHinhKiemTraVideo> createState() => _ManHinhKiemTraVideoState();
 }
 
 class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
   VideoPlayerController? videoController;
+  MusicProvider? _musicProvider;
   late QuayVideoProvider provider = Provider.of<QuayVideoProvider>(context);
   Future<bool> _showCancelDialog() async {
     bool? result = await showDialog<bool>(
@@ -83,10 +83,16 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
       }
     });
   }
-
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _musicProvider = Provider.of<MusicProvider>(context);
+  }
   @override
   void dispose() {
     videoController?.dispose(); // Giải phóng tài nguyên
+    _musicProvider?.stopAudio();
+    _musicProvider= null;
     super.dispose();
   }
 

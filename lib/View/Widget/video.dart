@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'ad_page.dart';
 import 'home_side_bar.dart';
 
 class Video extends StatefulWidget {
@@ -104,41 +105,8 @@ class _ForYouState extends State<Video> {
                             }
                           });
                         }
-                        return GestureDetector(
-                          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-                          child: Stack(
-                            alignment: Alignment.bottomLeft,
-                            children: [
-                              VideoPlayerItem(
-                                videoData.videoUrl,
-                                videoData.id,
-                                videoProvider,
-                                videoData.songUrl
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.height / 10,
-                                      child: VideoDetail(videoProvider),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height /
-                                          1.75,
-                                      child: HomeSideBar(
-                                          videoProvider, CallVideoService(),'manhinhchoban',index,videoStream),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
+                        return Container();
+                        // return AdPage();
                       },
                     ),
                   );

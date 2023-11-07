@@ -63,6 +63,7 @@ class MusicProvider extends ChangeNotifier {
     notifyListeners();
   }
   void dispose() {
+    player.dispose();
     super.dispose();
   }
 }

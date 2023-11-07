@@ -28,6 +28,7 @@ class VideoPlayerItem extends StatefulWidget {
 
 class _VideoPlayerItemState extends State<VideoPlayerItem> {
   late VideoPlayerController? videoPlayerController;
+  late MusicProvider? musicProvider;
   late ChewieController chewieController;
   bool isLoading = true;
   bool isPlay = true;
@@ -65,7 +66,6 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
-
     if(widget.songUrl.length>0 && musicProvider.isCheckMusicPlay==false){
       musicProvider.initAudioPlayerForScreenVideo(widget.songUrl);
       musicProvider.setIsCheckMusicPlay();
