@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:app/Provider/edit_item_profile_provider.dart';
 import 'package:app/Provider/edit_profile_provider.dart';
 import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/Profile/showAvatar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Provider/page_provider.dart';
@@ -118,20 +122,22 @@ class EditProfile extends StatelessWidget {
                           children: <Widget>[
                             // Hình ảnh
                             ClipOval(
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    '${userData['avatarURL']}',
-                                fit: BoxFit.cover,
-                                height: 100,
-                                width: 100,
+                              child: ElevatedButton(
+
+                                onPressed: () {
+                                      ImagePick(ImageSource.gallery, context,  uid);
+                                },
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      '${userData['avatarURL']}',
+                                  fit: BoxFit.cover,
+                                  height: 100,
+                                  width: 100,
+                                ),
                               ),
                             ),
                             // Biểu tượng
-                            const Icon(
-                              Icons.camera_alt_outlined,
-                              size: 30,
-                              color: Colors.white,
-                            ),
+
                           ],
                         ),
                       ),
@@ -255,5 +261,20 @@ class EditProfile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  ImagePick(
+      ImageSource src, BuildContext context, String uId) async {
+    final image = await ImagePicker().pickImage(source: src);
+    if (image != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ShowAvatar(
+            urlImage: File(image.path),
+            onSave: () {
+              Navigator.of(context).pop();
+            },
+            uId: uId,
+          )));
+    }
   }
 }
