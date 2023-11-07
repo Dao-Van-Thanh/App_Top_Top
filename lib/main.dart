@@ -1,4 +1,3 @@
-import 'package:app/Provider/ad_provider.dart';
 import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/dang_ky_sdt_provider.dart';
 import 'package:app/Provider/dang_nhap_facebook_provider.dart';
@@ -19,14 +18,12 @@ import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Provider/chats_provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
 import 'View/Screen/DangKy/man_hinh_dang_ky.dart';
-import 'View/Widget/ad_page.dart';
 import 'View/Widget/bottom_navigation.dart';
 import 'firebase_options.dart';
 
@@ -38,10 +35,11 @@ Future<void> _backgroundMessageHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // MobileAds.instance.initialize();
+
   await FirebaseMessaging.instance.getInitialMessage();
 
   FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
@@ -67,7 +65,6 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (context) => DangNhapFacebookProvider()),
       ChangeNotifierProvider(create: (context) => MusicProvider()),
       ChangeNotifierProvider(create: (context) => LoadVideoProvider()),
-      // ChangeNotifierProvider(create: (context) => AdProvider()),
     ],
     child: MyApp(),
   ));

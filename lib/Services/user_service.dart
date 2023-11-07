@@ -30,6 +30,15 @@ class UserService {
       return null;
     }
   }
+  Future<bool> banUser(String targetUserId,bool ban)async{
+    await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(targetUserId)
+        .update({
+      "ban": ban
+    });
+    return ban;
+  }
 
   // Chỉnh sửa thông tin user
   Future<void> editDataUser(String uid,String label, String value) async {
@@ -102,6 +111,7 @@ class UserService {
     }
   }
 
+
   Future<List<Map<String, dynamic>>?> getListFriend() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
@@ -133,6 +143,7 @@ class UserService {
       return null;
     }
   }
+
 
   Future<List<String>> getFollowingList(String currentUserID) async {
     try {
