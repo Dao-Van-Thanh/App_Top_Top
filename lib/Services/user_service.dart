@@ -15,11 +15,11 @@ class UserService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   // Lấy thông tin user
-  Future<Map<String, dynamic>?> getDataUser() async {
-    String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  Future<Map<String, dynamic>?> getDataUser(String uid) async {
+    // String currentUserId = FirebaseAuth.instance.currentUser!.uid;
     try {
       DocumentSnapshot userDoc =
-      await firestore.collection('Users').doc(currentUserId).get();
+      await firestore.collection('Users').doc(uid).get();
       if (userDoc.exists) {
         Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>;
         return userData;
@@ -80,7 +80,7 @@ class UserService {
           'follower': FieldValue.arrayUnion([user.uid]),
         });
         NotificationsService notificationsService = NotificationsService();
-        final data = await getDataUser();
+        final data = await getDataUser(user.uid);
         notificationsService.sendNotification(
             title: data!['fullname'],
             body: 'Đã follow bạn',
