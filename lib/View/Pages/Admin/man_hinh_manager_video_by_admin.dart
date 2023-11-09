@@ -6,29 +6,27 @@ import 'package:provider/provider.dart';
 import '../../../Model/video_model.dart';
 import '../../../Provider/video_provider.dart';
 import '../../../Services/call_video_service.dart';
-import '../../../Services/tab_video_service.dart';
 import '../../Widget/home_side_bar.dart';
 import '../../Widget/video_detail.dart';
 import '../../Widget/video_player_item.dart';
 
-class ManHinhVideoByBookMart extends StatefulWidget {
+class ManHinhManagerVideoByAdmin extends StatefulWidget {
+  final String uid;
   final int index;
-   ManHinhVideoByBookMart({Key? key, required this.index}) : super(key: key);
-
+  final bool status;
+  ManHinhManagerVideoByAdmin({required this.uid,required this.index, required this.status});
   @override
-  State<ManHinhVideoByBookMart> createState() => _ManHinhVideoByBookMartState();
+  State<ManHinhManagerVideoByAdmin> createState() => _ManHinhManagerVideoByAdminState();
 }
 
-class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
+class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin> {
   @override
   Widget build(BuildContext context) {
-    final Stream<List<VideoModel>> videoStream;
     final _auth = FirebaseAuth.instance;
-    videoStream = CallVideoService().getVideoBookmarks(_auth.currentUser!.uid);
+    final Stream<List<VideoModel>> videoStream;
+    videoStream = CallVideoService().getVideosStreamByAuthor(widget.uid);
     PageController controller = PageController(initialPage: widget.index);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
@@ -42,6 +40,7 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
           },
         ),
       ),
+
       body: StreamBuilder<List<VideoModel>>(
         stream: videoStream,
         builder: (context, snapshot) {
@@ -63,7 +62,7 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                   onPageChanged: (int page) {
                     print(videoList!.length - 1);
                     if (page == videoList!.length - 1) {
-                      print('video cuối cùng rồi xem cái lol đi học đi');
+                      print('video cuối cùng rồi xem cái lol đi học đi');
                     }
                   },
                   scrollDirection: Axis.vertical,
@@ -76,18 +75,17 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                         builder: (context, videoProvider, child) {
                           videoProvider.setValue(
                               videoData!.blockComments,
-                              videoData.likes.length,
-                              videoData.comments.length,
+                              videoData!.likes.length,
+                              videoData!.comments.length,
                               videoData.userSaveVideos!.length,
-                              videoData.caption,
-                              videoData.profilePhoto,
-                              videoData.username,
-                              videoData.id,
-                              videoData.uid,
-                              videoData.videoUrl,
+                              videoData!.caption,
+                              videoData!.profilePhoto,
+                              videoData!.username,
+                              videoData!.id,
+                              videoData!.uid,
+                              videoData!.videoUrl,
                               videoData.blockComments
                           );
-                          videoProvider.listVideo.addAll(videoList!);
                           if (!videoProvider.hasCheckedLike) {
                             videoProvider.hasCheckedLike = true;
                             CallVideoService()
@@ -110,13 +108,19 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                             });
                           }
                           return GestureDetector(
-                            onTap: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            },
+                            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
                             child: Stack(
                               alignment: Alignment.bottomLeft,
                               children: [
-                                VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
+                                widget.status==false?Container(
+                                  margin: const EdgeInsets.only(top: 3,left: 13,right: 13,bottom: 3),
+                                  height: double.maxFinite,
+                                  width: double.maxFinite,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage('https://upload.wikimedia.org/wikipedia/vi/thumb/a/a7/Batman_Lee.png/250px-Batman_Lee.png'),fit: BoxFit.cover)
+                                  ),
+                                ):VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -133,7 +137,7 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                                         height: MediaQuery.of(context).size.height /
                                             1.75,
                                         child: HomeSideBar(
-                                            videoProvider, CallVideoService(),'videoManHinhSearch',index,videoStream),
+                                            videoProvider, CallVideoService(),'man_hinh_quan_ly_video_by_admin',index,videoStream),
                                       ),
                                     ),
                                   ],

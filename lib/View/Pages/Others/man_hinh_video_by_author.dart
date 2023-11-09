@@ -109,7 +109,7 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                             child: Stack(
                               alignment: Alignment.bottomLeft,
                               children: [
-                                VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider,videoData.songUrl),
+                                VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [

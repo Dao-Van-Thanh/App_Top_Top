@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:app/Model/user_model.dart';
 import 'package:app/Services/tab_video_service.dart';
 import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/Admin/user_screen_video.dart';
 import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,7 @@ class UserScreen extends StatelessWidget {
               Text("Đã hoạt động được: ${FirebaseAuth.instance.currentUser?.metadata.creationTime}"),
               SizedBox(height: 50),
               textButton("Thông tin cá nhân", context,(){
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(uid: userModel.uid,)));
               }),
               SizedBox(height: 50),
               textButton("Thay đổi mật khẩu", context,(){
@@ -82,6 +83,8 @@ class UserScreen extends StatelessWidget {
                   }
                   // VideoModel videoModel = VideoModel.fromSnap(snapshot.data!)
                   return textButton("${snapshot.data!.length} Videos", context,(){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>UserScreenVideo(uid)));
+
                   });
                 },
               ),

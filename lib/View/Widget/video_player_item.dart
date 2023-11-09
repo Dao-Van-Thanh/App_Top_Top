@@ -18,9 +18,8 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final String videoId;
-  final String songUrl;
   final VideoProvider videoProvider;
-  const VideoPlayerItem(this.videoUrl,this.videoId, this.videoProvider, this.songUrl, {Key? key})
+  const VideoPlayerItem(this.videoUrl,this.videoId, this.videoProvider, {Key? key})
       : super(key: key);
   @override
   _VideoPlayerItemState createState() => _VideoPlayerItemState();
@@ -28,6 +27,7 @@ class VideoPlayerItem extends StatefulWidget {
 
 class _VideoPlayerItemState extends State<VideoPlayerItem> {
   late VideoPlayerController? videoPlayerController;
+  late MusicProvider? musicProvider;
   late ChewieController chewieController;
   bool isLoading = true;
   bool isPlay = true;
@@ -65,11 +65,6 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
-
-    if(widget.songUrl.length>0 && musicProvider.isCheckMusicPlay==false){
-      musicProvider.initAudioPlayerForScreenVideo(widget.songUrl);
-      musicProvider.setIsCheckMusicPlay();
-    }
       return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
@@ -81,14 +76,10 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
           widget.videoProvider.changeControlVideo();
           if(widget.videoProvider.controlVideo == true){
             videoPlayerController!.play();
-            if(widget.songUrl.length>0){
-              musicProvider.playAudio();
-            }
+
           }else {
             videoPlayerController!.pause();
-            if(widget.songUrl.length>0){
-              musicProvider.pauseAudio();
-            }
+
           }
         },
         child: Container(

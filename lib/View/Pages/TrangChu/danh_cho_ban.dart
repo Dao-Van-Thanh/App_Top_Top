@@ -41,10 +41,11 @@ class _ForYouState extends State<ForYou> {
         isVideoLoaded = true;
       }
     }
-    videoStream = CallVideoService().getVideosStream1000();
+    videoStream = CallVideoService().getVideosStream();
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
       builder: (context, snapshot) {
+        print(snapshot);
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
             width: 200,
@@ -54,7 +55,7 @@ class _ForYouState extends State<ForYou> {
         } else if (snapshot.hasError) {
           return Text('Lỗi: ${snapshot.error}');
         } else {
-          final videoList = snapshot.data;
+          final videoList = snapshot.data!;
           return Scaffold(
             resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
@@ -121,7 +122,6 @@ class _ForYouState extends State<ForYou> {
                                 videoUrl=videoData.videoUrl,
                                 videoData.id,
                                 videoProvider,
-                                videoData.songUrl,
                               ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
