@@ -42,8 +42,8 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar>
       'lastActive':DateTime.now(),
       'isOnline':true
     });
+    // CallVideoService().addStatusFieldToVideos();
   }
-
   // kiểm tra người dùng nếu offline
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

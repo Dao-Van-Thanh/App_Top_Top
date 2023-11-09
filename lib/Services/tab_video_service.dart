@@ -32,9 +32,28 @@ class TabVideoService{
       FirebaseFirestore.instance.collection('Videos');
 
       final QuerySnapshot querySnapshot = await videosCollection
-          .where('uid', isEqualTo: uid) // Điều kiện trường 'uid' bằng UID cụ thể
-          .get();
+          .where('uid', isEqualTo: uid)
+          .where('status',isEqualTo:true)
 
+          .get();
+      final List<VideoModel> videos = querySnapshot.docs
+          .map((doc) => VideoModel.fromSnap(doc))
+          .toList();
+      return videos;
+    } catch (error) {
+      print('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
+      return [];
+    }
+  }
+  static Future<List<VideoModel>> getVideoPrivate(String uid) async {
+    try {
+      final CollectionReference videosCollection =
+      FirebaseFirestore.instance.collection('Videos');
+
+      final QuerySnapshot querySnapshot = await videosCollection
+          .where('uid', isEqualTo: uid)
+          .where('status',isEqualTo:false)
+          .get();
       final List<VideoModel> videos = querySnapshot.docs
           .map((doc) => VideoModel.fromSnap(doc))
           .toList();

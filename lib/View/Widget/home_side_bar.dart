@@ -64,6 +64,11 @@ class HomeSideBar extends StatelessWidget {
               child: _sideBarItem('more', 1, style, 2, videoProvider.iconColors[2], context),
             )
                 : SizedBox(),
+            labelScreen == 'man_hinh_quan_ly_video_by_admin'?Container(
+              margin: EdgeInsets.only(bottom: 10),
+              child: _sideBarItem('error', 1, style, 2, videoProvider.iconColors[2], context),
+            )
+                : SizedBox(),
           ],
         ),
       ),
@@ -108,6 +113,35 @@ class HomeSideBar extends StatelessWidget {
       },
     );
   }
+  _showDialogError(context) {
+    final pageProvider = Provider.of<PageProvider>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text('Ẩn video này?',style: TextStyle(fontSize: 20),),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Đóng hộp thoại
+              },
+              child:
+              Text('Hủy',style: TextStyle(color: Colors.grey.withOpacity(0.8)),),
+            ),
+            TextButton(
+              onPressed: () {
+                CallVideoService().privateVideo(videoProvider.videoId);
+                Navigator.of(context).pop();
+                pageProvider.setPageProfile();
+              },
+              child:
+              Text('Ẩn', style: TextStyle(color: Colors.black),),
+            ),
+          ],
+        );
+      },
+    );
+  }
   Widget _sideBarItem(
       String iconName, int label, TextStyle style, int index1, Color color, BuildContext context ) {
     IconData iconData;
@@ -121,6 +155,8 @@ class HomeSideBar extends StatelessWidget {
     }
     else if (iconName == 'save') {
       iconData = Icons.bookmark;
+    }else if(iconName == 'error'){
+      iconData = Icons.error;
     }else {
       iconData = Icons.more_horiz;
     }
@@ -251,6 +287,10 @@ class HomeSideBar extends StatelessWidget {
                 ShareVideo.shareVideo(videoProvider.videoId, videoProvider.videoUrl);
                 break;
               }
+              case 'error':{
+                _showDialogError(context);
+                break;
+              }
               default:
             }
           },
@@ -263,10 +303,10 @@ class HomeSideBar extends StatelessWidget {
         const SizedBox(
           height: 5,
         ),
-        iconData==Icons.more_horiz?SizedBox():Text(
+        iconData == Icons.error?SizedBox():iconData==Icons.more_horiz?SizedBox():Text(
           label.toString(),
           style: style,
-        ),
+        )
       ],
     );
   }

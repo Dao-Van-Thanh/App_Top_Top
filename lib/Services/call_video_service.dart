@@ -20,6 +20,7 @@ class CallVideoService {
       final querySnapshot = await _firestore
           .collection('Videos')
           .where('uid', isEqualTo: uid)
+          .where('status', isEqualTo: true)
           .limit(10)
           .get();
 
@@ -34,10 +35,12 @@ class CallVideoService {
   Stream<List<VideoModel>> getVideosStream() {
     return _firestore
         .collection('Videos')
+        .where('status', isEqualTo: true)
         .snapshots()
         .map((snapshot) {
       List<VideoModel> videoList = [];
       snapshot.docs.forEach((doc) {
+        print(doc);
         videoList.add(VideoModel.fromSnap(doc));
       });
       return videoList;
@@ -47,6 +50,7 @@ class CallVideoService {
     return _firestore
         .collection('Videos')
         .orderBy('views', descending: true)
+        .where('status', isEqualTo: true)
         .snapshots()
         .map((snapshot) {
       List<VideoModel> videoList = [];
@@ -167,7 +171,64 @@ class CallVideoService {
   //     'videoUrl' : 'https://a253-2a09-bac1-7a80-50-00-17-169.ngrok-free.app/uploads/1698302425463-Download%20(5).mp4'
   //   });
   // }
+  // void addStatusFieldToVideos() {
+  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  //   firestore.collection('Videos').get().then((QuerySnapshot querySnapshot) {
+  //     querySnapshot.docs.forEach((doc) {
+  //       doc.reference.update({
+  //         'status': true,
+  //       });
+  //     });
+  //   }).catchError((error) {
+  //     print('Error: $error');
+  //   });
+  // }
+  void privateVideo(String id) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    var uid = FirebaseAuth.instance.currentUser!.uid;
 
+    DocumentSnapshot doc = await firestore.collection('Videos').doc(id).get();
+    if (doc.exists) {
+      // Check if the document exists
+      var data = doc.data() as Map<String, dynamic>?;
+
+      if (data != null && data.containsKey('status')) {
+        // Update the 'status' field to true for the specific video if 'status' field exists
+        firestore.collection('Videos').doc(id).update({
+          'status': false,
+        }).then((value) {
+          print('Status updated successfully.');
+        }).catchError((error) {
+          print('Error updating status: $error');
+        });
+      }
+    } else {
+      print('Document does not exist.');
+    }
+  }
+  void publicVideo(String id) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+
+    DocumentSnapshot doc = await firestore.collection('Videos').doc(id).get();
+    if (doc.exists) {
+      // Check if the document exists
+      var data = doc.data() as Map<String, dynamic>?;
+
+      if (data != null && data.containsKey('status')) {
+        // Update the 'status' field to true for the specific video if 'status' field exists
+        firestore.collection('Videos').doc(id).update({
+          'status': true,
+        }).then((value) {
+          print('Status updated successfully.');
+        }).catchError((error) {
+          print('Error updating status: $error');
+        });
+      }
+    } else {
+      print('Document does not exist.');
+    }
+  }
   Future<void> addShareCountInTablesVideo(String idVideo)async{
     try{
       print('=========================');
