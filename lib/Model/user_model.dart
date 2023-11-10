@@ -13,6 +13,7 @@ class UserModel {
   String avatarURL;
   String uid;
   String idTopTop;
+  String realTime;
 
   UserModel(
       {required this.gender,
@@ -24,6 +25,7 @@ class UserModel {
       required this.fullName,
       required this.uid,
       required this.birth,
+      required this.realTime,
       this.follower,
       this.following,
       this.saveVideos});
@@ -37,6 +39,7 @@ class UserModel {
         "birth": birth,
         "avatarURL": avatarURL,
         "phone": phone,
+        "realTime": realTime,
         "follower": [],
         "following": [],
         "saveVideos": [],
@@ -49,6 +52,7 @@ class UserModel {
       fullName: snapshotData['fullname'] ?? '',
       email: snapshotData['email'] ?? '',
       age: snapshotData['age'] ?? '',
+      realTime: snapshotData['realTime'] ?? '',
       avatarURL: snapshotData['avatarURL'] ?? '',
       phone: snapshotData['phone'] ?? '',
       birth: snapshotData['birth'] ?? '',
