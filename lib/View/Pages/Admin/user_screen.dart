@@ -9,10 +9,16 @@ import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UserScreen extends StatelessWidget {
+class UserScreen extends StatefulWidget {
   UserScreen({super.key, required this.uid});
 
   final String uid;
+
+  @override
+  State<UserScreen> createState() => _UserScreenState();
+}
+
+class _UserScreenState extends State<UserScreen> {
 
   int _calculateDaysSinceRegistration(String registrationTime) {
     try {
@@ -26,12 +32,10 @@ class UserScreen extends StatelessWidget {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: UserService().getUser(uid),
+      stream: UserService().getUser(widget.uid),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center();
@@ -134,7 +138,7 @@ class UserScreen extends StatelessWidget {
               }),
               SizedBox(height: 50),
               FutureBuilder(
-                future: TabVideoService.getVideosByUid(uid),
+                future: TabVideoService.getVideosByUid(widget.uid),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center();
@@ -142,7 +146,7 @@ class UserScreen extends StatelessWidget {
                   // VideoModel videoModel = VideoModel.fromSnap(snapshot.data!)
 
                   return textButton("${snapshot.data!.length} Videos", context,(){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) =>UserScreenVideo(uid)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>UserScreenVideo(widget.uid)));
 
                   });
                 },

@@ -70,7 +70,7 @@ dependencies:
   share_plus: ^7.2.1
   video_trimmer: ^3.0.1
   ffmpeg_kit_flutter: ^6.0.3
-
+  firebase_admin: ^0.2.0
 
 
 
