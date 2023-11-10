@@ -27,6 +27,7 @@ class DangKySdtService{
       } else {
         // Người dùng chưa tồn tại, hãy thêm họ vào cơ sở dữ liệu
         String idTopTop = await taoVaKiemTraIdTopTop();
+        final realTime = FirebaseAuth.instance.currentUser?.metadata.creationTime;
         final userModel = UserModel(
 
           gender: 'None',
@@ -38,6 +39,7 @@ class DangKySdtService{
           fullName: idTopTop, // Thêm tên đầy đủ nếu bạn muốn
           uid: uid, // Sử dụng uid từ người dùng Firebase
           birth: '01/01/1999', // Thêm ngày sinh nếu bạn muốn
+          realTime:realTime.toString(),
           follower: [],
           following: [],
         );

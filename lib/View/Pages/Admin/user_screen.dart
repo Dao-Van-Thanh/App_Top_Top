@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:app/Model/user_model.dart';
+import 'package:app/Model/video_model.dart';
 import 'package:app/Services/tab_video_service.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
@@ -12,12 +13,26 @@ class UserScreen extends StatelessWidget {
 
   final String uid;
 
+  int _calculateDaysSinceRegistration(String registrationTime) {
+    try {
+      DateTime registrationDateTime = DateTime.parse(registrationTime);
+      DateTime now = DateTime.now();
+      Duration difference = now.difference(registrationDateTime);
+      int days = difference.inDays;
+      return days;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: UserService().getUser(uid),
       builder: (context, snapshot) {
-        if(snapshot.connectionState == ConnectionState.waiting){
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Center();
         }
         UserModel userModel = UserModel.fromSnap(snapshot.data!);
@@ -46,43 +61,86 @@ class UserScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                       Center(
-                         child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), // Độ mờ
-                          child: Container(
-                            child: CircleAvatar(
-                              backgroundColor: Colors.black,
-                              backgroundImage: NetworkImage(
-                                userModel.avatarURL,
-                              ),
-                              maxRadius: 100,
+                    Center(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                        // Độ mờ
+                        child: Container(
+                          child: CircleAvatar(
+                            backgroundColor: Colors.black,
+                            backgroundImage: NetworkImage(
+                              userModel.avatarURL,
                             ),
+                            maxRadius: 100,
                           ),
+                        ),
                       ),
-                       ),
+                    ),
                   ],
                 ),
               ),
               SizedBox(height: 50),
-              Text("Đã hoạt động được: ${FirebaseAuth.instance.currentUser?.metadata.creationTime}"),
+              Text(
+                  "Đã hoạt động được: ${_calculateDaysSinceRegistration(userModel.realTime)} Ngày"),
               SizedBox(height: 50),
-              textButton("Thông tin cá nhân", context,(){
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+              textButton("Thông tin cá nhân", context, () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditProfile(uid: userModel.uid)));
               }),
               SizedBox(height: 50),
-              textButton("Thay đổi mật khẩu", context,(){
-
+              textButton("Thay đổi mật khẩu", context, () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Center(child: Text('Thay đổi mật khẩu')),
+                      actions: [
+                        Column(
+                          children: [
+                            TextField(
+                              decoration:
+                                  InputDecoration(hintText: 'New Password'),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        content: Text('Đã thay đổi mật khẩu thành công.'),
+                                      ));
+                                      Future.delayed(Duration(seconds: 1), () {
+                                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                      });
+                                    },
+                                    child: Text('Lưu')),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Hủy')),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    );
+                  },
+                );
               }),
               SizedBox(height: 50),
               FutureBuilder(
                 future: TabVideoService.getVideosByUid(uid),
                 builder: (context, snapshot) {
-                  if(snapshot.connectionState == ConnectionState.waiting){
+                  if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center();
                   }
                   // VideoModel videoModel = VideoModel.fromSnap(snapshot.data!)
-                  return textButton("${snapshot.data!.length} Videos", context,(){
-                  });
+                  return textButton(
+                      "${snapshot.data!.length} Videos", context, () {});
                 },
               ),
             ],
@@ -92,8 +150,7 @@ class UserScreen extends StatelessWidget {
     );
   }
 
-
-  Widget textButton(String title,BuildContext context,VoidCallback onPress){
+  Widget textButton(String title, BuildContext context, VoidCallback onPress) {
     return ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStatePropertyAll(Colors.white),
@@ -101,13 +158,13 @@ class UserScreen extends StatelessWidget {
         ),
         onPressed: onPress,
         child: Container(
-          width: MediaQuery.of(context).size.width*0.5,
+          width: MediaQuery.of(context).size.width * 0.5,
           height: 50,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title,style: TextStyle(color: Colors.black,fontSize: 18)),
-              Icon(Icons.navigate_next,color: Colors.black)
+              Text(title, style: TextStyle(color: Colors.black, fontSize: 18)),
+              Icon(Icons.navigate_next, color: Colors.black)
             ],
           ),
         ));
