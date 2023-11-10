@@ -1,36 +1,38 @@
-import 'dart:async';
 import 'dart:typed_data';
-import 'package:app/Model/video_model.dart';
-import 'package:app/Provider/profile_provider.dart';
-import 'package:app/View/Pages/Admin/man_hinh_manager_video_by_admin.dart';
-import 'package:app/View/Pages/Others/man_hinh_video_bookmart.dart';
+
 import 'package:chewie/chewie.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../../Model/video_model.dart';
 import '../../Provider/page_provider.dart';
+import '../../Provider/profile_provider.dart';
 import '../../Services/call_video_service.dart';
 import '../../Services/tab_video_service.dart';
+import '../Pages/Admin/man_hinh_manager_video_by_admin.dart';
+import '../Pages/Others/man_hinh_video_bookmart.dart';
 import '../Pages/Others/man_hinh_video_by_author.dart';
-import '../Pages/TrangChu/danh_cho_ban.dart';
 
-class GridViewVideo extends StatefulWidget {
+class GridViewVideoForAdmin extends StatefulWidget {
   String uid;
   String label;
   PageProvider pageProvider;
-  GridViewVideo(this.uid,this.label ,this.pageProvider);
+  GridViewVideoForAdmin(this.uid,this.label ,this.pageProvider);
 
   @override
-  _GridViewVideoState createState() => _GridViewVideoState();
+  State<GridViewVideoForAdmin> createState() => _GridViewVideoForAdminState();
 }
-class _GridViewVideoState extends State<GridViewVideo> {
+
+class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
   bool _isLooping = false; // Đặt mặc định để lặp lại
   ChewieController? controller ;
   @override
   void initState() {
     super.initState();
+    print(widget.label);
     final provider = Provider.of<ProfileProvider>(context, listen: false);
     if (!provider.isLoading && provider.videos.isEmpty) {
       provider.loadVideos(widget.uid);
@@ -63,6 +65,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
               onPressed: () {
                 CallVideoService().publicVideo(videoId);
                 Navigator.of(context).pop();
+                setState(() {});
               },
               child:
               Text('bỏ', style: TextStyle(color: Colors.black),),
@@ -93,7 +96,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => widget.label=='UserScreenVideo'?ManHinhManagerVideoByAdmin(uid: video.uid,index:index,status:video.status):(widget.label=='TabVideo'?ManhinhVideoByAuthor(uid: video.uid,index:index):ManHinhVideoByBookMart(index:index)),
+                  builder: (context) => widget.label=='videoPublic'?ManHinhManagerVideoByAdmin(uid: video.uid,index:index,status:video.status):(widget.label=='TabVideo'?ManhinhVideoByAuthor(uid: video.uid,index:index):ManHinhVideoByBookMart(index:index)),
                 ),
               );
             },
@@ -108,8 +111,8 @@ class _GridViewVideoState extends State<GridViewVideo> {
                     height: double.maxFinite,
                     width: double.maxFinite,
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage('https://upload.wikimedia.org/wikipedia/vi/thumb/a/a7/Batman_Lee.png/250px-Batman_Lee.png'),fit: BoxFit.cover)
+                        image: DecorationImage(
+                            image: NetworkImage('https://upload.wikimedia.org/wikipedia/vi/thumb/a/a7/Batman_Lee.png/250px-Batman_Lee.png'),fit: BoxFit.cover)
                     ),
                   ):Chewie(
                     controller: ChewieController(
@@ -162,10 +165,10 @@ class _GridViewVideoState extends State<GridViewVideo> {
 
   Widget _getDataFirebase(BuildContext context) {
     Future<List<VideoModel>> result;
-    if (widget.label == 'TabVideo' || widget.label == 'UserScreenVideo') {
+    if (widget.label == 'videoPublic') {
       result = TabVideoService.getVideosByUid(widget.uid);
     } else {
-      result = TabVideoService.getVideoBookmarks(widget.uid);
+      result = TabVideoService.getVideoPrivate(widget.uid);
     }
     return FutureBuilder<List<VideoModel>>(
       future: result,
@@ -193,8 +196,8 @@ class _GridViewVideoState extends State<GridViewVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: _getDataFirebase(context)
+        backgroundColor: Colors.white,
+        body: _getDataFirebase(context)
     );
   }
 }

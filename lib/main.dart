@@ -13,8 +13,6 @@ import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/Provider/text_provider.dart';
 import 'package:app/Provider/video_provider.dart';
-import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
-import 'package:app/View/Pages/Profile/tab_admin.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_kiem_tra_video.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Provider/chats_provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
 import 'View/Screen/DangKy/man_hinh_dang_ky.dart';
+import 'View/Widget/bottom_navigation.dart';
 import 'firebase_options.dart';
 
 Future<void> _backgroundMessageHandler(RemoteMessage message) async {
@@ -77,8 +76,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: ManHinhProfile(),
-      // home: TabAdmin(),
+      // home: ManHinhDangKy(),
       home: Bottom_Navigation_Bar(),
     );
   }

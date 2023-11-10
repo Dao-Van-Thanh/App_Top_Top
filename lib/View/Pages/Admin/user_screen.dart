@@ -4,6 +4,7 @@ import 'package:app/Model/user_model.dart';
 import 'package:app/Model/video_model.dart';
 import 'package:app/Services/tab_video_service.dart';
 import 'package:app/Services/user_service.dart';
+import 'package:app/View/Pages/Admin/user_screen_video.dart';
 import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -139,8 +140,11 @@ class UserScreen extends StatelessWidget {
                     return Center();
                   }
                   // VideoModel videoModel = VideoModel.fromSnap(snapshot.data!)
-                  return textButton(
-                      "${snapshot.data!.length} Videos", context, () {});
+
+                  return textButton("${snapshot.data!.length} Videos", context,(){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>UserScreenVideo(uid)));
+
+                  });
                 },
               ),
             ],

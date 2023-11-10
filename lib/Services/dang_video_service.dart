@@ -69,6 +69,7 @@ class DangVideoService{
         'caption': caption,
         'videoUrl': videoUrl,
         'blockComments': blockComments,
+        'status':true,
         'views' : 0,
         'userSaveVideos' : [],
         'profilePhoto': userDoc['avatarURL'], // Sử dụng userDoc để lấy avatarURL

@@ -8,11 +8,11 @@ class VideoModel {
   List comments;
   int shareCount;
   String songName;
-  String songUrl;
   String caption;
   String videoUrl;
   String profilePhoto;
   bool blockComments;
+  bool status;
   int views;
   List<String>? userSaveVideos;
 
@@ -24,10 +24,10 @@ class VideoModel {
         required this.comments,
         required this.shareCount,
         required this.songName,
-        required this.songUrl,
         required this.caption,
         required this.videoUrl,
         required this.blockComments,
+        required this.status,
         required this.views,
         required this.profilePhoto,
         this.userSaveVideos});
@@ -41,9 +41,9 @@ class VideoModel {
     "comments": comments,
     "shareCount": shareCount,
     "songName": songName,
-    "songUrl": songUrl,
     "caption": caption,
     "blockComments": blockComments,
+    "status":status,
     "views": views,
     "videoUrl": videoUrl,
     "userSaveVideos": [],
@@ -59,10 +59,10 @@ class VideoModel {
       comments: snapshot['comments'],
       shareCount: snapshot['shareCount'],
       songName: snapshot['songName'],
-      songUrl: snapshot['songUrl'],
       caption: snapshot['caption'],
       videoUrl: snapshot['videoUrl'],
       blockComments: snapshot['blockComments'],
+      status: snapshot['status'],
       views: snapshot['views'],
       profilePhoto: snapshot['profilePhoto'],
       userSaveVideos: (snapshot['userSaveVideos'] as List<dynamic>?)
