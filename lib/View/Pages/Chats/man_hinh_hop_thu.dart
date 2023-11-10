@@ -4,6 +4,7 @@ import 'package:app/Provider/chats_provider.dart';
 import 'package:app/Services/chat_service.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Pages/Chats/man_hinh_chat.dart';
+import 'package:app/View/Pages/notification/notificationScreen.dart';
 import 'package:app/View/Widget/snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,54 +42,100 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
         ),
         centerTitle: true,
       ),
-      body: StreamBuilder<List<ChatModel>>(
-          stream: service.getChatsByUser(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              print('${snapshot.error} ======================');
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else {
-              String? uid = FirebaseAuth.instance.currentUser?.uid;
-              List<ChatModel>? ls = snapshot.data;
-              ls?.sort((a, b) {
-                // Lấy tin nhắn cuối cùng trong mỗi phòng chat (nếu có)
-                final aLastMessage = a.messages.isNotEmpty
-                    ? a.messages.last.timestamp
-                    : DateTime(0);
-                final bLastMessage = b.messages.isNotEmpty
-                    ? b.messages.last.timestamp
-                    : DateTime(0);
-                // Sắp xếp giảm dần (từ mới đến cũ)
-                return bLastMessage.compareTo(aLastMessage);
-              });
-
-              return ListView.builder(
-                itemCount: ls?.length,
-                itemBuilder: (context, index) {
-                  String? chat;
-                  String? idUserChat = '';
-                  String? timestamp = '' ;
-                  try {
-                    chat =
-                        ls?[index].messages[ls[index].messages.length - 1].chat;
-                    idUserChat = ls?[index]
-                        .messages[ls[index].messages.length - 1]
-                        .idUserChat;
-                    timestamp = ls?[index].messages[ls[index].messages.length - 1].timestamp.toString();
-                  } catch (e) {
-                    chat = '';
-                    idUserChat = '';
-                    timestamp = '' ;
-                  }
-                  return _itemGroupChat(
-                      context, ls![index], chat ?? '', idUserChat!, uid!,timestamp!);
-                  // return Text('data');
-                },
+      body: Column(
+        children: [
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
               );
-            }
-          }),
+            },
+            child: Container(
+              padding: const EdgeInsets.only(right: 10),
+              height: 50,
+              width: double.maxFinite,
+              child: Row(
+                children: [
+                    Row(
+                      children: [
+                        ClipOval(
+                          child: Container(
+                            width: 90,
+                            height: 90,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.redAccent,
+                            ),
+                            child: Center(
+                              child: Icon(Icons.notifications, color: Colors.white, size: 30),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text('Những thông báo mới', style: TextStyle(color: Colors.black)),
+                          ],
+                        ),
+                      ],
+                    ),
+                Expanded(child: Container()),
+                Icon(Icons.navigate_next, color: Colors.black, size: 24),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<List<ChatModel>>(
+                stream: service.getChatsByUser(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    print('${snapshot.error} ======================');
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    String? uid = FirebaseAuth.instance.currentUser?.uid;
+                    List<ChatModel>? ls = snapshot.data;
+                    ls?.sort((a, b) {
+                      // Lấy tin nhắn cuối cùng trong mỗi phòng chat (nếu có)
+                      final aLastMessage = a.messages.isNotEmpty
+                          ? a.messages.last.timestamp
+                          : DateTime(0);
+                      final bLastMessage = b.messages.isNotEmpty
+                          ? b.messages.last.timestamp
+                          : DateTime(0);
+                      // Sắp xếp giảm dần (từ mới đến cũ)
+                      return bLastMessage.compareTo(aLastMessage);
+                    });
+                    return ListView.builder(
+                      itemCount: ls?.length,
+                      itemBuilder: (context, index) {
+                        String? chat;
+                        String? idUserChat = '';
+                        String? timestamp = '' ;
+                        try {
+                          chat =
+                              ls?[index].messages[ls[index].messages.length - 1].chat;
+                          idUserChat = ls?[index]
+                              .messages[ls[index].messages.length - 1]
+                              .idUserChat;
+                          timestamp = ls?[index].messages[ls[index].messages.length - 1].timestamp.toString();
+                        } catch (e) {
+                          chat = '';
+                          idUserChat = '';
+                          timestamp = '' ;
+                        }
+                        return _itemGroupChat(
+                            context, ls![index], chat ?? '', idUserChat!, uid!,timestamp!);
+                        // return Text('data');
+                      },
+                    );
+                  }
+                }),
+          ),
+        ],
+      ),
     ));
   }
 
