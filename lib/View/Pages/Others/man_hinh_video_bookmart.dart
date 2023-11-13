@@ -1,19 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Model/video_model.dart';
 import '../../../Provider/video_provider.dart';
 import '../../../Services/call_video_service.dart';
-import '../../../Services/tab_video_service.dart';
 import '../../Widget/home_side_bar.dart';
 import '../../Widget/video_detail.dart';
 import '../../Widget/video_player_item.dart';
 
 class ManHinhVideoByBookMart extends StatefulWidget {
   final int index;
-   ManHinhVideoByBookMart({Key? key, required this.index}) : super(key: key);
+   const ManHinhVideoByBookMart({Key? key, required this.index}) : super(key: key);
 
   @override
   State<ManHinhVideoByBookMart> createState() => _ManHinhVideoByBookMartState();
@@ -23,8 +21,8 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
-    final _auth = FirebaseAuth.instance;
-    videoStream = CallVideoService().getVideoBookmarks(_auth.currentUser!.uid);
+    final auth = FirebaseAuth.instance;
+    videoStream = CallVideoService().getVideoBookmarks(auth.currentUser!.uid);
     PageController controller = PageController(initialPage: widget.index);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -62,7 +60,7 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                   controller: controller,
                   onPageChanged: (int page) {
                     print(videoList!.length - 1);
-                    if (page == videoList!.length - 1) {
+                    if (page == videoList.length - 1) {
                       print('video cuối cùng rồi xem cái lol đi học đi');
                     }
                   },
@@ -98,7 +96,7 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                               }
                             });
                             CallVideoService().checkFollowing(videoData.uid).then((value) => {
-                              if (value || videoData.uid == _auth.currentUser!.uid){
+                              if (value || videoData.uid == auth.currentUser!.uid){
                                 videoProvider.setHasFollowing()
                               }
                             });
@@ -116,20 +114,20 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                             child: Stack(
                               alignment: Alignment.bottomLeft,
                               children: [
-                                VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
+                                VideoPlayerItem(videoData.videoUrl,videoData.id,videoProvider),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Expanded(
                                       flex: 2,
-                                      child: Container(
+                                      child: SizedBox(
                                         height:
                                         MediaQuery.of(context).size.height / 10,
                                         child: VideoDetail(videoProvider),
                                       ),
                                     ),
                                     Expanded(
-                                      child: Container(
+                                      child: SizedBox(
                                         height: MediaQuery.of(context).size.height /
                                             1.75,
                                         child: HomeSideBar(

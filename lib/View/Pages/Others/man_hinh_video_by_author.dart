@@ -12,14 +12,14 @@ import '../../Widget/video_detail.dart';
 class ManhinhVideoByAuthor extends StatefulWidget {
   final String uid;
   final int index;
-  ManhinhVideoByAuthor({required this.uid,required this.index});
+  const ManhinhVideoByAuthor({super.key, required this.uid,required this.index});
   @override
   State<ManhinhVideoByAuthor> createState() => _ManhinhVideoByAuthorState();
 }
 class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuth.instance;
+    final auth = FirebaseAuth.instance;
     final Stream<List<VideoModel>> videoStream;
     videoStream = CallVideoService().getVideosStreamByAuthor(widget.uid);
     PageController controller = PageController(initialPage: widget.index);
@@ -58,7 +58,7 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                   controller: controller,
                   onPageChanged: (int page) {
                     print(videoList!.length - 1);
-                    if (page == videoList!.length - 1) {
+                    if (page == videoList.length - 1) {
                       print('video cuối cùng rồi xem cái lol đi học đi');
                     }
                   },
@@ -72,15 +72,15 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                         builder: (context, videoProvider, child) {
                           videoProvider.setValue(
                               videoData!.blockComments,
-                              videoData!.likes.length,
-                              videoData!.comments.length,
+                              videoData.likes.length,
+                              videoData.comments.length,
                               videoData.userSaveVideos!.length,
-                              videoData!.caption,
-                              videoData!.profilePhoto,
-                              videoData!.username,
-                              videoData!.id,
-                              videoData!.uid,
-                              videoData!.videoUrl,
+                              videoData.caption,
+                              videoData.profilePhoto,
+                              videoData.username,
+                              videoData.id,
+                              videoData.uid,
+                              videoData.videoUrl,
                               videoData.blockComments
                           );
                           if (!videoProvider.hasCheckedLike) {
@@ -93,7 +93,7 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                               }
                             });
                             CallVideoService().checkFollowing(videoData.uid).then((value) => {
-                              if (value || videoData.uid == _auth.currentUser!.uid){
+                              if (value || videoData.uid == auth.currentUser!.uid){
                                 videoProvider.setHasFollowing()
                               }
                             });
@@ -109,20 +109,20 @@ class _ManhinhVideoByAuthorState extends State<ManhinhVideoByAuthor> {
                             child: Stack(
                               alignment: Alignment.bottomLeft,
                               children: [
-                                VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
+                                VideoPlayerItem(videoData.videoUrl,videoData.id,videoProvider),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Expanded(
                                       flex: 2,
-                                      child: Container(
+                                      child: SizedBox(
                                         height:
                                         MediaQuery.of(context).size.height / 10,
                                         child: VideoDetail(videoProvider),
                                       ),
                                     ),
                                     Expanded(
-                                      child: Container(
+                                      child: SizedBox(
                                         height: MediaQuery.of(context).size.height /
                                             1.75,
                                         child: HomeSideBar(

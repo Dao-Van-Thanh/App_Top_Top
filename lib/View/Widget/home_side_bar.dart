@@ -19,15 +19,15 @@ class HomeSideBar extends StatelessWidget {
   final String labelScreen;
   final int index;
   Stream<List<VideoModel>> _videoStream;
-  HomeSideBar(this.videoProvider, this.callVideoService, this.labelScreen, this.index, this._videoStream);
+  HomeSideBar(this.videoProvider, this.callVideoService, this.labelScreen, this.index, this._videoStream, {super.key});
   Stream<List<VideoModel>> get videoStream => _videoStream;
   @override
   Widget build(BuildContext context) {
     final CallVideoService callVideoService;
-    final _auth = FirebaseAuth.instance;
+    final auth = FirebaseAuth.instance;
     TextStyle style = Theme.of(context)
         .textTheme
-        .bodyText1!
+        .bodyLarge!
         .copyWith(fontSize: 13, color: Colors.white);
 
     return Align(
@@ -39,36 +39,36 @@ class HomeSideBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              margin: const EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
               child: _profileImageButton(context),
             ),
             Container(
-              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              margin: const EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
               child: _sideBarItem('heart', videoProvider.countLike, style, 0, videoProvider.iconColors[0], context),
             ),
             Container(
-              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              margin: const EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
               child: _sideBarItem('comment', videoProvider.countComment, style, 1, Colors.white, context),
             ),
             Container(
-              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              margin: const EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
               child: _sideBarItem('save', videoProvider.countSave, style, 2, videoProvider.iconColors[1], context),
             ),
             Container(
-              margin: EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
+              margin: const EdgeInsets.only(bottom: 5), // Điều chỉnh khoảng cách dưới
               child: _sideBarItem('share', 1, style, 2, videoProvider.iconColors[2], context),
             ),
-            videoProvider.authorId == _auth.currentUser!.uid
+            videoProvider.authorId == auth.currentUser!.uid
                 ? Container(
-              margin: EdgeInsets.only(bottom: 10), // Điều chỉnh khoảng cách dưới
+              margin: const EdgeInsets.only(bottom: 10), // Điều chỉnh khoảng cách dưới
               child: _sideBarItem('more', 1, style, 2, videoProvider.iconColors[2], context),
             )
-                : SizedBox(),
+                : const SizedBox(),
             labelScreen == 'man_hinh_quan_ly_video_by_admin'?Container(
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               child: _sideBarItem('error', 1, style, 2, videoProvider.iconColors[2], context),
             )
-                : SizedBox(),
+                : const SizedBox(),
           ],
         ),
       ),
@@ -90,7 +90,7 @@ class HomeSideBar extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Text('Xóa video này?',style: TextStyle(fontSize: 20),),
+          content: const Text('Xóa video này?',style: TextStyle(fontSize: 20),),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -106,7 +106,7 @@ class HomeSideBar extends StatelessWidget {
                 pageProvider.setPageProfile();
               },
               child:
-              Text('Xóa', style: TextStyle(color: Colors.black),),
+              const Text('Xóa', style: TextStyle(color: Colors.black),),
             ),
           ],
         );
@@ -119,7 +119,7 @@ class HomeSideBar extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Text('Ẩn video này?',style: TextStyle(fontSize: 20),),
+          content: const Text('Ẩn video này?',style: TextStyle(fontSize: 20),),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -135,7 +135,7 @@ class HomeSideBar extends StatelessWidget {
                 pageProvider.setPageProfile();
               },
               child:
-              Text('Ẩn', style: TextStyle(color: Colors.black),),
+              const Text('Ẩn', style: TextStyle(color: Colors.black),),
             ),
           ],
         );
@@ -170,12 +170,12 @@ class HomeSideBar extends StatelessWidget {
                 if(labelScreen =='videoManHinhSearch'){
                   callVideoService.likeVideo(videoProvider.videoId);
                   videoProvider.incrementLike();
-                  final _auth = FirebaseAuth.instance;
+                  final auth = FirebaseAuth.instance;
                   final likes = videoProvider.listVideo[index].likes;
-                  if (likes.contains(_auth.currentUser!.uid)) {
-                    likes.remove(_auth.currentUser!.uid);
+                  if (likes.contains(auth.currentUser!.uid)) {
+                    likes.remove(auth.currentUser!.uid);
                   } else {
-                    likes.add(_auth.currentUser!.uid);
+                    likes.add(auth.currentUser!.uid);
                   }
                   videoProvider.listVideo[index].likes = likes;
                   _videoStream = Stream.value(videoProvider as List<VideoModel>);
@@ -188,12 +188,12 @@ class HomeSideBar extends StatelessWidget {
                 if(labelScreen =='videoManHinhSearch'){
                   videoProvider.incrementSaveVideo();
                   callVideoService.saveVideo(videoProvider.videoId);
-                  final _auth = FirebaseAuth.instance;
+                  final auth = FirebaseAuth.instance;
                   final userSaveVides = videoProvider.listVideo[index].userSaveVideos;
-                  if (userSaveVides!.contains(_auth.currentUser!.uid)) {
-                    userSaveVides.remove(_auth.currentUser!.uid);
+                  if (userSaveVides!.contains(auth.currentUser!.uid)) {
+                    userSaveVides.remove(auth.currentUser!.uid);
                   } else {
-                    userSaveVides.add(_auth.currentUser!.uid);
+                    userSaveVides.add(auth.currentUser!.uid);
                   }
                   videoProvider.listVideo[index].userSaveVideos = userSaveVides;
                   _videoStream = Stream.value(videoProvider as List<VideoModel>);
@@ -228,8 +228,8 @@ class HomeSideBar extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 10, left: 10),
                       child: Column(
                         children: [
-                          Text('Gửi đến', style: TextStyle(color: Colors.black)),
-                          SizedBox(height: 10),
+                          const Text('Gửi đến', style: TextStyle(color: Colors.black)),
+                          const SizedBox(height: 10),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Wrap(
@@ -241,7 +241,7 @@ class HomeSideBar extends StatelessWidget {
                               }),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Wrap(
@@ -303,7 +303,7 @@ class HomeSideBar extends StatelessWidget {
         const SizedBox(
           height: 5,
         ),
-        iconData == Icons.error?SizedBox():iconData==Icons.more_horiz?SizedBox():Text(
+        iconData == Icons.error?const SizedBox():iconData==Icons.more_horiz?const SizedBox():Text(
           label.toString(),
           style: style,
         )
@@ -312,11 +312,11 @@ class HomeSideBar extends StatelessWidget {
   }
 
   Widget _profileImageButton(BuildContext context) {
-    final _auth = FirebaseAuth.instance;
-    final pageProvider = Provider.of<PageProvider>(context, listen: false);;
+    final auth = FirebaseAuth.instance;
+    final pageProvider = Provider.of<PageProvider>(context, listen: false);
     return GestureDetector(
       onTap: () {
-        if(videoProvider.authorId == _auth.currentUser!.uid){
+        if(videoProvider.authorId == auth.currentUser!.uid){
           pageProvider.setPageProfile();
         }else{
           if(labelScreen == 'man hinh nguoi khac'){
@@ -365,7 +365,7 @@ class HomeSideBar extends StatelessWidget {
                 ),
               ),
             ),
-          ):SizedBox()
+          ):const SizedBox()
         ],
       ),
     );

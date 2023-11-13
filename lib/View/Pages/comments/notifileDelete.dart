@@ -18,7 +18,7 @@ class NotifiDelete extends StatelessWidget {
         ),
         actions: [
           Center(
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height / 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -13,7 +13,6 @@ import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/Provider/text_provider.dart';
 import 'package:app/Provider/video_provider.dart';
-import 'package:app/View/Pages/QuayVideo/man_hinh_kiem_tra_video.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -23,8 +22,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Provider/chats_provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
-import 'View/Screen/DangKy/man_hinh_dang_ky.dart';
-import 'View/Widget/bottom_navigation.dart';
 import 'firebase_options.dart';
 
 Future<void> _backgroundMessageHandler(RemoteMessage message) async {
@@ -66,15 +63,17 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (context) => MusicProvider()),
       ChangeNotifierProvider(create: (context) => LoadVideoProvider()),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: ManHinhDangKy(),
       home: Bottom_Navigation_Bar(),

@@ -12,7 +12,7 @@ import '../../Widget/user_card.dart';
 import '../Others/man_hinh_nguoi_khac.dart';
 
 class FollowingScreen extends StatefulWidget {
-  FollowingScreen({super.key, this.uId, required this.following});
+  const FollowingScreen({super.key, this.uId, required this.following});
 
   final List<String> following;
   final String? uId;
@@ -45,7 +45,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                   stream: UserService().getUser(id),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center();
+                      return const Center();
                     } else if (snapshot.hasError) {
                       return Text("Error: ${snapshot.error}");
                     } else {
@@ -61,7 +61,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                               .contains(
                                   provider.searchController.text.toLowerCase());
                           if (!isFullNameContainsSearch) {
-                            return SizedBox();
+                            return const SizedBox();
                           }
                           return ItemView(
                             followingUserName,
@@ -190,8 +190,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
               }
             },
             style: ElevatedButton.styleFrom(
-              primary: check ? Colors.grey : Colors.redAccent, // Màu nền đỏ
-              onPrimary: Colors.white, // Màu chữ trắng
+              foregroundColor: Colors.white, backgroundColor: check ? Colors.grey : Colors.redAccent, // Màu chữ trắng
               minimumSize:
                   const Size(150, 40), // Đặt chiều dài và chiều rộng mong muốn
             ),

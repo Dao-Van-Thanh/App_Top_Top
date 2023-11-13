@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../Provider/dang_ky_sdt_provider.dart';
 
 class ManHinhDangKySDT extends StatefulWidget {
+  const ManHinhDangKySDT({super.key});
+
   @override
   State<ManHinhDangKySDT> createState() => _ManHinhDangKySDTState();
 }
@@ -108,16 +110,16 @@ class _ManHinhDangKySDTState extends State<ManHinhDangKySDT> {
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll(
-                              provider.phone.length < 1
+                              provider.phone.isEmpty
                                   ? Colors.black12
                                   : Colors.pinkAccent)),
-                      onPressed: provider.phone.length < 1
+                      onPressed: provider.phone.isEmpty
                           ? null
                           : () {
                               provider.dangKyPhone(context);
@@ -133,7 +135,7 @@ class _ManHinhDangKySDTState extends State<ManHinhDangKySDT> {
                   visible: provider.isPhoneNumberCheck,
                   // Ẩn hoặc hiển thị dựa trên giá trị của isTextVisible
                   child: Text(
-                    '${provider.message}',
+                    provider.message,
                     style: const TextStyle(
                       color: Colors.red,
                     ),

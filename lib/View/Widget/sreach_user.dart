@@ -5,7 +5,7 @@ import '../../Services/search_service.dart';
 
 class searchWidget extends StatefulWidget {
 
-  searchWidget({Key? key, required this.profileProvider, required this.controller}) : super(key: key);
+  const searchWidget({Key? key, required this.profileProvider, required this.controller}) : super(key: key);
 
   final ProfileProvider profileProvider;
   final TextEditingController controller;
@@ -36,7 +36,7 @@ class _searchWidgetState extends State<searchWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(15),
+      margin: const EdgeInsets.all(15),
       height: 40,
       decoration: BoxDecoration(
         color: Colors.grey[300],
@@ -57,7 +57,7 @@ class _searchWidgetState extends State<searchWidget> {
                 maxLines: 1,
 
                 controller: widget.controller,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Tìm kiếm User',
                   border: InputBorder.none,
                 ),

@@ -1,15 +1,13 @@
-import 'package:app/Provider/comments_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Model/user_model.dart';
 import '../../../Provider/video_provider.dart';
 import '../../../Services/user_service.dart';
-import '../../Widget/sreach_user.dart';
 import '../Others/man_hinh_nguoi_khac.dart';
 
 class FollowerScreen extends StatefulWidget {
-  FollowerScreen({this.uId, required this.follower});
+  const FollowerScreen({super.key, this.uId, required this.follower});
 
   final List<String> follower;
   final String? uId;
@@ -28,7 +26,7 @@ class _FollowerScreenState extends State<FollowerScreen> {
       body: Column(
         children: [
           // searchWidget(),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Expanded(
               child: ListView.builder(
                 itemCount: widget.follower.length,
@@ -83,19 +81,19 @@ class _FollowerScreenState extends State<FollowerScreen> {
                 ),
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Column(
               children: [
                 Text(
                   userName.length > 20
                       ? '${userName.substring(0, 20)}...'
                       : userName,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(
                   idTikTok,
-                  style: TextStyle(fontSize: 15, color: Colors.grey),
+                  style: const TextStyle(fontSize: 15, color: Colors.grey),
                 )
               ],
             ),
@@ -110,11 +108,10 @@ class _FollowerScreenState extends State<FollowerScreen> {
             }
           },
           style: ElevatedButton.styleFrom(
-            primary: check ? Colors.grey : Colors.redAccent, // Màu nền đỏ
-            onPrimary: Colors.white, // Màu chữ trắng
-            minimumSize: Size(150, 40), // Đặt chiều dài và chiều rộng mong muốn
+            foregroundColor: Colors.white, backgroundColor: check ? Colors.grey : Colors.redAccent, // Màu chữ trắng
+            minimumSize: const Size(150, 40), // Đặt chiều dài và chiều rộng mong muốn
           ),
-          child: check ? Text("Đang Follow") : Text("Follow lại"),
+          child: check ? const Text("Đang Follow") : const Text("Follow lại"),
         ),
       ],
     );

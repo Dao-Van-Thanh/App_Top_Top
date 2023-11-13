@@ -64,7 +64,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Container(
-              margin: EdgeInsets.only(right: 20, left: 20),
+              margin: const EdgeInsets.only(right: 20, left: 20),
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
@@ -95,8 +95,8 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                 onChanged: (text) {
                   setState(() {
                     isSearching =
-                        textInputSearch.text.length == 0 ? false : true;
-                    if (text.length != 0) {
+                        textInputSearch.text.isEmpty ? false : true;
+                    if (text.isNotEmpty) {
                       textSearch = '';
                       recomments = captions
                           .where((caption) => caption
@@ -120,7 +120,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => Bottom_Navigation_Bar()));
+                        builder: (context) => const Bottom_Navigation_Bar()));
               }),
           leadingWidth: 20,
           // actions: const [
@@ -132,7 +132,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
           //   ),
           // ],
         ),
-        body: textSearch.length <= 0
+        body: textSearch.isEmpty
             ? ListView.builder(
                 itemCount:
                     isSearching ? recomments.length : historySearchs.length,
@@ -152,11 +152,11 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                       });
                     },
                     child: ListTile(
-                      contentPadding: EdgeInsets.all(0),
+                      contentPadding: const EdgeInsets.all(0),
                       // Để loại bỏ khoảng cách mặc định
                       title: Row(
                         children: [
-                          Icon(Icons.history), // Icon bên trái
+                          const Icon(Icons.history), // Icon bên trái
                           Expanded(
                             child: Text(item), // Văn bản ở giữa
                           ),
@@ -168,7 +168,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                               });
                             },
                             child:
-                                Icon(Icons.close), // Biểu tượng close bên phải
+                                const Icon(Icons.close), // Biểu tượng close bên phải
                           ),
                         ],
                       ),
@@ -177,7 +177,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                 },
               )
             : Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: StreamBuilder<List<VideoModel>>(
                   stream:
                       SearchService().getVideosByCaption(textSearch.toString()),
@@ -225,7 +225,7 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                                 children: [
                                   Stack(
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         height: 300.0,
                                         // Giới hạn chiều cao của Chewie
                                         child: Chewie(
@@ -248,24 +248,16 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                                                       'Lỗi: $errorMessage'),
                                                 );
                                               },
-                                              placeholder: Center(
+                                              placeholder: const Center(
                                                 child:
                                                     CircularProgressIndicator(),
                                               )),
                                         ),
                                       ),
-                                      if (videoData!.videoUrl == null)
-                                        Center(
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    Colors.black),
-                                          ),
-                                        ),
                                     ],
                                   ),
                                   Text(
-                                    videoData!.caption,
+                                    videoData.caption,
                                     style: const TextStyle(
                                         fontSize: 12, color: Colors.white),
                                   ),

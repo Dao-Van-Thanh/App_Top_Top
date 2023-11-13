@@ -3,7 +3,6 @@ import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_otp.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Services/notifications_service.dart';
 
@@ -50,7 +49,7 @@ class DangNhapSdtProvider extends ChangeNotifier {
   }
 
   void changeLoading(bool loading) {
-    this.isLoading = loading;
+    isLoading = loading;
     notifyListeners();
   }
 
@@ -86,7 +85,7 @@ class DangNhapSdtProvider extends ChangeNotifier {
         this.verificationId = verificationId;
         changeLoading(false);
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ManHinhDangNhapOTP()));
+            MaterialPageRoute(builder: (context) => const ManHinhDangNhapOTP()));
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
@@ -96,7 +95,7 @@ class DangNhapSdtProvider extends ChangeNotifier {
     NotificationsService notifications = NotificationsService();
     try {
       changeLoading(true);
-      User? existingUser = await FirebaseAuth.instance.currentUser;
+      User? existingUser = FirebaseAuth.instance.currentUser;
         // Tạo một PhoneAuthCredential từ OTP và verificationId
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId,
@@ -105,21 +104,19 @@ class DangNhapSdtProvider extends ChangeNotifier {
         // Xác minh OTP và đăng nhập người dùng
         UserCredential userCredential =
             await FirebaseAuth.instance.signInWithCredential(credential);
-        final user = await UserService().getUser(userCredential.user!.uid);
-        if(user!= null){
-          setMessage('Thành công');
-          changCheckOTP(false);
-          changeLoading(false);
-          // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
-          await notifications.requestPermission();
-          await notifications.getToken();
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Bottom_Navigation_Bar(),
-              ));
-        }
-        setMessage('Tài khoản không đúng, hãy thử lại!');
+        final user = UserService().getUser(userCredential.user!.uid);
+        setMessage('Thành công');
+        changCheckOTP(false);
+        changeLoading(false);
+        // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
+        await notifications.requestPermission();
+        await notifications.getToken();
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Bottom_Navigation_Bar(),
+            ));
+              setMessage('Tài khoản không đúng, hãy thử lại!');
         changCheckOTP(true);
         changeLoading(false);
     } catch (e) {

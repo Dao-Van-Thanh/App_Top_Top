@@ -1,4 +1,3 @@
-import 'package:app/Model/user_model.dart';
 import 'package:app/Model/video_model.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,10 +38,10 @@ class CallVideoService {
         .snapshots()
         .map((snapshot) {
       List<VideoModel> videoList = [];
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         print(doc);
         videoList.add(VideoModel.fromSnap(doc));
-      });
+      }
       return videoList;
     });
   }
@@ -54,9 +53,9 @@ class CallVideoService {
         .snapshots()
         .map((snapshot) {
       List<VideoModel> videoList = [];
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         videoList.add(VideoModel.fromSnap(doc));
-      });
+      }
       return videoList;
     });
   }
@@ -66,9 +65,9 @@ class CallVideoService {
         .snapshots()
         .map((querySnapshot) {
       List<VideoModel> videoList = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         videoList.add(VideoModel.fromSnap(doc));
-      });
+      }
       return videoList;
     });
   }

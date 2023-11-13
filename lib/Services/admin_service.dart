@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AdminService{
   Future<bool> getBanUid(String uid)async{
@@ -9,7 +8,7 @@ class AdminService{
           .doc(uid)
           .get();
       if(document.exists){
-        final userData = document.data() as Map<String, dynamic>?;
+        final userData = document.data();
         bool isBan = userData?['ban'];
         return isBan;
       }
@@ -17,12 +16,12 @@ class AdminService{
     }catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi: $e');
-      throw e; // Rethrow lỗi nếu cần
+      rethrow; // Rethrow lỗi nếu cần
     }
   }
   Future<void> banUser(String uid,bool status)async{
     try{
-      final useRef = await FirebaseFirestore.instance
+      final useRef = FirebaseFirestore.instance
           .collection("Users").doc(uid);
       final  useDoc = await useRef
           .get();
@@ -34,7 +33,7 @@ class AdminService{
     }catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi: $e');
-      throw e; // Rethrow lỗi nếu cần
+      rethrow; // Rethrow lỗi nếu cần
     }
   }
 }

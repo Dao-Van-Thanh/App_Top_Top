@@ -30,7 +30,7 @@ class SearchService {
       return idFollowing;
     } catch (e) {
       print('Error fetching following list: $e');
-      throw e;
+      rethrow;
     }
   }
   Future<String> getUserById(String uid) async{
@@ -39,7 +39,7 @@ class SearchService {
       return 'null';
     }catch (e) {
       print('Error fetching following list: $e');
-      throw e;
+      rethrow;
     }
   }
 Stream<List<VideoModel>> getVideosByCaption(String caption) {
@@ -48,9 +48,9 @@ Stream<List<VideoModel>> getVideosByCaption(String caption) {
       .snapshots()
       .map((querySnapshot) {
     List<VideoModel> videoList = [];
-    querySnapshot.docs.forEach((doc) {
+    for (var doc in querySnapshot.docs) {
       videoList.add(VideoModel.fromSnap(doc));
-    });
+    }
     return videoList;
   });
 }

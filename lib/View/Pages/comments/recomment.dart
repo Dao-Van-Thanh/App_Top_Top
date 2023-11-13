@@ -1,4 +1,3 @@
-import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/comment_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,14 +7,13 @@ import 'package:provider/provider.dart';
 import '../../../Model/comment_model.dart';
 import '../../../Provider/comments_provider.dart';
 import '../../../Services/user_service.dart';
-import 'notifileDelete.dart';
 
 class ReComment extends StatelessWidget {
   String idVideo;
   String idComment;
   String idReComment;
 
-  ReComment(this.idVideo, this.idComment, this.idReComment);
+  ReComment(this.idVideo, this.idComment, this.idReComment, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +80,7 @@ class ReComment extends StatelessWidget {
                                     ),
                                   if (check)
                                     PopupMenuItem(
-                                      child: Text('Chỉnh sửa bình luận'),
+                                      child: const Text('Chỉnh sửa bình luận'),
                                       onTap: () {
                                         showDialog(
                                           context: context,
@@ -95,7 +93,7 @@ class ReComment extends StatelessWidget {
                                                           controllerSuaComment,
                                                       decoration: InputDecoration(
                                                           hintText:
-                                                              '${commentModel.text}')),
+                                                              commentModel.text)),
                                                   TextButton(
                                                       onPressed: () {
                                                         if (controllerSuaComment
@@ -115,7 +113,7 @@ class ReComment extends StatelessWidget {
                                                               context);
                                                         }
                                                       },
-                                                      child: Text('Sửa'))
+                                                      child: const Text('Sửa'))
                                                 ],
                                               ),
                                             );
@@ -167,7 +165,7 @@ class ReComment extends StatelessWidget {
                                         softWrap:
                                             true, // Cho phép tự động xuống dòng khi cần
                                       ),
-                                      SizedBox(height: 5,),
+                                      const SizedBox(height: 5,),
                                       Row(
                                         children: [
                                           Text(
@@ -210,7 +208,7 @@ class ReComment extends StatelessWidget {
                         );
                       },
                     )
-                  : SizedBox();
+                  : const SizedBox();
             }
           },
         );

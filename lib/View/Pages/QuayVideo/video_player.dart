@@ -6,7 +6,7 @@ class VideoPlayerWidget extends StatefulWidget {
   final double startValue;
   final double endValue;
 
-  VideoPlayerWidget(this.videoPath, this.startValue, this.endValue);
+  const VideoPlayerWidget(this.videoPath, this.startValue, this.endValue, {super.key});
 
   @override
   _VideoPlayerWidgetState createState() => _VideoPlayerWidgetState();

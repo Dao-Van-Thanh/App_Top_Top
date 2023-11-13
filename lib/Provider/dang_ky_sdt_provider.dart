@@ -44,7 +44,7 @@ class DangKySdtProvider extends ChangeNotifier{
   }
 
   void changeLoading(bool loading){
-    this.isLoading = loading;
+    isLoading = loading;
     notifyListeners();
   }
 
@@ -68,7 +68,7 @@ class DangKySdtProvider extends ChangeNotifier{
         this.verificationId = verificationId;
         changeLoading(false);
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ManHinhDangKyOTP())
+            MaterialPageRoute(builder: (context) => const ManHinhDangKyOTP())
         );
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -97,7 +97,7 @@ class DangKySdtProvider extends ChangeNotifier{
         await notifications.requestPermission();
         await notifications.getToken();
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),));
+            MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar(),));
         // đăng ký thành công và chuyển sang màn hình home()
         changCheckOTP(false);
         changeLoading(false);

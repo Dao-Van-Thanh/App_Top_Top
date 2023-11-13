@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class EditItemProfile extends StatefulWidget {
   String uid;
-  EditItemProfile(this.uid);
+  EditItemProfile(this.uid, {super.key});
 
   @override
   State<EditItemProfile> createState() => _MyEditItemProfileState();
@@ -97,7 +97,7 @@ class _MyEditItemProfileState extends State<EditItemProfile> {
                   provider.countText.toString(),
                   style: TextStyle(color: provider.colorText),
                 ),
-                Text('/' + provider.getMaxText.toString()),
+                Text('/${provider.getMaxText}'),
               ],
             )
           ],

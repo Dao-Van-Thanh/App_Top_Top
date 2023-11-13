@@ -14,19 +14,18 @@ import '../../Provider/page_provider.dart';
 import '../../Services/call_video_service.dart';
 import '../../Services/tab_video_service.dart';
 import '../Pages/Others/man_hinh_video_by_author.dart';
-import '../Pages/TrangChu/danh_cho_ban.dart';
 
 class GridViewVideo extends StatefulWidget {
   String uid;
   String label;
   PageProvider pageProvider;
-  GridViewVideo(this.uid,this.label ,this.pageProvider);
+  GridViewVideo(this.uid,this.label ,this.pageProvider, {super.key});
 
   @override
   _GridViewVideoState createState() => _GridViewVideoState();
 }
 class _GridViewVideoState extends State<GridViewVideo> {
-  bool _isLooping = false; // Đặt mặc định để lặp lại
+  final bool _isLooping = false; // Đặt mặc định để lặp lại
   ChewieController? controller ;
   @override
   void initState() {
@@ -50,7 +49,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Text('Bỏ ẩn video này?',style: TextStyle(fontSize: 20),),
+          content: const Text('Bỏ ẩn video này?',style: TextStyle(fontSize: 20),),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -65,7 +64,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
                 Navigator.of(context).pop();
               },
               child:
-              Text('bỏ', style: TextStyle(color: Colors.black),),
+              const Text('bỏ', style: TextStyle(color: Colors.black),),
             ),
           ],
         );
@@ -74,7 +73,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
   }
   Widget _content2(BuildContext context, List<VideoModel> videos) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
@@ -98,7 +97,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
               );
             },
             child: Container(
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               child: Stack(
                 fit: StackFit.expand,
                 alignment: Alignment.bottomRight,
@@ -107,7 +106,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
                     margin: const EdgeInsets.only(top: 3,left: 13,right: 13,bottom: 3),
                     height: double.maxFinite,
                     width: double.maxFinite,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: NetworkImage('https://upload.wikimedia.org/wikipedia/vi/thumb/a/a7/Batman_Lee.png/250px-Batman_Lee.png'),fit: BoxFit.cover)
                     ),
@@ -131,7 +130,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
                       },
                       placeholder: Center(
                         child: Container(
-                            child: CircularProgressIndicator()
+                            child: const CircularProgressIndicator()
                         ), // Hiển thị chỉ báo tải video
                       ),
                     ),
@@ -141,12 +140,12 @@ class _GridViewVideoState extends State<GridViewVideo> {
                     left: 0,
                     child: Row(
                       children: [
-                        SizedBox(width: 5),
-                        Icon(Icons.play_arrow, color: Colors.white),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
+                        const Icon(Icons.play_arrow, color: Colors.white),
+                        const SizedBox(width: 5),
                         Text(
                           "${video.views.toString()} ",
-                          style: TextStyle(color: Colors.white, fontSize: 15),
+                          style: const TextStyle(color: Colors.white, fontSize: 15),
                         )
                       ],
                     ),
@@ -171,7 +170,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
       future: result,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
@@ -179,7 +178,7 @@ class _GridViewVideoState extends State<GridViewVideo> {
             child: Text('Đã xảy ra lỗi: ${snapshot.error}'),
           );
         } else if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
-          return Center(
+          return const Center(
             child: Text('Không có dữ liệu'),
           );
         } else {

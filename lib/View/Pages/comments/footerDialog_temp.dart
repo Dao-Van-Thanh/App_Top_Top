@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../Provider/comments_provider.dart';
-import '../../../Provider/video_provider.dart';
-import '../../../Services/comment_service.dart';
 import 'footerDialog.dart';
 
 class FooterDialogTemp extends StatefulWidget {
@@ -12,8 +10,8 @@ class FooterDialogTemp extends StatefulWidget {
 
   // final VideoProvider videoProvider;
 
-  FooterDialogTemp(
-      {required this.avatarURL,
+  const FooterDialogTemp(
+      {super.key, required this.avatarURL,
       required this.videoId,
       required this.uId,
       // required this.videoProvider
@@ -130,7 +128,7 @@ class _FooterDialogState extends State<FooterDialogTemp> {
                     onPressed: () {
 
                     },
-                    icon: Icon(Icons.send),
+                    icon: const Icon(Icons.send),
                   ),
                 ],
               ),

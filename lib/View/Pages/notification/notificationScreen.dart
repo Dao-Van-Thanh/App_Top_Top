@@ -1,5 +1,4 @@
 import 'package:app/View/Widget/app_item_notify.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -36,7 +35,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           itemCount: 100,
           itemExtent: 60,
           itemBuilder: (BuildContext context, int index){
-            return Column(
+            return const Column(
               children: [
                 SizedBox(height: 10,),
                 AppItemNotify(avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/452f6d22389287.56312b2471813.png', nameUser: 'Thuy ngo', content: 'Đã follow bạn',),
