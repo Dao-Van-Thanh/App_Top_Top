@@ -53,26 +53,26 @@ class DangKySdtService{
 
     String generate_idTopTop() {
       final random = Random();
-      final _idTopTop = 'user${random.nextInt(90000) + 10000}';
-      return _idTopTop;
+      final idTopTop = 'user${random.nextInt(90000) + 10000}';
+      return idTopTop;
     }
 
-    Future<bool> _kiemTraIdTopTop(String _idTopTop) async {
+    Future<bool> _kiemTraIdTopTop(String idTopTop) async {
       final querySnapshot =
       await FirebaseFirestore.instance.collection('Users').
-          where('idTopTop', isEqualTo: _idTopTop).get();
+          where('idTopTop', isEqualTo: idTopTop).get();
       return querySnapshot.docs.isEmpty;
     }
 
     Future<String> taoVaKiemTraIdTopTop() async {
-      String _idTopTop = '';
+      String idTopTop = '';
       bool isUnique = false;
 
       while (!isUnique) {
-        _idTopTop = generate_idTopTop();
+        idTopTop = generate_idTopTop();
         // Kiểm tra xem _idTopTop đã tồn tại trong bảng users hay chưa
-        isUnique = await _kiemTraIdTopTop(_idTopTop);
+        isUnique = await _kiemTraIdTopTop(idTopTop);
       }
-      return _idTopTop;
+      return idTopTop;
     }
 }

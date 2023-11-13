@@ -1,11 +1,12 @@
 import 'package:app/Provider/dang_nhap_sdt_provider.dart';
-import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_otp.dart';
 import 'package:app/View/Widget/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:provider/provider.dart';
 
 class ManHinhDangNhapSDT extends StatefulWidget {
+  const ManHinhDangNhapSDT({super.key});
+
   @override
   State<ManHinhDangNhapSDT> createState() => _ManHinhDangNhapSDTState();
 }
@@ -106,16 +107,16 @@ class _ManHinhDangNhapSDTState extends State<ManHinhDangNhapSDT> {
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll(
-                              provider.phone.length < 1
+                              provider.phone.isEmpty
                                   ? Colors.black12
                                   : Colors.pinkAccent)),
-                      onPressed: provider.phone.length < 1
+                      onPressed: provider.phone.isEmpty
                           ? null
                           : () {
                               provider.dangNhapPhone(context);
@@ -131,7 +132,7 @@ class _ManHinhDangNhapSDTState extends State<ManHinhDangNhapSDT> {
                   visible: provider.isPhoneNumberCheck,
                   // Ẩn hoặc hiển thị dựa trên giá trị của isTextVisible
                   child: Text(
-                    '${provider.message}',
+                    provider.message,
                     style: const TextStyle(
                       color: Colors.red,
                     ),

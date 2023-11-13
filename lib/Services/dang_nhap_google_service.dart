@@ -41,7 +41,7 @@ class DangNhapGooogleService {
       int atIndex = email.indexOf('@');
       if (atIndex != -1 && atIndex < email.length - 1) {
         String domain = email.substring(0, atIndex);
-        return '$domain';
+        return domain;
       }
     }
     return ""; // Trả về giá trị mặc định nếu không có email hoặc không tìm thấy '@'

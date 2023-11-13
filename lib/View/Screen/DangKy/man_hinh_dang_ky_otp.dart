@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import '../../Widget/loading.dart';
 
 class ManHinhDangKyOTP extends StatefulWidget {
+  const ManHinhDangKyOTP({super.key});
+
   @override
   _ManHinhDangKyOTPState createState() => _ManHinhDangKyOTPState();
 }
@@ -97,7 +99,7 @@ class _ManHinhDangKyOTPState extends State<ManHinhDangKyOTP> {
                     ),
                     OtpTextField(
                       numberOfFields: 6,
-                      borderColor: Color(0xFF512DA8),
+                      borderColor: const Color(0xFF512DA8),
                       cursorColor: Colors.pinkAccent,
                       enabled: _isCodeSubmitted,
                       focusedBorderColor: Colors.pinkAccent,
@@ -120,10 +122,10 @@ class _ManHinhDangKyOTPState extends State<ManHinhDangKyOTP> {
                     ),
                     provider.isCheckOtp
                         ? Text(
-                            '${provider.message}',
-                            style: TextStyle(color: Colors.red),
+                            provider.message,
+                            style: const TextStyle(color: Colors.red),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
                     const SizedBox(height: 10),
                     Row(
                       children: [

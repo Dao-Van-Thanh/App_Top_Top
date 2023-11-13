@@ -1,19 +1,13 @@
 import 'package:app/Services/call_video_service.dart';
-import 'package:app/View/Widget/video_player_item.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 
-import '../../../Provider/page_provider.dart';
 import '../../../Provider/video_provider.dart';
 import '../../Widget/video_player_item_edit.dart';
 
 class ManHinhChinhSuaVideo extends StatefulWidget {
   final VideoProvider videoProvider;
 
-  ManHinhChinhSuaVideo({required this.videoProvider});
+  const ManHinhChinhSuaVideo({super.key, required this.videoProvider});
 
   @override
   State<ManHinhChinhSuaVideo> createState() => _ManHinhChinhSuaVideoState(videoProvider.blockComments);
@@ -25,8 +19,8 @@ class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _textEditingController = TextEditingController();
-    _textEditingController.text = widget.videoProvider.caption;
+    TextEditingController textEditingController = TextEditingController();
+    textEditingController.text = widget.videoProvider.caption;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -40,13 +34,13 @@ class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
           ),
         ),
         leading: TextButton(
-          child: Text('hủy'),
+          child: const Text('hủy'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ),
-      body: Container(
+      body: SizedBox(
         height: double.maxFinite,
         width: double.maxFinite,
         child: Column(
@@ -55,10 +49,10 @@ class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
               children: [
                 Expanded(
                   flex: 3,
-                  child: Container(
+                  child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.25,
                     child: TextField(
-                      controller: _textEditingController,
+                      controller: textEditingController,
                       textAlignVertical: TextAlignVertical.top,
                       decoration: const InputDecoration(
                         hintText: 'Viết nội dung video của bạn ở đây',
@@ -73,7 +67,7 @@ class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
                   flex: 2,
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.25,
-                    padding: EdgeInsets.all(13),
+                    padding: const EdgeInsets.all(13),
                     child: Container(
                       child: AspectRatio(
                         aspectRatio: 16 / 9,
@@ -92,14 +86,14 @@ class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
                     Icons.comment_bank_outlined,
                     size: 30,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10.0,
                   ),
                   const Text(
                     'Cho phép bình luận ',
                     style: TextStyle(fontSize: 20.0),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Switch(
                     value: !checked,
                     onChanged: (value) {
@@ -116,18 +110,18 @@ class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
                 onTap: () {
                   CallVideoService().updateVideoCaption(
                       widget.videoProvider.videoId,
-                      _textEditingController.text,
+                      textEditingController.text,
                       checked);
                   Navigator.of(context).pop();
                 },
                 child: Container(
-                  margin: EdgeInsets.only(left: 10, right: 10),
+                  margin: const EdgeInsets.only(left: 10, right: 10),
                   width: double.maxFinite,
                   height: 50,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.redAccent),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(

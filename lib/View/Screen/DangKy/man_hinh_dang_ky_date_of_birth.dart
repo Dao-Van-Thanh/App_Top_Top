@@ -59,8 +59,8 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: const Column(
+                  const Expanded(
+                    child: Column(
                       children: [
                         Text(
                           'Ngày sinh của bạn là ngày nào?',
@@ -99,7 +99,7 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                 ),
                 decoration: InputDecoration(
                   errorStyle:
-                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                      const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                   errorText: dateErrorText = isCheckAge == true
                       ? null
                       : 'Bạn chưa đủ tuổi để tham gia ứng dụng!!!',
@@ -123,7 +123,7 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Bottom_Navigation_Bar(),
+                                builder: (context) => const Bottom_Navigation_Bar(),
                               ));
                         } else {
                           // Đăng ký thất bại, hiển thị thông báo lỗi cho người dùng
@@ -155,7 +155,7 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                 ),
               ),
               const SizedBox(height: 180),
-              Container(
+              SizedBox(
                 height: 300, // Hoặc kích thước cố định khác tùy bạn chọn
                 child: CupertinoDatePicker(
                   mode: CupertinoDatePickerMode.date,

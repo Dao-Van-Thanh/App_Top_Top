@@ -3,21 +3,15 @@ import 'dart:io';
 import 'package:app/Model/user_model.dart';
 import 'package:app/Services/others_service.dart';
 import 'package:app/Services/user_service.dart';
-import 'package:app/View/Pages/Profile/main_hinh_editProfile.dart';
 import 'package:app/View/Pages/Profile/showAvatar.dart';
 import 'package:app/View/Pages/Profile/tab_bookmark.dart';
 import 'package:app/View/Pages/Profile/tab_video.dart';
-import 'package:app/View/Pages/Profile/man_hinh_addFriend.dart';
-import 'package:app/View/Screen/DangKy/man_hinh_dang_ky.dart';
 import 'package:app/View/Widget/avatar.dart';
-import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:app/View/Widget/text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Provider/page_provider.dart';
 import '../../../Provider/video_provider.dart';
@@ -66,7 +60,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                 ),
                 title: Text(
                     userModel.fullName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black
                     ),
                 ),
@@ -77,17 +71,17 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                   children: [
                     // AppBarCustom(context, userModel.fullName),
                     Avatar(userModel.avatarURL, context, isDialog, widget.uid),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     text(
                         lable: userModel.idTopTop,
                         size: 18,
                         fontWeight: FontWeight.normal),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TrangThai(userModel.following!.length,
                         userModel.follower!.length, 5),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     textButton(context, userModel.uid),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Expanded(child: TastBar(pageProvider)),
                   ],
                 ),
@@ -98,7 +92,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
   }
 
   Widget AppBarCustom(BuildContext context, String fullname) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.05,
       child: Row(
@@ -129,7 +123,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
     return Container(
       child: Column(
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Stack(
             alignment: Alignment.bottomRight,
             children: [
@@ -174,7 +168,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                     lable: dangFollow.toString(),
                     size: 20,
                     fontWeight: FontWeight.w900),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 const text(
                     lable: "Đang follow",
                     size: 15,
@@ -206,8 +200,8 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                     lable: like.toString(),
                     size: 20,
                     fontWeight: FontWeight.w900),
-                SizedBox(height: 5),
-                text(lable: "Thích", size: 15, fontWeight: FontWeight.normal),
+                const SizedBox(height: 5),
+                const text(lable: "Thích", size: 15, fontWeight: FontWeight.normal),
               ],
             ),
           ),
@@ -219,7 +213,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
     Widget buttonFollow(BuildContext context) {
       return ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(Colors.pinkAccent),
+          backgroundColor: const MaterialStatePropertyAll(Colors.pinkAccent),
           minimumSize: MaterialStateProperty.all<Size>(
             const Size(100,
                 40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
@@ -253,7 +247,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
               style: TextStyle(color: Colors.black),
             ),
           ),
-          SizedBox(width: 5,),
+          const SizedBox(width: 5,),
           OutlinedButton(
               style: ButtonStyle(
                 minimumSize: MaterialStateProperty.all<Size>(
@@ -266,7 +260,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                 service.UnFollowOther(idOther);
                 widget.videoProvider.setHasFollowing();
               },
-              child: Icon(
+              child: const Icon(
                   color: Colors.black,
                   size: 20,
                   Icons.undo
@@ -308,7 +302,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
             fit: StackFit.passthrough,
             children: [
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: const EdgeInsets.only(top: 40),
                 child: TabBarView(
                   children: [
                     TabVideo(widget.uid,'TabVideo',pageProvider),
@@ -382,11 +376,11 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(25)),
                 child: IconButton(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   onPressed: () {
                     ImagePick(ImageSource.gallery, context, isDialog, uId);
                   },
-                  icon: Icon(Icons.add, color: Colors.white),
+                  icon: const Icon(Icons.add, color: Colors.white),
                 ),
               ),
             )

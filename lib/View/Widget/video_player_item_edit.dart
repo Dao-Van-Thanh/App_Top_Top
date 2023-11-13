@@ -2,8 +2,6 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../Provider/video_provider.dart';
-import '../../Services/call_video_service.dart';
 
 class VideoPlayerItemEdit extends StatefulWidget {
   final String videoUrl;
@@ -46,7 +44,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItemEdit> {
         children: [
           VideoPlayer(videoPlayerController),
           if (isLoading)
-            CircularProgressIndicator(
+            const CircularProgressIndicator(
               strokeWidth: 4,
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),

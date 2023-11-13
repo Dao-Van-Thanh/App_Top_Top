@@ -1,4 +1,3 @@
-import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_date_of_birth.dart';
 import 'package:flutter/material.dart';
@@ -163,7 +162,7 @@ class _MyWidgetState extends State<CreatePassSingup> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CreateDateOfBirth()),
+                              builder: (context) => const CreateDateOfBirth()),
                         );
                       });
                     }

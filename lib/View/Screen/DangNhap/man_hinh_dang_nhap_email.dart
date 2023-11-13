@@ -6,11 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Services/notifications_service.dart';
-import 'man_hinh_dang_nhap_sdt.dart';
 import 'man_hinh_quen_mat_khau_email.dart';
 import 'man_hinh_quen_mat_khau_sdt.dart';
 
 class ManHinhDangNhapEmail extends StatefulWidget {
+  const ManHinhDangNhapEmail({super.key});
+
   @override
   _ManHinhDangNhapEmail createState() => _ManHinhDangNhapEmail();
 }
@@ -51,7 +52,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
@@ -92,12 +93,12 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                     });
                   },
                 ),
-                Text('Lưu thông tin đăng nhập'),
+                const Text('Lưu thông tin đăng nhập'),
               ],
             ),
             Container(
               alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(left: 15),
+              margin: const EdgeInsets.only(left: 15),
               child: TextButton(
                 onPressed: (){
                   _showDialog(context);
@@ -111,7 +112,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 ),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: isButtonEnabled
                   ? () async {
@@ -133,8 +134,8 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                 );
                 bool check = await service.DangNhapBangEmail(email, password);
                 NotificationsService notifications = NotificationsService();
-                final _auth = FirebaseAuth.instance.currentUser!.uid;
-                bool checkBan = await AdminService().getBanUid(_auth);
+                final auth = FirebaseAuth.instance.currentUser!.uid;
+                bool checkBan = await AdminService().getBanUid(auth);
                 if(!checkBan) {
                   if (check) {
                     await notifications.requestPermission();
@@ -184,7 +185,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Center(child: Text('Đặt lại mật khẩu bằng',style: TextStyle(fontSize: 18),)),
+          title: const Center(child: Text('Đặt lại mật khẩu bằng',style: TextStyle(fontSize: 18),)),
           actions: <Widget>[
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -201,9 +202,9 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ManHinhQuenMatKhauSDT()),
+                                builder: (context) => const ManHinhQuenMatKhauSDT()),
                           );},
-                        child: text(lable: 'Số điện thoại', size: 15, fontWeight: FontWeight.w400,),
+                        child: const text(lable: 'Số điện thoại', size: 15, fontWeight: FontWeight.w400,),
                       ),
                     ),
                 Divider(
@@ -217,10 +218,10 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ManHinhQuenMatKhauEmail()),
+                              builder: (context) => const ManHinhQuenMatKhauEmail()),
                         );
                       },
-                      child: text(lable: 'Email', size: 15, fontWeight: FontWeight.w400,),
+                      child: const text(lable: 'Email', size: 15, fontWeight: FontWeight.w400,),
                     ),
                 Divider(
                   height: 20, // Điều chỉnh chiều cao của đường dọc
@@ -231,7 +232,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                       onPressed: (){
                         Navigator.of(context).pop();
                       },
-                      child: text(lable: 'hủy', size: 15, fontWeight: FontWeight.w400,),
+                      child: const text(lable: 'hủy', size: 15, fontWeight: FontWeight.w400,),
                     )
               ],
             )

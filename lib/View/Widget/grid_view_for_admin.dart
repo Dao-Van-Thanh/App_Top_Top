@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:chewie/chewie.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -20,14 +19,14 @@ class GridViewVideoForAdmin extends StatefulWidget {
   String uid;
   String label;
   PageProvider pageProvider;
-  GridViewVideoForAdmin(this.uid,this.label ,this.pageProvider);
+  GridViewVideoForAdmin(this.uid,this.label ,this.pageProvider, {super.key});
 
   @override
   State<GridViewVideoForAdmin> createState() => _GridViewVideoForAdminState();
 }
 
 class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
-  bool _isLooping = false; // Đặt mặc định để lặp lại
+  final bool _isLooping = false; // Đặt mặc định để lặp lại
   ChewieController? controller ;
   @override
   void initState() {
@@ -52,7 +51,7 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Text('Bỏ ẩn video này?',style: TextStyle(fontSize: 20),),
+          content: const Text('Bỏ ẩn video này?',style: TextStyle(fontSize: 20),),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -68,7 +67,7 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
                 setState(() {});
               },
               child:
-              Text('bỏ', style: TextStyle(color: Colors.black),),
+              const Text('bỏ', style: TextStyle(color: Colors.black),),
             ),
           ],
         );
@@ -77,7 +76,7 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
   }
   Widget _content2(BuildContext context, List<VideoModel> videos) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
@@ -101,7 +100,7 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
               );
             },
             child: Container(
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               child: Stack(
                 fit: StackFit.expand,
                 alignment: Alignment.bottomRight,
@@ -110,7 +109,7 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
                     margin: const EdgeInsets.only(top: 3,left: 13,right: 13,bottom: 3),
                     height: double.maxFinite,
                     width: double.maxFinite,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: NetworkImage('https://upload.wikimedia.org/wikipedia/vi/thumb/a/a7/Batman_Lee.png/250px-Batman_Lee.png'),fit: BoxFit.cover)
                     ),
@@ -134,7 +133,7 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
                       },
                       placeholder: Center(
                         child: Container(
-                            child: CircularProgressIndicator()
+                            child: const CircularProgressIndicator()
                         ), // Hiển thị chỉ báo tải video
                       ),
                     ),
@@ -144,12 +143,12 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
                     left: 0,
                     child: Row(
                       children: [
-                        SizedBox(width: 5),
-                        Icon(Icons.play_arrow, color: Colors.white),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
+                        const Icon(Icons.play_arrow, color: Colors.white),
+                        const SizedBox(width: 5),
                         Text(
                           "${video.views.toString()} ",
-                          style: TextStyle(color: Colors.white, fontSize: 15),
+                          style: const TextStyle(color: Colors.white, fontSize: 15),
                         )
                       ],
                     ),
@@ -174,7 +173,7 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
       future: result,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
@@ -182,7 +181,7 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
             child: Text('Đã xảy ra lỗi: ${snapshot.error}'),
           );
         } else if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
-          return Center(
+          return const Center(
             child: Text('Không có dữ liệu'),
           );
         } else {

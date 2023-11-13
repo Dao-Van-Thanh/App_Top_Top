@@ -3,7 +3,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../Model/user_model.dart';
 
 class DangNhapFacebookService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -53,7 +52,7 @@ class DangNhapFacebookService {
       int atIndex = email.indexOf('@');
       if (atIndex != -1 && atIndex < email.length - 1) {
         String domain = email.substring(0, atIndex);
-        return '$domain';
+        return domain;
       }
     }
     return ""; // Trả về giá trị mặc định nếu không có email hoặc không tìm thấy '@'

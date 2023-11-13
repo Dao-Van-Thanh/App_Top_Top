@@ -3,7 +3,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 
 class LoadingWidget extends StatelessWidget {
   final bool isLoading;
-  LoadingWidget({required this.isLoading});
+  const LoadingWidget({super.key, required this.isLoading});
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -33,6 +33,6 @@ class LoadingWidget extends StatelessWidget {
         )
       ],
     )
-        : SizedBox.shrink(); // Nếu không isLoading, trả về widget trống
+        : const SizedBox.shrink(); // Nếu không isLoading, trả về widget trống
   }
 }

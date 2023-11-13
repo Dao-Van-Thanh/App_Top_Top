@@ -14,7 +14,7 @@ class _VideoDetailState extends State<VideoDetail> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 16.0),
+      padding: const EdgeInsets.only(left: 16.0),
       child: Align(
         alignment: Alignment.centerLeft, // Đặt căn chỉnh về phía trái
         child: Column(
@@ -39,7 +39,7 @@ class _VideoDetailState extends State<VideoDetail> {
               collapseText: 'Thu gọn',
               linkEllipsis: true,
               linkColor: Colors.white60,
-              linkStyle: TextStyle(
+              linkStyle: const TextStyle(
                 decoration: TextDecoration.underline,
               ),
             ),

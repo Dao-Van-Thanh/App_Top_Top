@@ -62,6 +62,7 @@ class MusicProvider extends ChangeNotifier {
       musics[index].isFocus = !musics[index].isFocus;
     notifyListeners();
   }
+  @override
   void dispose() {
     player.dispose();
     super.dispose();
