@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ManHinhTrangThai extends StatefulWidget {
-  const ManHinhTrangThai({super.key, Key?key,required this.following,required this.follower, required this.uid, required this.initTab});
+  const ManHinhTrangThai({super.key,required this.following,required this.follower, required this.uid, required this.initTab});
 
   final List<String> following;
   final List<String> follower;
