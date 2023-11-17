@@ -91,7 +91,7 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    print('${snapshot.error} ======================');
+                    debugPrint('${snapshot.error} ======================');
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
                     String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -142,20 +142,13 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
       String idUserChat, String uid, String timestampme) {
     String idOther = service.getIdOtherInListUID(model.uid);
     UserService userService = UserService();
-    String time = '';
-    try{
-      time = UserService.formattedTimeAgo(DateTime.parse(timestampme));
-    }catch(e){
-
-      time = '';
-    }
     return StreamBuilder<DocumentSnapshot>(
         stream: userService.getUser(idOther),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            print('${snapshot.error} ======================');
+            debugPrint('${snapshot.error} ======================');
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             UserModel userModel = UserModel.fromSnap(snapshot.data!);

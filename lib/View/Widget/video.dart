@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:app/Model/video_model.dart';
-import 'package:app/Provider/load_videoProvider.dart';
 import 'package:app/Provider/video_provider.dart';
 import 'package:app/Services/call_video_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,8 +29,6 @@ class _ForYouState extends State<Video> {
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
     final auth = FirebaseAuth.instance;
-    final loadVideoProvider = context.read<LoadVideoProvider>();
-    late String videoUrl;
     videoStream = CallVideoService().getVideosStream();
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
@@ -62,7 +59,7 @@ class _ForYouState extends State<Video> {
                   }
                 },
                 scrollDirection: Axis.vertical,
-                itemCount: videoList.length ?? 0,
+                itemCount: videoList.length,
                 itemBuilder: (context, index) {
                   final videoData = videoList[index];
                   return ChangeNotifierProvider<VideoProvider>(

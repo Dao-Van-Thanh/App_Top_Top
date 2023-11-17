@@ -23,7 +23,6 @@ class HomeSideBar extends StatelessWidget {
   Stream<List<VideoModel>> get videoStream => _videoStream;
   @override
   Widget build(BuildContext context) {
-    final CallVideoService callVideoService;
     final auth = FirebaseAuth.instance;
     TextStyle style = Theme.of(context)
         .textTheme

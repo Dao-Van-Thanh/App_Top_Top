@@ -37,7 +37,7 @@ class NotificationsService {
         },
       );
     }catch(e){
-      print('=======================chết ở 1');
+      debugPrint('=======================chết ở 1');
     }
   }
   Future<void> _showLocalNotification(RemoteMessage message)async {
@@ -75,7 +75,7 @@ class NotificationsService {
           payload: message.data['body']
       );
     }catch(e){
-      print('=======================chết ở 2');
+      debugPrint('=======================chết ở 2');
     }
   }
 
@@ -91,13 +91,13 @@ class NotificationsService {
       sound: true
     );
     if(settings.authorizationStatus ==AuthorizationStatus.authorized){
-      print('============================User granted permission');
+      debugPrint('============================User granted permission');
       debugPrint('User granted permission');
     }else if(settings.authorizationStatus ==AuthorizationStatus.provisional){
-      print('============================User granted provisional permission');
+      debugPrint('============================User granted provisional permission');
       debugPrint('User granted provisional permission');
     }else{
-      print('============================User declined or has not accepted permission');
+      debugPrint('============================User declined or has not accepted permission');
       debugPrint('User declined or has not accepted permission');
     }
   }
@@ -135,11 +135,11 @@ class NotificationsService {
       });
       FirebaseMessaging.onMessage
           .listen((RemoteMessage message) async {
-        print(message.data);
+        debugPrint(message.data as String?);
         await _showLocalNotification(message);
       });
     }catch(e){
-      print('===========================chết ở 4');
+      debugPrint('===========================chết ở 4');
     }
   }
 
@@ -174,9 +174,9 @@ class NotificationsService {
       ).onError(
               (error, stackTrace) => debugPrint('đây là thất bại==============${error.toString()}')
       );
-      print('thành công=======================');
+      debugPrint('thành công=======================');
     } catch (e) {
-      print('Lỗi ==========================');
+      debugPrint('Lỗi ==========================');
       debugPrint(e.toString());
     }
   }

@@ -15,9 +15,9 @@ class ManHinhDangKy extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Texts("Đăng ký TikTok", 30, FontWeight.w800),
+              texts("Đăng ký TikTok", 30, FontWeight.w800),
               const SizedBox(height: 10),
-              Texts(
+              texts(
                   "Tạo hồ sơ, follow các tài khoản khác, quay\n video của chính bạn,v.v ",
                   18,
 
@@ -77,7 +77,7 @@ class ManHinhDangKy extends StatelessWidget {
     );
   }
 
-  Widget Texts(String lable, double size, FontWeight fontWeight) {
+  Widget texts(String lable, double size, FontWeight fontWeight) {
     return Text(
       lable,
       style: TextStyle(

@@ -26,12 +26,10 @@ class GridViewVideoForAdmin extends StatefulWidget {
 }
 
 class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
-  final bool _isLooping = false; // Đặt mặc định để lặp lại
   ChewieController? controller ;
   @override
   void initState() {
     super.initState();
-    print(widget.label);
     final provider = Provider.of<ProfileProvider>(context, listen: false);
     if (!provider.isLoading && provider.videos.isEmpty) {
       provider.loadVideos(widget.uid);
@@ -131,10 +129,8 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
                           child: Text('Lỗi: $errorMessage'),
                         );
                       },
-                      placeholder: Center(
-                        child: Container(
-                            child: const CircularProgressIndicator()
-                        ), // Hiển thị chỉ báo tải video
+                      placeholder: const Center(
+                        child: CircularProgressIndicator(), // Hiển thị chỉ báo tải video
                       ),
                     ),
                   ),

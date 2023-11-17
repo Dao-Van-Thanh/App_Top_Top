@@ -84,21 +84,21 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                   body: SafeArea(
                     child: Column(
                       children: [
-                        AppBarCustom(context,userModel.fullName),
-                        Avatar(userModel.avatarURL, context, isDialog, uId),
+                        appBarCustom(context,userModel.fullName),
+                        avatar(userModel.avatarURL, context, isDialog, uId),
                         const SizedBox(height: 20),
-                        text(
+                        TextWidget(
                             lable: userModel.idTopTop,
                             size: 18,
                             fontWeight: FontWeight.normal
                         ),
                         const SizedBox(height: 20),
-                        TrangThai(userModel.following!.length,
+                        trangThai(userModel.following!.length,
                             userModel.follower!.length, 5,following!,follower!),
                         const SizedBox(height: 30),
                         textButton(context),
                         const SizedBox(height: 10),
-                        Expanded(child: TastBar(userModel.uid,pageProvider)),
+                        Expanded(child: tastBar(userModel.uid,pageProvider)),
                       ],
                     ),
                   ),
@@ -121,7 +121,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
           );
   }
 
-  Widget AppBarCustom(BuildContext context,String fullname){
+  Widget appBarCustom(BuildContext context,String fullname){
     return SizedBox(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.05,
@@ -176,44 +176,42 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     );
   }
 
-  Avatar(String url, BuildContext sContext, bool isDialog, String uid) {
-    return Container(
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              ClipOval(
-                child: GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: sContext,
-                        builder: (context) =>
-                            showAvatarDialog(context, url, isDialog, uid));
-                  },
-                  child: SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black,
-                      backgroundImage: NetworkImage(url),
-                    ),
+  avatar(String url, BuildContext sContext, bool isDialog, String uid) {
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            ClipOval(
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: sContext,
+                      builder: (context) =>
+                          showAvatarDialog(context, url, isDialog, uid));
+                },
+                child: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black,
+                    backgroundImage: NetworkImage(url),
                   ),
                 ),
               ),
-              const IconButton(
-                onPressed: null,
-                icon: Icon(Icons.upload, color: Colors.redAccent),
-              ),
-            ],
-          )
-        ],
-      ),
+            ),
+            const IconButton(
+              onPressed: null,
+              icon: Icon(Icons.upload, color: Colors.redAccent),
+            ),
+          ],
+        )
+      ],
     );
   }
 
-  TrangThai(int dangFollow, int follow, int like,List<String> following, List<String> follower) {
+  trangThai(int dangFollow, int follow, int like,List<String> following, List<String> follower) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -223,19 +221,17 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(username: uId,follow: follow,follower: dangFollow,uid: uId,initTab: 0,following: following,ngfollow: follower,id: id)));
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(uid: uId,follower: follower, following: following,initTab: 0)));
             },
-            child: Container(
-              child: Column(
-                children: [
-                  text(
-                    lable: dangFollow.toString(),
-                    size: 20,
-                    fontWeight: FontWeight.w900,
-                  ),
-                  const SizedBox(height: 5),
-                  const text(
-                      lable: "Đang follow", size: 15, fontWeight: FontWeight.normal),
-                ],
-              ),
+            child: Column(
+              children: [
+                TextWidget(
+                  lable: dangFollow.toString(),
+                  size: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+                const SizedBox(height: 5),
+                const TextWidget(
+                    lable: "Đang follow", size: 15, fontWeight: FontWeight.normal),
+              ],
             ),
           ),
         ),
@@ -245,41 +241,36 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(username: uId,follow: follow,follower: dangFollow,uid: uId,initTab: 0)));
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(uid: uId,follower: follower, following: following,initTab: 1)));
             },
-            child: Container(
-              child: Column(
-                children: [
-                  text(
-                      lable: follow.toString(),
-                      size: 20,
-                      fontWeight: FontWeight.w900,
-                  ),
-                  const SizedBox(height: 5),
-                  const text(
-                      lable: "Follower", size: 15, fontWeight: FontWeight.normal),
-                ],
-              ),
+            child: Column(
+              children: [
+                TextWidget(
+                    lable: follow.toString(),
+                    size: 20,
+                    fontWeight: FontWeight.w900,
+                ),
+                const SizedBox(height: 5),
+                const TextWidget(
+                    lable: "Follower", size: 15, fontWeight: FontWeight.normal),
+              ],
             ),
           ),
         ),
         Expanded(
           child: GestureDetector(
             onTap: (){
-              
               print(uId);
             },
-            child: Container(
-              child: Column(
-                children: [
-                  text(
-                    lable: like.toString(),
-                    size: 20,
-                    fontWeight: FontWeight.w900,
-                  ),
-                  const SizedBox(height: 5),
-                  const text(
-                      lable: "Thích", size: 15, fontWeight: FontWeight.normal),
-                ],
-              ),
+            child: Column(
+              children: [
+                TextWidget(
+                  lable: like.toString(),
+                  size: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+                const SizedBox(height: 5),
+                const TextWidget(
+                    lable: "Thích", size: 15, fontWeight: FontWeight.normal),
+              ],
             ),
           ),
         ),
@@ -427,7 +418,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     );
   }
 
-  TastBar(String uid, PageProvider pageProvider) {
+  tastBar(String uid, PageProvider pageProvider) {
     return DefaultTabController(
           length: 2,
           child: Scaffold(
@@ -522,7 +513,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 child: IconButton(
                   padding: const EdgeInsets.all(5),
                   onPressed: () {
-                    ImagePick(ImageSource.gallery, context, isDialog, uId);
+                    imagePick(ImageSource.gallery, context, isDialog, uId);
                   },
                   icon: const Icon(Icons.add, color: Colors.white),
                 ),
@@ -534,7 +525,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     );
   }
 
-  ImagePick(
+  imagePick(
       ImageSource src, BuildContext context, bool isDialog, String uId) async {
     final image = await ImagePicker().pickImage(source: src);
     if (image != null) {

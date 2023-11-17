@@ -53,7 +53,6 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                         if (snapshot.connectionState == ConnectionState.done) {
                           // Camera đã sẵn sàng, hiển thị nó trong widget CameraPreview
                           return CameraPreview(_controller);
-                                                  return const Center(child: CircularProgressIndicator());
 
                         } else {
                           // Đợi camera sẵn sàng
@@ -107,7 +106,7 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                                 });
                               }
                             } catch (e) {
-                              print("Lỗi khi quay video: $e");
+                              debugPrint("Lỗi khi quay video: $e");
                             }
                           },
                           icon: Icon(

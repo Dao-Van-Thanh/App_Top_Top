@@ -1,6 +1,7 @@
 import 'package:app/Model/comment_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class CommentService {
   Stream<DocumentSnapshot> getCommentsInVideo(String videoId) {
@@ -12,7 +13,7 @@ class CommentService {
       return stream;
     } catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       rethrow; // Rethrow lỗi nếu cần
     }
   }
@@ -27,7 +28,7 @@ class CommentService {
       return stream;
     } catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       rethrow; // Rethrow lỗi nếu cần
     }
   }
@@ -64,7 +65,7 @@ class CommentService {
       });
     } catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       rethrow; // Rethrow lỗi nếu cần
     }
   }
@@ -105,7 +106,7 @@ class CommentService {
       });
     } catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       rethrow; // Rethrow lỗi nếu cần
     }
   }
@@ -188,7 +189,7 @@ class CommentService {
         return null;
       }
     } catch (e) {
-      print('Lỗi khi lấy dữ liệu người dùng: $e');
+      debugPrint('Lỗi khi lấy dữ liệu người dùng: $e');
       return null;
     }
   }

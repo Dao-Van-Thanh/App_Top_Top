@@ -2,6 +2,7 @@ import 'package:app/Model/video_model.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class CallVideoService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -39,7 +40,6 @@ class CallVideoService {
         .map((snapshot) {
       List<VideoModel> videoList = [];
       for (var doc in snapshot.docs) {
-        print(doc);
         videoList.add(VideoModel.fromSnap(doc));
       }
       return videoList;
@@ -82,7 +82,7 @@ class CallVideoService {
           .toList();
     })
         .handleError((error) {
-      print('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
+      debugPrint('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
     });
   }
 
@@ -131,7 +131,6 @@ class CallVideoService {
     }
   }
   Future<void> deleteVideo(String videoId) async {
-    print(videoId);
     await _firestore.collection('Videos').doc(videoId).delete();
   }
   Future<void> updateVideoCaption(String videoId, String newCaption,bool blockComments) async {
@@ -141,7 +140,7 @@ class CallVideoService {
         'blockComments' : blockComments
       });
     } catch (error) {
-      print('Error updating caption: $error');
+      debugPrint('Error updating caption: $error');
     }
   }
    saveVideo(String videoId) async{
@@ -184,7 +183,6 @@ class CallVideoService {
   // }
   void privateVideo(String id) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    var uid = FirebaseAuth.instance.currentUser!.uid;
 
     DocumentSnapshot doc = await firestore.collection('Videos').doc(id).get();
     if (doc.exists) {
@@ -196,18 +194,17 @@ class CallVideoService {
         firestore.collection('Videos').doc(id).update({
           'status': false,
         }).then((value) {
-          print('Status updated successfully.');
+          debugPrint('Status updated successfully.');
         }).catchError((error) {
-          print('Error updating status: $error');
+          debugPrint('Error updating status: $error');
         });
       }
     } else {
-      print('Document does not exist.');
+      debugPrint('Document does not exist.');
     }
   }
   void publicVideo(String id) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    var uid = FirebaseAuth.instance.currentUser!.uid;
 
     DocumentSnapshot doc = await firestore.collection('Videos').doc(id).get();
     if (doc.exists) {
@@ -219,23 +216,21 @@ class CallVideoService {
         firestore.collection('Videos').doc(id).update({
           'status': true,
         }).then((value) {
-          print('Status updated successfully.');
+          debugPrint('Status updated successfully.');
         }).catchError((error) {
-          print('Error updating status: $error');
+          debugPrint('Error updating status: $error');
         });
       }
     } else {
-      print('Document does not exist.');
+      debugPrint('Document does not exist.');
     }
   }
   Future<void> addShareCountInTablesVideo(String idVideo)async{
     try{
-      print('=========================');
       final videoSnap = await FirebaseFirestore.instance
           .collection('Videos')
           .doc(idVideo)
           .get();
-      print('${videoSnap['shareCount']}=========================');
       int shareCount = videoSnap['shareCount'] ?? 0;
       shareCount++;
       await FirebaseFirestore.instance
@@ -245,7 +240,7 @@ class CallVideoService {
         'shareCount' : shareCount
       });
     }catch(e){
-      print('=======================$e');
+      debugPrint('=======================$e');
     }
   }
 

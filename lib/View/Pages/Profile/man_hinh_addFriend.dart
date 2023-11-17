@@ -9,11 +9,11 @@ class AddFriend extends StatefulWidget {
   const AddFriend({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddFriendState createState() => _AddFriendState();
 }
 
 class _AddFriendState extends State<AddFriend> {
-  final bool _hasInitialized = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -35,87 +35,85 @@ class UserCard extends StatelessWidget {
               width: 10,
             ),
             Expanded(
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 20,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      userData['fullname'],
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        userData['fullname'],
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  checkScreen ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: followProvider.isFollowed
+                        ? [
+                      Expanded(
+                        child: buttonFollowAndDelete(
+                            'Xóa',
+                            Colors.black,
+                            Colors.grey[300]!,
+                            userData['uid'],
+                            followProvider,
+                            150),
                       ),
-                    ),
-                    checkScreen ? Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: followProvider.isFollowed
-                          ? [
-                        Expanded(
-                          child: ButtonFollowAndDelete(
-                              'Xóa',
-                              Colors.black,
-                              Colors.grey[300]!,
-                              userData['uid'],
-                              followProvider,
-                              150),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: ButtonFollowAndDelete(
-                              'Follow',
-                              Colors.white,
-                              Colors.red[400]!,
-                              userData['uid'],
-                              followProvider,
-                              150),
-                        ),
-                      ]
-                          : [
-                        Expanded(
-                          child: ButtonFollowAndDelete(
-                              'Đang Follow',
-                              Colors.black,
-                              Colors.grey[300]!,
-                              userData['uid'],
-                              followProvider,
-                              300),
-                        ),
-                      ],
-                    )
-                        : Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: followProvider.isFollowed?[
-                        SizedBox(
-                          width: 150, // Đặt chiều rộng của Container
-                          height: 40,
-                          child: ButtonFollowAndDelete(
-                              'Follow',
-                              Colors.white,
-                              Colors.red[400]!,
-                              userData['uid'],
-                              followProvider,
-                              150),
-                        )
-                      ]:[
-                        SizedBox(
-                          width: 150, // Đặt chiều rộng của Container
-                          height: 40,
-                          child:  ButtonFollowAndDelete(
-                              'Đang Follow',
-                              Colors.black,
-                              Colors.grey[300]!,
-                              userData['uid'],
-                              followProvider,
-                              300),
-                        )
-                      ]
-                    )
-                  ],
-                ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: buttonFollowAndDelete(
+                            'Follow',
+                            Colors.white,
+                            Colors.red[400]!,
+                            userData['uid'],
+                            followProvider,
+                            150),
+                      ),
+                    ]
+                        : [
+                      Expanded(
+                        child: buttonFollowAndDelete(
+                            'Đang Follow',
+                            Colors.black,
+                            Colors.grey[300]!,
+                            userData['uid'],
+                            followProvider,
+                            300),
+                      ),
+                    ],
+                  )
+                      : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: followProvider.isFollowed?[
+                      SizedBox(
+                        width: 150, // Đặt chiều rộng của Container
+                        height: 40,
+                        child: buttonFollowAndDelete(
+                            'Follow',
+                            Colors.white,
+                            Colors.red[400]!,
+                            userData['uid'],
+                            followProvider,
+                            150),
+                      )
+                    ]:[
+                      SizedBox(
+                        width: 150, // Đặt chiều rộng của Container
+                        height: 40,
+                        child:  buttonFollowAndDelete(
+                            'Đang Follow',
+                            Colors.black,
+                            Colors.grey[300]!,
+                            userData['uid'],
+                            followProvider,
+                            300),
+                      )
+                    ]
+                  )
+                ],
               ),
             )
           ],

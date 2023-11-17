@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 
 import '../../Services/search_service.dart';
 
-class searchWidget extends StatefulWidget {
+class SearchWidget extends StatefulWidget {
 
-  const searchWidget({Key? key, required this.profileProvider, required this.controller}) : super(key: key);
+  const SearchWidget({Key? key, required this.profileProvider, required this.controller}) : super(key: key);
 
   final ProfileProvider profileProvider;
   final TextEditingController controller;
 
   @override
-  State<searchWidget> createState() => _searchWidgetState();
+  State<SearchWidget> createState() => _SearchWidgetState();
 }
 
-class _searchWidgetState extends State<searchWidget> {
+class _SearchWidgetState extends State<SearchWidget> {
   List<String> username = [];
   @override
   void initState() {

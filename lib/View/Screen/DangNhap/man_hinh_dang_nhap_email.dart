@@ -132,7 +132,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                     duration: Duration(seconds: 3), // Độ dài hiển thị
                   ),
                 );
-                bool check = await service.DangNhapBangEmail(email, password);
+                bool check = await service.dangNhapBangEmail(email, password);
                 NotificationsService notifications = NotificationsService();
                 final auth = FirebaseAuth.instance.currentUser!.uid;
                 bool checkBan = await AdminService().getBanUid(auth);
@@ -204,7 +204,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                             MaterialPageRoute(
                                 builder: (context) => const ManHinhQuenMatKhauSDT()),
                           );},
-                        child: const text(lable: 'Số điện thoại', size: 15, fontWeight: FontWeight.w400,),
+                        child: const TextWidget(lable: 'Số điện thoại', size: 15, fontWeight: FontWeight.w400,),
                       ),
                     ),
                 Divider(
@@ -221,7 +221,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                               builder: (context) => const ManHinhQuenMatKhauEmail()),
                         );
                       },
-                      child: const text(lable: 'Email', size: 15, fontWeight: FontWeight.w400,),
+                      child: const TextWidget(lable: 'Email', size: 15, fontWeight: FontWeight.w400,),
                     ),
                 Divider(
                   height: 20, // Điều chỉnh chiều cao của đường dọc
@@ -232,7 +232,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                       onPressed: (){
                         Navigator.of(context).pop();
                       },
-                      child: const text(lable: 'hủy', size: 15, fontWeight: FontWeight.w400,),
+                      child: const TextWidget(lable: 'hủy', size: 15, fontWeight: FontWeight.w400,),
                     )
               ],
             )

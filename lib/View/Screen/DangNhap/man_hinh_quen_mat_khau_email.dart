@@ -57,12 +57,10 @@ class _ManHinhQuenMatKhauEmailState extends State<ManHinhQuenMatKhauEmail> {
               fontWeight: FontWeight.bold
             ),
             ),
-            Container(
-              child: Text('Chúng tôi sẽ gửi mã đặt lại mật khẩu cho bạn qua email.',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black.withOpacity(0.3),
-                ),
+            Text('Chúng tôi sẽ gửi mã đặt lại mật khẩu cho bạn qua email.',
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black.withOpacity(0.3),
               ),
             ),
             const SizedBox(

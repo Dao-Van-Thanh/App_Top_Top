@@ -109,30 +109,28 @@ class EditProfile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      child: Align(
+                    Align(
+                      alignment: Alignment.center,
+                      child: Stack(
                         alignment: Alignment.center,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            // Hình ảnh
-                            ClipOval(
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    '${userData['avatarURL']}',
-                                fit: BoxFit.cover,
-                                height: 100,
-                                width: 100,
-                              ),
+                        children: <Widget>[
+                          // Hình ảnh
+                          ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  '${userData['avatarURL']}',
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: 100,
                             ),
-                            // Biểu tượng
-                            const Icon(
-                              Icons.camera_alt_outlined,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                          ],
-                        ),
+                          ),
+                          // Biểu tượng
+                          const Icon(
+                            Icons.camera_alt_outlined,
+                            size: 30,
+                            color: Colors.white,
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(

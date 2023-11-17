@@ -1,6 +1,7 @@
 import 'package:app/Model/video_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchService {
@@ -14,7 +15,7 @@ class SearchService {
       }).toList();
       return captions;
     } catch (e) {
-      print('Error fetching data: $e');
+      debugPrint('Error fetching data: $e');
       throw Exception('Failed to load captions from Firestore');
     }
   }
@@ -29,19 +30,19 @@ class SearchService {
           : [];
       return idFollowing;
     } catch (e) {
-      print('Error fetching following list: $e');
+      debugPrint('Error fetching following list: $e');
       rethrow;
     }
   }
-  Future<String> getUserById(String uid) async{
-    try{
-      DocumentSnapshot docUser = await FirebaseFirestore.instance.collection("Users").doc(uid).get();
-      return 'null';
-    }catch (e) {
-      print('Error fetching following list: $e');
-      rethrow;
-    }
-  }
+  // Future<String> getUserById(String uid) async{
+  //   try{
+  //     DocumentSnapshot docUser = await FirebaseFirestore.instance.collection("Users").doc(uid).get();
+  //     return 'null';
+  //   }catch (e) {
+  //     print('Error fetching following list: $e');
+  //     rethrow;
+  //   }
+  // }
 Stream<List<VideoModel>> getVideosByCaption(String caption) {
   return _firestore.collection('Videos')
       .where('caption', isEqualTo: caption)
@@ -55,14 +56,13 @@ Stream<List<VideoModel>> getVideosByCaption(String caption) {
   });
 }
   Future<void> saveListHistory(List<String> dataList) async {
-    print(dataList);
+    (dataList);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setStringList('myList', dataList);
   }
   Future<List<String>> getListHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? dataList = prefs.getStringList('myList');
-    print(dataList);
     return dataList ?? [];
   }
 

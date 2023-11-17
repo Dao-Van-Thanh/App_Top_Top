@@ -18,7 +18,6 @@ class LoadVideoProvider extends ChangeNotifier {
   }
 
   void loadVideoPlayer(String videoUrl) async{
-    print('loadvideo tiếp theo$videoUrl');
     loadingVD = true;
     _videoPlayerController = VideoPlayerController.network(videoUrl);
     loadingVD = false;

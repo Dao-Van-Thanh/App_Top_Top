@@ -2,7 +2,6 @@ import 'package:app/Provider/music_provider.dart';
 import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import '../../Provider/load_videoProvider.dart';
@@ -55,7 +54,6 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final musicProvider = Provider.of<MusicProvider>(context, listen: false);
       return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
@@ -167,6 +165,5 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     final tempDir = await getTemporaryDirectory();
     final path = '${tempDir.path}/${widget.videoProvider.caption}.mp4';
     await Dio().download(widget.videoUrl, path);
-    bool? isSaved = await GallerySaver.saveVideo(path, toDcim: true);
   }
 }

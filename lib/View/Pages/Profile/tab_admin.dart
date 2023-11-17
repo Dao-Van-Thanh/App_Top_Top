@@ -33,7 +33,7 @@ class TabAdmin extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(flex:0,child: searchWidget(profileProvider: profileProvider, controller: controller)),
+          Expanded(flex:0,child: SearchWidget(profileProvider: profileProvider, controller: controller)),
           Expanded(
             flex: 1,
             child: StreamBuilder(
@@ -53,7 +53,7 @@ class TabAdmin extends StatelessWidget {
                             final data = docs[index].data();
                             final uid = data['uid'];
                             if (uid != FirebaseAuth.instance.currentUser!.uid) {
-                              return UserCard(data, index, context);
+                              return userCard(data, index, context);
                             }
                             return const SizedBox.shrink();
                           },
@@ -68,7 +68,7 @@ class TabAdmin extends StatelessWidget {
       )
     );
   }
-  Widget UserCard(Map<String,dynamic> data,int index,BuildContext context){
+  Widget userCard(Map<String,dynamic> data,int index,BuildContext context){
 
     return Container(
 

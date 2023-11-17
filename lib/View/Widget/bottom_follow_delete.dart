@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../Provider/follow_provider.dart';
 import '../../Services/user_service.dart';
 
-Widget ButtonFollowAndDelete(String label, Color colorText, Color bg,
+Widget buttonFollowAndDelete(String label, Color colorText, Color bg,
     String uid, FollowProvider followProvider, int size) {
   return ElevatedButton(
     onPressed: () {

@@ -68,14 +68,12 @@ class _UserScreenState extends State<UserScreen> {
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                         // Độ mờ
-                        child: Container(
-                          child: CircleAvatar(
-                            backgroundColor: Colors.black,
-                            backgroundImage: NetworkImage(
-                              userModel.avatarURL,
-                            ),
-                            maxRadius: 100,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black,
+                          backgroundImage: NetworkImage(
+                            userModel.avatarURL,
                           ),
+                          maxRadius: 100,
                         ),
                       ),
                     ),

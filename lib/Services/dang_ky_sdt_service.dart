@@ -8,7 +8,7 @@ import '../Model/user_model.dart';
 
 class DangKySdtService{
 
-    Future<bool> KiemTraDangKySdt(UserCredential authResult,String phone) async {
+    Future<bool> kiemTraDangKySdt(UserCredential authResult,String phone) async {
       User? user = authResult.user;
       if (user != null) {
         // Đăng nhập thành công, kiểm tra xem người dùng đã đăng ký tài khoản hay chưa
@@ -51,7 +51,7 @@ class DangKySdtService{
       }
     }
 
-    String generate_idTopTop() {
+    String generateIdTopTop() {
       final random = Random();
       final idTopTop = 'user${random.nextInt(90000) + 10000}';
       return idTopTop;
@@ -69,7 +69,7 @@ class DangKySdtService{
       bool isUnique = false;
 
       while (!isUnique) {
-        idTopTop = generate_idTopTop();
+        idTopTop = generateIdTopTop();
         // Kiểm tra xem _idTopTop đã tồn tại trong bảng users hay chưa
         isUnique = await _kiemTraIdTopTop(idTopTop);
       }

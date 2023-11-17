@@ -25,7 +25,6 @@ class GridViewVideo extends StatefulWidget {
   _GridViewVideoState createState() => _GridViewVideoState();
 }
 class _GridViewVideoState extends State<GridViewVideo> {
-  final bool _isLooping = false; // Đặt mặc định để lặp lại
   ChewieController? controller ;
   @override
   void initState() {
@@ -128,10 +127,8 @@ class _GridViewVideoState extends State<GridViewVideo> {
                           child: Text('Lỗi: $errorMessage'),
                         );
                       },
-                      placeholder: Center(
-                        child: Container(
-                            child: const CircularProgressIndicator()
-                        ), // Hiển thị chỉ báo tải video
+                      placeholder: const Center(
+                        child: CircularProgressIndicator(), // Hiển thị chỉ báo tải video
                       ),
                     ),
                   ),

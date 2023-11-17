@@ -141,7 +141,6 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                       isSearching ? recomments[index] : historySearchs[index];
                   return InkWell(
                     onTap: () {
-                      print('Item $item được nhấn');
                       _focusNode.unfocus();
                       setState(() {
                         textInputSearch.text = item;
@@ -217,7 +216,6 @@ class _ManHinhTimKiemState extends State<ManHinhTimKiem> {
                                   },
                                 ),
                               );
-                              print(index);
                             },
                             child: Container(
                               color: Colors.black,

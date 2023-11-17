@@ -36,7 +36,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            searchWidget(
+            SearchWidget(
                 profileProvider: profileProvider, controller: textController),
             const SizedBox(height: 20),
             Column(
@@ -63,7 +63,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
                           if (!isFullNameContainsSearch) {
                             return const SizedBox();
                           }
-                          return ItemView(
+                          return itemView(
                             followingUserName,
                             followingUser.avatarURL,
                             followingUser.idTopTop,
@@ -138,7 +138,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
     );
   }
 
-  Widget ItemView(String userName, String Url, String idTikTok, String uid,
+  Widget itemView(String userName, String url, String idTikTok, String uid,
       String idOther, bool check) {
     VideoProvider videoProvider = VideoProvider();
     return Row(
@@ -157,7 +157,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
               child: SizedBox(
                 child: CircleAvatar(
                   foregroundColor: Colors.black,
-                  foregroundImage: NetworkImage(Url),
+                  foregroundImage: NetworkImage(url),
                 ),
               ),
             ),

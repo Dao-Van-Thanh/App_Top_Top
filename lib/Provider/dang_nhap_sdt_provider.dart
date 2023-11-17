@@ -1,4 +1,3 @@
-import 'package:app/Services/user_service.dart';
 import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_otp.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,14 +58,13 @@ class DangNhapSdtProvider extends ChangeNotifier {
   }
 
   Future<void> sendPasswordResetEmail() async {
-    print('sendPasswordRestEmail');
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
         email: email,
       );
       // Gửi email xác minh mật khẩu thành công
     } catch (e) {
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       // Xử lý lỗi
     }
   }
@@ -95,16 +93,14 @@ class DangNhapSdtProvider extends ChangeNotifier {
     NotificationsService notifications = NotificationsService();
     try {
       changeLoading(true);
-      User? existingUser = FirebaseAuth.instance.currentUser;
         // Tạo một PhoneAuthCredential từ OTP và verificationId
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: verificationId,
-          smsCode: otp,
-        );
+        // PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        //   verificationId: verificationId,
+        //   smsCode: otp,
+        // );
         // Xác minh OTP và đăng nhập người dùng
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-        final user = UserService().getUser(userCredential.user!.uid);
+        // UserCredential userCredential =
+        //     await FirebaseAuth.instance.signInWithCredential(credential);
         setMessage('Thành công');
         changCheckOTP(false);
         changeLoading(false);

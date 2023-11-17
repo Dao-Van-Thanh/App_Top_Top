@@ -48,7 +48,6 @@ class _ManHinhChatState extends State<ManHinhChat> {
         } else {
           final chatData = snapshot.data;
           if (chatData != null) {
-            final message = chatData.messages;
             final user = FirebaseAuth.instance.currentUser;
             final idOther = service.getIdOtherInListUID(chatData.uid);
             NotificationsService notificationsService = NotificationsService();
@@ -94,15 +93,13 @@ class _ManHinhChatState extends State<ManHinhChat> {
                           ),
                           if (snapshot.data != null &&
                               snapshot.data!['fullname'] != null)
-                            Container(
-                              child: Text(
-                                '${snapshot.data!['fullname']}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                            Text(
+                              '${snapshot.data!['fullname']}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                         ],

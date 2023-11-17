@@ -34,7 +34,6 @@ class _ForYouState extends State<ForYou> {
     final Stream<List<VideoModel>> videoStream;
     final auth = FirebaseAuth.instance;
     late String videoUrl;
-    String? tempVideoUrl;
     bool isVideoLoaded = false;
     void prepareNextPageVideo(int index,List<VideoModel> videoList) {
       if (index + 1 < videoList.length) {
@@ -47,7 +46,6 @@ class _ForYouState extends State<ForYou> {
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
       builder: (context, snapshot) {
-        print(snapshot);
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
             width: 200,
@@ -74,7 +72,7 @@ class _ForYouState extends State<ForYou> {
                   // }
                 },
                 scrollDirection: Axis.vertical,
-                itemCount: videoList.length ?? 0,
+                itemCount: videoList.length,
                 itemBuilder: (context, index) {
                   final videoData = videoList[index];
                   return ChangeNotifierProvider<VideoProvider>(

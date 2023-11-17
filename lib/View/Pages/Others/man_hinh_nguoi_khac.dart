@@ -70,19 +70,19 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                 child: Column(
                   children: [
                     // AppBarCustom(context, userModel.fullName),
-                    Avatar(userModel.avatarURL, context, isDialog, widget.uid),
+                    avatar(userModel.avatarURL, context, isDialog, widget.uid),
                     const SizedBox(height: 20),
-                    text(
+                    TextWidget(
                         lable: userModel.idTopTop,
                         size: 18,
                         fontWeight: FontWeight.normal),
                     const SizedBox(height: 20),
-                    TrangThai(userModel.following!.length,
+                    trangThai(userModel.following!.length,
                         userModel.follower!.length, 5),
                     const SizedBox(height: 30),
                     textButton(context, userModel.uid),
                     const SizedBox(height: 10),
-                    Expanded(child: TastBar(pageProvider)),
+                    Expanded(child: tastBar(pageProvider)),
                   ],
                 ),
               ),
@@ -91,7 +91,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
         });
   }
 
-  Widget AppBarCustom(BuildContext context, String fullname) {
+  Widget appBarCustom(BuildContext context, String fullname) {
     return SizedBox(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.05,
@@ -119,91 +119,83 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
     );
   }
 
-  Avatar(String url, BuildContext sContext, bool isDialog, String uid) {
-    return Container(
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              ClipOval(
-                child: GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: sContext,
-                        builder: (context) =>
-                            showAvatarDialog(context, url, isDialog, uid));
-                  },
-                  child: SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black,
-                      backgroundImage: NetworkImage(url),
-                    ),
+  avatar(String url, BuildContext sContext, bool isDialog, String uid) {
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            ClipOval(
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: sContext,
+                      builder: (context) =>
+                          showAvatarDialog(context, url, isDialog, uid));
+                },
+                child: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black,
+                    backgroundImage: NetworkImage(url),
                   ),
                 ),
               ),
-              const IconButton(
-                onPressed: null,
-                icon: Icon(Icons.upload, color: Colors.redAccent),
-              ),
-            ],
-          )
-        ],
-      ),
+            ),
+            const IconButton(
+              onPressed: null,
+              icon: Icon(Icons.upload, color: Colors.redAccent),
+            ),
+          ],
+        )
+      ],
     );
   }
 
-  TrangThai(int dangFollow, int follow, int like) {
+  trangThai(int dangFollow, int follow, int like) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Expanded(
-          child: Container(
-            child: Column(
-              children: [
-                text(
-                    lable: dangFollow.toString(),
-                    size: 20,
-                    fontWeight: FontWeight.w900),
-                const SizedBox(height: 5),
-                const text(
-                    lable: "Đang follow",
-                    size: 15,
-                    fontWeight: FontWeight.normal),
-              ],
-            ),
+          child: Column(
+            children: [
+              TextWidget(
+                  lable: dangFollow.toString(),
+                  size: 20,
+                  fontWeight: FontWeight.w900),
+              const SizedBox(height: 5),
+              const TextWidget(
+                  lable: "Đang follow",
+                  size: 15,
+                  fontWeight: FontWeight.normal),
+            ],
           ),
         ),
         Expanded(
-          child: Container(
-            child: Column(
-              children: [
-                text(
-                    lable: follow.toString(),
-                    size: 20,
-                    fontWeight: FontWeight.w900),
-                const SizedBox(height: 5),
-                const text(
-                    lable: "Follower", size: 15, fontWeight: FontWeight.normal),
-              ],
-            ),
+          child: Column(
+            children: [
+              TextWidget(
+                  lable: follow.toString(),
+                  size: 20,
+                  fontWeight: FontWeight.w900),
+              const SizedBox(height: 5),
+              const TextWidget(
+                  lable: "Follower", size: 15, fontWeight: FontWeight.normal),
+            ],
           ),
         ),
         Expanded(
-          child: Container(
-            child: Column(
-              children: [
-                text(
-                    lable: like.toString(),
-                    size: 20,
-                    fontWeight: FontWeight.w900),
-                const SizedBox(height: 5),
-                const text(lable: "Thích", size: 15, fontWeight: FontWeight.normal),
-              ],
-            ),
+          child: Column(
+            children: [
+              TextWidget(
+                  lable: like.toString(),
+                  size: 20,
+                  fontWeight: FontWeight.w900),
+              const SizedBox(height: 5),
+              const TextWidget(lable: "Thích", size: 15, fontWeight: FontWeight.normal),
+            ],
           ),
         ),
       ],
@@ -221,7 +213,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
         ),
         onPressed: () async {
           OthersService service = OthersService(); // Thay đổi cách khởi tạo đối tượng service
-          await service.FollowOther(idOther);
+          await service.followOther(idOther);
         },
         child: const Text(
           'Follow',
@@ -257,7 +249,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
               ),
               onPressed: () {
                 OthersService service = OthersService();
-                service.UnFollowOther(idOther);
+                service.unFollowOther(idOther);
                 widget.videoProvider.setHasFollowing();
               },
               child: const Icon(
@@ -278,7 +270,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
               context); // Hiển thị một tiến trình đang tải nếu đang kiểm tra
         }
         if (snapshot.hasError) {
-          print('Lỗi: ${snapshot.error}');
+          debugPrint('Lỗi: ${snapshot.error}');
           return buttonFollow(context); // Xử lý lỗi nếu cần
         }
         final userData = UserModel.fromSnap(snapshot.data!);
@@ -293,7 +285,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
       },
     );
   }
-  TastBar(PageProvider pageProvider) {
+  tastBar(PageProvider pageProvider) {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -378,7 +370,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
                 child: IconButton(
                   padding: const EdgeInsets.all(5),
                   onPressed: () {
-                    ImagePick(ImageSource.gallery, context, isDialog, uId);
+                    imagePick(ImageSource.gallery, context, isDialog, uId);
                   },
                   icon: const Icon(Icons.add, color: Colors.white),
                 ),
@@ -390,7 +382,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
     );
   }
 
-  ImagePick(
+  imagePick(
       ImageSource src, BuildContext context, bool isDialog, String uId) async {
     final image = await ImagePicker().pickImage(source: src);
     if (image != null) {

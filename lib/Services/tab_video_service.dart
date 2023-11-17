@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../Model/video_model.dart';
 
@@ -39,7 +40,7 @@ class TabVideoService{
           .toList();
       return videos;
     } catch (error) {
-      print('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
+      debugPrint('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
       return [];
     }
   }
@@ -57,7 +58,7 @@ class TabVideoService{
           .toList();
       return videos;
     } catch (error) {
-      print('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
+      debugPrint('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
       return [];
     }
   }
@@ -72,7 +73,7 @@ class TabVideoService{
           .toList();
       return videos;
     } catch (error) {
-      print('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
+      debugPrint('Lỗi khi truy vấn dữ liệu từ Firestore: $error');
       return [];
     }
   }

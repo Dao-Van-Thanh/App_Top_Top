@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class OthersService {
   static Stream<DocumentSnapshot> getUserDataStream() {
@@ -12,7 +13,7 @@ class OthersService {
     return userRef.snapshots();
   }
 
-  Future<void> FollowOther(String idOther) async {
+  Future<void> followOther(String idOther) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw Exception('User is not logged in');
@@ -29,11 +30,11 @@ class OthersService {
       });
       await createChatRoomsForUsers(user, idOther);
     } catch (e) {
-      print('Lỗi khi cập nhật trường following: $e');
+      debugPrint('Lỗi khi cập nhật trường following: $e');
     }
   }
 
-  void UnFollowOther(String idOther) async {
+  void unFollowOther(String idOther) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw Exception('User is not logged in');
@@ -49,7 +50,7 @@ class OthersService {
         'follower': FieldValue.arrayRemove([user.uid])
       });
     } catch (e) {
-      print('Lỗi khi cập nhật trường following: $e');
+      debugPrint('Lỗi khi cập nhật trường following: $e');
     }
   }
 
@@ -107,7 +108,7 @@ class OthersService {
         });
       }
     } catch (e) {
-      print('==================$e');
+      debugPrint('==================$e');
     }
     // Làm bất cứ điều gì bạn muốn sau khi tạo phòng chat (ví dụ: điều hướng đến phòng chat).
   }

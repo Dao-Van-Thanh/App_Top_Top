@@ -5,6 +5,7 @@ import 'package:app/Services/others_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +26,7 @@ class UserService {
       }
       return null;
     } catch (e) {
-      print('Lỗi khi lấy dữ liệu người dùng: $e');
+      debugPrint('Lỗi khi lấy dữ liệu người dùng: $e');
       return null;
     }
   }
@@ -62,7 +63,7 @@ class UserService {
       }
       await userDoc.update(updateData);
     } catch (e) {
-      print('Lỗi khi cập nhật dữ liệu người dùng: $e');
+      debugPrint('Lỗi khi cập nhật dữ liệu người dùng: $e');
     }
   }
 
@@ -88,7 +89,7 @@ class UserService {
         service.createChatRoomsForUsers(user, targetUserID);
       }
     } catch (e) {
-      print("Error following user: $e");
+      debugPrint("Error following user: $e");
     }
   }
 
@@ -106,7 +107,7 @@ class UserService {
         });
       }
     } catch (e) {
-      print("Error unfollowing user: $e");
+      debugPrint("Error unfollowing user: $e");
     }
   }
 
@@ -138,7 +139,7 @@ class UserService {
         return usersList;
       }
     } catch (e) {
-      print("Error getting users: $e");
+      debugPrint("Error getting users: $e");
       return null;
     }
     return null;
@@ -159,7 +160,7 @@ class UserService {
       }
       return [];
     } catch (e) {
-      print("Error getting following list: $e");
+      debugPrint("Error getting following list: $e");
       return [];
     }
   }
@@ -177,7 +178,7 @@ class UserService {
       }
       return [];
     } catch (e) {
-      print("Error getting following list: $e");
+      debugPrint("Error getting following list: $e");
       return [];
     }
   }
@@ -209,7 +210,7 @@ class UserService {
         "avatarURL": imageUrl,
       });
     } catch (e) {
-      print('Lỗi khi cập nhật dữ liệu người dùng: $e');
+      debugPrint('Lỗi khi cập nhật dữ liệu người dùng: $e');
     }
   }
 
@@ -222,7 +223,7 @@ class UserService {
       return stream;
     } catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       rethrow; // Rethrow lỗi nếu cần
     }
   }
@@ -236,7 +237,7 @@ class UserService {
       return document;
     } catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       rethrow; // Rethrow lỗi nếu cần
     }
   }
@@ -249,7 +250,7 @@ class UserService {
       // Đăng xuất người dùng khỏi Firebase Auth
       await auth.signOut();
     } catch (e) {
-      print('Lỗi khi đăng xuất: $e');
+      debugPrint('Lỗi khi đăng xuất: $e');
     }
   }
 
@@ -296,17 +297,17 @@ class UserService {
     if (status.isGranted) {
       // Người dùng đã cấp quyền, có thể lấy vị trí.
       Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      print('Vị trí: $position');
+      debugPrint('Vị trí: $position');
     } else {
       if (status.isGranted) {
         // Quyền chưa được cấp, yêu cầu người dùng.
         var result = await Permission.location.request();
         if (result.isGranted) {
           Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-          print('Vị trí: $position');
+          debugPrint('Vị trí: $position');
         } else {
           // Xử lý trường hợp người dùng từ chối quyền.
-          print('Người dùng từ chối quyền vị trí.');
+          debugPrint('Người dùng từ chối quyền vị trí.');
         }
       } else {
         // Người dùng đã từ chối hoặc vô hiệu hóa quyền.

@@ -18,8 +18,8 @@ class DangNhapFacebookService {
 
         if (userCredential.user != null) {
           // Lấy thông tin người dùng từ Firestore
-          DocumentSnapshot userSnapshot =
-          await _firestore.collection('Users').doc(userCredential.user!.uid).get();
+          // DocumentSnapshot userSnapshot =
+          // await _firestore.collection('Users').doc(userCredential.user!.uid).get();
 
           // Người dùng mới đăng nhập hoặc thông tin người dùng đã tồn tại, lưu thông tin vào Firestore
           await _firestore.collection('Users').doc(userCredential.user!.uid).set({
@@ -42,7 +42,7 @@ class DangNhapFacebookService {
         return null;
       }
     } catch (e) {
-      print("Error signing in with Facebook: $e");
+      debugPrint("Error signing in with Facebook: $e");
       return null;
     }
   }
