@@ -1,6 +1,5 @@
 import 'package:app/Services/user_service.dart';
 import 'package:app/View/Widget/app_item_notify.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Model/notifycation_model.dart';
@@ -53,6 +52,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ],
                 );
               },
+
             );
           }
       ),

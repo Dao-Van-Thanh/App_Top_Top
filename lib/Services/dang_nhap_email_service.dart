@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/user_model.dart';
 
@@ -26,7 +25,7 @@ class DangNhapEmailService {
           print('Thông tin UserModel:');
           print('Full Name: ${userModel.fullName}');
           print('Age: ${userModel.age}');
-          print('${userModel.uid}');
+          print(userModel.uid);
 
           return true;
         } else {

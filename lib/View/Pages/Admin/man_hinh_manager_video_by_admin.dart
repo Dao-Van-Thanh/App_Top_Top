@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,7 @@ class ManHinhManagerVideoByAdmin extends StatefulWidget {
   final String uid;
   final int index;
   final bool status;
-  ManHinhManagerVideoByAdmin({required this.uid,required this.index, required this.status});
+  const ManHinhManagerVideoByAdmin({super.key, required this.uid,required this.index, required this.status});
   @override
   State<ManHinhManagerVideoByAdmin> createState() => _ManHinhManagerVideoByAdminState();
 }
@@ -22,7 +21,7 @@ class ManHinhManagerVideoByAdmin extends StatefulWidget {
 class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin> {
   @override
   Widget build(BuildContext context) {
-    final _auth = FirebaseAuth.instance;
+    final auth = FirebaseAuth.instance;
     final Stream<List<VideoModel>> videoStream;
     videoStream = CallVideoService().getVideosStreamByAuthor(widget.uid);
     PageController controller = PageController(initialPage: widget.index);
@@ -61,7 +60,7 @@ class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin>
                   controller: controller,
                   onPageChanged: (int page) {
                     print(videoList!.length - 1);
-                    if (page == videoList!.length - 1) {
+                    if (page == videoList.length - 1) {
                       print('video cuối cùng rồi xem cái lol đi học đi');
                     }
                   },
@@ -75,15 +74,15 @@ class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin>
                         builder: (context, videoProvider, child) {
                           videoProvider.setValue(
                               videoData!.blockComments,
-                              videoData!.likes.length,
-                              videoData!.comments.length,
+                              videoData.likes.length,
+                              videoData.comments.length,
                               videoData.userSaveVideos!.length,
-                              videoData!.caption,
-                              videoData!.profilePhoto,
-                              videoData!.username,
-                              videoData!.id,
-                              videoData!.uid,
-                              videoData!.videoUrl,
+                              videoData.caption,
+                              videoData.profilePhoto,
+                              videoData.username,
+                              videoData.id,
+                              videoData.uid,
+                              videoData.videoUrl,
                               videoData.blockComments
                           );
                           if (!videoProvider.hasCheckedLike) {
@@ -96,7 +95,7 @@ class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin>
                               }
                             });
                             CallVideoService().checkFollowing(videoData.uid).then((value) => {
-                              if (value || videoData.uid == _auth.currentUser!.uid){
+                              if (value || videoData.uid == auth.currentUser!.uid){
                                 videoProvider.setHasFollowing()
                               }
                             });
@@ -116,24 +115,24 @@ class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin>
                                   margin: const EdgeInsets.only(top: 3,left: 13,right: 13,bottom: 3),
                                   height: double.maxFinite,
                                   width: double.maxFinite,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       image: DecorationImage(
                                           image: NetworkImage('https://upload.wikimedia.org/wikipedia/vi/thumb/a/a7/Batman_Lee.png/250px-Batman_Lee.png'),fit: BoxFit.cover)
                                   ),
-                                ):VideoPlayerItem(videoData!.videoUrl,videoData.id,videoProvider),
+                                ):VideoPlayerItem(videoData.videoUrl,videoData.id,videoProvider),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Expanded(
                                       flex: 2,
-                                      child: Container(
+                                      child: SizedBox(
                                         height:
                                         MediaQuery.of(context).size.height / 10,
                                         child: VideoDetail(videoProvider),
                                       ),
                                     ),
                                     Expanded(
-                                      child: Container(
+                                      child: SizedBox(
                                         height: MediaQuery.of(context).size.height /
                                             1.75,
                                         child: HomeSideBar(

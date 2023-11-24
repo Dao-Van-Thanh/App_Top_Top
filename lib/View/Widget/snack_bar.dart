@@ -5,7 +5,7 @@ class SnackBarWidget{
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: Duration(seconds: 2), // Thời gian hiển thị của Snackbar
+        duration: const Duration(seconds: 2), // Thời gian hiển thị của Snackbar
       ),
     );
   }

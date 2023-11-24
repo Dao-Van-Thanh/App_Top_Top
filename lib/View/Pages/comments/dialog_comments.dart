@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Provider/video_provider.dart';
-import 'footerDialog.dart';
 import 'footerDialog_temp.dart';
 
 class CommentsDialog extends StatefulWidget {
@@ -26,7 +25,7 @@ class CommentsDialog extends StatefulWidget {
 }
 
 class _CommentsDialogState extends State<CommentsDialog> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   String? avatarURL;
   CommentService commentService = CommentService();
   String? uId;
@@ -69,13 +68,13 @@ class _CommentsDialogState extends State<CommentsDialog> {
           backgroundColor: Colors.white,
           title: Text(
             '${widget.commentsSize} bình luận',
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
           ),
           centerTitle: true,
           actions: <Widget>[
             IconButton(
               color: Colors.black,
-              icon: Icon(Icons.close), // Nút đóng
+              icon: const Icon(Icons.close), // Nút đóng
               onPressed: () {
                 Navigator.pop(context);
               },

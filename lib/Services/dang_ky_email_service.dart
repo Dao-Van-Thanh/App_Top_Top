@@ -1,9 +1,7 @@
-import 'dart:math';
 
 import 'package:app/Model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DangKyEmailService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,7 +11,7 @@ class DangKyEmailService {
     if (atIndex != -1 && atIndex < email.length - 1) {
       // Sử dụng phương thức substring để lấy phần sau ký tự '@'
       String domain = email.substring(0, atIndex);
-      return '$domain';
+      return domain;
     }
     return "";
   }
@@ -49,6 +47,7 @@ class DangKyEmailService {
     } catch (e) {
       return e.toString(); // Trả về thông báo lỗi nếu đăng ký thất bại
     }
+    return null;
   }
 
 

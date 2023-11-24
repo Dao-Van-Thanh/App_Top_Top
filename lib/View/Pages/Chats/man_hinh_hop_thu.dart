@@ -10,9 +10,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../Services/notifications_service.dart';
 
 class ManHinhHopThu extends StatefulWidget {
+  const ManHinhHopThu({super.key});
+
   @override
   State<ManHinhHopThu> createState() => _ManHinhHopThuState();
 }
@@ -109,7 +110,7 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                 stream: service.getChatsByUser(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     print('${snapshot.error} ======================');
                     return Center(child: Text('Error: ${snapshot.error}'));
@@ -173,7 +174,7 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
         stream: userService.getUser(idOther),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             print('${snapshot.error} ======================');
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -239,8 +240,8 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${userModel.fullName}',
-                            style: TextStyle(color: Colors.black, fontSize: 20),
+                            userModel.fullName,
+                            style: const TextStyle(color: Colors.black, fontSize: 20),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -253,7 +254,7 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                               chat.isNotEmpty
                                   ? idUserChat != idOther
                                       ? 'Bạn: $chat'
-                                      : '$chat'
+                                      : chat
                                   : 'Hãy bắt đầu cuộc trò chuyện',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -269,7 +270,7 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                     ),
                     Container(
                       alignment: Alignment.bottomCenter,
-                      padding: EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.only(bottom: 20),
                       width: MediaQuery.sizeOf(context).height * 0.05,
                       child: snapshot.data!['isOnline']
                           ? const SizedBox()

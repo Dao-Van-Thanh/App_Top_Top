@@ -13,7 +13,7 @@ class CommentService {
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi: $e');
-      throw e; // Rethrow lỗi nếu cần
+      rethrow; // Rethrow lỗi nếu cần
     }
   }
   Stream<DocumentSnapshot> getReCommentsInComment(String videoId,String idComment) {
@@ -28,7 +28,7 @@ class CommentService {
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi: $e');
-      throw e; // Rethrow lỗi nếu cần
+      rethrow; // Rethrow lỗi nếu cần
     }
   }
 
@@ -63,7 +63,7 @@ class CommentService {
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi: $e');
-      throw e; // Rethrow lỗi nếu cần
+      rethrow; // Rethrow lỗi nếu cần
     }
   }
   Future<void> sendReComment(String videoId,String idComment, String comment, String uId) async {
@@ -104,7 +104,7 @@ class CommentService {
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi: $e');
-      throw e; // Rethrow lỗi nếu cần
+      rethrow; // Rethrow lỗi nếu cần
     }
   }
 

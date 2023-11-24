@@ -5,11 +5,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Provider/page_provider.dart';
 import 'man_hinh_edit_item_profile.dart';
 
 class EditProfile extends StatelessWidget {
-  EditProfile({Key? key, required this.uid}) : super(key: key);
+  const EditProfile({Key? key, required this.uid}) : super(key: key);
   final String uid;
   @override
   Widget build(BuildContext context) {
@@ -204,14 +203,14 @@ class EditProfile extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Thông báo'),
-          content: Text('Hiện tại tính năng đang được cập nhật.'),
+          title: const Text('Thông báo'),
+          content: const Text('Hiện tại tính năng đang được cập nhật.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Đóng hộp thoại
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );

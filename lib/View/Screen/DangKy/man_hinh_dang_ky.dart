@@ -4,43 +4,45 @@ import 'package:app/View/Widget/button.dart';
 import 'package:flutter/material.dart';
 
 class ManHinhDangKy extends StatelessWidget {
+  const ManHinhDangKy({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.only(top: 50),
+        margin: const EdgeInsets.only(top: 50),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Texts("Đăng ký TikTok", 30, FontWeight.w800),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Texts(
                   "Tạo hồ sơ, follow các tài khoản khác, quay\n video của chính bạn,v.v ",
                   18,
 
                   FontWeight.normal),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ButtonCusstom(
                   text: "Đăng ký bằng số điện thoại & Email",
                   icon: Icons.person,
                   onPress: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder:
-                            (context) => ManHinhDangKyEmailWithSDT(),)
+                            (context) => const ManHinhDangKyEmailWithSDT(),)
                     );
                   }),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ButtonCusstom(
                   text: "Tiếp tục với Google",
                   icon: Icons.g_mobiledata_sharp,
                   onPress: () {}),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ButtonCusstom(
                   text: "Tiếp tục với facebook",
                   icon: Icons.facebook,
                   onPress: () {}),
-              SizedBox(height: 100),
+              const SizedBox(height: 100),
               textButton(
                   "Bạn đã có tài khoản?", 'Đăng nhập', 18, FontWeight.bold, () {
                 Navigator.push(
@@ -98,7 +100,7 @@ class ManHinhDangKy extends StatelessWidget {
             fontWeight: fontWeight,
           ),
         ),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         TextButton(
           onPressed: onPress,
           child: Text(

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:app/Services/user_service.dart';
-import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:flutter/material.dart';
 
 class ShowAvatar extends StatelessWidget {
@@ -46,7 +45,7 @@ class ShowAvatar extends StatelessWidget {
 
     return Container(
       width: width/2-80,
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: text == "Hủy" ? Colors.white : Colors.redAccent,
         border: Border.all(color: text == "Hủy" ? Colors.black : Colors.transparent),

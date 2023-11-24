@@ -12,10 +12,10 @@ class ButtonCusstom extends StatelessWidget {
     return OutlinedButton(
         style: ButtonStyle(
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            EdgeInsets.all(15.0), // Đặt giá trị padding là 10
+            const EdgeInsets.all(15.0), // Đặt giá trị padding là 10
           ),
           minimumSize: MaterialStateProperty.all<Size>(
-            Size(300, 40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
+            const Size(300, 40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
           ),
         ),
         onPressed: onPress,
@@ -26,10 +26,10 @@ class ButtonCusstom extends StatelessWidget {
               icon,
               color: Colors.black,
             ),
-            SizedBox(width: 10,),
+            const SizedBox(width: 10,),
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
               ),
             ),

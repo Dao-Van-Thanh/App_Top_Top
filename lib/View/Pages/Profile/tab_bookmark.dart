@@ -7,7 +7,7 @@ class TabBookMark extends StatelessWidget {
   String uid;
   String label;
   PageProvider pageProvider;
-  TabBookMark(this.uid,this.label,this.pageProvider);
+  TabBookMark(this.uid,this.label,this.pageProvider, {super.key});
   @override
   Widget build(BuildContext context) {
     return GridViewVideo(uid,label,pageProvider);

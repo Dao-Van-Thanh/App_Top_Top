@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/Services/dang_video_service.dart';
-import 'package:app/View/Widget/loading.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,7 @@ import 'package:video_player/video_player.dart'; // Import thư viện video_pla
 class ManHinhDangVideo extends StatefulWidget {
   final XFile xflie;
   final String musicChoose;
-  ManHinhDangVideo(this.xflie, this.musicChoose);
+  const ManHinhDangVideo(this.xflie, this.musicChoose, {super.key});
 
   @override
   _ManHinhDangVideoState createState() => _ManHinhDangVideoState();
@@ -81,7 +80,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                       children: [
                         Expanded(
                           flex: 3,
-                          child: Container(
+                          child: SizedBox(
                             height: MediaQuery.of(context).size.height * 0.25,
                             child: TextField(
                               controller: controller,
@@ -99,7 +98,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                           flex: 2,
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.25,
-                            padding: EdgeInsets.all(13),
+                            padding: const EdgeInsets.all(13),
                             child: Container(
                               child: AspectRatio(
                                 aspectRatio: _videoController.value.aspectRatio,
@@ -137,7 +136,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                       ),
 
                     ),
-                    SizedBox(height: 13.0,),
+                    const SizedBox(height: 13.0,),
                     Container(
                       child: const Row(
                         children: [
@@ -157,7 +156,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 13.0,),
+                    const SizedBox(height: 13.0,),
                     Container(
                       child: const Row(
                         children: [
@@ -177,7 +176,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 13.0,),
+                    const SizedBox(height: 13.0,),
                     Container(
                       child: Row(
                         children: [
@@ -185,12 +184,12 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                             Icons.comment_bank_outlined,
                             size: 30,
                           ),
-                          SizedBox(width: 10.0,),
+                          const SizedBox(width: 10.0,),
                           const Text(
                             'Cho phép bình luận ',
                             style: TextStyle(fontSize: 20.0),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Switch(
                             value: provider.isChecked, // Giá trị bật/tắt (có thể thay đổi tùy thuộc vào trạng thái thực tế)
                             onChanged: (value) {
@@ -202,9 +201,9 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 13.0,),
+                    const SizedBox(height: 13.0,),
                     Container(
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(
                             Icons.person_off_outlined,
@@ -222,9 +221,9 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 13.0,),
+                    const SizedBox(height: 13.0,),
                     Container(
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(
                             Icons.download_outlined,
@@ -251,7 +250,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.1,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
                       child: Row(
                         children: [
                           Expanded(
@@ -263,11 +262,11 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                                   backgroundColor:
                                   MaterialStateProperty.all(Colors.blue),
                                 ),
-                                child: Text('Quay lại'),
+                                child: const Text('Quay lại'),
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: SizedBox(
                               height: double.maxFinite,
@@ -305,11 +304,11 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                                     isUploading = false;
                                   });
                                 },
-                                child: Text('Đăng'),
                                 style: ButtonStyle(
                                   backgroundColor:
                                   MaterialStateProperty.all(Colors.pinkAccent),
                                 ),
+                                child: const Text('Đăng'),
                               ),
                             ),
                           ),
@@ -322,7 +321,7 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                 if (isUploading)
                   Container(
                     color: Colors.black.withOpacity(0.7),
-                    child: Center(
+                    child: const Center(
                       child: CircularProgressIndicator(),
                     ),
                   ),

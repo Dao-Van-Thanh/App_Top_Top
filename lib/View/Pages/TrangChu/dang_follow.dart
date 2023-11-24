@@ -10,6 +10,8 @@ import '../../Widget/video_detail.dart';
 import '../../Widget/video_player_item.dart';
 
 class Following extends StatefulWidget {
+  const Following({super.key});
+
   @override
   State<Following> createState() => _Following();
 }
@@ -18,7 +20,7 @@ class _Following extends State<Following> {
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
-    final _auth = FirebaseAuth.instance;
+    final auth = FirebaseAuth.instance;
     videoStream = CallVideoService().getVideosFollowingStream();
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
@@ -41,7 +43,7 @@ class _Following extends State<Following> {
                 onPageChanged: (int page) {
                   print(page);
                   print(videoList!.length - 1);
-                  if (page == videoList!.length - 1) {
+                  if (page == videoList.length - 1) {
                     print('video cuối cùng rồi xem cái lol đi học đi');
                   }
                 },
@@ -55,7 +57,7 @@ class _Following extends State<Following> {
                       builder: (context, videoProvider, child) {
                         videoProvider.setValue(
                             videoData!.blockComments,
-                            videoData!.likes.length,
+                            videoData.likes.length,
                             videoData.comments.length,
                             videoData.userSaveVideos!.length,
                             videoData.caption,
@@ -76,7 +78,7 @@ class _Following extends State<Following> {
                             }
                           });
                           CallVideoService().checkFollowing(videoData.uid).then((value) => {
-                            if (value || videoData.uid == _auth.currentUser!.uid){
+                            if (value || videoData.uid == auth.currentUser!.uid){
                               videoProvider.setHasFollowing()
                             }
                           });
@@ -93,20 +95,20 @@ class _Following extends State<Following> {
                           child: Stack(
                             alignment: Alignment.bottomLeft,
                             children: [
-                              VideoPlayerItem( videoData!.videoUrl,videoData.id,videoProvider),
+                              VideoPlayerItem( videoData.videoUrl,videoData.id,videoProvider),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Expanded(
                                     flex: 2,
-                                    child: Container(
+                                    child: SizedBox(
                                       height:
                                       MediaQuery.of(context).size.height / 10,
                                       child: VideoDetail(videoProvider),
                                     ),
                                   ),
                                   Expanded(
-                                    child: Container(
+                                    child: SizedBox(
                                       height: MediaQuery.of(context).size.height /
                                           1.75,
                                       child: HomeSideBar(

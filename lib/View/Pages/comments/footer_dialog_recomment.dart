@@ -11,7 +11,7 @@ class FooterDialogReComment extends StatefulWidget {
   final String idComment;
   final String nameUserReComment;
 
-  FooterDialogReComment({
+  const FooterDialogReComment({super.key, 
     required this.idComment,
     required this.videoId,
     required this.uId,
@@ -96,7 +96,7 @@ class _FooterDialogReCommentState extends State<FooterDialogReComment> {
                                   //     .indexWhere((element) => element == videoId);
                                   // videoProvider.listVideo[index].comments.add('');
                                 },
-                                icon: Icon(Icons.send),
+                                icon: const Icon(Icons.send),
                               ),
                             ],
                           ),
@@ -131,7 +131,7 @@ class _FooterDialogReCommentState extends State<FooterDialogReComment> {
                         horizontalSpacing: 0,
                         gridPadding: EdgeInsets.zero,
                         initCategory: Category.RECENT,
-                        bgColor: Color(0xFFF2F2F2),
+                        bgColor: const Color(0xFFF2F2F2),
                         indicatorColor: Colors.blue,
                         iconColor: Colors.grey,
                         iconColorSelected: Colors.blue,

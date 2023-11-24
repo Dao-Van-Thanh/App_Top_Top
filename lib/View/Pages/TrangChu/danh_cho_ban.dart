@@ -12,6 +12,8 @@ import '../../Widget/home_side_bar.dart';
 import '../../Widget/video_detail.dart';
 
 class ForYou extends StatefulWidget {
+  const ForYou({super.key});
+
 
   @override
   State<ForYou> createState() => _ForYouState();
@@ -30,13 +32,13 @@ class _ForYouState extends State<ForYou> {
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
-    final _auth = FirebaseAuth.instance;
+    final auth = FirebaseAuth.instance;
     late String videoUrl;
     String? tempVideoUrl;
     bool isVideoLoaded = false;
     void prepareNextPageVideo(int index,List<VideoModel> videoList) {
-      if (index + 1 < videoList!.length) {
-        final nextPageVideoData = videoList![index + 1].videoUrl;
+      if (index + 1 < videoList.length) {
+        final nextPageVideoData = videoList[index + 1].videoUrl;
         videoUrl = nextPageVideoData;
         isVideoLoaded = true;
       }
@@ -63,7 +65,7 @@ class _ForYouState extends State<ForYou> {
               child: PageView.builder(
                 controller: pageController,
                 onPageChanged: (int page) {
-                  if (page == videoList!.length - 1) {
+                  if (page == videoList.length - 1) {
                       print('video cuối cùng rồi xem cái lol đi học đi');
                   }
                   // prepareNextPageVideo(page,videoList);
@@ -72,15 +74,15 @@ class _ForYouState extends State<ForYou> {
                   // }
                 },
                 scrollDirection: Axis.vertical,
-                itemCount: videoList?.length ?? 0,
+                itemCount: videoList.length ?? 0,
                 itemBuilder: (context, index) {
-                  final videoData = videoList?[index];
+                  final videoData = videoList[index];
                   return ChangeNotifierProvider<VideoProvider>(
                     create: (context) => VideoProvider(),
                     child: Consumer<VideoProvider>(
                       builder: (context, videoProvider, child) {
                         videoProvider.setValue(
-                            videoData!.blockComments,
+                            videoData.blockComments,
                             videoData.likes.length,
                             videoData.comments.length,
                             videoData.userSaveVideos!.length,
@@ -102,7 +104,7 @@ class _ForYouState extends State<ForYou> {
                             }
                           });
                           CallVideoService().checkFollowing(videoData.uid).then((value) => {
-                            if (value || videoData.uid == _auth.currentUser!.uid){
+                            if (value || videoData.uid == auth.currentUser!.uid){
                               videoProvider.setHasFollowing()
                             }
                           });
@@ -128,14 +130,14 @@ class _ForYouState extends State<ForYou> {
                                 children: [
                                   Expanded(
                                     flex: 2,
-                                    child: Container(
+                                    child: SizedBox(
                                       height:
                                       MediaQuery.of(context).size.height / 10,
                                       child: VideoDetail(videoProvider),
                                     ),
                                   ),
                                   Expanded(
-                                    child: Container(
+                                    child: SizedBox(
                                       height: MediaQuery.of(context).size.height /
                                           1.75,
                                       child: HomeSideBar(

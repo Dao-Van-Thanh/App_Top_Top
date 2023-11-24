@@ -1,11 +1,8 @@
-import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap_email.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Provider/dang_ky_email_provider.dart';
 import '../../../Provider/dang_nhap_sdt_provider.dart';
-import 'man_hinh_dang_nhap.dart';
 
 
 class ManHinhQuenMatKhauEmail extends StatefulWidget {
@@ -53,7 +50,7 @@ class _ManHinhQuenMatKhauEmailState extends State<ManHinhQuenMatKhauEmail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Quên Mật khẩu',
+            const Text('Quên Mật khẩu',
               style: TextStyle(
               fontSize: 20,
               color: Colors.black,
@@ -68,7 +65,7 @@ class _ManHinhQuenMatKhauEmailState extends State<ManHinhQuenMatKhauEmail> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextField(
@@ -100,7 +97,7 @@ class _ManHinhQuenMatKhauEmailState extends State<ManHinhQuenMatKhauEmail> {
                     provider.emailController.clear();
                     provider.isClearButtonVisible = false;
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.close,
                     color: Colors.pinkAccent,
                   ),
@@ -108,10 +105,10 @@ class _ManHinhQuenMatKhauEmailState extends State<ManHinhQuenMatKhauEmail> {
                     : null,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Container(
+            SizedBox(
               height: 40,
               child: ElevatedButton(
                 onPressed: provider.isButtonEnabled

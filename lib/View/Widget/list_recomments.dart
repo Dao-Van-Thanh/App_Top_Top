@@ -9,7 +9,7 @@ class ListRecommets extends StatelessWidget {
   String idVideo;
   String idComment;
 
-  ListRecommets(this.idVideo, this.idComment);
+  ListRecommets(this.idVideo, this.idComment, {super.key});
 
   CommentService commentService = CommentService();
 
@@ -40,9 +40,9 @@ class ListRecommets extends StatelessWidget {
                       )
                     : Row(
                         children: [
-                          Container(
+                          const SizedBox(
                             width: 20,
-                            child: const Divider(
+                            child: Divider(
                               color: Colors.grey,
                               height: 20,
                               thickness: 1,
@@ -76,7 +76,7 @@ class ListRecommets extends StatelessWidget {
                           ),
                         ),
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
               ],
             );
           },

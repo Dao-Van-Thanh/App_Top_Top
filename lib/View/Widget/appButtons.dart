@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppButtons extends StatelessWidget {
@@ -31,7 +30,7 @@ class AppButtons extends StatelessWidget {
       Center(child: Icon(icon,color: color.withOpacity(0.8),)),
     ),
         Container(
-            child: Text(text.toString(),style: TextStyle(fontSize: 15,color: Colors.grey),),
+            child: Text(text.toString(),style: const TextStyle(fontSize: 15,color: Colors.grey),),
           ),
       ]
     );
