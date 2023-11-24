@@ -15,6 +15,7 @@ class ManHinhKiemTraVideo extends StatefulWidget {
   final XFile file;
 
   const ManHinhKiemTraVideo(this.file, {super.key});
+
   @override
   State<ManHinhKiemTraVideo> createState() => _ManHinhKiemTraVideoState();
 }
@@ -69,16 +70,18 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
       }
     });
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _musicProvider = Provider.of<MusicProvider>(context);
   }
+
   @override
   void dispose() {
     videoController?.dispose(); // Giải phóng tài nguyên
     _musicProvider?.stopAudio();
-    _musicProvider= null;
+    _musicProvider = null;
     super.dispose();
   }
 
@@ -100,8 +103,8 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                   Expanded(
                     // flex: 1,
                     child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 15),
                       child: Row(
                         children: [
                           Expanded(
@@ -181,7 +184,8 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                         Expanded(
                             child: Text(
                           provider.title,
-                          style: const TextStyle(color: Colors.white, fontSize: 15),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 15),
                         ))
                       ],
                     ),
@@ -204,7 +208,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                 right: MediaQuery.sizeOf(context).width * 0.02,
                 child: SizedBox(
                     width: 30,
-                    height: 100,
+                    height: 150,
                     child: Column(
                       children: [
                         InkWell(
@@ -246,6 +250,24 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                               )
                             ],
                           ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Column(
+                          children: [
+                            Image.asset('assets/text.png',
+                                width: 25, height: 25, color: Colors.white),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const Text(
+                              'Sửa',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
                         )
                       ],
                     )))

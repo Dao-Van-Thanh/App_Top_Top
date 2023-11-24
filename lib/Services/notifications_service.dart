@@ -180,6 +180,7 @@ class NotificationsService {
       debugPrint(e.toString());
     }
   }
+
   Stream<QuerySnapshot> getNotification(){
     try{
       final _auth = FirebaseAuth.instance.currentUser!.uid;
