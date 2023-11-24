@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Notification {
+class NotificationModel {
   String id;
   String uid;
   String idOther;
   String type;
   Timestamp timestamp;
 
-  Notification({
+  NotificationModel({
     required this.id,
     required this.uid,
     required this.idOther,
@@ -15,9 +15,9 @@ class Notification {
     required this.timestamp,
   });
 
-  factory Notification.fromSnapshot(DocumentSnapshot snapshot) {
+  factory NotificationModel.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    return Notification(
+    return NotificationModel(
       id: snapshot.id,
       uid: data['uid'] ?? '',
       idOther: data['idOther'] ?? '',

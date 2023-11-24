@@ -52,10 +52,8 @@ class CommentService {
       );
       // Chuyển đối tượng Comment thành một Map
       Map<String, dynamic> commentMap = commentData.toJson();
-
       // Thêm một comment mới vào collection 'Comments'
       final commentDocRef = await commentCollection.add(commentMap);
-
       // thêm comment vào trường comments trong bảng Videos
       final videoCollection =
       FirebaseFirestore.instance.collection('Videos').doc(videoId);
@@ -92,7 +90,7 @@ class CommentService {
 
       // Thêm một comment mới vào collection 'Comments'
       final commentDocRef = await recommentCollection.add(commentMap);
-
+      final notification = FirebaseFirestore.instance.collection("Notification");
       // thêm comment vào trường comments trong bảng Videos
       final commentCollection =
       FirebaseFirestore.instance

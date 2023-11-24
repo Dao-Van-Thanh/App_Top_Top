@@ -1,8 +1,12 @@
+import 'package:app/Services/user_service.dart';
 import 'package:app/View/Widget/app_item_notify.dart';
 import 'package:flutter/material.dart';
 
+import '../../../Model/notifycation_model.dart';
+
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  final List<NotificationModel> notificationList ;
+  NotificationScreen({Key? key, required this.notificationList}) : super(key: key);
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -32,14 +36,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
         centerTitle: true,
       ),
       body: ListView.builder(
-          itemCount: 100,
+          itemCount: widget.notificationList.length,
           itemExtent: 60,
           itemBuilder: (BuildContext context, int index){
-            return const Column(
-              children: [
-                SizedBox(height: 10,),
-                AppItemNotify(avatar: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/452f6d22389287.56312b2471813.png', nameUser: 'Thuy ngo', content: 'Đã follow bạn',),
-              ],
+            NotificationModel notificationModel = widget.notificationList[index];
+            print(notificationModel.type);
+            return FutureBuilder<Map<String, dynamic>?>(
+              future: UserService().getDataUser(notificationModel.idOther),
+              builder:(context, snapshot) {
+                final useData = snapshot.data!;
+                return  Column(
+                  children: [
+                    SizedBox(height: 10,),
+                    AppItemNotify(avatar: useData['avatarURL'], nameUser: useData['fullname'], content: 'Đã ${notificationModel.type}',),
+                  ],
+                );
+              },
+
             );
           }
       ),
