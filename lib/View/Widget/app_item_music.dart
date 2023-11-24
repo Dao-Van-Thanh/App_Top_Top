@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppItemMusic extends StatefulWidget {
   final String thumb;
   final String title;
   final bool? isForcus;
-  AppItemMusic({Key? key, required this.thumb, required this.title, required this.isForcus}) : super(key: key);
+  const AppItemMusic({Key? key, required this.thumb, required this.title, required this.isForcus}) : super(key: key);
 
   @override
   State<AppItemMusic> createState() => _AppItemMusicState();
@@ -35,13 +34,13 @@ class _AppItemMusicState extends State<AppItemMusic> {
               ),
             ),
           ),
-          SizedBox(width: 10,),
+          const SizedBox(width: 10,),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 widget.title,
-                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
+                style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ],
           ),

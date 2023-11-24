@@ -1,11 +1,9 @@
 import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
-import 'package:app/Services/call_video_service.dart';
 import 'package:app/View/Screen/DangKy/man_hinh_dang_ky_createPass.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Services/dang_ky_email_service.dart';
 
 class ManHinhDangKyEmail extends StatefulWidget {
   const ManHinhDangKyEmail({Key? key}) : super(key: key);
@@ -54,7 +52,7 @@ class _MyManHinhDangKyEmailState extends State<ManHinhDangKyEmail> {
                             provider.emailController.clear();
                             provider.isClearButtonVisible = false;
                           },
-                          child: Icon(
+                          child: const Icon(
                               Icons.close,
                               color: Colors.pinkAccent,
                           ),

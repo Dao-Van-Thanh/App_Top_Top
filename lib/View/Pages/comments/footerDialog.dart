@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Provider/comments_provider.dart';
-import '../../../Provider/video_provider.dart';
 import '../../../Services/comment_service.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
@@ -15,8 +14,8 @@ class FooterDialog extends StatefulWidget {
 
   // final VideoProvider videoProvider;
 
-  FooterDialog(
-      {required this.avatarURL,
+  const FooterDialog(
+      {super.key, required this.avatarURL,
       required this.videoId,
       required this.uId,
       // required this.videoProvider
@@ -107,7 +106,7 @@ class _FooterDialogState extends State<FooterDialog> {
                                   //     .indexWhere((element) => element == videoId);
                                   // videoProvider.listVideo[index].comments.add('');
                                 },
-                                icon: Icon(Icons.send),
+                                icon: const Icon(Icons.send),
                               ),
                             ],
                           ),
@@ -142,7 +141,7 @@ class _FooterDialogState extends State<FooterDialog> {
                         horizontalSpacing: 0,
                         gridPadding: EdgeInsets.zero,
                         initCategory: Category.RECENT,
-                        bgColor: Color(0xFFF2F2F2),
+                        bgColor: const Color(0xFFF2F2F2),
                         indicatorColor: Colors.blue,
                         iconColor: Colors.grey,
                         iconColorSelected: Colors.blue,

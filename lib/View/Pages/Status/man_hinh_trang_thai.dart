@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ManHinhTrangThai extends StatefulWidget {
-  ManHinhTrangThai({Key?key,required this.following,required this.follower, required this.uid, required this.initTab});
+  const ManHinhTrangThai({super.key,required this.following,required this.follower, required this.uid, required this.initTab});
 
   final List<String> following;
   final List<String> follower;
@@ -62,33 +62,33 @@ class _ManHinhTrangThaiState extends State<ManHinhTrangThai> with TickerProvider
                 automaticallyImplyLeading: false,
                 backgroundColor: Colors.white,
                 bottom: PreferredSize(
-                    preferredSize: Size.fromHeight(50),
+                    preferredSize: const Size.fromHeight(50),
                     child: TabBar(
                       isScrollable: true,
                       indicatorColor: Colors.black,
-                      indicatorPadding: EdgeInsets.only(left: 10,right: 10),
+                      indicatorPadding: const EdgeInsets.only(left: 10,right: 10),
                       unselectedLabelColor: Colors.grey,
                       labelColor: Colors.black,
                       controller: _tabController,
                       tabs: [
-                        Tab(child: Text("Đang follow ${widget.following.length}",style: TextStyle(fontSize: 20))),
-                        Tab(child: Text("Follower ${widget.follower.length}",style: TextStyle(fontSize: 20))),
-                        Tab(child: Text("Bạn bè",style: TextStyle(fontSize: 20))),
-                        Tab(child: Text("Được đề xuất",style: TextStyle(fontSize: 20))),
+                        Tab(child: Text("Đang follow ${widget.following.length}",style: const TextStyle(fontSize: 20))),
+                        Tab(child: Text("Follower ${widget.follower.length}",style: const TextStyle(fontSize: 20))),
+                        const Tab(child: Text("Bạn bè",style: TextStyle(fontSize: 20))),
+                        const Tab(child: Text("Được đề xuất",style: TextStyle(fontSize: 20))),
                       ],
                       // tabs: tabs,
                     )
                 ),
               ),
               body: Container(
-                margin: EdgeInsets.only(left: 10,right: 10),
+                margin: const EdgeInsets.only(left: 10,right: 10),
                 child: TabBarView(
                   controller: _tabController,
                   children: [
 
                     FollowingScreen(uId: widget.uid,following: widget.following),
                     FollowerScreen(uId: widget.uid,follower: widget.follower,),
-                    FriendScreen(),
+                    const FriendScreen(),
                     Container(color: Colors.yellow),
                   ],
                 ),
@@ -110,16 +110,16 @@ class _ManHinhTrangThaiState extends State<ManHinhTrangThai> with TickerProvider
             onTap: (){
               Navigator.of(context).pop();
             },
-            child: Icon(
+            child: const Icon(
                 CupertinoIcons.back,
                 size: 40,
                 color: Colors.black
             ),
           ),
-          Text(username, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 20)),
+          Text(username, style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 20)),
           GestureDetector(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AddFriend()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddFriend()));
             },
             child: Image.asset(
               'assets/adduser.png',

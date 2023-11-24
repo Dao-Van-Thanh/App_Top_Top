@@ -7,6 +7,8 @@ import 'dart:async';
 import '../../Widget/loading.dart';
 
 class ManHinhDangNhapOTP extends StatefulWidget {
+  const ManHinhDangNhapOTP({super.key});
+
   @override
   _ManHinhDangNhapOTPState createState() => _ManHinhDangNhapOTPState();
 }
@@ -92,7 +94,7 @@ class _ManHinhDangNhapOTPState extends State<ManHinhDangNhapOTP> {
                     ),
                     OtpTextField(
                       numberOfFields: 6,
-                      borderColor: Color(0xFF512DA8),
+                      borderColor: const Color(0xFF512DA8),
                       cursorColor: Colors.pinkAccent,
                       enabled: _isCodeSubmitted,
                       focusedBorderColor: Colors.pinkAccent,
@@ -116,10 +118,10 @@ class _ManHinhDangNhapOTPState extends State<ManHinhDangNhapOTP> {
                     ),
                     provider.isCheckOtp
                         ? Text(
-                            '${provider.message}',
-                            style: TextStyle(color: Colors.red),
+                            provider.message,
+                            style: const TextStyle(color: Colors.red),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
                     const SizedBox(height: 10),
                     Row(
                       children: [

@@ -8,7 +8,7 @@ class QuayVideoProvider extends ChangeNotifier{
   String title = 'Thêm âm thanh';
 
   void setTitle(String text){
-    this.title = text;
+    title = text;
     notifyListeners();
   }
 
@@ -17,15 +17,12 @@ class QuayVideoProvider extends ChangeNotifier{
     // notifyListeners();
   }
   void setChecked(){
-    isChecked = !isChecked!;
+    isChecked = !isChecked;
     notifyListeners();
   }
 
   void setControlMusic(){
-    isControlMusic = !isControlMusic!;
+    isControlMusic = !isControlMusic;
     notifyListeners();
-  }
-  void dispose() {
-    super.dispose();
   }
 }

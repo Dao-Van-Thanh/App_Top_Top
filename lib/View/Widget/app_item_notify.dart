@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../Pages/notification/notificationScreen.dart';
 
 class AppItemNotify extends StatelessWidget {
   final String avatar;
   final String nameUser;
   final String content;
-  AppItemNotify({Key? key, required this.avatar, required this.nameUser, required this.content}) : super(key: key);
+  const AppItemNotify({Key? key, required this.avatar, required this.nameUser, required this.content}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -47,14 +45,14 @@ class AppItemNotify extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(nameUser, style: TextStyle(color: Colors.black)),
+                    Text(nameUser, style: const TextStyle(color: Colors.black)),
                     Text(content, style: TextStyle(color: Colors.black.withOpacity(0.4))),
                   ],
                 ),
               ],
             ),
             Expanded(child: Container()),
-            Icon(Icons.navigate_next, color: Colors.black, size: 24),
+            const Icon(Icons.navigate_next, color: Colors.black, size: 24),
           ],
         ),
       ),

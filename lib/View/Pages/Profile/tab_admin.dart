@@ -18,7 +18,7 @@ class TabAdmin extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
         actions: [
@@ -26,7 +26,7 @@ class TabAdmin extends StatelessWidget {
             onPressed: () {
               // Xử lý khi người dùng nhấn vào nút
             },
-            icon: Icon(Icons.notifications), // Chọn một biểu tượng thích hợp
+            icon: const Icon(Icons.notifications), // Chọn một biểu tượng thích hợp
             tooltip: "Thông báo", // Mô tả khi di chuột vào biểu tượng
           ),
         ],
@@ -40,7 +40,7 @@ class TabAdmin extends StatelessWidget {
                 stream: FirebaseFirestore.instance.collection("Users").snapshots(),
                 builder: (context, snapshot) {
                   if(snapshot.connectionState == ConnectionState.waiting){
-                    return Center();
+                    return const Center();
                   }else if(snapshot.hasError){
                     return Text("Error: ${snapshot.error}");
                   }else{
@@ -55,7 +55,7 @@ class TabAdmin extends StatelessWidget {
                             if (uid != FirebaseAuth.instance.currentUser!.uid) {
                               return UserCard(data, index, context);
                             }
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                           },
                         ),
                   );
@@ -72,7 +72,7 @@ class TabAdmin extends StatelessWidget {
 
     return Container(
 
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         children: [
           Row(
@@ -81,27 +81,27 @@ class TabAdmin extends StatelessWidget {
                 backgroundColor: Colors.black,
                 backgroundImage: NetworkImage(data['avatarURL']),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(data['fullname']),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(data['email']),
                   ],
                 ),
               ),
               Consumer<ProfileProvider>(
                 builder: (context, provier, child) {
-                  Color buttonColor = data['ban'] == true ? Color(0x61ABA8A8) : Color(0x61EF307A);
+                  Color buttonColor = data['ban'] == true ? const Color(0x61ABA8A8) : const Color(0x61EF307A);
                   String buttonText = data['ban'] == true ? 'UnBan' : 'Ban';
                 return ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(buttonColor),
-                    minimumSize: MaterialStateProperty.all(Size(60, 40)), // Đặt kích thước tối thiểu (rộng x cao)
-                    padding: MaterialStateProperty.all(EdgeInsets.all(10)), // Đặt padding (khoảng cách xung quanh văn bản)
+                    minimumSize: MaterialStateProperty.all(const Size(60, 40)), // Đặt kích thước tối thiểu (rộng x cao)
+                    padding: MaterialStateProperty.all(const EdgeInsets.all(10)), // Đặt padding (khoảng cách xung quanh văn bản)
                   ),
                   onPressed: () async{
                     provier.banUser();
@@ -111,17 +111,17 @@ class TabAdmin extends StatelessWidget {
                 );
                 },
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               ElevatedButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Color(0x6130D9EF)),
-                  minimumSize: MaterialStateProperty.all(Size(60, 40)), // Đặt kích thước tối thiểu (rộng x cao)
-                  padding: MaterialStateProperty.all(EdgeInsets.all(10)), // Đặt padding (khoảng cách xung quanh văn bản)
+                  backgroundColor: const MaterialStatePropertyAll(Color(0x6130D9EF)),
+                  minimumSize: MaterialStateProperty.all(const Size(60, 40)), // Đặt kích thước tối thiểu (rộng x cao)
+                  padding: MaterialStateProperty.all(const EdgeInsets.all(10)), // Đặt padding (khoảng cách xung quanh văn bản)
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserScreen(uid: data['uid'])));
                 },
-                child: Text("Chi tiết"),
+                child: const Text("Chi tiết"),
               ),
             ],
           ),

@@ -79,11 +79,11 @@ class OthersService {
       if (checkFollow) {
         // 2. Truy cập bảng Chats và kiểm tra từng phòng chat.
         for (final chatRoom in existingChatRooms) {
-          final chatData = chatRoom.data() as Map<String, dynamic>;
+          final chatData = chatRoom.data();
 
           //kiểm tra xem có phòng chat nào không nếu không:
           // => chưa tồn tại phòng chat
-          if(chatData.length == 0){
+          if(chatData.isEmpty){
             break;
           }else{
             final List<String> chatUid = List<String>.from(chatData['uid']);

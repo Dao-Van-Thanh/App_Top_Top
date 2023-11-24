@@ -12,12 +12,12 @@ class UserCard extends StatelessWidget {
   final Map<String, dynamic> userData;
 
 
-  UserCard({required this.userData, required this.heightImage, required this.widthImage, required this.checkScreen});
+  const UserCard({super.key, required this.userData, required this.heightImage, required this.widthImage, required this.checkScreen});
 
   @override
   Widget build(BuildContext context) {
     final followProvider = Provider.of<FollowProvider>(context);
-    return Container(
+    return SizedBox(
       height: 100,
       child: Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -89,7 +89,7 @@ class UserCard extends StatelessWidget {
                         : Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: followProvider.isFollowed?[
-                        Container(
+                        SizedBox(
                           width: 150, // Đặt chiều rộng của Container
                           height: 40,
                           child: ButtonFollowAndDelete(
@@ -101,7 +101,7 @@ class UserCard extends StatelessWidget {
                               150),
                         )
                       ]:[
-                        Container(
+                        SizedBox(
                           width: 150, // Đặt chiều rộng của Container
                           height: 40,
                           child:  ButtonFollowAndDelete(

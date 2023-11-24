@@ -1,15 +1,12 @@
 import 'package:app/Provider/page_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../Widget/gridView.dart';
 import '../../Widget/grid_view_for_admin.dart';
-import '../Profile/tab_video.dart';
 
 class UserScreenVideo extends StatefulWidget {
   String uid;
-  UserScreenVideo(this.uid);
+  UserScreenVideo(this.uid, {super.key});
 
   @override
   State<UserScreenVideo> createState() => _UserScreenVideoState();
@@ -29,7 +26,7 @@ class _UserScreenVideoState extends State<UserScreenVideo> with TickerProviderSt
     final pageProvider = Provider.of<PageProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('UserScreenVideo'),
+        title: const Text('UserScreenVideo'),
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
@@ -44,11 +41,11 @@ class _UserScreenVideoState extends State<UserScreenVideo> with TickerProviderSt
         children: [
           TabBar(
             controller: _tabController,
-            tabs: [
+            tabs: const [
               Tab(text: 'Public'),
               Tab(text: 'Private'),
             ],
-            labelPadding: EdgeInsets.symmetric(horizontal: 0),
+            labelPadding: const EdgeInsets.symmetric(horizontal: 0),
           ),
           Expanded(
             child: TabBarView(

@@ -1,20 +1,13 @@
 import 'package:app/Provider/music_provider.dart';
 import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 import 'package:video_player/video_player.dart';
-import 'package:http/http.dart' as http;
 import '../../Provider/load_videoProvider.dart';
 import '../../Provider/video_provider.dart';
-import '../../Services/call_video_service.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final String videoId;
@@ -38,9 +31,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     super.initState();
     final loadVideoProvider = context.read<LoadVideoProvider>();
     videoPlayerController = loadVideoProvider.videoPlayer;
-    if (videoPlayerController == null) {
-      videoPlayerController = VideoPlayerController.network(widget.videoUrl);
-    }
+    videoPlayerController ??= VideoPlayerController.network(widget.videoUrl);
     _initializeVideoPlayer();
   }
   void _initializeVideoPlayer() async{
@@ -93,13 +84,13 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
             children: [
               VideoPlayer(videoPlayerController!),
               if (isLoading)
-                CircularProgressIndicator(
+                const CircularProgressIndicator(
                   strokeWidth: 4,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               widget.videoProvider.controlVideo == false
                   ? Icon(Icons.play_circle_filled, size: 50, color: Colors.white.withOpacity(0.5))
-                  : SizedBox(),
+                  : const SizedBox(),
             ],
           ),
         ),
@@ -112,8 +103,8 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Thông báo'),
-          content: Text('Tải video xuống'),
+          title: const Text('Thông báo'),
+          content: const Text('Tải video xuống'),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
@@ -122,7 +113,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
                 _showDialog2(context);
 
               },
-              child:_isSuccess==false?Text('OK'):CircularProgressIndicator(
+              child:_isSuccess==false?const Text('OK'):const CircularProgressIndicator(
                 strokeWidth: 4,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
@@ -134,7 +125,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   }
   _showDialog2(context) async{
 
-    Future.delayed(Duration(seconds: 3), (){
+    Future.delayed(const Duration(seconds: 3), (){
       setState(() async{
         await downloadFile();
         Navigator.of(context).pop();
@@ -144,8 +135,8 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Thông báo'),
-          content: Text('Đang tải video xuống'),
+          title: const Text('Thông báo'),
+          content: const Text('Đang tải video xuống'),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
@@ -153,7 +144,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
                   _isSuccess = true;
                 });
               },
-              child: CircularProgressIndicator(
+              child: const CircularProgressIndicator(
                 strokeWidth: 4,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
               ),
@@ -164,7 +155,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     );
   }
   final snackBar = SnackBar(
-    content: Text('Tải thành công!!!'),
+    content: const Text('Tải thành công!!!'),
     action: SnackBarAction(
       label: 'Đóng',
       onPressed: () {

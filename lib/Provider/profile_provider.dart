@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app/Model/video_model.dart';
 import 'package:app/Services/tab_video_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Services/admin_service.dart';
 
 class ProfileProvider with ChangeNotifier {
   List<VideoModel> _videos = [];

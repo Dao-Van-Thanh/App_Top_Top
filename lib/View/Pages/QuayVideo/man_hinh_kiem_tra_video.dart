@@ -4,21 +4,17 @@ import 'package:app/View/Pages/QuayVideo/man_hinh_cut_video.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_dang_video.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
-import 'package:http/http.dart' as http;
 
-import '../../../Model/music_model.dart';
 import '../../../Provider/music_provider.dart';
 import '../../Widget/app_item_music.dart';
 
 class ManHinhKiemTraVideo extends StatefulWidget {
   final XFile file;
 
-  ManHinhKiemTraVideo(this.file);
+  const ManHinhKiemTraVideo(this.file, {super.key});
   @override
   State<ManHinhKiemTraVideo> createState() => _ManHinhKiemTraVideoState();
 }
@@ -35,19 +31,19 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Xác định hủy bỏ?'),
+          title: const Text('Xác định hủy bỏ?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text('Không'),
+              child: const Text('Không'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: Text('Có'),
+              child: const Text('Có'),
             ),
           ],
         );
@@ -98,14 +94,14 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
               child: Column(
                 children: [
                   Expanded(
-                    child: _Content(context),
                     flex: 11,
+                    child: _Content(context),
                   ),
                   Expanded(
                     // flex: 1,
                     child: Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
                       child: Row(
                         children: [
                           Expanded(
@@ -118,11 +114,11 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                                 style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all(Colors.blue)),
-                                child: Text('Tải xuống'),
+                                child: const Text('Tải xuống'),
                               ),
                             ),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: SizedBox(
                               height: double.maxFinite,
@@ -144,10 +140,10 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                                             ManHinhDangVideo(file, songUrl),
                                       ));
                                 },
-                                child: Text('Tiếp'),
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         Colors.pinkAccent)),
+                                child: const Text('Tiếp'),
                               ),
                             ),
                           ),
@@ -158,7 +154,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               height: 50,
               child: AppBar(
                 elevation: 0,
@@ -177,7 +173,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                         color: Colors.black.withOpacity(0.6)),
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.music_note,
                           color: Colors.white,
                           size: 20,
@@ -185,16 +181,16 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                         Expanded(
                             child: Text(
                           provider.title,
-                          style: TextStyle(color: Colors.white, fontSize: 15),
+                          style: const TextStyle(color: Colors.white, fontSize: 15),
                         ))
                       ],
                     ),
                   ),
                 ),
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                   onPressed: () async {
-                    bool cancel = (await _showCancelDialog()) as bool;
+                    bool cancel = (await _showCancelDialog());
                     if (cancel) {
                       // provider.dispose();
                       Navigator.of(context).pop();
@@ -206,7 +202,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
             Positioned(
                 top: MediaQuery.sizeOf(context).height * 0.05,
                 right: MediaQuery.sizeOf(context).width * 0.02,
-                child: Container(
+                child: SizedBox(
                     width: 30,
                     height: 100,
                     child: Column(
@@ -239,7 +235,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                           child: Column(
                             children: [
                               Image.asset('assets/cut-video-player.png'),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               const Text(
@@ -284,7 +280,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
         return Container(
             padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
             height: 300,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),

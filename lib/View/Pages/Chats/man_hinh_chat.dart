@@ -5,7 +5,6 @@ import 'package:app/Services/user_service.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:app/Services/chat_service.dart';
-import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +18,7 @@ import '../../../Model/chat_model.dart';
 class ManHinhChat extends StatefulWidget {
   String idPhongChat;
 
-  ManHinhChat(this.idPhongChat);
+  ManHinhChat(this.idPhongChat, {super.key});
 
   @override
   State<ManHinhChat> createState() => _ManHinhChatState();
@@ -27,7 +26,7 @@ class ManHinhChat extends StatefulWidget {
 
 class _ManHinhChatState extends State<ManHinhChat> {
   ChatService service = ChatService();
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
   TextEditingController editingController = TextEditingController();
   bool emojiShowing = false;
 
@@ -206,7 +205,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           Offstage(
                             offstage: !provider.emojiShowing,
                             child: SizedBox(
@@ -233,7 +232,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                                   horizontalSpacing: 0,
                                   gridPadding: EdgeInsets.zero,
                                   initCategory: Category.RECENT,
-                                  bgColor: Color(0xFFF2F2F2),
+                                  bgColor: const Color(0xFFF2F2F2),
                                   indicatorColor: Colors.blue,
                                   iconColor: Colors.grey,
                                   iconColorSelected: Colors.blue,
@@ -267,7 +266,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
               ),
             );
           } else {
-            return Text('Không có dữ liệu cho phòng chat này.');
+            return const Text('Không có dữ liệu cho phòng chat này.');
           }
         }
       },
@@ -293,8 +292,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text('Chọn ảnh từ thư viện'),
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Chọn ảnh từ thư viện'),
               onTap: () async {
                 await ImagePicker()
                     .pickImage(source: ImageSource.gallery)
@@ -310,8 +309,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.photo_camera),
-              title: Text('Chụp ảnh mới'),
+              leading: const Icon(Icons.photo_camera),
+              title: const Text('Chụp ảnh mới'),
               onTap: () {
                 Navigator.pop(context);
                 // Gọi hàm chụp ảnh ở đây
@@ -324,7 +323,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
   }
 
   Widget infoOther(BuildContext context, snapshot) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.3,
       child: Column(
@@ -335,7 +334,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.3,
                     height: MediaQuery.of(context).size.height * 0.15,
                     child: CircleAvatar(
@@ -397,7 +396,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
         //
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+        margin: const EdgeInsets.only(bottom: 20, left: 10, right: 10),
         child: Align(
           alignment:
               checkNguoiChat ? Alignment.centerLeft : Alignment.centerRight,
@@ -436,7 +435,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                       maxWidth: MediaQuery.of(context)
                           .size
                           .width), // Đặt kích thước tối đa
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: checkNguoiChat
                         ? Colors.black12
@@ -444,8 +443,8 @@ class _ManHinhChatState extends State<ManHinhChat> {
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(checkNguoiChat ? 0 : 26),
                         bottomRight: Radius.circular(checkNguoiChat ? 26 : 0),
-                        topRight: Radius.circular(26),
-                        topLeft: Radius.circular(26)),
+                        topRight: const Radius.circular(26),
+                        topLeft: const Radius.circular(26)),
                   ),
                   child: Text(
                     message.chat,
@@ -483,7 +482,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
         width: 70,
         height: 70,
         child: InkWell(
-          borderRadius: BorderRadius.all(Radius.circular(90)),
+          borderRadius: const BorderRadius.all(Radius.circular(90)),
           onTap: () async {
             await service.deleteMessageByChatId(phongChat, idChat);
             Navigator.pop(context);

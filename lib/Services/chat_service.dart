@@ -4,7 +4,6 @@ import 'package:app/Services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'notifications_service.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -26,6 +25,7 @@ class ChatService {
       } catch (e) {
         print('===========$e');
       }
+      return null;
     });
   }
   List<String> getIdOther(List<Message> ls) {
@@ -47,7 +47,7 @@ class ChatService {
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi: $e');
-      throw e; // Rethrow lỗi nếu cần
+      rethrow; // Rethrow lỗi nếu cần
     }
   }
   Future<bool> addMessageToChat(String chatId, String chat, String idUserChat) async {

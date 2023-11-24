@@ -1,20 +1,19 @@
 import 'package:app/Provider/follow_provider.dart';
 import 'package:app/Services/user_service.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Widget/user_card.dart';
 
 class AddFriend extends StatefulWidget {
-  AddFriend({Key? key}) : super(key: key);
+  const AddFriend({Key? key}) : super(key: key);
 
   @override
   _AddFriendState createState() => _AddFriendState();
 }
 
 class _AddFriendState extends State<AddFriend> {
-  bool _hasInitialized = false;
+  final bool _hasInitialized = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +43,7 @@ class _AddFriendState extends State<AddFriend> {
         future: UserService().getListFriend(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
@@ -52,7 +51,7 @@ class _AddFriendState extends State<AddFriend> {
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  Container(
+                  SizedBox(
                     height: 80,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),

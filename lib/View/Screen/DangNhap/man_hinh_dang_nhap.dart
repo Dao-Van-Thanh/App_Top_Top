@@ -9,6 +9,8 @@ import 'package:app/View/Widget/bottom_navigation.dart';
 class ManHinhDangNhap extends StatelessWidget {
   final DangNhapGooogleProvider dangnhapGGprovider = DangNhapGooogleProvider();
 
+  ManHinhDangNhap({super.key});
+
   Future<void> _signInWithFacebook(BuildContext context) async {
     final authService = DangNhapFacebookService();
     final userCredential = await authService.signInWithFacebook(context);
@@ -17,7 +19,7 @@ class ManHinhDangNhap extends StatelessWidget {
       // Xử lý khi đăng nhập thành công (nếu cần)
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar()),
+        MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar()),
       );
     } else {
       // Xử lý khi đăng nhập thất bại
@@ -31,7 +33,7 @@ class ManHinhDangNhap extends StatelessWidget {
       // Xử lý khi đăng nhập thành công (nếu cần)
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar()),
+        MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar()),
       );
     } else {
       // Xử lý khi đăng nhập thất bại
@@ -42,19 +44,19 @@ class ManHinhDangNhap extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        margin: EdgeInsets.only(top: 50),
+        margin: const EdgeInsets.only(top: 50),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Texts("Đăng nhập TikTok", 30, FontWeight.w800),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Texts(
                 "Quản lý tài khoản, kiểm tra thông báo, bình\n luận trên các video,v.v ",
                 18,
                 FontWeight.normal,
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ButtonCusstom(
                 text: "Đăng nhập bằng số điện thoại & Email",
                 icon: Icons.person,
@@ -62,12 +64,12 @@ class ManHinhDangNhap extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ManHinhDangNhapEmailVoiSdt(),
+                      builder: (context) => const ManHinhDangNhapEmailVoiSdt(),
                     ),
                   );
                 },
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ButtonCusstom(
                 text: "Tiếp tục với Google",
                 icon: Icons.g_mobiledata_sharp,
@@ -75,7 +77,7 @@ class ManHinhDangNhap extends StatelessWidget {
                   await _signInWithGoogle(context); // Gọi hàm đăng nhập với Google
                 },
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ButtonCusstom(
                 text: "Tiếp tục với Facebook",
                 icon: Icons.facebook,
@@ -93,7 +95,7 @@ class ManHinhDangNhap extends StatelessWidget {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
-                          ManHinhDangKy(),
+                          const ManHinhDangKy(),
                       transitionsBuilder: (context, animation,
                           secondaryAnimation, child) {
                         const begin =
@@ -145,7 +147,7 @@ class ManHinhDangNhap extends StatelessWidget {
             fontWeight: fontWeight,
           ),
         ),
-        SizedBox(width: 5),
+        const SizedBox(width: 5),
         TextButton(
           onPressed: onPress,
           child: Text(

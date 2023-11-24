@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:provider/provider.dart';
@@ -128,16 +127,16 @@ class _ManHinhQuenMatKhauSDTState extends State<ManHinhQuenMatKhauSDT> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
                           style: ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
-                                  provider.phone.length < 1
+                                  provider.phone.isEmpty
                                       ? Colors.black12
                                       : Colors.pinkAccent)),
-                          onPressed: provider.phone.length < 1
+                          onPressed: provider.phone.isEmpty
                               ? null
                               : () {
                             provider.dangNhapPhone(context);
@@ -153,7 +152,7 @@ class _ManHinhQuenMatKhauSDTState extends State<ManHinhQuenMatKhauSDT> {
                       visible: provider.isPhoneNumberCheck,
                       // Ẩn hoặc hiển thị dựa trên giá trị của isTextVisible
                       child: Text(
-                        '${provider.message}',
+                        provider.message,
                         style: const TextStyle(
                           color: Colors.red,
                         ),

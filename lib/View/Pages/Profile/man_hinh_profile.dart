@@ -86,18 +86,18 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                       children: [
                         AppBarCustom(context,userModel.fullName),
                         Avatar(userModel.avatarURL, context, isDialog, uId),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         text(
                             lable: userModel.idTopTop,
                             size: 18,
                             fontWeight: FontWeight.normal
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         TrangThai(userModel.following!.length,
                             userModel.follower!.length, 5,following!,follower!),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         textButton(context),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Expanded(child: TastBar(userModel.uid,pageProvider)),
                       ],
                     ),
@@ -112,7 +112,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                         MaterialStatePropertyAll(Colors.pinkAccent)),
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ManHinhDangKy()));
+                      MaterialPageRoute(builder: (context) => const ManHinhDangKy()));
                 },
                 child: const Text(
                   'Đăng ký',
@@ -122,7 +122,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
   }
 
   Widget AppBarCustom(BuildContext context,String fullname){
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.05,
       child: Row(
@@ -157,7 +157,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                       provider.setVideos([]);
                       UserService.signOutUser();
                       Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Bottom_Navigation_Bar(),)
+                        MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar(),)
                       );
                     });
                   }
@@ -180,7 +180,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     return Container(
       child: Column(
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Stack(
             alignment: Alignment.bottomRight,
             children: [
@@ -294,7 +294,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
         OutlinedButton(
           style: ButtonStyle(
             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.all(20.0), // Đặt giá trị padding là 10
+              const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
             ),
             minimumSize: MaterialStateProperty.all<Size>(
               const Size(100,
@@ -336,7 +336,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
         OutlinedButton(
           style: ButtonStyle(
             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.all(20.0), // Đặt giá trị padding là 10
+              const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
             ),
             minimumSize: MaterialStateProperty.all<Size>(
               const Size(100,
@@ -348,7 +348,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               context,
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
-                    AddFriend(),
+                    const AddFriend(),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
                   const begin = Offset(0.0,
@@ -381,7 +381,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
             child: OutlinedButton(
               style: ButtonStyle(
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.all(20.0), // Đặt giá trị padding là 10
+                  const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
                 ),
                 minimumSize: MaterialStateProperty.all<Size>(
                   const Size(100,
@@ -393,7 +393,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        TabAdmin(),
+                        const TabAdmin(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                       const begin = Offset(0.0,
@@ -436,7 +436,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               fit: StackFit.passthrough,
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 40),
+                  margin: const EdgeInsets.only(top: 40),
                   child: TabBarView(
                     children: [
                       TabVideo(uid,'TabVideo',pageProvider),
@@ -488,7 +488,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                     context: context,
                     builder: (context) {
                       return Center(
-                          child: Container(
+                          child: SizedBox(
                             width: double.infinity,
                             height: MediaQuery.of(context).size.height * 0.5,
                             child: Image.network(
@@ -520,11 +520,11 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(25)),
                 child: IconButton(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   onPressed: () {
                     ImagePick(ImageSource.gallery, context, isDialog, uId);
                   },
-                  icon: Icon(Icons.add, color: Colors.white),
+                  icon: const Icon(Icons.add, color: Colors.white),
                 ),
               ),
             )

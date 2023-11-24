@@ -16,7 +16,7 @@ class ShowComment extends StatelessWidget {
   String idVideo;
   bool blockComments;
 
-  ShowComment(this.idVideo, this.idComment, this.blockComments);
+  ShowComment(this.idVideo, this.idComment, this.blockComments, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class ShowComment extends StatelessWidget {
               return Text('Error: ${snapshot.error}');
             } else {
               return snapshot.data == null
-                  ? SizedBox()
+                  ? const SizedBox()
                   : Consumer<CommentsProvider>(
                 builder: (context, provider, child) {
                   return GestureDetector(
@@ -87,7 +87,7 @@ class ShowComment extends StatelessWidget {
                               ),
                             if (check)
                               PopupMenuItem(
-                                child: Text('Chỉnh sửa bình luận'),
+                                child: const Text('Chỉnh sửa bình luận'),
                                 onTap: () {
                                   showDialog(
                                     context: context,
@@ -100,7 +100,7 @@ class ShowComment extends StatelessWidget {
                                                 controllerSuaComment,
                                                 decoration: InputDecoration(
                                                     hintText:
-                                                    '${commentModel.text}')),
+                                                    commentModel.text)),
                                             TextButton(
                                                 onPressed: () {
                                                   if (controllerSuaComment
@@ -119,7 +119,7 @@ class ShowComment extends StatelessWidget {
                                                         context);
                                                   }
                                                 },
-                                                child: Text('Sửa'))
+                                                child: const Text('Sửa'))
                                           ],
                                         ),
                                       );

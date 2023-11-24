@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ManHinhQuayVideo extends StatefulWidget {
+  const ManHinhQuayVideo({super.key});
+
   @override
   _ManHinhQuayVideoState createState() => _ManHinhQuayVideoState();
 }
@@ -50,10 +52,8 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           // Camera đã sẵn sàng, hiển thị nó trong widget CameraPreview
-                          if (_controller.value != null) {
-                            return CameraPreview(_controller);
-                          }
-                          return const Center(child: CircularProgressIndicator());
+                          return CameraPreview(_controller);
+                                                  return const Center(child: CircularProgressIndicator());
 
                         } else {
                           // Đợi camera sẵn sàng
@@ -117,7 +117,7 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
                           // fill: BoxFit.cover,
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 50,
                         // color: Colors.yellow,
                         child: Column(

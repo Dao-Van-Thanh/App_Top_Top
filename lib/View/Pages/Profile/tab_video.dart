@@ -6,7 +6,7 @@ class TabVideo extends StatelessWidget {
   String uid;
   String label;
   PageProvider pageProvider;
-  TabVideo(this.uid,this.label,this.pageProvider);
+  TabVideo(this.uid,this.label,this.pageProvider, {super.key});
 
   @override
   Widget build(BuildContext context) {

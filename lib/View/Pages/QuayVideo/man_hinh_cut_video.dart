@@ -5,7 +5,7 @@ import 'package:video_trimmer/video_trimmer.dart';
 class ManHinhCatVideo extends StatefulWidget {
   final File file;
 
-  ManHinhCatVideo(this.file);
+  const ManHinhCatVideo(this.file, {super.key});
 
   @override
   _ManHinhCatVideoState createState() => _ManHinhCatVideoState();
@@ -58,7 +58,7 @@ class _ManHinhCatVideoState extends State<ManHinhCatVideo> {
                           Navigator.pop(context, outputPath);
                         });
                   },
-            icon: Icon(Icons.done),
+            icon: const Icon(Icons.done),
           ),
         ],
       ),
