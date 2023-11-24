@@ -4,7 +4,6 @@ import 'package:app/View/Pages/Chats/man_hinh_hop_thu.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
@@ -130,7 +129,7 @@ class NotificationsService {
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) =>
-                ManHinhHopThu(),
+                const ManHinhHopThu(),
           ),
         );
       });
@@ -179,6 +178,16 @@ class NotificationsService {
     } catch (e) {
       print('Lỗi ==========================');
       debugPrint(e.toString());
+    }
+  }
+  Stream<QuerySnapshot> getNotification(){
+    try{
+      final _auth = FirebaseAuth.instance.currentUser!.uid;
+      final stream = FirebaseFirestore.instance.collection("Notifications").snapshots();
+      return stream;
+    }catch(e){
+      print('Lỗi: $e');
+      throw e;
     }
   }
 }

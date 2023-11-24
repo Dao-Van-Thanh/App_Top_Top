@@ -71,6 +71,8 @@ dependencies:
   video_trimmer: ^3.0.1
   ffmpeg_kit_flutter: ^6.0.3
   firebase_admin: ^0.2.0
+  text_editor: ^0.7.0
+  flutter_quill: ^8.1.1
 
 
 
