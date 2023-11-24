@@ -1,5 +1,4 @@
 import 'package:app/Model/comment_model.dart';
-import 'package:app/Model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -53,10 +52,8 @@ class CommentService {
       );
       // Chuyển đối tượng Comment thành một Map
       Map<String, dynamic> commentMap = commentData.toJson();
-
       // Thêm một comment mới vào collection 'Comments'
       final commentDocRef = await commentCollection.add(commentMap);
-
       // thêm comment vào trường comments trong bảng Videos
       final videoCollection =
       FirebaseFirestore.instance.collection('Videos').doc(videoId);
@@ -93,7 +90,7 @@ class CommentService {
 
       // Thêm một comment mới vào collection 'Comments'
       final commentDocRef = await recommentCollection.add(commentMap);
-
+      final notification = FirebaseFirestore.instance.collection("Notification");
       // thêm comment vào trường comments trong bảng Videos
       final commentCollection =
       FirebaseFirestore.instance

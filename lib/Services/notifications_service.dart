@@ -181,4 +181,14 @@ class NotificationsService {
       debugPrint(e.toString());
     }
   }
+  Stream<QuerySnapshot> getNotification(){
+    try{
+      final _auth = FirebaseAuth.instance.currentUser!.uid;
+      final stream = FirebaseFirestore.instance.collection("Notifications").snapshots();
+      return stream;
+    }catch(e){
+      print('Lỗi: $e');
+      throw e;
+    }
+  }
 }
