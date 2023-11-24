@@ -2,6 +2,8 @@ import 'package:app/Model/comment_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'notifications_service.dart';
+
 class CommentService {
   Stream<DocumentSnapshot> getCommentsInVideo(String videoId) {
     try {
@@ -60,6 +62,11 @@ class CommentService {
       videoCollection.update({
         'comments': FieldValue.arrayUnion([commentDocRef.id])
       });
+      var videoSnapshot = await videoCollection.get();
+      if(videoSnapshot.data()?['uid'] != uId){
+        NotificationsService().createNotification(videoSnapshot.data()?['uid'], uId, 'comment');
+      }
+
     } catch (e) {
       // Xử lý lỗi nếu có
       print('Lỗi: $e');
