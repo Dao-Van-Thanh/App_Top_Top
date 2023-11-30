@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 
 import '../../../Services/notifications_service.dart';
 
-
 class ManHinhHopThu extends StatefulWidget {
   const ManHinhHopThu({super.key});
 
@@ -28,6 +27,7 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     ChatService service = ChatService();
@@ -46,68 +46,84 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
       ),
       body: Column(
         children: [
-          StreamBuilder<QuerySnapshot>(
-            stream: NotificationsService().getNotification(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              }
-
-              if (!snapshot.hasData || snapshot.data == null) {
-                return const Text('No data available');
-              }
-              List<NotificationModel> notificationList = [];
-              snapshot.data?.docs.forEach((doc) {
-                NotificationModel notifiModel = NotificationModel.fromSnapshot(doc);
-                notificationList.add(notifiModel);
-              });
-              return GestureDetector(
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NotificationScreen(notificationList: notificationList,)),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(right: 10),
-                  height: 50,
-                  width: double.maxFinite,
-                  child: Row(
-                    children: [
-                      Row(
-                        children: [
-                          ClipOval(
-                            child: Container(
-                              width: 90,
-                              height: 90,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.redAccent,
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.notifications, color: Colors.white, size: 30),
-                              ),
-                            ),
-                          ),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: StreamBuilder<QuerySnapshot>(
+              stream: NotificationsService().getNotification(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return const Text('No data available');
+                }
+                List<NotificationModel> notificationList = [];
+                snapshot.data?.docs.forEach((doc) {
+                  NotificationModel notifiModel =
+                      NotificationModel.fromSnapshot(doc);
+                  notificationList.add(notifiModel);
+                });
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NotificationScreen(
+                                notificationList: notificationList,
+                              )),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(right: 10),
+                    height: 50,
+                    width: double.maxFinite,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text('Những thông báo mới', style: TextStyle(color: Colors.black)),
+                              CircleAvatar(
+                                maxRadius:
+                                    MediaQuery.of(context).size.width * 0.06,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.redAccent,
+                                  ),
+                                  child: const Center(
+                                    child: Icon(Icons.notifications,
+                                        color: Colors.white, size: 30),
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  const Text('Những thông báo mới',
+                                      style: TextStyle(color: Colors.black)),
+                                  Text(
+                                      'Bạn có ${notificationList.length} thông báo')
+                                ],
+                              ),
                             ],
-
                           ),
-                        ],
-                      ),
-                      Expanded(child: Container()),
-                      const Icon(Icons.navigate_next, color: Colors.black, size: 24),
-                    ],
+                        ),
+                        const Icon(Icons.navigate_next,
+                            color: Colors.black, size: 24),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
           Expanded(
-
             child: StreamBuilder<List<ChatModel>>(
                 stream: service.getChatsByUser(),
                 builder: (context, snapshot) {
@@ -135,21 +151,25 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                       itemBuilder: (context, index) {
                         String? chat;
                         String? idUserChat = '';
-                        String? timestamp = '' ;
+                        String? timestamp = '';
                         try {
-                          chat =
-                              ls?[index].messages[ls[index].messages.length - 1].chat;
+                          chat = ls?[index]
+                              .messages[ls[index].messages.length - 1]
+                              .chat;
                           idUserChat = ls?[index]
                               .messages[ls[index].messages.length - 1]
                               .idUserChat;
-                          timestamp = ls?[index].messages[ls[index].messages.length - 1].timestamp.toString();
+                          timestamp = ls?[index]
+                              .messages[ls[index].messages.length - 1]
+                              .timestamp
+                              .toString();
                         } catch (e) {
                           chat = '';
                           idUserChat = '';
-                          timestamp = '' ;
+                          timestamp = '';
                         }
-                        return _itemGroupChat(
-                            context, ls![index], chat ?? '', idUserChat!, uid!,timestamp!);
+                        return _itemGroupChat(context, ls![index], chat ?? '',
+                            idUserChat!, uid!, timestamp!);
                         // return Text('data');
                       },
                     );
@@ -211,8 +231,8 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.006
-                          ),
+                              bottom:
+                                  MediaQuery.of(context).size.height * 0.006),
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.02,
                             width: MediaQuery.of(context).size.width * 0.02,
@@ -236,7 +256,8 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                         children: [
                           Text(
                             userModel.fullName,
-                            style: const TextStyle(color: Colors.black, fontSize: 20),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 20),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),

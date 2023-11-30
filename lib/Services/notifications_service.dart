@@ -189,8 +189,13 @@ class NotificationsService {
 
   Stream<QuerySnapshot> getNotification() {
     try {
-      final stream =
-          FirebaseFirestore.instance.collection("Notifications").snapshots();
+      final stream = FirebaseFirestore.instance
+          .collection("Notifications")
+          .orderBy('timestamp',
+              descending:
+                  true) // Sắp xếp theo trường timestamp, giảm dần (gần nhất đầu tiên)
+          .snapshots();
+
       return stream;
     } catch (e) {
       print('Lỗi: $e');
