@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 
 class DangVideoService{
   final user = FirebaseAuth.instance.currentUser;
@@ -24,7 +25,6 @@ class DangVideoService{
   // hàm cho video vào storage
   Future<String?> _uploadVideoToStorage(XFile videoFile) async {
     if (user == null) {
-      print('Người dùng chưa đăng nhập.');
       return '';
     }
     final storage = FirebaseStorage.instance;
@@ -40,7 +40,7 @@ class DangVideoService{
       final downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } catch (error) {
-      print('Lỗi khi tải lên video: $error');
+      debugPrint('Lỗi khi tải lên video: $error');
       return null;
     }
   }
@@ -48,7 +48,6 @@ class DangVideoService{
   // hàm thêm video vào bảng videos
   Future<void> _addVideoToFirestore(String videoUrl, String caption,bool blockComments, String songUrl) async {
     if (user == null) {
-      print('Người dùng chưa đăng nhập.');
       return;
     }
 
@@ -74,15 +73,15 @@ class DangVideoService{
         'userSaveVideos' : [],
         'profilePhoto': userDoc['avatarURL'], // Sử dụng userDoc để lấy avatarURL
       });
-      print('Video đã được thêm vào Firestore.');
+      debugPrint('Video đã được thêm vào Firestore.');
     } catch (error) {
-      print('Lỗi khi thêm video vào Firestore: $error');
+      debugPrint('Lỗi khi thêm video vào Firestore: $error');
     }
   }
 
 
   // hàm chính: đăng video
-  Future<bool> DangVideo(String caption,bool blockComments,XFile file, String musicChoose) async {
+  Future<bool> dangVideo(String caption,bool blockComments,XFile file, String musicChoose) async {
       try{
         String videoUrl = await _uploadVideoToStorage(file) ?? '';
         if(videoUrl.isNotEmpty){

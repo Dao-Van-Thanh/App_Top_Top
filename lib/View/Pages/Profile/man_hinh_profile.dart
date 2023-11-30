@@ -66,16 +66,16 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               } else if (snapshot.hasError) {
                 return Text("Error: ${snapshot.error}");
               } else {
-
                 UserModel userModel = UserModel.fromSnap(snapshot.data!);
                 // idFolloer = userModel.follower as String;
                 List<String>? follower = userModel.follower;
                 List<String>? following = userModel.following;
-                final rolesProvider = Provider.of<ProfileProvider>(context,listen: false);
-                try{
+                final rolesProvider =
+                    Provider.of<ProfileProvider>(context, listen: false);
+                try {
                   String? roles = snapshot.data?['role'];
-                  rolesProvider.updateRoles(roles=='admin');
-                }catch(e){
+                  rolesProvider.updateRoles(roles == 'admin');
+                } catch (e) {
                   rolesProvider.updateRoles(false);
                 }
 
@@ -84,21 +84,24 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                   body: SafeArea(
                     child: Column(
                       children: [
-                        AppBarCustom(context,userModel.fullName),
-                        Avatar(userModel.avatarURL, context, isDialog, uId),
+                        appBarCustom(context, userModel.fullName),
+                        avatar(userModel.avatarURL, context, isDialog, uId),
                         const SizedBox(height: 20),
-                        text(
+                        TextWidget(
                             lable: userModel.idTopTop,
                             size: 18,
-                            fontWeight: FontWeight.normal
-                        ),
+                            fontWeight: FontWeight.normal),
                         const SizedBox(height: 20),
-                        TrangThai(userModel.following!.length,
-                            userModel.follower!.length, 5,following!,follower!),
+                        trangThai(
+                            userModel.following!.length,
+                            userModel.follower!.length,
+                            5,
+                            following!,
+                            follower!),
                         const SizedBox(height: 30),
                         textButton(context),
                         const SizedBox(height: 10),
-                        Expanded(child: TastBar(userModel.uid,pageProvider)),
+                        Expanded(child: tastBar(userModel.uid, pageProvider)),
                       ],
                     ),
                   ),
@@ -111,8 +114,10 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                     backgroundColor:
                         MaterialStatePropertyAll(Colors.pinkAccent)),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const ManHinhDangKy()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ManHinhDangKy()));
                 },
                 child: const Text(
                   'Đăng ký',
@@ -121,17 +126,13 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
           );
   }
 
-  Widget AppBarCustom(BuildContext context,String fullname){
+  Widget appBarCustom(BuildContext context, String fullname) {
     return SizedBox(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.05,
       child: Row(
         children: [
-          Expanded(
-              flex: 1,
-              child: Container(
-              )
-          ),
+          Expanded(flex: 1, child: Container()),
           Expanded(
               flex: 8,
               child: Container(
@@ -139,12 +140,9 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 child: Text(
                   fullname,
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
-              )
-          ),
+              )),
           Expanded(
             flex: 1,
             child: Container(
@@ -153,19 +151,25 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 onSelected: (value) {
                   if (value == 'item1') {
                     setState(() {
-                      ProfileProvider provider = Provider.of(context,listen: false);
+                      ProfileProvider provider =
+                          Provider.of(context, listen: false);
                       provider.setVideos([]);
                       UserService.signOutUser();
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar(),)
-                      );
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Bottom_Navigation_Bar(),
+                          ));
                     });
                   }
                 },
                 itemBuilder: (BuildContext context) => [
                   const PopupMenuItem<String>(
                     value: 'item1',
-                    child: Text('Đăng xuất',style: TextStyle(color: Colors.red),),
+                    child: Text(
+                      'Đăng xuất',
+                      style: TextStyle(color: Colors.red),
+                    ),
                   ),
                 ],
               ),
@@ -176,110 +180,114 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     );
   }
 
-  Avatar(String url, BuildContext sContext, bool isDialog, String uid) {
-    return Container(
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              ClipOval(
-                child: GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: sContext,
-                        builder: (context) =>
-                            showAvatarDialog(context, url, isDialog, uid));
-                  },
-                  child: SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black,
-                      backgroundImage: NetworkImage(url),
-                    ),
+  avatar(String url, BuildContext sContext, bool isDialog, String uid) {
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            ClipOval(
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: sContext,
+                      builder: (context) =>
+                          showAvatarDialog(context, url, isDialog, uid));
+                },
+                child: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black,
+                    backgroundImage: NetworkImage(url),
                   ),
                 ),
               ),
-              const IconButton(
-                onPressed: null,
-                icon: Icon(Icons.upload, color: Colors.redAccent),
-              ),
-            ],
-          )
-        ],
-      ),
+            ),
+            const IconButton(
+              onPressed: null,
+              icon: Icon(Icons.upload, color: Colors.redAccent),
+            ),
+          ],
+        )
+      ],
     );
   }
 
-  TrangThai(int dangFollow, int follow, int like,List<String> following, List<String> follower) {
+  trangThai(int dangFollow, int follow, int like, List<String> following,
+      List<String> follower) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(username: uId,follow: follow,follower: dangFollow,uid: uId,initTab: 0,following: following,ngfollow: follower,id: id)));
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(uid: uId,follower: follower, following: following,initTab: 0)));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ManHinhTrangThai(
+                      uid: uId,
+                      follower: follower,
+                      following: following,
+                      initTab: 0)));
             },
-            child: Container(
-              child: Column(
-                children: [
-                  text(
-                    lable: dangFollow.toString(),
-                    size: 20,
-                    fontWeight: FontWeight.w900,
-                  ),
-                  const SizedBox(height: 5),
-                  const text(
-                      lable: "Đang follow", size: 15, fontWeight: FontWeight.normal),
-                ],
-              ),
+            child: Column(
+              children: [
+                TextWidget(
+                  lable: dangFollow.toString(),
+                  size: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+                const SizedBox(height: 5),
+                const TextWidget(
+                    lable: "Đang follow",
+                    size: 15,
+                    fontWeight: FontWeight.normal),
+              ],
             ),
           ),
         ),
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(username: uId,follow: follow,follower: dangFollow,uid: uId,initTab: 0)));
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManHinhTrangThai(uid: uId,follower: follower, following: following,initTab: 1)));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ManHinhTrangThai(
+                      uid: uId,
+                      follower: follower,
+                      following: following,
+                      initTab: 1)));
             },
-            child: Container(
-              child: Column(
-                children: [
-                  text(
-                      lable: follow.toString(),
-                      size: 20,
-                      fontWeight: FontWeight.w900,
-                  ),
-                  const SizedBox(height: 5),
-                  const text(
-                      lable: "Follower", size: 15, fontWeight: FontWeight.normal),
-                ],
-              ),
+            child: Column(
+              children: [
+                TextWidget(
+                  lable: follow.toString(),
+                  size: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+                const SizedBox(height: 5),
+                const TextWidget(
+                    lable: "Follower", size: 15, fontWeight: FontWeight.normal),
+              ],
             ),
           ),
         ),
         Expanded(
           child: GestureDetector(
-            onTap: (){
-              
+            onTap: () {
               print(uId);
             },
-            child: Container(
-              child: Column(
-                children: [
-                  text(
-                    lable: like.toString(),
-                    size: 20,
-                    fontWeight: FontWeight.w900,
-                  ),
-                  const SizedBox(height: 5),
-                  const text(
-                      lable: "Thích", size: 15, fontWeight: FontWeight.normal),
-                ],
-              ),
+            child: Column(
+              children: [
+                TextWidget(
+                  lable: like.toString(),
+                  size: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+                const SizedBox(height: 5),
+                const TextWidget(
+                    lable: "Thích", size: 15, fontWeight: FontWeight.normal),
+              ],
             ),
           ),
         ),
@@ -291,49 +299,52 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        OutlinedButton(
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
-            ),
-            minimumSize: MaterialStateProperty.all<Size>(
-              const Size(100,
-                  40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
-            ),
-          ),
-          onPressed: () {
-            // final uid = FirebaseAuth.instance.currentUser!.uid;
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    EditProfile(uid: uId),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  const begin = Offset(0.0,
-                      1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
-                  const end = Offset
-                      .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
-                  const curve =
-                      Curves.easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
-                  var tween = Tween(begin: begin, end: end)
-                      .chain(CurveTween(curve: curve));
-                  var offsetAnimation = animation.drive(tween);
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: child,
-                  );
-                },
+        Expanded(
+          child: OutlinedButton(
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
               ),
-            );
-          },
-          child: const Text(
-            'Sửa hồ sơ',
-            style: TextStyle(color: Colors.black),
+              minimumSize: MaterialStateProperty.all<Size>(
+                const Size(100,
+                    40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
+              ),
+            ),
+            onPressed: () {
+              // final uid = FirebaseAuth.instance.currentUser!.uid;
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      EditProfile(uid: uId),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    const begin = Offset(0.0,
+                        1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
+                    const end = Offset
+                        .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
+                    const curve =
+                        Curves.easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
+                    var offsetAnimation = animation.drive(tween);
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            },
+            child: const Text(
+              'Sửa hồ sơ',
+              style: TextStyle(color: Colors.black),
+            ),
           ),
         ),
-        const SizedBox(width: 20),
-        OutlinedButton(
+        const SizedBox(width: 10),
+        Expanded(
+            child: OutlinedButton(
           style: ButtonStyle(
             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
               const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
@@ -372,104 +383,102 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
             'Thêm bạn',
             style: TextStyle(color: Colors.black),
           ),
-        ),
-        const SizedBox(width: 20),
-        Consumer<ProfileProvider>(
-          builder: (context, provider, child) {
-          return Visibility(
-            visible: provider.isAdmin,
-            child: OutlinedButton(
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
-                ),
-                minimumSize: MaterialStateProperty.all<Size>(
-                  const Size(100,
-                      40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        const TabAdmin(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      const begin = Offset(0.0,
-                          1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
-                      const end = Offset
-                          .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
-                      const curve =
-                          Curves.easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
-                      var tween = Tween(begin: begin, end: end)
-                          .chain(CurveTween(curve: curve));
-                      var offsetAnimation = animation.drive(tween);
-                      return SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      );
-                    },
+        )),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Consumer<ProfileProvider>(
+            builder: (context, provider, child) {
+              return Visibility(
+                visible: provider.isAdmin,
+                child: OutlinedButton(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                      const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
+                    ),
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(100,
+                          40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
+                    ),
                   ),
-                );
-              },
-              child: const Text(
-                'Quản lý người dùng',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          );
-          },
-
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const TabAdmin(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(0.0,
+                              1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
+                          const end = Offset
+                              .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
+                          const curve = Curves
+                              .easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Quản lý',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
-
       ],
     );
   }
 
-  TastBar(String uid, PageProvider pageProvider) {
+  tastBar(String uid, PageProvider pageProvider) {
     return DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            body: Stack(
-              fit: StackFit.passthrough,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 40),
-                  child: TabBarView(
-                    children: [
-                      TabVideo(uid,'TabVideo',pageProvider),
-                      TabBookMark(uid,'TabBookMark',pageProvider),
-                    ],
-                  ),
+        length: 2,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Stack(
+            fit: StackFit.passthrough,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 40),
+                child: TabBarView(
+                  children: [
+                    TabVideo(uid, 'TabVideo', pageProvider),
+                    TabBookMark(uid, 'TabBookMark', pageProvider),
+                  ],
                 ),
-                const Positioned(
-                  top: 0,
-                  right: 0,
-                  left: 0,
-                  child: TabBar(
-                    indicatorColor: Colors.black,
-                    tabs: [
-                      Tab(
-                          child: Icon(
-                        Icons.video_collection,
-                        color: Colors.black,
-                      )),
-                      Tab(
-                          child: Icon(
-                        Icons.bookmark,
-                        color: Colors.black,
-                      )),
-
-                    ],
-                    labelPadding: EdgeInsets.symmetric(horizontal: 0),
-                  ),
+              ),
+              const Positioned(
+                top: 0,
+                right: 0,
+                left: 0,
+                child: TabBar(
+                  indicatorColor: Colors.black,
+                  tabs: [
+                    Tab(
+                        child: Icon(
+                      Icons.video_collection,
+                      color: Colors.black,
+                    )),
+                    Tab(
+                        child: Icon(
+                      Icons.bookmark,
+                      color: Colors.black,
+                    )),
+                  ],
+                  labelPadding: EdgeInsets.symmetric(horizontal: 0),
                 ),
-              ],
-            ),
-          )
-    );
+              ),
+            ],
+          ),
+        ));
   }
 
   showAvatarDialog(
@@ -482,32 +491,31 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
           alignment: Alignment.bottomRight,
           children: [
             GestureDetector(
-                onTap: () {
-                  showDialog(
-                    barrierDismissible: true,
-                    context: context,
-                    builder: (context) {
-                      return Center(
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height * 0.5,
-                            child: Image.network(
-                              url,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                    },
-                  );
-                },
-                // child:
-                // AvatarCircle(
-                //     urlImage: url, widthImage: 100, heightImagel: 100)
+              onTap: () {
+                showDialog(
+                  barrierDismissible: true,
+                  context: context,
+                  builder: (context) {
+                    return Center(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        child: Image.network(
+                          url,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              // child:
+              // AvatarCircle(
+              //     urlImage: url, widthImage: 100, heightImagel: 100)
               child: CircleAvatar(
                 backgroundColor: Colors.black,
                 backgroundImage: NetworkImage(url),
                 radius: 50,
-
               ),
             ),
             Positioned(
@@ -522,7 +530,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 child: IconButton(
                   padding: const EdgeInsets.all(5),
                   onPressed: () {
-                    ImagePick(ImageSource.gallery, context, isDialog, uId);
+                    imagePick(ImageSource.gallery, context, isDialog, uId);
                   },
                   icon: const Icon(Icons.add, color: Colors.white),
                 ),
@@ -534,7 +542,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
     );
   }
 
-  ImagePick(
+  imagePick(
       ImageSource src, BuildContext context, bool isDialog, String uId) async {
     final image = await ImagePicker().pickImage(source: src);
     if (image != null) {

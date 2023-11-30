@@ -87,7 +87,7 @@ class DangKySdtProvider extends ChangeNotifier{
       UserCredential authResult =
       await FirebaseAuth.instance.signInWithCredential(credential);
       DangKySdtService service = DangKySdtService();
-      bool check = await service.KiemTraDangKySdt(authResult,phone);
+      bool check = await service.kiemTraDangKySdt(authResult,phone);
       if(check){
         setMessage('Số điện thoại đã được đăng ký');
         changCheckOTP(true);
@@ -95,7 +95,6 @@ class DangKySdtProvider extends ChangeNotifier{
       }else{
         NotificationsService notifications = NotificationsService();
         await notifications.requestPermission();
-        await notifications.getToken();
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar(),));
         // đăng ký thành công và chuyển sang màn hình home()

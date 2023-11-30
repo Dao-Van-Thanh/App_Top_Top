@@ -3,7 +3,6 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Provider/comments_provider.dart';
 import '../../../Services/comment_service.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
@@ -38,8 +37,6 @@ class _FooterDialogState extends State<FooterDialog> {
 
   @override
   Widget build(BuildContext context) {
-    CommentsProvider setComment = CommentsProvider();
-    bool check = setComment.reline;
     TextEditingController textEditingController = TextEditingController();
     return Container(
         width: MediaQuery.of(context).size.width,

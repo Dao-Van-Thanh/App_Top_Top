@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../Provider/comments_provider.dart';
 import 'footerDialog.dart';
 
 class FooterDialogTemp extends StatefulWidget {
@@ -32,9 +31,6 @@ class _FooterDialogState extends State<FooterDialogTemp> {
 
   @override
   Widget build(BuildContext context) {
-    CommentsProvider setComment = CommentsProvider();
-    bool check = setComment.reline;
-    TextEditingController textEditingController = TextEditingController();
     return Container(
       width: MediaQuery.of(context).size.width,
       color: Colors.white,

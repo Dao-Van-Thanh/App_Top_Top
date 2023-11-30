@@ -50,11 +50,11 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
             stream: NotificationsService().getNotification(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               }
 
               if (!snapshot.hasData || snapshot.data == null) {
-                return Text('No data available');
+                return const Text('No data available');
               }
               List<NotificationModel> notificationList = [];
               snapshot.data?.docs.forEach((doc) {
@@ -80,16 +80,16 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                             child: Container(
                               width: 90,
                               height: 90,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.redAccent,
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Icon(Icons.notifications, color: Colors.white, size: 30),
                               ),
                             ),
                           ),
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Những thông báo mới', style: TextStyle(color: Colors.black)),
@@ -99,7 +99,7 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                         ],
                       ),
                       Expanded(child: Container()),
-                      Icon(Icons.navigate_next, color: Colors.black, size: 24),
+                      const Icon(Icons.navigate_next, color: Colors.black, size: 24),
                     ],
                   ),
                 ),
@@ -114,7 +114,7 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    print('${snapshot.error} ======================');
+                    debugPrint('${snapshot.error} ======================');
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
                     String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -165,20 +165,13 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
       String idUserChat, String uid, String timestampme) {
     String idOther = service.getIdOtherInListUID(model.uid);
     UserService userService = UserService();
-    String time = '';
-    try{
-      time = UserService.formattedTimeAgo(DateTime.parse(timestampme));
-    }catch(e){
-
-      time = '';
-    }
     return StreamBuilder<DocumentSnapshot>(
         stream: userService.getUser(idOther),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            print('${snapshot.error} ======================');
+            debugPrint('${snapshot.error} ======================');
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             UserModel userModel = UserModel.fromSnap(snapshot.data!);

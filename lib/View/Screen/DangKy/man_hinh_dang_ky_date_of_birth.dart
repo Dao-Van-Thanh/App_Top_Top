@@ -1,4 +1,3 @@
-import 'package:app/Provider/dang_ky_email_provider.dart';
 import 'package:app/Provider/gui_data_provider.dart';
 import 'package:app/Services/dang_ky_email_service.dart';
 import 'package:app/View/Widget/bottom_navigation.dart';
@@ -28,7 +27,6 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<DangKyEmailProvider>(context);
     final myData = Provider.of<MyData>(context);
     DangKyEmailService dangKyEmailService = DangKyEmailService();
     return Scaffold(
@@ -119,7 +117,6 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                             dayOfBirth);
                         if (result == null) {
                           await notifications.requestPermission();
-                          await notifications.getToken();
                           Navigator.push(
                               context,
                               MaterialPageRoute(

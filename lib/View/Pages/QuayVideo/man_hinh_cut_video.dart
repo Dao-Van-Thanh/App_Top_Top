@@ -8,6 +8,7 @@ class ManHinhCatVideo extends StatefulWidget {
   const ManHinhCatVideo(this.file, {super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ManHinhCatVideoState createState() => _ManHinhCatVideoState();
 }
 

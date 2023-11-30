@@ -3,6 +3,7 @@ import 'package:app/Model/chat_model.dart';
 import 'package:app/Services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 
 class ChatService {
@@ -23,7 +24,7 @@ class ChatService {
           return null;
         }
       } catch (e) {
-        print('===========$e');
+        debugPrint('===========$e');
       }
       return null;
     });
@@ -46,7 +47,7 @@ class ChatService {
       return snapshot;
     } catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       rethrow; // Rethrow lỗi nếu cần
     }
   }
@@ -55,7 +56,6 @@ class ChatService {
       final chatRef = _firestore.collection('Chats').doc(chatId);
       // Thêm tin nhắn vào danh sách messages trong phòng chat
       String idChat = _firestore.collection('Chats').doc().id;
-      print(idChat);
       await chatRef.update({
         'messages': FieldValue.arrayUnion([
           {
@@ -68,7 +68,7 @@ class ChatService {
       });
       return true;
     } catch (e) {
-      print('Lỗi khi thêm tin nhắn: $e');
+      debugPrint('Lỗi khi thêm tin nhắn: $e');
       return false;
     }
   }
@@ -116,7 +116,7 @@ class ChatService {
         return true;
       }return false;
     }catch(e){
-      print('$e =========== Lỗi up load ảnh ở màn hình chat');
+      debugPrint('$e =========== Lỗi up load ảnh ở màn hình chat');
       return false;
     }
   }

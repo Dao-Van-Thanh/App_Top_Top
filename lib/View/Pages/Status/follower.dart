@@ -45,7 +45,7 @@ class _FollowerScreenState extends State<FollowerScreen> {
                         String followingUserName =followerUser.fullName;
                         // Hiển thị thông tin người dùng theo ý của bạn
                         bool check = followerUser.follower!.contains(widget.uId);
-                        return ItemView(
+                        return itemView(
                             followingUserName,
                             followerUser.avatarURL,
                             followerUser.idTopTop,
@@ -63,7 +63,7 @@ class _FollowerScreenState extends State<FollowerScreen> {
     );
   }
 
-  Widget ItemView(String userName, String Url, String idTikTok,String uid, String idOther,bool check) {
+  Widget itemView(String userName, String url, String idTikTok,String uid, String idOther,bool check) {
     VideoProvider videoProvider = VideoProvider();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,7 +77,7 @@ class _FollowerScreenState extends State<FollowerScreen> {
               child: SizedBox(
                 child: CircleAvatar(
                   foregroundColor: Colors.black,
-                  foregroundImage: NetworkImage(Url),
+                  foregroundImage: NetworkImage(url),
                 ),
               ),
             ),

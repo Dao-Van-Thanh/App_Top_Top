@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 class AdminService{
   Future<bool> getBanUid(String uid)async{
@@ -15,7 +16,7 @@ class AdminService{
       return false;
     }catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       rethrow; // Rethrow lỗi nếu cần
     }
   }
@@ -32,7 +33,7 @@ class AdminService{
       }
     }catch (e) {
       // Xử lý lỗi nếu có
-      print('Lỗi: $e');
+      debugPrint('Lỗi: $e');
       rethrow; // Rethrow lỗi nếu cần
     }
   }

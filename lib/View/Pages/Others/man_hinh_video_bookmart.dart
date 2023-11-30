@@ -59,8 +59,7 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                 child: PageView.builder(
                   controller: controller,
                   onPageChanged: (int page) {
-                    print(videoList!.length - 1);
-                    if (page == videoList.length - 1) {
+                    if (page == videoList!.length - 1) {
                       print('video cuối cùng rồi xem cái lol đi học đi');
                     }
                   },

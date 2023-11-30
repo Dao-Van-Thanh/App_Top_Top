@@ -68,42 +68,38 @@ class _ManHinhChinhSuaVideoState extends State<ManHinhChinhSuaVideo> {
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.25,
                     padding: const EdgeInsets.all(13),
-                    child: Container(
-                      child: AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child:
-                            VideoPlayerItemEdit(widget.videoProvider.videoUrl),
-                      ),
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child:
+                          VideoPlayerItemEdit(widget.videoProvider.videoUrl),
                     ),
                   ),
                 ),
               ],
             ),
-            Container(
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.comment_bank_outlined,
-                    size: 30,
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  const Text(
-                    'Cho phép bình luận ',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                  const Spacer(),
-                  Switch(
-                    value: !checked,
-                    onChanged: (value) {
-                      setState(() {
-                        checked = !checked;
-                      });
-                    },
-                  ),
-                ],
-              ),
+            Row(
+              children: [
+                const Icon(
+                  Icons.comment_bank_outlined,
+                  size: 30,
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                const Text(
+                  'Cho phép bình luận ',
+                  style: TextStyle(fontSize: 20.0),
+                ),
+                const Spacer(),
+                Switch(
+                  value: !checked,
+                  onChanged: (value) {
+                    setState(() {
+                      checked = !checked;
+                    });
+                  },
+                ),
+              ],
             ),
             Flexible(
               child: GestureDetector(

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app/Enum/enum_notification.dart';
 import 'package:app/Provider/chats_provider.dart';
 import 'package:app/Services/notifications_service.dart';
 import 'package:app/Services/user_service.dart';
@@ -33,9 +34,10 @@ class _ManHinhChatState extends State<ManHinhChat> {
   @override
   void initState() {
     super.initState();
-    final provider = Provider.of<ChatsProfiver>(context,listen: false);
+    final provider = Provider.of<ChatsProfiver>(context, listen: false);
     provider.emojiShowing = false;
   }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -48,7 +50,6 @@ class _ManHinhChatState extends State<ManHinhChat> {
         } else {
           final chatData = snapshot.data;
           if (chatData != null) {
-            final message = chatData.messages;
             final user = FirebaseAuth.instance.currentUser;
             final idOther = service.getIdOtherInListUID(chatData.uid);
             NotificationsService notificationsService = NotificationsService();
@@ -94,15 +95,13 @@ class _ManHinhChatState extends State<ManHinhChat> {
                           ),
                           if (snapshot.data != null &&
                               snapshot.data!['fullname'] != null)
-                            Container(
-                              child: Text(
-                                '${snapshot.data!['fullname']}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                            Text(
+                              '${snapshot.data!['fullname']}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                         ],
@@ -125,17 +124,14 @@ class _ManHinhChatState extends State<ManHinhChat> {
                           // ô chat
                           SingleChildScrollView(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 5, right: 5),
+                              padding: const EdgeInsets.only(left: 5, right: 5),
                               child: Row(
                                 children: [
                                   Expanded(
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: Colors.grey),
-                                        borderRadius:
-                                            BorderRadius.circular(25),
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(25),
                                       ),
                                       child: Row(
                                         children: [
@@ -154,17 +150,16 @@ class _ManHinhChatState extends State<ManHinhChat> {
                                             child: TextField(
                                               controller: editingController,
                                               maxLines: null,
-                                              decoration:
-                                                  const InputDecoration(
-                                                hintText:
-                                                    'Nhập tin nhắn...',
+                                              decoration: const InputDecoration(
+                                                hintText: 'Nhập tin nhắn...',
                                                 border: InputBorder.none,
                                               ),
                                             ),
                                           ),
                                           IconButton(
                                             onPressed: () {
-                                              provider.setEmojiShowing(!provider.emojiShowing);
+                                              provider.setEmojiShowing(
+                                                  !provider.emojiShowing);
                                             },
                                             icon: const Icon(
                                               Icons.tag_faces_sharp,
@@ -176,24 +171,28 @@ class _ManHinhChatState extends State<ManHinhChat> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      if (editingController
-                                          .text.trim().isNotEmpty) {
+                                      if (editingController.text
+                                          .trim()
+                                          .isNotEmpty) {
                                         String chat = editingController.text;
                                         editingController.text = '';
-                                        final check = await service.addMessageToChat(
-                                            widget.idPhongChat,
-                                            chat,
-                                            user.uid);
-                                        if(check){
+                                        final check =
+                                            await service.addMessageToChat(
+                                                widget.idPhongChat,
+                                                chat,
+                                                user.uid);
+                                        if (check) {
                                           final checkOnline =
-                                              await UserService
-                                                  .checkUserOnline(uid: idOther);
-                                          if(!checkOnline){
+                                              await UserService.checkUserOnline(
+                                                  uid: idOther);
+                                          if (!checkOnline) {
                                             notificationsService.sendNotification(
-                                                title: 'Tin nhăn mới từ ${snapshot.data!['fullname'] ?? 'người dùng'} ',
+                                                title:
+                                                    'Tin nhăn mới từ ${snapshot.data!['fullname'] ?? 'người dùng'} ',
                                                 body: chat,
-                                                idOther: idOther
-                                            );
+                                                idOther: idOther,
+                                                typeNotification:
+                                                    EnumNotificationType.chat);
                                           }
                                         }
                                       }
@@ -205,7 +204,9 @@ class _ManHinhChatState extends State<ManHinhChat> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Offstage(
                             offstage: !provider.emojiShowing,
                             child: SizedBox(

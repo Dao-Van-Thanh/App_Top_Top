@@ -2,6 +2,7 @@
 import 'package:app/Model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class DangKyEmailService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -41,8 +42,8 @@ class DangKyEmailService {
           .doc(_auth
               .currentUser!.uid) // Sử dụng UID của người dùng làm tên tài liệu
           .set(userModel.toJson())
-          .catchError((error, StackTrace) {
-        print(error);
+          .catchError((error, stackTrace) {
+        debugPrint(error);
       }); // Đăng ký thành công, trả về null để chỉ ra không có lỗi
     } catch (e) {
       return e.toString(); // Trả về thông báo lỗi nếu đăng ký thất bại

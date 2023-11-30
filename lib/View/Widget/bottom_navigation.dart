@@ -5,6 +5,7 @@ import 'package:app/View/Pages/Chats/man_hinh_hop_thu.dart';
 import 'package:app/View/Pages/Profile/man_hinh_profile.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_quay_video.dart';
 import 'package:app/View/Widget/custom_icon_add_video.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,17 +32,18 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     notification.firebaseNotification(context);
     //Sửa trạng thái người dùng đã online
-    UserService.updateStatusUser({
-      'lastActive':DateTime.now(),
-      'isOnline':true
-    });
+    if (FirebaseAuth.instance.currentUser != null) {
+      notification.getToken();
+    }
+    UserService.updateStatusUser(
+        {'lastActive': DateTime.now(), 'isOnline': true});
     // CallVideoService().addStatusFieldToVideos();
   }
+
   // kiểm tra người dùng nếu offline
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

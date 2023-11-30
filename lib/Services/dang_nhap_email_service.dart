@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../Model/user_model.dart';
 
@@ -7,7 +8,7 @@ class DangNhapEmailService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<bool> DangNhapBangEmail(String email, String password) async {
+  Future<bool> dangNhapBangEmail(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(
         email: email,
@@ -22,26 +23,26 @@ class DangNhapEmailService {
           // Chuyển dữ liệu từ DocumentSnapshot sang UserModel
           UserModel userModel = UserModel.fromSnap(userSnapshot);
           // In thông tin UserModel
-          print('Thông tin UserModel:');
-          print('Full Name: ${userModel.fullName}');
-          print('Age: ${userModel.age}');
-          print(userModel.uid);
+          debugPrint('Thông tin UserModel:');
+          debugPrint('Full Name: ${userModel.fullName}');
+          debugPrint('Age: ${userModel.age}');
+          debugPrint(userModel.uid);
 
           return true;
         } else {
-          print('Không tìm thấy thông tin người dùng trong Firestore.');
+          debugPrint('Không tìm thấy thông tin người dùng trong Firestore.');
           return false;
         }
       }
       return false;
     } on FirebaseAuthException catch (e) {
-      print(e.code);
+      debugPrint(e.code);
       if (e.code == 'user-not-found') {
-        print('Email không tồn tại.');
+        debugPrint('Email không tồn tại.');
       } else if (e.code == 'wrong-password') {
-        print('Sai mật khẩu.');
+        debugPrint('Sai mật khẩu.');
       } else {
-        print('Lỗi đăng nhập: ${e.code}');
+        debugPrint('Lỗi đăng nhập: ${e.code}');
       }
       return false;
     }

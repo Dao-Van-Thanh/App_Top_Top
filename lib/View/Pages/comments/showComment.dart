@@ -43,7 +43,6 @@ class ShowComment extends StatelessWidget {
         String time =
         UserService.formattedTimeAgo(commentModel.timestamp.toDate());
         bool isLiked = commentModel.likes.contains(uid);
-
         return StreamBuilder<DocumentSnapshot>(
           stream: UserService().getUser(commentModel.uid),
           builder: (context, snapshot) {
@@ -162,7 +161,7 @@ class ShowComment extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  commentModel.text ?? '',
+                                  commentModel.text,
                                   style: const TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
@@ -175,7 +174,7 @@ class ShowComment extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      time ?? '',
+                                      time,
                                     ),
                                     TextButton(
                                       onPressed: () {

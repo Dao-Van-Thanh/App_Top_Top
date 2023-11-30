@@ -7,9 +7,9 @@ class AppButtons extends StatelessWidget {
   bool? isIcon;
   final Color color;
   final Color backgroundColor;
-  final  boderColor;
+  final Color boderColor;
 
-  AppButtons({Key? key,this.isIcon = false,this.text,this.icon,required this.size, required this.color, required this.backgroundColor, this.boderColor}) : super(key: key);
+  AppButtons({Key? key,this.isIcon = false,this.text,this.icon,required this.size, required this.color, required this.backgroundColor, required this.boderColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,7 @@ class AppButtons extends StatelessWidget {
       child:
       Center(child: Icon(icon,color: color.withOpacity(0.8),)),
     ),
-        Container(
-            child: Text(text.toString(),style: const TextStyle(fontSize: 15,color: Colors.grey),),
-          ),
+        Text(text.toString(),style: const TextStyle(fontSize: 15,color: Colors.grey),),
       ]
     );
   }

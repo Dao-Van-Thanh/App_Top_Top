@@ -156,7 +156,7 @@ class ReComment extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 5),
                                       Text(
-                                        commentModel.text ?? '',
+                                        commentModel.text,
                                         style: const TextStyle(
                                           fontSize: 15,
                                           color: Colors.black,
@@ -169,7 +169,7 @@ class ReComment extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            time ?? '',
+                                            time,
                                           ),
                                         ],
                                       ),

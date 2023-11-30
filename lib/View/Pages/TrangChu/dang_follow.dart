@@ -41,9 +41,7 @@ class _Following extends State<Following> {
             body: SafeArea(
               child: PageView.builder(
                 onPageChanged: (int page) {
-                  print(page);
-                  print(videoList!.length - 1);
-                  if (page == videoList.length - 1) {
+                  if (page == videoList!.length - 1) {
                     print('video cuối cùng rồi xem cái lol đi học đi');
                   }
                 },

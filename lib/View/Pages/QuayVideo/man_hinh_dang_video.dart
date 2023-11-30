@@ -99,11 +99,9 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.25,
                             padding: const EdgeInsets.all(13),
-                            child: Container(
-                              child: AspectRatio(
-                                aspectRatio: _videoController.value.aspectRatio,
-                                child: VideoPlayer(_videoController),
-                              ),
+                            child: AspectRatio(
+                              aspectRatio: _videoController.value.aspectRatio,
+                              child: VideoPlayer(_videoController),
                             ),
                           ),
                         ),
@@ -114,132 +112,119 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                         border: Border.all(color: Colors.black12, width: 1),
                       ),
                     ),
-                    Container(
-                      child: const Row(
-                        children: [
-                          // Biểu tượng "person"
-                          Icon(
-                            Icons.person_outline,
-                            size: 30.0,
-                          ),
-                          SizedBox(width: 10.0), // Khoảng cách giữa biểu tượng và văn bản
-                          // Dòng văn bản "Gắn thẻ mọi người"
-                          Text(
-                            'Gắn thẻ mọi người',
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                          Spacer(),
-                          Icon(
-                            Icons.navigate_next_sharp, // Thay thế bằng biểu tượng mong muốn
-                          ),
-                        ],
-                      ),
+                    const Row(
+                      children: [
+                        // Biểu tượng "person"
+                        Icon(
+                          Icons.person_outline,
+                          size: 30.0,
+                        ),
+                        SizedBox(width: 10.0), // Khoảng cách giữa biểu tượng và văn bản
+                        // Dòng văn bản "Gắn thẻ mọi người"
+                        Text(
+                          'Gắn thẻ mọi người',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        Spacer(),
+                        Icon(
+                          Icons.navigate_next_sharp, // Thay thế bằng biểu tượng mong muốn
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 13.0,),
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          size: 30
+                        ),
+                        SizedBox(width: 10.0,),
+                        Text(
+                          'Vị trí',
+                          style:TextStyle(fontSize: 20.0),
+                        ),
+                        Spacer(),
+                        Icon(
+                          Icons.navigate_next_sharp, // Thay thế bằng biểu tượng mong muốn
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 13.0,),
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.add,
+                          size: 30,
+                        ),
+                        SizedBox(width: 10.0,),
+                        Text(
+                          'Thêm liên kết',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        Spacer(),
+                        Icon(
+                          Icons.navigate_next
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 13.0,),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.comment_bank_outlined,
+                          size: 30,
+                        ),
+                        const SizedBox(width: 10.0,),
+                        const Text(
+                          'Cho phép bình luận ',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        const Spacer(),
+                        Switch(
+                          value: provider.isChecked, // Giá trị bật/tắt (có thể thay đổi tùy thuộc vào trạng thái thực tế)
+                          onChanged: (value) {
+                            provider.setChecked();
+                            blockComments = !value;
+                          },
+                        ),
 
+                      ],
                     ),
                     const SizedBox(height: 13.0,),
-                    Container(
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            size: 30
-                          ),
-                          SizedBox(width: 10.0,),
-                          Text(
-                            'Vị trí',
-                            style:TextStyle(fontSize: 20.0),
-                          ),
-                          Spacer(),
-                          Icon(
-                            Icons.navigate_next_sharp, // Thay thế bằng biểu tượng mong muốn
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 13.0,),
-                    Container(
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.add,
-                            size: 30,
-                          ),
-                          SizedBox(width: 10.0,),
-                          Text(
-                            'Thêm liên kết',
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                          Spacer(),
-                          Icon(
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.person_off_outlined,
+                          size: 30,
+                        ),
+                        SizedBox(width: 10.0,),
+                        Text(
+                          'Ai cũng có thể xem bài đăng này',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        Spacer(),
+                        Icon(
                             Icons.navigate_next
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                     const SizedBox(height: 13.0,),
-                    Container(
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.comment_bank_outlined,
-                            size: 30,
-                          ),
-                          const SizedBox(width: 10.0,),
-                          const Text(
-                            'Cho phép bình luận ',
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                          const Spacer(),
-                          Switch(
-                            value: provider.isChecked, // Giá trị bật/tắt (có thể thay đổi tùy thuộc vào trạng thái thực tế)
-                            onChanged: (value) {
-                              provider.setChecked();
-                              blockComments = !value;
-                            },
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 13.0,),
-                    Container(
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.person_off_outlined,
-                            size: 30,
-                          ),
-                          SizedBox(width: 10.0,),
-                          Text(
-                            'Ai cũng có thể xem bài đăng này',
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                          Spacer(),
-                          Icon(
-                              Icons.navigate_next
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 13.0,),
-                    Container(
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.download_outlined,
-                            size: 30,
-                          ),
-                          SizedBox(width: 10.0,),
-                          Text(
-                            'Lưu vào thiết bị',
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                          Spacer(),
-                          Icon(
-                              Icons.navigate_next
-                          )
-                        ],
-                      ),
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.download_outlined,
+                          size: 30,
+                        ),
+                        SizedBox(width: 10.0,),
+                        Text(
+                          'Lưu vào thiết bị',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        Spacer(),
+                        Icon(
+                            Icons.navigate_next
+                        )
+                      ],
                     ),
                   ],
                 ),
@@ -279,14 +264,16 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
 
                                   DangVideoService service = DangVideoService();
                                   bool check =
-                                  await service.DangVideo(controller.text,blockComments, widget.xflie,widget.musicChoose);
+                                  await service.dangVideo(controller.text,blockComments, widget.xflie,widget.musicChoose);
                                   if (check) {
+                                    // ignore: use_build_context_synchronously
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('Đăng video thành công.'),
 
                                       ),
                                     );
+                                    // ignore: use_build_context_synchronously
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                   } else {
