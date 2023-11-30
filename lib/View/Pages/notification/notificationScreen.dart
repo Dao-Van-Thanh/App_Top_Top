@@ -3,6 +3,7 @@ import 'package:app/View/Widget/app_item_notify.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Model/notifycation_model.dart';
+import '../../../Model/user_model.dart';
 
 class NotificationScreen extends StatefulWidget {
   final List<NotificationModel> notificationList;
@@ -42,7 +43,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             NotificationModel notificationModel =
                 widget.notificationList[index];
             print(notificationModel.type);
-            return FutureBuilder<Map<String, dynamic>?>(
+            return FutureBuilder<UserModel?>(
               future: UserService().getDataUser(notificationModel.idOther),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -50,8 +51,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 }
                 final useData = snapshot.data!;
                 return AppItemNotify(
-                  avatar: useData['avatarURL'],
-                  nameUser: useData['fullname'],
+                  avatar: useData.avatarURL,
+                  nameUser: useData.fullName,
                   content: 'Đã ${notificationModel.type}',
                 );
               },

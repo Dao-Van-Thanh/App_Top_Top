@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Model/user_model.dart';
 import 'man_hinh_edit_item_profile.dart';
 
 class EditProfile extends StatelessWidget {
@@ -14,7 +15,7 @@ class EditProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final editItemProvider = Provider.of<EditItemProfileProvider>(context);
     final editProfileProvider = Provider.of<EditProfileProvider>(context);
-    return FutureBuilder<Map<String, dynamic>?>(
+    return FutureBuilder<UserModel?>(
       future: UserService().getDataUser(uid),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -76,9 +77,9 @@ class EditProfile extends StatelessWidget {
           );
         } else {
           final userData = snapshot.data!;
-          String uid = userData['uid'];
-          editProfileProvider.setfullname = userData['fullname'];
-          editProfileProvider.setidTopTop = userData['idTopTop'];
+          String uid = userData.uid;
+          editProfileProvider.setfullname = userData.fullName;
+          editProfileProvider.setidTopTop = userData.idTopTop;
           return Scaffold(
             appBar: AppBar(
               elevation: 0,
@@ -117,8 +118,7 @@ class EditProfile extends StatelessWidget {
                           // Hình ảnh
                           ClipOval(
                             child: CachedNetworkImage(
-                              imageUrl:
-                                  '${userData['avatarURL']}',
+                              imageUrl: '${userData.avatarURL}',
                               fit: BoxFit.cover,
                               height: 100,
                               width: 100,
@@ -151,7 +151,6 @@ class EditProfile extends StatelessWidget {
                       editItemProvider.updateProfileData(
                           'Tên', editProfileProvider.getfullname.toString());
                       Navigator.push(
-
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditItemProfile(uid)),
@@ -177,13 +176,13 @@ class EditProfile extends StatelessWidget {
                             builder: (context) => EditItemProfile(uid)),
                       );
                     }),
-                    _inkWellRowEdit('Số điện thoại', userData['phone'], () {
+                    _inkWellRowEdit('Số điện thoại', userData.phone, () {
                       _showDialog(context);
                     }),
-                    _inkWellRowEdit('Email', userData['email'], () {
+                    _inkWellRowEdit('Email', userData.email, () {
                       _showDialog(context);
                     }),
-                    _inkWellRowEdit('Ngày sinh', userData['birth'], () {
+                    _inkWellRowEdit('Ngày sinh', userData.birth, () {
                       _showDialog(context);
                     }),
                   ],
