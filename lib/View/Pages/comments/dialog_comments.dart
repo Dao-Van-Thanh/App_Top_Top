@@ -93,8 +93,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                   } else if (snapshot.hasError) {
                     return Text("Error: ${snapshot.error}");
                   } else {
-                    final data =
-                        snapshot.data?.data() as Map<String, dynamic>;
+                    final data = snapshot.data?.data() as Map<String, dynamic>;
                     var comments = data['comments'] as List<dynamic>;
                     if (comments.isEmpty) {
                       return const Center(
@@ -139,6 +138,7 @@ class _CommentsDialogState extends State<CommentsDialog> {
                     avatarURL: avatarURL,
                     videoId: widget.videoId,
                     uId: uId,
+                    authorId: widget.videoProvider.authorId,
                   ),
           ],
         ),

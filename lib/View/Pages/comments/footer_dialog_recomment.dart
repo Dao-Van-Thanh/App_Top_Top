@@ -10,12 +10,15 @@ class FooterDialogReComment extends StatefulWidget {
   final String uId;
   final String idComment;
   final String nameUserReComment;
+  final String authorId;
 
-  const FooterDialogReComment({super.key, 
+  const FooterDialogReComment({
+    super.key,
     required this.idComment,
     required this.videoId,
     required this.uId,
     required this.nameUserReComment,
+    required this.authorId,
   });
 
   @override
@@ -28,7 +31,7 @@ class _FooterDialogReCommentState extends State<FooterDialogReComment> {
   @override
   void initState() {
     super.initState();
-    final provider = Provider.of<ChatsProfiver>(context,listen: false);
+    final provider = Provider.of<ChatsProfiver>(context, listen: false);
     provider.emojiShowing = false;
     myFocusNode.requestFocus();
   }
@@ -66,7 +69,7 @@ class _FooterDialogReCommentState extends State<FooterDialogReComment> {
                                     controller: textEditingController,
                                     decoration: InputDecoration(
                                       hintText:
-                                      'Trả lời bình luận của ${widget.nameUserReComment}...',
+                                          'Trả lời bình luận của ${widget.nameUserReComment}...',
                                       border: InputBorder.none,
                                     ),
                                   ),
@@ -74,12 +77,14 @@ class _FooterDialogReCommentState extends State<FooterDialogReComment> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  if(provider.emojiShowing){
+                                  if (provider.emojiShowing) {
                                     myFocusNode.requestFocus();
-                                  }else{
-                                    FocusScope.of(context).requestFocus(FocusNode());
+                                  } else {
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
                                   }
-                                  provider.setEmojiShowing(!provider.emojiShowing);
+                                  provider
+                                      .setEmojiShowing(!provider.emojiShowing);
                                 },
                                 icon: const Icon(Icons.emoji_emotions),
                               ),
@@ -89,7 +94,8 @@ class _FooterDialogReCommentState extends State<FooterDialogReComment> {
                                       widget.videoId,
                                       widget.idComment,
                                       textEditingController.text.trim(),
-                                      widget.uId);
+                                      widget.uId,
+                                      widget.authorId);
                                   textEditingController.clear();
                                   Navigator.pop(context);
                                   // int index = videoProvider.listVideo
@@ -123,7 +129,7 @@ class _FooterDialogReCommentState extends State<FooterDialogReComment> {
                         columns: 7,
                         emojiSizeMax: 32 *
                             (foundation.defaultTargetPlatform ==
-                                TargetPlatform.iOS
+                                    TargetPlatform.iOS
                                 ? 1.30
                                 : 1.0),
                         // Issue: https://github.com/flutter/flutter/issues/28894
@@ -143,8 +149,7 @@ class _FooterDialogReCommentState extends State<FooterDialogReComment> {
                         recentsLimit: 28,
                         noRecents: const Text(
                           'No Recents',
-                          style: TextStyle(
-                              fontSize: 20, color: Colors.black26),
+                          style: TextStyle(fontSize: 20, color: Colors.black26),
                           textAlign: TextAlign.center,
                         ),
                         // Needs to be const Widget

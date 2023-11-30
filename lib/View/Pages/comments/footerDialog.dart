@@ -10,15 +10,19 @@ class FooterDialog extends StatefulWidget {
   final String? avatarURL;
   final String videoId;
   final String? uId;
+  final String? authorId;
 
   // final VideoProvider videoProvider;
 
-  const FooterDialog(
-      {super.key, required this.avatarURL,
-      required this.videoId,
-      required this.uId,
-      // required this.videoProvider
-      });
+  const FooterDialog({
+    super.key,
+    required this.avatarURL,
+    required this.videoId,
+    required this.uId,
+    required this.authorId,
+
+    // required this.videoProvider
+  });
 
   @override
   State<FooterDialog> createState() => _FooterDialogState();
@@ -30,7 +34,7 @@ class _FooterDialogState extends State<FooterDialog> {
   @override
   void initState() {
     super.initState();
-    final provider = Provider.of<ChatsProfiver>(context,listen: false);
+    final provider = Provider.of<ChatsProfiver>(context, listen: false);
     provider.emojiShowing = false;
     myFocusNode.requestFocus();
   }
@@ -84,19 +88,24 @@ class _FooterDialogState extends State<FooterDialog> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  if(provider.emojiShowing){
+                                  if (provider.emojiShowing) {
                                     myFocusNode.requestFocus();
-                                  }else{
-                                    FocusScope.of(context).requestFocus(FocusNode());
+                                  } else {
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
                                   }
-                                  provider.setEmojiShowing(!provider.emojiShowing);
+                                  provider
+                                      .setEmojiShowing(!provider.emojiShowing);
                                 },
                                 icon: const Icon(Icons.emoji_emotions),
                               ),
                               IconButton(
                                 onPressed: () {
-                                  CommentService().sendComment(widget.videoId,
-                                      textEditingController.text.trim(), widget.uId!);
+                                  CommentService().sendComment(
+                                      widget.videoId,
+                                      textEditingController.text.trim(),
+                                      widget.uId!,
+                                      widget.authorId!);
                                   textEditingController.clear();
                                   Navigator.pop(context);
                                   // int index = videoProvider.listVideo
@@ -130,7 +139,7 @@ class _FooterDialogState extends State<FooterDialog> {
                         columns: 7,
                         emojiSizeMax: 32 *
                             (foundation.defaultTargetPlatform ==
-                                TargetPlatform.iOS
+                                    TargetPlatform.iOS
                                 ? 1.30
                                 : 1.0),
                         // Issue: https://github.com/flutter/flutter/issues/28894
@@ -150,8 +159,7 @@ class _FooterDialogState extends State<FooterDialog> {
                         recentsLimit: 28,
                         noRecents: const Text(
                           'No Recents',
-                          style: TextStyle(
-                              fontSize: 20, color: Colors.black26),
+                          style: TextStyle(fontSize: 20, color: Colors.black26),
                           textAlign: TextAlign.center,
                         ),
                         // Needs to be const Widget

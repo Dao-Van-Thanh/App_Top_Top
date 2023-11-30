@@ -192,6 +192,9 @@ class ShowComment extends StatelessWidget {
                                                             '',
                                                         idComment:
                                                         idComment,
+                                                        authorId: snapshot.data?[
+                                                        'uid'] ??
+                                                            '',
                                                         videoId: idVideo,
                                                         uId: uid),
                                                     Container(

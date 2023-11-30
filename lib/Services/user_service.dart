@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/Enum/enum_notification.dart';
+import 'package:app/Model/user_model.dart';
 import 'package:app/Services/notifications_service.dart';
 import 'package:app/Services/others_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,38 +12,36 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class UserService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   // Lấy thông tin user
-  Future<Map<String, dynamic>?> getDataUser(String uid) async {
+  Future<UserModel?> getDataUser(String uid) async {
     // String currentUserId = FirebaseAuth.instance.currentUser!.uid;
     try {
+      final uID = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot userDoc =
-      await firestore.collection('Users').doc(uid).get();
-      if (userDoc.exists) {
-        Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>;
-        return userData;
-      }
-      return null;
+          await firestore.collection('Users').doc(uID).get();
+
+      // Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>;
+      UserModel userData = UserModel.fromSnap(userDoc);
+      return userData;
     } catch (e) {
       debugPrint('Lỗi khi lấy dữ liệu người dùng: $e');
       return null;
     }
   }
-  Future<bool> banUser(String targetUserId,bool ban)async{
+
+  Future<bool> banUser(String targetUserId, bool ban) async {
     await FirebaseFirestore.instance
         .collection("Users")
         .doc(targetUserId)
-        .update({
-      "ban": ban
-    });
+        .update({"ban": ban});
     return ban;
   }
 
   // Chỉnh sửa thông tin user
-  Future<void> editDataUser(String uid,String label, String value) async {
+  Future<void> editDataUser(String uid, String label, String value) async {
     final firestore = FirebaseFirestore.instance;
     CollectionReference users = firestore.collection('Users');
 
@@ -68,11 +67,11 @@ class UserService {
     }
   }
 
-  Future<void> followUser( String targetUserID) async {
+  Future<void> followUser(String targetUserID) async {
     OthersService service = OthersService();
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if(user != null){
+      if (user != null) {
         final firestoreInstance = FirebaseFirestore.instance;
         await firestoreInstance.collection('Users').doc(user.uid).update({
           'following': FieldValue.arrayUnion([targetUserID]),
@@ -83,13 +82,13 @@ class UserService {
         NotificationsService notificationsService = NotificationsService();
         final data = await getDataUser(user.uid);
         notificationsService.sendNotification(
-            title: data!['fullname'],
+            title: data!.fullName,
             body: 'Đã follow bạn',
             idOther: targetUserID,
-            typeNotification: EnumNotificationType.follow
-        );
+            typeNotification: EnumNotificationType.follow);
         service.createChatRoomsForUsers(user, targetUserID);
-        NotificationsService().createNotification(targetUserID, user.uid, 'follow');
+        NotificationsService()
+            .createNotification(targetUserID, user.uid, 'follow');
       }
     } catch (e) {
       debugPrint("Error following user: $e");
@@ -99,7 +98,7 @@ class UserService {
   Future<void> unfollowUser(String targetUserID) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if(user != null){
+      if (user != null) {
         final firestoreInstance = FirebaseFirestore.instance;
         await firestoreInstance.collection('Users').doc(user.uid).update({
           'following': FieldValue.arrayRemove([targetUserID]),
@@ -114,11 +113,10 @@ class UserService {
     }
   }
 
-
   Future<List<Map<String, dynamic>>?> getListFriend() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if(user != null){
+      if (user != null) {
         final firestoreInstance = FirebaseFirestore.instance;
         final userCollection = firestoreInstance.collection('Users');
 
@@ -127,16 +125,15 @@ class UserService {
         List<Map<String, dynamic>> usersList = [];
 
         // Lấy danh sách người bạn đã theo dõi một lần
-        final followingList =
-        await getFollowingList(user.uid);
+        final followingList = await getFollowingList(user.uid);
         for (var userDoc in userSnapshot.docs) {
-          Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+          Map<String, dynamic> userData =
+              userDoc.data() as Map<String, dynamic>;
           final targetUserID = userData['uid'].toString();
           // Kiểm tra xem người dùng có trong danh sách bạn bè đã theo dõi chưa
           if (!followingList.contains(targetUserID) &&
               targetUserID != user.uid) {
             usersList.add(userData);
-
           }
         }
         return usersList;
@@ -148,17 +145,16 @@ class UserService {
     return null;
   }
 
-
   Future<List<String>> getFollowingList(String currentUserID) async {
     try {
       final firestoreInstance = FirebaseFirestore.instance;
       DocumentSnapshot currentUserDoc =
-      await firestoreInstance.collection('Users').doc(currentUserID).get();
+          await firestoreInstance.collection('Users').doc(currentUserID).get();
       if (currentUserDoc.exists) {
         Map<String, dynamic> currentUserData =
-        currentUserDoc.data() as Map<String, dynamic>;
+            currentUserDoc.data() as Map<String, dynamic>;
         List<String> followingList =
-        List<String>.from(currentUserData['following']);
+            List<String>.from(currentUserData['following']);
         return followingList;
       }
       return [];
@@ -167,16 +163,17 @@ class UserService {
       return [];
     }
   }
+
   Future<List<String>> getFollowerList(String currentUserID) async {
     try {
       final firestoreInstance = FirebaseFirestore.instance;
       DocumentSnapshot currentUserDoc =
-      await firestoreInstance.collection('Users').doc(currentUserID).get();
+          await firestoreInstance.collection('Users').doc(currentUserID).get();
       if (currentUserDoc.exists) {
         Map<String, dynamic> currentUserData =
-        currentUserDoc.data() as Map<String, dynamic>;
+            currentUserDoc.data() as Map<String, dynamic>;
         List<String> followingList =
-        List<String>.from(currentUserData['follower']);
+            List<String>.from(currentUserData['follower']);
         return followingList;
       }
       return [];
@@ -200,14 +197,12 @@ class UserService {
     }
   }
 
-
-
-  Future uploadFile(File file,String documenId) async {
+  Future uploadFile(File file, String documenId) async {
     final firestore = FirebaseFirestore.instance;
     CollectionReference users = firestore.collection('Users');
-    try{
+    try {
       String imageUrl = await uploadFileToStorege(file);
-        final userDoc = users.doc(documenId);
+      final userDoc = users.doc(documenId);
 
       await userDoc.update({
         "avatarURL": imageUrl,
@@ -257,12 +252,13 @@ class UserService {
     }
   }
 
-  static Future<void> updateStatusUser(Map<String,dynamic> data) async{
+  static Future<void> updateStatusUser(Map<String, dynamic> data) async {
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .update(data);
   }
+
   static String formattedTimeAgo(DateTime timestamp) {
     final now = DateTime.now();
     final difference = now.difference(timestamp);
@@ -279,10 +275,8 @@ class UserService {
   }
 
   static Future<bool> checkUserOnline({required String uid}) async {
-    final document = await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(uid)
-        .get();
+    final document =
+        await FirebaseFirestore.instance.collection('Users').doc(uid).get();
     if (document.exists) {
       final userData = document.data();
       if (userData != null) {
@@ -299,14 +293,16 @@ class UserService {
 
     if (status.isGranted) {
       // Người dùng đã cấp quyền, có thể lấy vị trí.
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
       debugPrint('Vị trí: $position');
     } else {
       if (status.isGranted) {
         // Quyền chưa được cấp, yêu cầu người dùng.
         var result = await Permission.location.request();
         if (result.isGranted) {
-          Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
           debugPrint('Vị trí: $position');
         } else {
           // Xử lý trường hợp người dùng từ chối quyền.
@@ -319,5 +315,4 @@ class UserService {
       }
     }
   }
-
 }

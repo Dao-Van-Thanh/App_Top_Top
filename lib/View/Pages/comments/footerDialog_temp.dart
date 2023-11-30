@@ -6,15 +6,18 @@ class FooterDialogTemp extends StatefulWidget {
   final String? avatarURL;
   final String videoId;
   final String? uId;
+  final String? authorId;
 
   // final VideoProvider videoProvider;
 
-  const FooterDialogTemp(
-      {super.key, required this.avatarURL,
-      required this.videoId,
-      required this.uId,
-      // required this.videoProvider
-      });
+  const FooterDialogTemp({
+    super.key,
+    required this.avatarURL,
+    required this.videoId,
+    required this.uId,
+    required this.authorId,
+    // required this.videoProvider
+  });
 
   @override
   State<FooterDialogTemp> createState() => _FooterDialogState();
@@ -68,10 +71,11 @@ class _FooterDialogState extends State<FooterDialogTemp> {
                                 child: Column(
                                   children: [
                                     FooterDialog(
-                                        avatarURL: widget.avatarURL,
-                                        videoId: widget.videoId,
-                                        uId: widget.uId,
-                                        ),
+                                      avatarURL: widget.avatarURL,
+                                      videoId: widget.videoId,
+                                      uId: widget.uId,
+                                      authorId: widget.authorId,
+                                    ),
                                     Container(
                                       height: MediaQuery.of(context)
                                           .viewInsets
@@ -106,11 +110,11 @@ class _FooterDialogState extends State<FooterDialogTemp> {
                                   avatarURL: widget.avatarURL,
                                   videoId: widget.videoId,
                                   uId: widget.uId,
+                                  authorId: widget.authorId,
                                 ),
                                 Container(
-                                  height: MediaQuery.of(context)
-                                      .viewInsets
-                                      .bottom,
+                                  height:
+                                      MediaQuery.of(context).viewInsets.bottom,
                                 )
                               ],
                             ),
@@ -121,9 +125,7 @@ class _FooterDialogState extends State<FooterDialogTemp> {
                     icon: const Icon(Icons.emoji_emotions),
                   ),
                   IconButton(
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                     icon: const Icon(Icons.send),
                   ),
                 ],
