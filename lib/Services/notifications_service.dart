@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 
+import '../Model/notifycation_model.dart';
+
 class NotificationsService {
   static const key = 'AAAAAKpsdlA:APA91bGZHUQVu0A-Ic6jUu9BiOHYv5sLwDfTSsdBae0dynB2x3YVO34gmcpHg4jGeF1ZWSU0ikc8geXL1ZsKIA6kIxc9gWLE_lS43FoTxQo7D3r6acyt_BhsPxVZdFxlN1Jpkd63_60O';
   final flutterLocalNotificationsPlugin =
@@ -178,6 +180,25 @@ class NotificationsService {
     } catch (e) {
       debugPrint('Lỗi ==========================');
       debugPrint(e.toString());
+    }
+  }
+  Stream<QuerySnapshot> getNotification(){
+    try{
+      final _auth = FirebaseAuth.instance.currentUser!.uid;
+      final stream = FirebaseFirestore.instance.collection("Notifications").snapshots();
+      return stream;
+    }catch(e){
+      print('Lỗi: $e');
+      throw e;
+    }
+  }
+  void createNotification(String uid,String idOther,String type) async{
+    final CollectionReference notifiCollection =
+    FirebaseFirestore.instance.collection('Notifications');
+    try{
+      await notifiCollection.add(NotificationModel(id: '', uid: uid, idOther: idOther, type: type, timestamp: Timestamp.now()).toJson());
+    }catch(e){
+      print(e);
     }
   }
 }

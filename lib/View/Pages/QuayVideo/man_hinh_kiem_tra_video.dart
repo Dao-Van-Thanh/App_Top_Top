@@ -4,6 +4,7 @@ import 'package:app/View/Pages/QuayVideo/man_hinh_cut_video.dart';
 import 'package:app/View/Pages/QuayVideo/man_hinh_dang_video.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -89,67 +90,69 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
         backgroundColor: Colors.black,
         body: Stack(
           children: [
-            Column(
-              children: [
-                Expanded(
-                  flex: 11,
-                  child: _content(context),
-                ),
-                Expanded(
-                  // flex: 1,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: double.maxFinite,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // downloadVideo(widget.file);
-                              },
-                              style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.blue)),
-                              child: const Text('Tải xuống'),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: SizedBox(
-                            height: double.maxFinite,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                String songUrl = '';
-                                try {
-                                  songUrl = musicProvider.linkUrl;
-                                } catch (e) {
-                                  debugPrint(e as String?);
-                                }
-                                videoController?.dispose();
-                                musicProvider.stopAudio();
-                                debugPrint('==================${file.path}');
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ManHinhDangVideo(file, songUrl),
-                                    ));
-                              },
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.pinkAccent)),
-                              child: const Text('Tiếp'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+            Container(
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 11,
+                    child: _Content(context),
                   ),
-                )
-              ],
+                  Expanded(
+                    // flex: 1,
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: double.maxFinite,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // downloadVideo(widget.file);
+                                },
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.blue)),
+                                child: const Text('Tải xuống'),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: SizedBox(
+                              height: double.maxFinite,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  String songUrl = '';
+                                  try {
+                                    songUrl = musicProvider.linkUrl;
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                  videoController?.dispose();
+                                  musicProvider.stopAudio();
+                                  print('==================${file.path}');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ManHinhDangVideo(file, songUrl),
+                                      ));
+                                },
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.pinkAccent)),
+                                child: const Text('Tiếp'),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
             SizedBox(
               height: 50,
@@ -214,7 +217,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
                                       ManHinhCatVideo(File(file.path)),
                                 ));
                             if (result != null) {
-                              debugPrint('đã vào đây $result');
+                              print('đã vào đây $result');
                               videoController =
                                   VideoPlayerController.file(File(result));
                               videoController?.play();
@@ -252,7 +255,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
     );
   }
 
-  Widget _content(BuildContext context) {
+  Widget _Content(BuildContext context) {
     if (videoController != null && videoController!.value.isInitialized) {
       return Center(
         child: AspectRatio(
@@ -269,6 +272,7 @@ class _ManHinhKiemTraVideoState extends State<ManHinhKiemTraVideo> {
 
   void showBottomDialog(BuildContext context) {
     final musicProvider = Provider.of<MusicProvider>(context, listen: false);
+    final player = AudioPlayer();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Đặt isScrollControlled thành true

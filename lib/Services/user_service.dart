@@ -87,6 +87,7 @@ class UserService {
             idOther: targetUserID
         );
         service.createChatRoomsForUsers(user, targetUserID);
+        NotificationsService().createNotification(targetUserID, user.uid, 'follow');
       }
     } catch (e) {
       debugPrint("Error following user: $e");
