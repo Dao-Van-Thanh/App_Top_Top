@@ -100,6 +100,9 @@ class _ManHinhHopThuState extends State<ManHinhHopThu> {
                                   ),
                                 ),
                               ),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
