@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/Enum/enum_notification.dart';
 import 'package:app/Services/notifications_service.dart';
 import 'package:app/Services/others_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -84,7 +85,8 @@ class UserService {
         notificationsService.sendNotification(
             title: data!['fullname'],
             body: 'Đã follow bạn',
-            idOther: targetUserID
+            idOther: targetUserID,
+            typeNotification: EnumNotificationType.follow
         );
         service.createChatRoomsForUsers(user, targetUserID);
         NotificationsService().createNotification(targetUserID, user.uid, 'follow');

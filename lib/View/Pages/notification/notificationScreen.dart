@@ -6,7 +6,7 @@ import '../../../Model/notifycation_model.dart';
 
 class NotificationScreen extends StatefulWidget {
   final List<NotificationModel> notificationList ;
-  NotificationScreen({Key? key, required this.notificationList}) : super(key: key);
+  const NotificationScreen({Key? key, required this.notificationList}) : super(key: key);
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -47,7 +47,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 final useData = snapshot.data!;
                 return  Column(
                   children: [
-                    SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
                     AppItemNotify(avatar: useData['avatarURL'], nameUser: useData['fullname'], content: 'Đã ${notificationModel.type}',),
                   ],
                 );

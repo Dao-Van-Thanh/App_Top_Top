@@ -13,10 +13,8 @@ import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/Provider/text_provider.dart';
 import 'package:app/Provider/video_provider.dart';
-import 'package:app/View/Pages/Chats/man_hinh_hop_thu.dart';
-import 'package:app/View/Pages/QuayVideo/man_hinh_kiem_tra_video.dart';
+import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap.dart';
 
-import 'package:app/View/Widget/bottom_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -76,10 +74,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: ManHinhHopThu(),
-      home: Bottom_Navigation_Bar(),
+      home: ManHinhDangNhap(),
+      // home: Bottom_Navigation_Bar(),
     );
   }
 }

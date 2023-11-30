@@ -10,7 +10,7 @@ class DangNhapSdtProvider extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool isChecked = false;
   String phone = '';
-  String email ='';
+  String email = '';
   String error = '';
   bool isLoading = false;
   String verificationId = '';
@@ -42,6 +42,7 @@ class DangNhapSdtProvider extends ChangeNotifier {
     this.phone = phone;
     notifyListeners();
   }
+
   void changeEmail(String email) {
     this.email = email;
     notifyListeners();
@@ -82,8 +83,10 @@ class DangNhapSdtProvider extends ChangeNotifier {
       codeSent: (String verificationId, int? resendToken) {
         this.verificationId = verificationId;
         changeLoading(false);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ManHinhDangNhapOTP()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ManHinhDangNhapOTP()));
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
@@ -93,28 +96,30 @@ class DangNhapSdtProvider extends ChangeNotifier {
     NotificationsService notifications = NotificationsService();
     try {
       changeLoading(true);
-        // Tạo một PhoneAuthCredential từ OTP và verificationId
-        // PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        //   verificationId: verificationId,
-        //   smsCode: otp,
-        // );
-        // Xác minh OTP và đăng nhập người dùng
-        // UserCredential userCredential =
-        //     await FirebaseAuth.instance.signInWithCredential(credential);
-        setMessage('Thành công');
-        changCheckOTP(false);
-        changeLoading(false);
-        // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
-        await notifications.requestPermission();
-        await notifications.getToken();
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const Bottom_Navigation_Bar(),
-            ));
-              setMessage('Tài khoản không đúng, hãy thử lại!');
-        changCheckOTP(true);
-        changeLoading(false);
+      // Tạo một PhoneAuthCredential từ OTP và verificationId
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: otp,
+      );
+      // Xác minh OTP và đăng nhập người dùng
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      print(userCredential.hashCode);
+      setMessage('Thành công');
+      changCheckOTP(false);
+      changeLoading(false);
+      // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
+      print(
+          '---------------------------------------------------------------------------------------------');
+      await notifications.requestPermission();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Bottom_Navigation_Bar(),
+          ));
+      setMessage('Tài khoản không đúng, hãy thử lại!');
+      changCheckOTP(true);
+      changeLoading(false);
     } catch (e) {
       changeLoading(false);
       changCheckOTP(true);

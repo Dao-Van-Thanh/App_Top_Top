@@ -117,7 +117,6 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                             dayOfBirth);
                         if (result == null) {
                           await notifications.requestPermission();
-                          await notifications.getToken();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
