@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import '../../../Model/notifycation_model.dart';
 
 class NotificationScreen extends StatefulWidget {
-  final List<NotificationModel> notificationList ;
-  const NotificationScreen({Key? key, required this.notificationList}) : super(key: key);
+  final List<NotificationModel> notificationList;
+  const NotificationScreen({Key? key, required this.notificationList})
+      : super(key: key);
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -35,27 +36,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
         centerTitle: true,
       ),
-      body: ListView.builder(
+      body: ListView.separated(
           itemCount: widget.notificationList.length,
-          itemExtent: 60,
-          itemBuilder: (BuildContext context, int index){
-            NotificationModel notificationModel = widget.notificationList[index];
+          itemBuilder: (BuildContext context, int index) {
+            NotificationModel notificationModel =
+                widget.notificationList[index];
             print(notificationModel.type);
             return FutureBuilder<Map<String, dynamic>?>(
               future: UserService().getDataUser(notificationModel.idOther),
-              builder:(context, snapshot) {
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 final useData = snapshot.data!;
-                return  Column(
-                  children: [
-                    const SizedBox(height: 10,),
-                    AppItemNotify(avatar: useData['avatarURL'], nameUser: useData['fullname'], content: 'Đã ${notificationModel.type}',),
-                  ],
+                return AppItemNotify(
+                  avatar: useData['avatarURL'],
+                  nameUser: useData['fullname'],
+                  content: 'Đã ${notificationModel.type}',
                 );
               },
-
             );
-          }
-      ),
+          },
+          separatorBuilder: (BuildContext context, int index) =>
+              const SizedBox()),
     );
   }
 }

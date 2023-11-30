@@ -23,6 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Provider/chats_provider.dart';
 import 'Provider/dang_nhap_sdt_provider.dart';
+import 'View/Widget/bottom_navigation.dart';
 import 'firebase_options.dart';
 
 Future<void> _backgroundMessageHandler(RemoteMessage message) async {
@@ -76,8 +77,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ManHinhDangNhap(),
-      // home: Bottom_Navigation_Bar(),
+      // home: ManHinhDangNhap(),
+      home: Bottom_Navigation_Bar(),
     );
   }
 }
