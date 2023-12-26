@@ -17,6 +17,7 @@ class ManHinhDangNhap extends StatelessWidget {
 
     if (userCredential != null) {
       // Xử lý khi đăng nhập thành công (nếu cần)
+      if (!context.mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar()),
@@ -27,17 +28,15 @@ class ManHinhDangNhap extends StatelessWidget {
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
-    await dangnhapGGprovider.signInWithGoogle(); // Gọi hàm đăng nhập với Google từ AuthProvider
+    await dangnhapGGprovider
+        .signInWithGoogle(); // Gọi hàm đăng nhập với Google từ AuthProvider
 
-    if (dangnhapGGprovider.user != null) {
-      // Xử lý khi đăng nhập thành công (nếu cần)
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar()),
-      );
-    } else {
-      // Xử lý khi đăng nhập thất bại
-    }
+    if (dangnhapGGprovider.user == null) return;
+    if (!context.mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar()),
+    );
   }
 
   @override
@@ -74,7 +73,8 @@ class ManHinhDangNhap extends StatelessWidget {
                 text: "Tiếp tục với Google",
                 icon: Icons.g_mobiledata_sharp,
                 onPress: () async {
-                  await _signInWithGoogle(context); // Gọi hàm đăng nhập với Google
+                  await _signInWithGoogle(
+                      context); // Gọi hàm đăng nhập với Google
                 },
               ),
               const SizedBox(height: 40),
@@ -90,19 +90,20 @@ class ManHinhDangNhap extends StatelessWidget {
                 'Đăng ký',
                 18,
                 FontWeight.bold,
-                    () {
+                () {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
                           const ManHinhDangKy(),
-                      transitionsBuilder: (context, animation,
-                          secondaryAnimation, child) {
-                        const begin =
-                        Offset(1.0, 0.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
-                        const end = Offset.zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
-                        const curve =
-                            Curves.easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(1.0,
+                            0.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
+                        const end = Offset
+                            .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
+                        const curve = Curves
+                            .easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
 
                         var tween = Tween(begin: begin, end: end)
                             .chain(CurveTween(curve: curve));

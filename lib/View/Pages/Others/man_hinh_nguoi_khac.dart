@@ -386,6 +386,7 @@ class _ManHinhNguoiKhacState extends State<ManHinhNguoiKhac> {
       ImageSource src, BuildContext context, bool isDialog, String uId) async {
     final image = await ImagePicker().pickImage(source: src);
     if (image != null) {
+      if(!context.mounted) return;
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ShowAvatar(
             urlImage: File(image.path),

@@ -42,14 +42,10 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
   Future<void> _getId() async {
     final saveUid = FirebaseAuth.instance.currentUser;
     if (saveUid != null) {
-      setState(() {
-        uId = saveUid.uid;
-        checkLogin = true;
-      });
+      uId = saveUid.uid;
+      checkLogin = true;
     } else {
-      setState(() {
-        checkLogin = false;
-      });
+      checkLogin = false;
     }
   }
 
@@ -78,7 +74,6 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                 } catch (e) {
                   rolesProvider.updateRoles(false);
                 }
-
                 return Scaffold(
                   backgroundColor: Colors.white,
                   body: SafeArea(
@@ -114,7 +109,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
                     backgroundColor:
                         MaterialStatePropertyAll(Colors.pinkAccent)),
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const ManHinhDangKy()));
@@ -150,11 +145,12 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
               child: PopupMenuButton<String>(
                 onSelected: (value) {
                   if (value == 'item1') {
-                    setState(() {
+                    setState(() async {
                       ProfileProvider provider =
                           Provider.of(context, listen: false);
                       provider.setVideos([]);
-                      UserService.signOutUser();
+                      await UserService.signOutUser();
+                      if (!context.mounted) return;
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -275,7 +271,6 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              print(uId);
             },
             child: Column(
               children: [
@@ -384,55 +379,58 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
             style: TextStyle(color: Colors.black),
           ),
         )),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Consumer<ProfileProvider>(
-            builder: (context, provider, child) {
-              return Visibility(
-                visible: provider.isAdmin,
-                child: OutlinedButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                      const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
-                    ),
-                    minimumSize: MaterialStateProperty.all<Size>(
-                      const Size(100,
-                          40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            const TabAdmin(),
-                        transitionsBuilder:
-                            (context, animation, secondaryAnimation, child) {
-                          const begin = Offset(0.0,
-                              1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
-                          const end = Offset
-                              .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
-                          const curve = Curves
-                              .easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
-                          var tween = Tween(begin: begin, end: end)
-                              .chain(CurveTween(curve: curve));
-                          var offsetAnimation = animation.drive(tween);
-                          return SlideTransition(
-                            position: offsetAnimation,
-                            child: child,
-                          );
-                        },
+        Consumer<ProfileProvider>(
+          builder: (context, provider, child) {
+            if (!provider.isAdmin) return const SizedBox.shrink();
+            return Expanded(
+              child: Column(
+                children: [
+                  const SizedBox(width: 10),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        const EdgeInsets.all(20.0), // Đặt giá trị padding là 10
                       ),
-                    );
-                  },
-                  child: const Text(
-                    'Quản lý',
-                    style: TextStyle(color: Colors.black),
+                      minimumSize: MaterialStateProperty.all<Size>(
+                        const Size(100,
+                            40), // Đặt kích thước theo chiều rộng và chiều cao mong muốn
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const TabAdmin(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(0.0,
+                                1.0); // Điểm bắt đầu (nếu bạn muốn chuyển từ bên phải)
+                            const end = Offset
+                                .zero; // Điểm kết thúc (nếu bạn muốn hiển thị ở giữa)
+                            const curve = Curves
+                                .easeInOut; // Loại chuyển cảnh (có thể tùy chỉnh)
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            var offsetAnimation = animation.drive(tween);
+                            return SlideTransition(
+                              position: offsetAnimation,
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Quản lý',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
@@ -546,6 +544,7 @@ class _ManHinhProfileState extends State<ManHinhProfile> {
       ImageSource src, BuildContext context, bool isDialog, String uId) async {
     final image = await ImagePicker().pickImage(source: src);
     if (image != null) {
+      if(!context.mounted) return;
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ShowAvatar(
                 urlImage: File(image.path),

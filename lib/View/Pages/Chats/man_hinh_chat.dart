@@ -306,6 +306,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
                                   idPhongChat: idPhongChat)
                             }
                         });
+                if(!context.mounted) return;
                 Navigator.pop(context);
               },
             ),
@@ -486,6 +487,7 @@ class _ManHinhChatState extends State<ManHinhChat> {
           borderRadius: const BorderRadius.all(Radius.circular(90)),
           onTap: () async {
             await service.deleteMessageByChatId(phongChat, idChat);
+            if(!context.mounted) return;
             Navigator.pop(context);
           },
           child: const Column(

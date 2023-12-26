@@ -96,8 +96,8 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                   fontWeight: FontWeight.bold, // Độ đậm của chữ
                 ),
                 decoration: InputDecoration(
-                  errorStyle:
-                      const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                  errorStyle: const TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold),
                   errorText: dateErrorText = isCheckAge == true
                       ? null
                       : 'Bạn chưa đủ tuổi để tham gia ứng dụng!!!',
@@ -107,7 +107,8 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
               ElevatedButton(
                 onPressed: isCheckAge
                     ? () async {
-                        NotificationsService notifications = NotificationsService();
+                        NotificationsService notifications =
+                            NotificationsService();
                         String dayOfBirth =
                             '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
                         final result = await dangKyEmailService.dangKyBangEmail(
@@ -117,12 +118,15 @@ class _MyCreateDateOfBirthState extends State<CreateDateOfBirth> {
                             dayOfBirth);
                         if (result == null) {
                           await notifications.requestPermission();
+                          if (!context.mounted) return;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const Bottom_Navigation_Bar(),
+                                builder: (context) =>
+                                    const Bottom_Navigation_Bar(),
                               ));
                         } else {
+                          if (!context.mounted) return;
                           // Đăng ký thất bại, hiển thị thông báo lỗi cho người dùng
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

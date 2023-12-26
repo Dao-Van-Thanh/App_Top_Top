@@ -29,6 +29,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar>
     const ManHinhProfile(),
   ];
   final notification = NotificationsService();
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -36,26 +37,64 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar>
     WidgetsBinding.instance.addObserver(this);
     notification.firebaseNotification(context);
     //Sửa trạng thái người dùng đã online
-    if (FirebaseAuth.instance.currentUser != null) {
+    if (user != null) {
       notification.getToken();
+      UserService.updateStatusUser(
+          {'lastActive': DateTime.now(), 'isOnline': true});
     }
-    UserService.updateStatusUser(
-        {'lastActive': DateTime.now(), 'isOnline': true});
+    // updateAllUserAvatars();
+
     // CallVideoService().addStatusFieldToVideos();
   }
+
+  // Future<void> updateAllUserAvatars() async {
+  //   try {
+  //     // Lấy tham chiếu đến bảng 'Users'
+  //     final users = FirebaseFirestore.instance.collection('Videos');
+  //
+  //     // Lấy danh sách tất cả các tài liệu trong bảng 'Users'
+  //     final querySnapshot = await users.get();
+  //
+  //     // Duyệt qua từng tài liệu và cập nhật trường 'avatarURL'
+  //     for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+  //       // Lấy ID của tài liệu
+  //       String userId = doc.id;
+  //
+  //       // Cập nhật trường 'avatarURL' với giá trị mới
+  //       await users.doc(userId).update({
+  //         'profilePhoto':
+  //             'https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg',
+  //       });
+  //     }
+  //
+  //     print('Cập nhật thành công tất cả avatarURL trong bảng Users');
+  //   } catch (e) {
+  //     print('Lỗi: $e');
+  //   }
+  // }
 
   // kiểm tra người dùng nếu offline
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    if (user == null) return;
     switch (state) {
       case AppLifecycleState.resumed:
         UserService.updateStatusUser(
             {'lastActive': DateTime.now(), 'isOnline': true});
         break;
       case AppLifecycleState.hidden:
+        UserService.updateStatusUser(
+            {'lastActive': DateTime.now(), 'isOnline': false});
+        break;
       case AppLifecycleState.inactive:
+        UserService.updateStatusUser(
+            {'lastActive': DateTime.now(), 'isOnline': false});
+        break;
       case AppLifecycleState.paused:
+        UserService.updateStatusUser(
+            {'lastActive': DateTime.now(), 'isOnline': false});
+        break;
       case AppLifecycleState.detached:
         UserService.updateStatusUser(
             {'lastActive': DateTime.now(), 'isOnline': false});
@@ -72,9 +111,7 @@ class _Bottom_Navigation_BarState extends State<Bottom_Navigation_Bar>
       bottomNavigationBar: ClipRect(
         child: BottomNavigationBar(
           onTap: (idx) {
-            setState(() {
-              pageProvider.setPage(idx);
-            });
+            pageProvider.setPage(idx);
           },
           type: BottomNavigationBarType.fixed,
           backgroundColor: const Color.fromARGB(255, 23, 1, 1),

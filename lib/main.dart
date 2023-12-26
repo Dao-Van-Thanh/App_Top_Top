@@ -13,7 +13,6 @@ import 'package:app/Provider/profile_provider.dart';
 import 'package:app/Provider/quay_video_provider.dart';
 import 'package:app/Provider/text_provider.dart';
 import 'package:app/Provider/video_provider.dart';
-import 'package:app/View/Screen/DangNhap/man_hinh_dang_nhap.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -75,7 +74,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: ManHinhDangNhap(),
       home: Bottom_Navigation_Bar(),

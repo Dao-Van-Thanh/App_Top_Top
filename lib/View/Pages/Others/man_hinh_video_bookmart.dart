@@ -11,7 +11,8 @@ import '../../Widget/video_player_item.dart';
 
 class ManHinhVideoByBookMart extends StatefulWidget {
   final int index;
-   const ManHinhVideoByBookMart({Key? key, required this.index}) : super(key: key);
+  const ManHinhVideoByBookMart({Key? key, required this.index})
+      : super(key: key);
 
   @override
   State<ManHinhVideoByBookMart> createState() => _ManHinhVideoByBookMartState();
@@ -59,9 +60,7 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                 child: PageView.builder(
                   controller: controller,
                   onPageChanged: (int page) {
-                    if (page == videoList!.length - 1) {
-                      print('video cuối cùng rồi xem cái lol đi học đi');
-                    }
+                    if (page == videoList!.length - 1) {}
                   },
                   scrollDirection: Axis.vertical,
                   itemCount: videoList?.length ?? 0,
@@ -82,8 +81,7 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                               videoData.id,
                               videoData.uid,
                               videoData.videoUrl,
-                              videoData.blockComments
-                          );
+                              videoData.blockComments);
                           videoProvider.listVideo.addAll(videoList!);
                           if (!videoProvider.hasCheckedLike) {
                             videoProvider.hasCheckedLike = true;
@@ -94,13 +92,18 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                                 videoProvider.changeColor();
                               }
                             });
-                            CallVideoService().checkFollowing(videoData.uid).then((value) => {
-                              if (value || videoData.uid == auth.currentUser!.uid){
-                                videoProvider.setHasFollowing()
-                              }
-                            });
-                            CallVideoService().checkUserSaveVideo(videoData.userSaveVideos!.cast<String>())
-                                .then((save){
+                            CallVideoService()
+                                .checkFollowing(videoData.uid)
+                                .then((value) => {
+                                      if (value ||
+                                          videoData.uid ==
+                                              auth.currentUser!.uid)
+                                        {videoProvider.setHasFollowing()}
+                                    });
+                            CallVideoService()
+                                .checkUserSaveVideo(
+                                    videoData.userSaveVideos!.cast<String>())
+                                .then((save) {
                               if (save) {
                                 videoProvider.changeColorSave();
                               }
@@ -113,7 +116,8 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                             child: Stack(
                               alignment: Alignment.bottomLeft,
                               children: [
-                                VideoPlayerItem(videoData.videoUrl,videoData.id,videoProvider),
+                                VideoPlayerItem(videoData.videoUrl,
+                                    videoData.id, videoProvider),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -121,16 +125,22 @@ class _ManHinhVideoByBookMartState extends State<ManHinhVideoByBookMart> {
                                       flex: 2,
                                       child: SizedBox(
                                         height:
-                                        MediaQuery.of(context).size.height / 10,
+                                            MediaQuery.of(context).size.height /
+                                                10,
                                         child: VideoDetail(videoProvider),
                                       ),
                                     ),
                                     Expanded(
                                       child: SizedBox(
-                                        height: MediaQuery.of(context).size.height /
-                                            1.75,
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                1.75,
                                         child: HomeSideBar(
-                                            videoProvider, CallVideoService(),'videoManHinhSearch',index,videoStream),
+                                            videoProvider,
+                                            CallVideoService(),
+                                            'videoManHinhSearch',
+                                            index,
+                                            videoStream),
                                       ),
                                     ),
                                   ],

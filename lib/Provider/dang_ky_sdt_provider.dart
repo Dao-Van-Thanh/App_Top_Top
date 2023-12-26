@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 
 import '../Services/notifications_service.dart';
 
-class DangKySdtProvider extends ChangeNotifier{
-  bool isPhoneNumberCheck= false;
+class DangKySdtProvider extends ChangeNotifier {
+  bool isPhoneNumberCheck = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool isChecked = false;
   String phone = '';
@@ -18,38 +18,37 @@ class DangKySdtProvider extends ChangeNotifier{
   String smsCode = '';
   String message = '';
 
-  void changeChecked(bool check){
+  void changeChecked(bool check) {
     isChecked = check;
     notifyListeners();
   }
 
-  void setMessage(String s){
+  void setMessage(String s) {
     message = s;
     notifyListeners();
   }
 
-  void setSmsCode(String s){
+  void setSmsCode(String s) {
     smsCode = s;
     notifyListeners();
   }
 
-  void changCheckOTP(bool check){
+  void changCheckOTP(bool check) {
     isCheckOtp = check;
     notifyListeners();
   }
 
-  void changePhone(String phone){
+  void changePhone(String phone) {
     this.phone = phone;
     notifyListeners();
   }
 
-  void changeLoading(bool loading){
+  void changeLoading(bool loading) {
     isLoading = loading;
     notifyListeners();
   }
 
-
-  void changePhoneNumberCheck(bool isPhoneNumberCheck){
+  void changePhoneNumberCheck(bool isPhoneNumberCheck) {
     this.isPhoneNumberCheck = isPhoneNumberCheck;
     notifyListeners();
   }
@@ -58,7 +57,7 @@ class DangKySdtProvider extends ChangeNotifier{
     changeLoading(true);
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: '+84$phone',
-      verificationCompleted: (PhoneAuthCredential credential) { },
+      verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {
         setMessage('Lỗi. Thử lại!');
         changePhoneNumberCheck(true);
@@ -68,14 +67,13 @@ class DangKySdtProvider extends ChangeNotifier{
         this.verificationId = verificationId;
         changeLoading(false);
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ManHinhDangKyOTP())
-        );
+            MaterialPageRoute(builder: (context) => const ManHinhDangKyOTP()));
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 
-  void verifyOTP(BuildContext context,String otp) async {
+  void verifyOTP(BuildContext context, String otp) async {
     try {
       changeLoading(true);
       // Tạo một PhoneAuthCredential từ OTP và verificationId
@@ -85,18 +83,22 @@ class DangKySdtProvider extends ChangeNotifier{
       );
       // Xác minh OTP và đăng nhập người dùng
       UserCredential authResult =
-      await FirebaseAuth.instance.signInWithCredential(credential);
+          await FirebaseAuth.instance.signInWithCredential(credential);
       DangKySdtService service = DangKySdtService();
-      bool check = await service.kiemTraDangKySdt(authResult,phone);
-      if(check){
+      bool check = await service.kiemTraDangKySdt(authResult, phone);
+      if (check) {
         setMessage('Số điện thoại đã được đăng ký');
         changCheckOTP(true);
         changeLoading(false);
-      }else{
+      } else {
         NotificationsService notifications = NotificationsService();
         await notifications.requestPermission();
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Bottom_Navigation_Bar(),));
+        if (!context.mounted) return;
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Bottom_Navigation_Bar(),
+            ));
         // đăng ký thành công và chuyển sang màn hình home()
         changCheckOTP(false);
         changeLoading(false);
@@ -110,7 +112,7 @@ class DangKySdtProvider extends ChangeNotifier{
     }
   }
 
-  void guiLaiMaOTP(BuildContext context){
+  void guiLaiMaOTP(BuildContext context) {
     dangKyPhone(context);
   }
 }

@@ -118,7 +118,7 @@ class EditProfile extends StatelessWidget {
                           // Hình ảnh
                           ClipOval(
                             child: CachedNetworkImage(
-                              imageUrl: '${userData.avatarURL}',
+                              imageUrl: userData.avatarURL,
                               fit: BoxFit.cover,
                               height: 100,
                               width: 100,

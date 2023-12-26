@@ -274,9 +274,11 @@ class _ManHinhDangVideoState extends State<ManHinhDangVideo> {
                                       ),
                                     );
                                     // ignore: use_build_context_synchronously
+                                    if(!context.mounted) return;
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                   } else {
+                                    if(!context.mounted) return;
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('Đăng video thất bại.'),

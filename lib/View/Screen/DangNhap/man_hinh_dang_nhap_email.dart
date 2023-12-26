@@ -136,11 +136,13 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                           await service.dangNhapBangEmail(email, password);
                       NotificationsService notifications =
                           NotificationsService();
-                      final auth = FirebaseAuth.instance.currentUser!.uid;
+                      final auth = FirebaseAuth.instance.currentUser?.uid;
+                      if (auth == null) return;
                       bool checkBan = await AdminService().getBanUid(auth);
                       if (!checkBan) {
                         if (check) {
                           await notifications.requestPermission();
+                          if (!context.mounted) return;
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -148,6 +150,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                                     const Bottom_Navigation_Bar(),
                               ));
                         } else {
+                          if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Tài khoản không chính xác!'),
@@ -155,6 +158,7 @@ class _ManHinhDangNhapEmail extends State<ManHinhDangNhapEmail> {
                           );
                         }
                       } else {
+                        if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Tài khoản không có quyền truy cập!'),

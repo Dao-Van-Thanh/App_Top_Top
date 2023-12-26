@@ -245,7 +245,8 @@ class UserService {
       final FirebaseAuth auth = FirebaseAuth.instance;
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.remove('uid');
-      // Đăng xuất người dùng khỏi Firebase Auth
+      UserService.updateStatusUser(
+          {'lastActive': DateTime.now(), 'isOnline': false});
       await auth.signOut();
     } catch (e) {
       debugPrint('Lỗi khi đăng xuất: $e');

@@ -67,7 +67,6 @@ class CommentService {
       videoCollection.update({
         'comments': FieldValue.arrayUnion([commentDocRef.id])
       });
-      var videoSnapshot = await videoCollection.get();
       if (uId != authorId) {
         NotificationsService().sendNotification(
           title: 'Thông báo',
@@ -108,8 +107,6 @@ class CommentService {
 
       // Thêm một comment mới vào collection 'Comments'
       final commentDocRef = await recommentCollection.add(commentMap);
-      final notification =
-          FirebaseFirestore.instance.collection("Notification");
       // thêm comment vào trường comments trong bảng Videos
       final commentCollection = FirebaseFirestore.instance
           .collection('Videos')

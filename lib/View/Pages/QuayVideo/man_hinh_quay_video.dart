@@ -34,133 +34,134 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
     XFile videoFile;
 
     return Consumer<QuayVideoProvider>(
-        builder: (context, provider, _) {
-          return Scaffold(
-            backgroundColor: Colors.black,
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(36)),
-                    clipBehavior: Clip.antiAlias,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: FutureBuilder<void>(
-                      future: _initializeControllerFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          // Camera đã sẵn sàng, hiển thị nó trong widget CameraPreview
-                          return CameraPreview(_controller);
-
-                        } else {
-                          // Đợi camera sẵn sàng
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                      },
+      builder: (context, provider, _) {
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(36)),
+                  clipBehavior: Clip.antiAlias,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: FutureBuilder<void>(
+                    future: _initializeControllerFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        // Camera đã sẵn sàng, hiển thị nó trong widget CameraPreview
+                        return CameraPreview(_controller);
+                      } else {
+                        // Đợi camera sẵn sàng
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 70,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    const SizedBox(
+                      width: 50,
+                      height: 70,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 70,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const SizedBox(
-                        width: 50,
-                        height: 70,
-                      ),
-                      Container(
-                        height: 100,
-                        width: 100,
-                        decoration: const BoxDecoration(
-                            color: Colors.white, shape: BoxShape.circle),
-                        child: IconButton(
-                          onPressed: () async {
-                            try {
-                              if (_isRecording) {
-                                // Đã đang quay video, dừng lại
-                                videoFile = await _controller.stopVideoRecording();
-                                provider.setVideoFile(videoFile);
-                                // Ở đây, bạn có thể làm gì đó với videoFile, ví dụ: lưu hoặc chia sẻ video
-                                setState(() {
-                                  _isRecording = false;
-                                });
-                                disController();
-                                await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ManHinhKiemTraVideo(videoFile),
-                                    )
-                                );
-                                setState(() {
-                                  createController();
-                                });
-                              } else {
-                                // Bắt đầu quay video
-                                await _controller.startVideoRecording();
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: const BoxDecoration(
+                          color: Colors.white, shape: BoxShape.circle),
+                      child: IconButton(
+                        onPressed: () async {
+                          try {
+                            if (_isRecording) {
+                              // Đã đang quay video, dừng lại
+                              videoFile =
+                                  await _controller.stopVideoRecording();
+                              provider.setVideoFile(videoFile);
+                              // Ở đây, bạn có thể làm gì đó với videoFile, ví dụ: lưu hoặc chia sẻ video
+                              setState(() {
+                                _isRecording = false;
+                              });
+                              disController();
+                              if (!context.mounted) return;
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ManHinhKiemTraVideo(videoFile),
+                                  ));
+                              setState(() {
+                                createController();
+                              });
+                            } else {
+                              // Bắt đầu quay video
+                              await _controller.startVideoRecording();
 
-                                setState(() {
-                                  _isRecording = true;
-                                });
-                              }
-                            } catch (e) {
-                              debugPrint("Lỗi khi quay video: $e");
+                              setState(() {
+                                _isRecording = true;
+                              });
                             }
-                          },
-                          icon: Icon(
-                            _isRecording ? Icons.stop : Icons.camera_alt,
-                            size: 50,
-                          ),
-                          // fill: BoxFit.cover,
+                          } catch (e) {
+                            debugPrint("Lỗi khi quay video: $e");
+                          }
+                        },
+                        icon: Icon(
+                          _isRecording ? Icons.stop : Icons.camera_alt,
+                          size: 50,
                         ),
+                        // fill: BoxFit.cover,
                       ),
-                      SizedBox(
-                        width: 50,
-                        // color: Colors.yellow,
-                        child: Column(
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                XFile? file = await pickVideo();
-                                provider.setVideoFile(file!);
-                                disController();
-                                await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ManHinhKiemTraVideo(file),
-                                    )
-                                );
-                                setState(() {
-                                  createController();
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.folder,
-                                color: Colors.white,
-                              ),
+                    ),
+                    SizedBox(
+                      width: 50,
+                      // color: Colors.yellow,
+                      child: Column(
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              XFile? file = await pickVideo();
+                              provider.setVideoFile(file!);
+                              disController();
+                              if (!context.mounted) return;
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ManHinhKiemTraVideo(file),
+                                  ));
+                              setState(() {
+                                createController();
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.folder,
+                              color: Colors.white,
                             ),
-                            const Text(
-                              'Tải lên',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
+                          ),
+                          const Text(
+                            'Tải lên',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
-          );
-        },
+          ),
+        );
+      },
     );
-
   }
+
   Future<XFile?> pickVideo() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
@@ -172,7 +173,8 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
     }
     return null;
   }
-  void disController(){
+
+  void disController() {
     if (_controller.value.isRecordingVideo) {
       _controller.stopVideoRecording();
     }
@@ -180,7 +182,7 @@ class _ManHinhQuayVideoState extends State<ManHinhQuayVideo> {
     _controller.dispose();
   }
 
-  void createController(){
+  void createController() {
     _controller = CameraController(
       const CameraDescription(
         name: '0',

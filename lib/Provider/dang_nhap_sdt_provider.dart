@@ -104,15 +104,13 @@ class DangNhapSdtProvider extends ChangeNotifier {
       // Xác minh OTP và đăng nhập người dùng
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      print(userCredential.hashCode);
       setMessage('Thành công');
       changCheckOTP(false);
       changeLoading(false);
       // Đăng nhập thành công, bạn có thể thực hiện các hành động sau đây.
-      print(
-          '---------------------------------------------------------------------------------------------');
       await notifications.requestPermission();
-      Navigator.push(
+      if (!context.mounted) return;
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const Bottom_Navigation_Bar(),

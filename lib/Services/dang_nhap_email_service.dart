@@ -10,11 +10,13 @@ class DangNhapEmailService {
 
   Future<bool> dangNhapBangEmail(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      final result = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // Đăng nhập thành công
+      if (result.user == null) return false;
+      await result.user!.sendEmailVerification();
+      if (result.user == null && result.user!.emailVerified) return false;
       User? user = _auth.currentUser;
       if (user != null) {
         DocumentSnapshot userSnapshot =

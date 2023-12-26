@@ -42,7 +42,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
           itemBuilder: (BuildContext context, int index) {
             NotificationModel notificationModel =
                 widget.notificationList[index];
-            print(notificationModel.type);
             return FutureBuilder<UserModel?>(
               future: UserService().getDataUser(notificationModel.idOther),
               builder: (context, snapshot) {

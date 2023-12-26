@@ -13,12 +13,18 @@ class ManHinhManagerVideoByAdmin extends StatefulWidget {
   final String uid;
   final int index;
   final bool status;
-  const ManHinhManagerVideoByAdmin({super.key, required this.uid,required this.index, required this.status});
+  const ManHinhManagerVideoByAdmin(
+      {super.key,
+      required this.uid,
+      required this.index,
+      required this.status});
   @override
-  State<ManHinhManagerVideoByAdmin> createState() => _ManHinhManagerVideoByAdminState();
+  State<ManHinhManagerVideoByAdmin> createState() =>
+      _ManHinhManagerVideoByAdminState();
 }
 
-class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin> {
+class _ManHinhManagerVideoByAdminState
+    extends State<ManHinhManagerVideoByAdmin> {
   @override
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
@@ -39,7 +45,6 @@ class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin>
           },
         ),
       ),
-
       body: StreamBuilder<List<VideoModel>>(
         stream: videoStream,
         builder: (context, snapshot) {
@@ -59,9 +64,7 @@ class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin>
                 child: PageView.builder(
                   controller: controller,
                   onPageChanged: (int page) {
-                    if (page == videoList!.length - 1) {
-                      print('video cuối cùng rồi xem cái lol đi học đi');
-                    }
+                    if (page == videoList!.length - 1) {}
                   },
                   scrollDirection: Axis.vertical,
                   itemCount: videoList?.length ?? 0,
@@ -82,8 +85,7 @@ class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin>
                               videoData.id,
                               videoData.uid,
                               videoData.videoUrl,
-                              videoData.blockComments
-                          );
+                              videoData.blockComments);
                           if (!videoProvider.hasCheckedLike) {
                             videoProvider.hasCheckedLike = true;
                             CallVideoService()
@@ -93,32 +95,46 @@ class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin>
                                 videoProvider.changeColor();
                               }
                             });
-                            CallVideoService().checkFollowing(videoData.uid).then((value) => {
-                              if (value || videoData.uid == auth.currentUser!.uid){
-                                videoProvider.setHasFollowing()
-                              }
-                            });
-                            CallVideoService().checkUserSaveVideo(videoData.userSaveVideos!.cast<String>())
-                                .then((save){
+                            CallVideoService()
+                                .checkFollowing(videoData.uid)
+                                .then((value) => {
+                                      if (value ||
+                                          videoData.uid ==
+                                              auth.currentUser!.uid)
+                                        {videoProvider.setHasFollowing()}
+                                    });
+                            CallVideoService()
+                                .checkUserSaveVideo(
+                                    videoData.userSaveVideos!.cast<String>())
+                                .then((save) {
                               if (save) {
                                 videoProvider.changeColorSave();
                               }
                             });
                           }
                           return GestureDetector(
-                            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+                            onTap: () => FocusScope.of(context)
+                                .requestFocus(FocusNode()),
                             child: Stack(
                               alignment: Alignment.bottomLeft,
                               children: [
-                                widget.status==false?Container(
-                                  margin: const EdgeInsets.only(top: 3,left: 13,right: 13,bottom: 3),
-                                  height: double.maxFinite,
-                                  width: double.maxFinite,
-                                  decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                          image: NetworkImage('https://upload.wikimedia.org/wikipedia/vi/thumb/a/a7/Batman_Lee.png/250px-Batman_Lee.png'),fit: BoxFit.cover)
-                                  ),
-                                ):VideoPlayerItem(videoData.videoUrl,videoData.id,videoProvider),
+                                widget.status == false
+                                    ? Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 3,
+                                            left: 13,
+                                            right: 13,
+                                            bottom: 3),
+                                        height: double.maxFinite,
+                                        width: double.maxFinite,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    videoData.videoUrl),
+                                                fit: BoxFit.cover)),
+                                      )
+                                    : VideoPlayerItem(videoData.videoUrl,
+                                        videoData.id, videoProvider),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -126,16 +142,22 @@ class _ManHinhManagerVideoByAdminState extends State<ManHinhManagerVideoByAdmin>
                                       flex: 2,
                                       child: SizedBox(
                                         height:
-                                        MediaQuery.of(context).size.height / 10,
+                                            MediaQuery.of(context).size.height /
+                                                10,
                                         child: VideoDetail(videoProvider),
                                       ),
                                     ),
                                     Expanded(
                                       child: SizedBox(
-                                        height: MediaQuery.of(context).size.height /
-                                            1.75,
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                1.75,
                                         child: HomeSideBar(
-                                            videoProvider, CallVideoService(),'man_hinh_quan_ly_video_by_admin',index,videoStream),
+                                            videoProvider,
+                                            CallVideoService(),
+                                            'man_hinh_quan_ly_video_by_admin',
+                                            index,
+                                            videoStream),
                                       ),
                                     ),
                                   ],

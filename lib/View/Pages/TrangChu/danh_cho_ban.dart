@@ -14,7 +14,6 @@ import '../../Widget/video_detail.dart';
 class ForYou extends StatefulWidget {
   const ForYou({super.key});
 
-
   @override
   State<ForYou> createState() => _ForYouState();
 }
@@ -25,23 +24,13 @@ class _ForYouState extends State<ForYou> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    pageController.addListener(() {
-    });
+    pageController.addListener(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final Stream<List<VideoModel>> videoStream;
     final auth = FirebaseAuth.instance;
-    late String videoUrl;
-    bool isVideoLoaded = false;
-    void prepareNextPageVideo(int index,List<VideoModel> videoList) {
-      if (index + 1 < videoList.length) {
-        final nextPageVideoData = videoList[index + 1].videoUrl;
-        videoUrl = nextPageVideoData;
-        isVideoLoaded = true;
-      }
-    }
     videoStream = CallVideoService().getVideosStream();
     return StreamBuilder<List<VideoModel>>(
       stream: videoStream,
@@ -63,9 +52,7 @@ class _ForYouState extends State<ForYou> {
               child: PageView.builder(
                 controller: pageController,
                 onPageChanged: (int page) {
-                  if (page == videoList.length - 1) {
-                      print('video cuối cùng rồi xem cái lol đi học đi');
-                  }
+                  if (page == videoList.length - 1) {}
                   // prepareNextPageVideo(page,videoList);
                   // if (videoUrl != null) {
                   //   tempVideoUrl = videoUrl;
@@ -89,9 +76,8 @@ class _ForYouState extends State<ForYou> {
                             videoData.username,
                             videoData.id,
                             videoData.uid,
-                          videoData.videoUrl,
-                          videoData.blockComments
-                        );
+                            videoData.videoUrl,
+                            videoData.blockComments);
                         if (!videoProvider.hasCheckedLike) {
                           videoProvider.hasCheckedLike = true;
                           CallVideoService()
@@ -101,25 +87,30 @@ class _ForYouState extends State<ForYou> {
                               videoProvider.changeColor();
                             }
                           });
-                          CallVideoService().checkFollowing(videoData.uid).then((value) => {
-                            if (value || videoData.uid == auth.currentUser!.uid){
-                              videoProvider.setHasFollowing()
-                            }
-                          });
-                          CallVideoService().checkUserSaveVideo(videoData.userSaveVideos!.cast<String>())
-                          .then((save){
+                          CallVideoService()
+                              .checkFollowing(videoData.uid)
+                              .then((value) => {
+                                    if (value ||
+                                        videoData.uid == auth.currentUser!.uid)
+                                      {videoProvider.setHasFollowing()}
+                                  });
+                          CallVideoService()
+                              .checkUserSaveVideo(
+                                  videoData.userSaveVideos!.cast<String>())
+                              .then((save) {
                             if (save) {
                               videoProvider.changeColorSave();
                             }
                           });
                         }
                         return GestureDetector(
-                          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+                          onTap: () =>
+                              FocusScope.of(context).requestFocus(FocusNode()),
                           child: Stack(
                             alignment: Alignment.bottomLeft,
                             children: [
                               VideoPlayerItem(
-                                videoUrl=videoData.videoUrl,
+                                videoUrl = videoData.videoUrl,
                                 videoData.id,
                                 videoProvider,
                               ),
@@ -130,16 +121,22 @@ class _ForYouState extends State<ForYou> {
                                     flex: 2,
                                     child: SizedBox(
                                       height:
-                                      MediaQuery.of(context).size.height / 10,
+                                          MediaQuery.of(context).size.height /
+                                              10,
                                       child: VideoDetail(videoProvider),
                                     ),
                                   ),
                                   Expanded(
                                     child: SizedBox(
-                                      height: MediaQuery.of(context).size.height /
-                                          1.75,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              1.75,
                                       child: HomeSideBar(
-                                          videoProvider, CallVideoService(),'manhinhchoban',index,videoStream),
+                                          videoProvider,
+                                          CallVideoService(),
+                                          'manhinhchoban',
+                                          index,
+                                          videoStream),
                                     ),
                                   ),
                                 ],

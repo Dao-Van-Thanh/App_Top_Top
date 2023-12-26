@@ -19,14 +19,14 @@ class GridViewVideoForAdmin extends StatefulWidget {
   String uid;
   String label;
   PageProvider pageProvider;
-  GridViewVideoForAdmin(this.uid,this.label ,this.pageProvider, {super.key});
+  GridViewVideoForAdmin(this.uid, this.label, this.pageProvider, {super.key});
 
   @override
   State<GridViewVideoForAdmin> createState() => _GridViewVideoForAdminState();
 }
 
 class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
-  ChewieController? controller ;
+  ChewieController? controller;
   @override
   void initState() {
     super.initState();
@@ -35,6 +35,7 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
       provider.loadVideos(widget.uid);
     }
   }
+
   Future<Uint8List?> getThumbnail(String videoUrl) async {
     final uint8list = await VideoThumbnail.thumbnailData(
       video: videoUrl,
@@ -44,19 +45,25 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
     );
     return uint8list;
   }
-  _showDialogError(context,String videoId) {
+
+  _showDialogError(context, String videoId) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: const Text('Bỏ ẩn video này?',style: TextStyle(fontSize: 20),),
+          content: const Text(
+            'Bỏ ẩn video này?',
+            style: TextStyle(fontSize: 20),
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Đóng hộp thoại
               },
-              child:
-              Text('Hủy',style: TextStyle(color: Colors.grey.withOpacity(0.8)),),
+              child: Text(
+                'Hủy',
+                style: TextStyle(color: Colors.grey.withOpacity(0.8)),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -64,14 +71,17 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
                 Navigator.of(context).pop();
                 setState(() {});
               },
-              child:
-              const Text('bỏ', style: TextStyle(color: Colors.black),),
+              child: const Text(
+                'bỏ',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           ],
         );
       },
     );
   }
+
   Widget _content2(BuildContext context, List<VideoModel> videos) {
     return Container(
       margin: const EdgeInsets.only(top: 10),
@@ -86,14 +96,19 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
           final video = videos[index];
           return InkWell(
             onTap: () {
-              if(video.status == false){
-                _showDialogError(context,video.id);
+              if (video.status == false) {
+                _showDialogError(context, video.id);
                 return;
               }
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => widget.label=='videoPublic'?ManHinhManagerVideoByAdmin(uid: video.uid,index:index,status:video.status):(widget.label=='TabVideo'?ManhinhVideoByAuthor(uid: video.uid,index:index):ManHinhVideoByBookMart(index:index)),
+                  builder: (context) => widget.label == 'videoPublic'
+                      ? ManHinhManagerVideoByAdmin(
+                          uid: video.uid, index: index, status: video.status)
+                      : (widget.label == 'TabVideo'
+                          ? ManhinhVideoByAuthor(uid: video.uid, index: index)
+                          : ManHinhVideoByBookMart(index: index)),
                 ),
               );
             },
@@ -103,37 +118,44 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
                 fit: StackFit.expand,
                 alignment: Alignment.bottomRight,
                 children: [
-                  video.status == false?Container(
-                    margin: const EdgeInsets.only(top: 3,left: 13,right: 13,bottom: 3),
-                    height: double.maxFinite,
-                    width: double.maxFinite,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage('https://upload.wikimedia.org/wikipedia/vi/thumb/a/a7/Batman_Lee.png/250px-Batman_Lee.png'),fit: BoxFit.cover)
-                    ),
-                  ):Chewie(
-                    controller: ChewieController(
-                      videoPlayerController: VideoPlayerController.network(
-                        video.videoUrl,
-                      ),
-                      autoPlay: false, // Tắt tự động phát video
-                      looping: true, // Cho phép lặp lại video
-                      allowMuting: true, // Cho phép tắt tiếng
-                      showControls: false, // Tắt hiển thị các điều khiển
-                      showOptions: false, // Tắt hiển thị tùy chọn video (chẳng hạn như tua video)
-                      aspectRatio: 0.7, // Tùy chỉnh tỷ lệ khung hình
-                      autoInitialize: true, // Tự động khởi tạo videoPlayerController khi được tạo
-                      errorBuilder: (context, errorMessage) {
-                        // Xử lý lỗi video (nếu có)
-                        return Center(
-                          child: Text('Lỗi: $errorMessage'),
-                        );
-                      },
-                      placeholder: const Center(
-                        child: CircularProgressIndicator(), // Hiển thị chỉ báo tải video
-                      ),
-                    ),
-                  ),
+                  video.status == false
+                      ? Container(
+                          margin: const EdgeInsets.only(
+                              top: 3, left: 13, right: 13, bottom: 3),
+                          height: double.maxFinite,
+                          width: double.maxFinite,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(video.videoUrl),
+                                  fit: BoxFit.cover)),
+                        )
+                      : Chewie(
+                          controller: ChewieController(
+                            videoPlayerController:
+                                VideoPlayerController.network(
+                              video.videoUrl,
+                            ),
+                            autoPlay: false, // Tắt tự động phát video
+                            looping: true, // Cho phép lặp lại video
+                            allowMuting: true, // Cho phép tắt tiếng
+                            showControls: false, // Tắt hiển thị các điều khiển
+                            showOptions:
+                                false, // Tắt hiển thị tùy chọn video (chẳng hạn như tua video)
+                            aspectRatio: 0.7, // Tùy chỉnh tỷ lệ khung hình
+                            autoInitialize:
+                                true, // Tự động khởi tạo videoPlayerController khi được tạo
+                            errorBuilder: (context, errorMessage) {
+                              // Xử lý lỗi video (nếu có)
+                              return Center(
+                                child: Text('Lỗi: $errorMessage'),
+                              );
+                            },
+                            placeholder: const Center(
+                              child:
+                                  CircularProgressIndicator(), // Hiển thị chỉ báo tải video
+                            ),
+                          ),
+                        ),
                   Positioned(
                     bottom: 10,
                     left: 0,
@@ -144,7 +166,8 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
                         const SizedBox(width: 5),
                         Text(
                           "${video.views.toString()} ",
-                          style: const TextStyle(color: Colors.white, fontSize: 15),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 15),
                         )
                       ],
                     ),
@@ -176,7 +199,9 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
           return Center(
             child: Text('Đã xảy ra lỗi: ${snapshot.error}'),
           );
-        } else if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty) {
+        } else if (!snapshot.hasData ||
+            snapshot.data == null ||
+            snapshot.data!.isEmpty) {
           return const Center(
             child: Text('Không có dữ liệu'),
           );
@@ -187,12 +212,9 @@ class _GridViewVideoForAdminState extends State<GridViewVideoForAdmin> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: _getDataFirebase(context)
-    );
+        backgroundColor: Colors.white, body: _getDataFirebase(context));
   }
 }

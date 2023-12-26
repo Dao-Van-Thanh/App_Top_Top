@@ -100,7 +100,6 @@ class NotificationsService {
 
   Future<void> getToken() async {
     final token = await FirebaseMessaging.instance.getToken();
-    print('===================================$token');
     _saveToken(token!);
   }
 
@@ -198,7 +197,6 @@ class NotificationsService {
 
       return stream;
     } catch (e) {
-      print('Lỗi: $e');
       rethrow;
     }
   }
@@ -206,16 +204,12 @@ class NotificationsService {
   void createNotification(String uid, String idOther, String type) async {
     final CollectionReference notifiCollection =
         FirebaseFirestore.instance.collection('Notifications');
-    try {
-      await notifiCollection.add(NotificationModel(
-              id: '',
-              uid: uid,
-              idOther: idOther,
-              type: type,
-              timestamp: Timestamp.now())
-          .toJson());
-    } catch (e) {
-      print(e);
-    }
+    await notifiCollection.add(NotificationModel(
+            id: '',
+            uid: uid,
+            idOther: idOther,
+            type: type,
+            timestamp: Timestamp.now())
+        .toJson());
   }
 }
